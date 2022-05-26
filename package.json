@@ -19,7 +19,15 @@
         "command": "grpc-clicker.helloWorld",
         "title": "New Title for command!"
       }
-    ]
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "nodeDependencies",
+          "name": "Node Dependencies"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
