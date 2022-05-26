@@ -20,12 +20,11 @@
         "title": "New Title for command!"
       }
     ],
-    "viewContainers": {
-      "panel": [
+    "views": {
+      "explorer": [
         {
-          "id": "package-explorer",
-          "title": "Package Explorer",
-          "icon": "net.svg"
+          "id": "nodeDependencies",
+          "name": "Node Dependencies"
         }
       ]
     }

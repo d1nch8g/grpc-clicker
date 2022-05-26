@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { NodeDependenciesProvider } from "./nodeDep";
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "grpc-clicker" is now active!');
@@ -8,8 +9,15 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.window.showErrorMessage("Hello VSCode!");
     }
   );
-
-  context.subscriptions.push(disposable);
+  const rootPath =
+    vscode.workspace.workspaceFolders &&
+    vscode.workspace.workspaceFolders.length > 0
+      ? vscode.workspace.workspaceFolders[0].uri.fsPath
+      : undefined;
+  vscode.window.registerTreeDataProvider(
+    "nodeDependencies",
+    new NodeDependenciesProvider(rootPath!)
+  );
 }
 
 export function deactivate() {}
