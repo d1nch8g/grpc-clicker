@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 
-const tree = {
+const tree:object = {
   a: {
     aa: {
       aaa: {
@@ -65,7 +65,7 @@ function aNodeWithIdTreeDataProvider(): vscode.TreeDataProvider<{
       treeItem.id = element.key;
       return treeItem;
     },
-    getParent: ({ key }: { key: string }): { key: string } => {
+    getParent: ({ key }: { key: string }):Key | undefined| { key: string } => {
       const parentKey = key.substring(0, key.length - 1);
       return parentKey ? new Key(parentKey) : void 0;
     },
@@ -100,10 +100,10 @@ function getTreeItem(key: string): vscode.TreeItem {
   };
 }
 
-function getTreeElement(element): any {
-  let parent = tree;
+function getTreeElement(element:string): any {
+  let parent:object = tree;
   for (let i = 0; i < element.length; i++) {
-    parent = parent[element.substring(0, i + 1)];
+    parent = parent.(element.substring(0, i + 1)); /// обащение к полю объекта идёт через . 
     if (!parent) {
       return null;
     }
