@@ -14,7 +14,25 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
-	  
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "grpc-clicker",
+          "title": "gRPC Clicker",
+          "icon": "images/net.svg"
+        }
+      ]
+    },
+    "views": {
+      "grpc-clicker": [
+        {
+          "id": "grpc-explorer",
+          "name": "gRPC Explorer",
+          "icon": "images/net.svg",
+          "contextualTitle": "gRPC Clicker"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
