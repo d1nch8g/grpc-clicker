@@ -32,7 +32,8 @@
           "contextualTitle": "gRPC Clicker"
         }
       ]
-    }
+    },
+    "commands": []
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
