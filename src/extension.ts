@@ -1,16 +1,11 @@
 import * as vscode from "vscode";
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log('Congratulations, your extension "grpc-clicker" is now active!');
-
-  let disposable = vscode.commands.registerCommand(
-    "grpc-clicker.helloWorld",
-    () => {
-      vscode.window.showInformationMessage("Hello World from grpc_clicker!");
-    }
-  );
-
-  context.subscriptions.push(disposable);
+  const rootPath =
+    vscode.workspace.workspaceFolders &&
+    vscode.workspace.workspaceFolders.length > 0
+      ? vscode.workspace.workspaceFolders[0].uri.fsPath
+      : undefined;
 }
 
 export function deactivate() {}

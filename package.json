@@ -14,12 +14,15 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "grpc-clicker.helloWorld",
-        "title": "Hello World"
-      }
-    ]
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "grpc-explorer",
+          "title": "gRPC Explorer",
+          "icon": "images/go.svg"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
