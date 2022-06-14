@@ -17,9 +17,19 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "grpc-explorer",
+          "id": "grpc-explorer-container",
           "title": "gRPC Explorer",
           "icon": "images/go.svg"
+        }
+      ]
+    },
+    "views": {
+      "grpc-explorer": [
+        {
+          "id": "grpc-explorer-view",
+          "name": "gRPC Explorer",
+          "icon": "images/go.svg",
+          "contextualTitle": "gRPC Explorer"
         }
       ]
     }
