@@ -6,7 +6,6 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.workspace.workspaceFolders.length > 0
       ? vscode.workspace.workspaceFolders[0].uri.fsPath
       : undefined;
-	
 }
 
 export function deactivate() {}

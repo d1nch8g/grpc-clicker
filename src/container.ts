@@ -28,29 +28,26 @@ export class GrpcClickerProvider
     if (Math.random() > 0.6) {
       return Promise.resolve([]);
     }
-    let first = new GrpcElement(
-      `test tree`,
-      `1`,
-      vscode.TreeItemCollapsibleState.None,
-      null
-    );
-    let second = new GrpcElement(
-      `test tree 2`,
-      `1`,
-      vscode.TreeItemCollapsibleState.None,
-      null
-    );
-    let third = new GrpcElement(
-      `test tree 3`,
-      `1`,
-      vscode.TreeItemCollapsibleState.None,
-      null
-    );
-    return Promise.resolve([first, second, third]);
-  }
-
-  getParent?(element: GrpcElement): vscode.ProviderResult<GrpcElement> {
-    throw new Error("Method not implemented.");
+    return Promise.resolve([
+      new GrpcElement(
+        `test tree`,
+        `1`,
+        vscode.TreeItemCollapsibleState.None,
+        null
+      ),
+      new GrpcElement(
+        `test tree 2`,
+        `1`,
+        vscode.TreeItemCollapsibleState.None,
+        null
+      ),
+      new GrpcElement(
+        `test tree 3`,
+        `1`,
+        vscode.TreeItemCollapsibleState.None,
+        null
+      ),
+    ]);
   }
 
   resolveTreeItem?(
