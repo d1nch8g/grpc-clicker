@@ -5,18 +5,48 @@ import * as path from "path";
 export class GrpcClickerProvider
   implements vscode.TreeDataProvider<GrpcElement>
 {
+  private _onDidChangeTreeData: vscode.EventEmitter<
+    GrpcElement | undefined | void
+  > = new vscode.EventEmitter<GrpcElement | undefined | void>();
+  readonly onDidChangeTreeData: vscode.Event<
+    void | GrpcElement | GrpcElement[]
+  > = this._onDidChangeTreeData.event;
+
   // Trigger to update element
-  onDidChangeTreeData?: vscode.Event<void | GrpcElement | GrpcElement[]>;
+  refresh(): void {
+    this._onDidChangeTreeData.fire();
+  }
 
   //
   getTreeItem(
     element: GrpcElement
   ): vscode.TreeItem | Thenable<vscode.TreeItem> {
-    throw new Error("Method not implemented.");
+    return element;
   }
 
   getChildren(element?: GrpcElement): vscode.ProviderResult<GrpcElement[]> {
-    throw new Error("Method not implemented.");
+    if (Math.random() > 0.6) {
+      return Promise.resolve([]);
+    }
+    let first = new GrpcElement(
+      `test tree`,
+      `1`,
+      vscode.TreeItemCollapsibleState.None,
+      null
+    );
+    let second = new GrpcElement(
+      `test tree 2`,
+      `1`,
+      vscode.TreeItemCollapsibleState.None,
+      null
+    );
+    let third = new GrpcElement(
+      `test tree 3`,
+      `1`,
+      vscode.TreeItemCollapsibleState.None,
+      null
+    );
+    return Promise.resolve([first, second, third]);
   }
 
   getParent?(element: GrpcElement): vscode.ProviderResult<GrpcElement> {
