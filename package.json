@@ -10,7 +10,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:grpc-clicker.helloWorld"
+    "onView:grpc-explorer-view"
   ],
   "main": "./dist/extension.js",
   "contributes": {

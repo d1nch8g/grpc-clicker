@@ -8,7 +8,7 @@ export function activate(context: vscode.ExtensionContext) {
       ? vscode.workspace.workspaceFolders[0].uri.fsPath
       : undefined;
 
-  var stuff = vscode.window.registerTreeDataProvider(
+  vscode.window.registerTreeDataProvider(
     "grpc-explorer-view",
     new GrpcClickerProvider()
   );
