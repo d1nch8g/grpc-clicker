@@ -17,7 +17,16 @@ export class GrpcClickerProvider
     this._onDidChangeTreeData.fire();
   }
 
-  //
+  getParent(element: GrpcElement): vscode.ProviderResult<GrpcElement> {
+    return new GrpcElement(
+      "test",
+      "1",
+      vscode.TreeItemCollapsibleState.Expanded,
+      null
+    );
+  }
+
+  // get elem of tree
   getTreeItem(
     element: GrpcElement
   ): vscode.TreeItem | Thenable<vscode.TreeItem> {

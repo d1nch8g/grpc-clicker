@@ -8,10 +8,8 @@ export function activate(context: vscode.ExtensionContext) {
       ? vscode.workspace.workspaceFolders[0].uri.fsPath
       : undefined;
 
-  new GrpcElement("test", "1", vscode.TreeItemCollapsibleState.Expanded, null);
-
   vscode.window.registerTreeDataProvider(
-    "grpc-explorer-container",
+    "grpc-clicker-vscode",
     new GrpcClickerProvider()
   );
 }
