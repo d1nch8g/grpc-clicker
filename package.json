@@ -10,7 +10,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onView:grpc-explorer-view"
+    "onView:proto-navigator"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -26,8 +26,26 @@
     "views": {
       "grpc-explorer": [
         {
-          "id": "grpc-explorer-view",
-          "name": "API Navigator",
+          "id": "adress-picker",
+          "name": "Adress Picker",
+          "icon": "images/go.svg",
+          "contextualTitle": "api navigation"
+        },
+        {
+          "id": "proto-navigator",
+          "name": "Proto Navigator",
+          "icon": "images/go.svg",
+          "contextualTitle": "api navigation"
+        },
+        {
+          "id": "request-history",
+          "name": "Request History",
+          "icon": "images/go.svg",
+          "contextualTitle": "api navigation"
+        },
+        {
+          "id": "tests",
+          "name": "gRPC Tests",
           "icon": "images/go.svg",
           "contextualTitle": "api navigation"
         }
