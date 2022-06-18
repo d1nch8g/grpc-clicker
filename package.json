@@ -30,6 +30,10 @@
           "name": "API Navigator",
           "icon": "images/go.svg",
           "contextualTitle": "api navigation"
+        },
+        {
+          "id": "testView",
+          "name": "Test View"
         }
       ]
     }
