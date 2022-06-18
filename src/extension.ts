@@ -9,7 +9,7 @@ export function activate(context: vscode.ExtensionContext) {
       : undefined;
 
   vscode.window.registerTreeDataProvider(
-    "grpc-clicker-vscode",
+    "grpc-explorer-view",
     new GrpcClickerProvider()
   );
 }

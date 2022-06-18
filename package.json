@@ -27,9 +27,9 @@
       "grpc-explorer": [
         {
           "id": "grpc-explorer-view",
-          "name": "gRPC Explorer",
+          "name": "API Navigator",
           "icon": "images/go.svg",
-          "contextualTitle": "gRPC Explorer"
+          "contextualTitle": "api navigation"
         }
       ]
     }
