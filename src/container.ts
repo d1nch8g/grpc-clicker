@@ -1,5 +1,5 @@
-import * as vscode from "vscode";
 import * as fs from "fs";
+import * as vscode from "vscode";
 import * as path from "path";
 
 export class GrpcClickerProvider
@@ -25,26 +25,20 @@ export class GrpcClickerProvider
   }
 
   getChildren(element?: GrpcElement): vscode.ProviderResult<GrpcElement[]> {
-    if (Math.random() > 0.6) {
+    if (Math.random() > 0.48) {
       return Promise.resolve([]);
     }
     return Promise.resolve([
       new GrpcElement(
         `test tree`,
         `1`,
-        vscode.TreeItemCollapsibleState.None,
+        vscode.TreeItemCollapsibleState.Expanded,
         null
       ),
       new GrpcElement(
-        `test tree 2`,
+        `test tree`,
         `1`,
-        vscode.TreeItemCollapsibleState.None,
-        null
-      ),
-      new GrpcElement(
-        `test tree 3`,
-        `1`,
-        vscode.TreeItemCollapsibleState.None,
+        vscode.TreeItemCollapsibleState.Expanded,
         null
       ),
     ]);
