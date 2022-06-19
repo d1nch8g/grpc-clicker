@@ -10,12 +10,12 @@ export class Adresses {
   }
 
   public list(): string[] {
-    let adresses = this.storage.get<string[]>(this.adressesKey) ?? [];
+    let adresses = this.storage.get<string[]>(this.adressesKey, []);
     return adresses;
   }
 
   public add(adress: string): ErrStorage {
-    let adresses = this.storage.get<string[]>(this.adressesKey) ?? [];
+    let adresses = this.storage.get<string[]>(this.adressesKey, []);
     if (adress.includes(adress)) {
       return ErrStorage.adressExists;
     }
@@ -24,7 +24,7 @@ export class Adresses {
   }
 
   public remove(adress: string) {
-    let adresses = this.storage.get<string[]>(this.adressesKey) ?? [];
+    let adresses = this.storage.get<string[]>(this.adressesKey, []);
     let idx = adresses.indexOf(adress);
     if (idx !== -1) {
       adresses.splice(idx, 1);
