@@ -5,9 +5,8 @@ import { Storage } from "./storage/storage";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
-  const adressList = new AdressList(storage.adressses);
-
-  vscode.window.registerTreeDataProvider("host", adressList);
+  const hosts = new AdressList(storage.adressses);
+  vscode.window.registerTreeDataProvider("host", hosts);
 
   vscode.commands.registerCommand("host.add", async () => {
     let adress = (await vscode.window.showInputBox()) ?? "";
@@ -20,7 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.window.showErrorMessage(msg);
       return;
     }
-    adressList.refresh();
+    hosts.refresh();
   });
 
   vscode.commands.registerCommand("host.remove", async () => {
@@ -29,7 +28,7 @@ export function activate(context: vscode.ExtensionContext) {
       canPickMany: false,
     });
     storage.adressses.remove(adress);
-    adressList.refresh();
+    hosts.refresh();
   });
 }
 
