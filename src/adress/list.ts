@@ -37,6 +37,8 @@ export class AdressList implements vscode.TreeDataProvider<AdressItem> {
     element: AdressItem,
     token: vscode.CancellationToken
   ): vscode.ProviderResult<vscode.TreeItem> {
-    throw new Error("Method not implemented.");
+    console.log(element.label);
+    this.storage.setCurret(element.label);
+    return Promise.resolve(item);
   }
 }
