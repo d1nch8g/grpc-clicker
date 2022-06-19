@@ -3,10 +3,13 @@ import { AdressItem } from "./item";
 import { Adresses } from "../storage/adresses";
 
 export class AdressList implements vscode.TreeDataProvider<AdressItem> {
-  constructor(private storage: Adresses) {}
+  constructor(private storage: Adresses) {
+    this.onChange = new vscode.EventEmitter<AdressItem | undefined | void>();
+    this.onDidChangeTreeData = this.onChange.event;
+  }
 
-  private onChange: vscode.EventEmitter<AdressItem | undefined | void> =
-    new vscode.EventEmitter<AdressItem | undefined | void>();
+  private onChange: vscode.EventEmitter<AdressItem | undefined | void>;
+  readonly onDidChangeTreeData: vscode.Event<void | AdressItem | AdressItem[]>;
 
   refresh(): void {
     this.onChange.fire();

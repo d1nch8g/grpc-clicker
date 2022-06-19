@@ -24,17 +24,10 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("host.remove", async () => {
     let adresses = storage.adressses.list();
-    let adress = await vscode.window.showQuickPick(adresses, {
-      canPickMany: false,
-    });
+    let adress = await vscode.window.showQuickPick(adresses);
     storage.adressses.remove(adress);
     hosts.refresh();
   });
-
-  // hosts.onDidChangeTreeData((adressItem) => {
-  //   console.log("chosen");
-  //   console.log(adressItem ?? "");
-  // });
 }
 
 export function deactivate() {}
