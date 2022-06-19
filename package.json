@@ -17,37 +17,29 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "grpc-explorer",
-          "title": "gRPC Explorer",
-          "icon": "images/go.svg"
+          "id": "grpc-clicker",
+          "title": "gRPC Clicker",
+          "icon": "images/extension.svg"
         }
       ]
     },
     "views": {
       "grpc-explorer": [
         {
-          "id": "adress-picker",
-          "name": "Adress Picker",
-          "icon": "images/go.svg",
-          "contextualTitle": "api navigation"
+          "id": "Host",
+          "name": "gRPC Host"
         },
         {
-          "id": "proto-navigator",
-          "name": "Proto Navigator",
-          "icon": "images/go.svg",
-          "contextualTitle": "api navigation"
+          "id": "schema",
+          "name": "Protobuf Schema"
         },
         {
-          "id": "request-history",
-          "name": "Request History",
-          "icon": "images/go.svg",
-          "contextualTitle": "api navigation"
+          "id": "collections",
+          "name": "Collections"
         },
         {
-          "id": "tests",
-          "name": "gRPC Tests",
-          "icon": "images/go.svg",
-          "contextualTitle": "api navigation"
+          "id": "history",
+          "name": "History"
         }
       ]
     }
