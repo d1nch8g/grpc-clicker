@@ -26,7 +26,7 @@
     "views": {
       "grpc-clicker": [
         {
-          "id": "Host",
+          "id": "host",
           "name": "gRPC Host"
         },
         {
@@ -42,7 +42,13 @@
           "name": "History"
         }
       ]
-    }
+    },
+    "commands": [
+      {
+        "title": "Add new adress",
+        "command": "host.add"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
