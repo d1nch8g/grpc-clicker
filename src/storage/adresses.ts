@@ -9,11 +9,11 @@ export class Adresses {
     this.currentAdressKey = "grpc-clicker-curAdress";
   }
 
-  public adressesLoad(): string[] {
+  public list(): string[] {
     return this.storage.get<string[]>(this.adressesKey);
   }
 
-  public adressesAdd(adress: string): ErrStorage {
+  public add(adress: string): ErrStorage {
     let adresses = this.storage.get<string[]>(this.adressesKey);
     if (adress.includes(adress)) {
       return ErrStorage.adressExists;
@@ -22,7 +22,7 @@ export class Adresses {
     this.storage.update(this.adressesKey, adresses);
   }
 
-  public removeAdress(adress: string) {
+  public remove(adress: string) {
     let adresses = this.storage.get<string[]>(this.adressesKey);
     let idx = adresses.indexOf(adress);
     if (idx !== -1) {

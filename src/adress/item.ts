@@ -3,11 +3,8 @@ import * as vscode from "vscode";
 import * as path from "path";
 
 export class AdressItem extends vscode.TreeItem {
-  constructor(
-    public readonly label: string,
-    public readonly collapsibleState: vscode.TreeItemCollapsibleState
-  ) {
-    super(label, collapsibleState);
+  constructor(public readonly label: string) {
+    super(label);
   }
 
   iconPath = {
