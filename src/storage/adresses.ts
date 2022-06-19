@@ -30,6 +30,7 @@ export class Adresses {
     if (idx !== -1) {
       adresses.splice(idx, 1);
     }
+    this.memento.update(this.adressesKey, adresses);
   }
 
   public getCurret(): string {

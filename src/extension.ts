@@ -30,6 +30,11 @@ export function activate(context: vscode.ExtensionContext) {
     storage.adressses.remove(adress);
     hosts.refresh();
   });
+
+  // hosts.onDidChangeTreeData((adressItem) => {
+  //   console.log("chosen");
+  //   console.log(adressItem ?? "");
+  // });
 }
 
 export function deactivate() {}

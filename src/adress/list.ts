@@ -7,8 +7,6 @@ export class AdressList implements vscode.TreeDataProvider<AdressItem> {
 
   private onChange: vscode.EventEmitter<AdressItem | undefined | void> =
     new vscode.EventEmitter<AdressItem | undefined | void>();
-  readonly onDidChangeTreeData: vscode.Event<void | AdressItem | AdressItem[]> =
-    this.onChange.event;
 
   refresh(): void {
     this.onChange.fire();
