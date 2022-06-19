@@ -29,7 +29,7 @@
       "grpc-clicker": [
         {
           "id": "host",
-          "name": "gRPC Host"
+          "name": "gRPC Hosts"
         },
         {
           "id": "schema",
