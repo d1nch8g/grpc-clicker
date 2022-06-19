@@ -1,11 +1,11 @@
 import * as vscode from "vscode";
 import { AdressList } from "./adress/list";
-import { Adresses } from "./storage/adresses";
 import { ErrStorage } from "./storage/errors";
+import { Storage } from "./storage/storage";
 
 export function activate(context: vscode.ExtensionContext) {
-  const adressStorage = new Adresses(context.globalState);
-  const adressList = new AdressList(adressStorage);
+  const storage = new Storage(context.globalState);
+  const adressList = new AdressList(storage.adressses);
 
   vscode.window.registerTreeDataProvider("host", adressList);
 
@@ -14,25 +14,21 @@ export function activate(context: vscode.ExtensionContext) {
     if (adress === "") {
       return;
     }
-    let error = adressStorage.add(adress);
+    let error = storage.adressses.add(adress);
     if (error === ErrStorage.adressExists) {
       let msg = `Adress you are trying to add already exists!`;
       vscode.window.showErrorMessage(msg);
       return;
     }
-    let msg = `Adress have been added: ${adress}!`;
-    vscode.window.showInformationMessage(msg);
     adressList.refresh();
   });
 
   vscode.commands.registerCommand("host.remove", async () => {
-    let adresses = adressStorage.list();
+    let adresses = storage.adressses.list();
     let adress = await vscode.window.showQuickPick(adresses, {
       canPickMany: false,
     });
-    adressStorage.remove(adress);
-    let msg = `Adress have been removed: ${adress}!`;
-    vscode.window.showInformationMessage(msg);
+    storage.adressses.remove(adress);
     adressList.refresh();
   });
 }

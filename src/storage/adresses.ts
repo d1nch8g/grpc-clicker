@@ -16,7 +16,6 @@ export class Adresses {
 
   public add(adress: string): ErrStorage {
     let adresses = this.memento.get<string[]>(this.adressesKey, []);
-    adresses = [];
     if (adresses.includes(adress)) {
       return ErrStorage.adressExists;
     }
