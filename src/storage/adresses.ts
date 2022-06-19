@@ -1,30 +1,40 @@
 import { Memento } from "vscode";
 import { ErrStorage } from "./errors";
 
-export class AdressesStorage {
-  key: string;
+export class Adresses {
+  adressesKey: string;
+  currentAdressKey: string;
   constructor(private storage: Memento) {
-    this.key = "grpc-clicker-adresses";
+    this.adressesKey = "grpc-clicker-adresses";
+    this.currentAdressKey = "grpc-clicker-curAdress";
   }
 
   public adressesLoad(): string[] {
-    return this.storage.get<string[]>(this.key);
+    return this.storage.get<string[]>(this.adressesKey);
   }
 
   public adressesAdd(adress: string): ErrStorage {
-    let adresses = this.storage.get<string[]>(this.key);
+    let adresses = this.storage.get<string[]>(this.adressesKey);
     if (adress.includes(adress)) {
       return ErrStorage.adressExists;
     }
     adresses.push(adress);
-    this.storage.update(this.key, adresses);
+    this.storage.update(this.adressesKey, adresses);
   }
 
   public removeAdress(adress: string) {
-    let adresses = this.storage.get<string[]>(this.key);
+    let adresses = this.storage.get<string[]>(this.adressesKey);
     let idx = adresses.indexOf(adress);
     if (idx !== -1) {
       adresses.splice(idx, 1);
     }
+  }
+
+  public getCurret(): string {
+    return this.storage.get<string>(this.currentAdressKey);
+  }
+
+  public setCurret(adress: string) {
+    this.storage.update(this.currentAdressKey, adress);
   }
 }
