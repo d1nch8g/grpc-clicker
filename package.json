@@ -46,9 +46,35 @@
     "commands": [
       {
         "title": "Add new adress",
-        "command": "host.add"
+        "command": "host.add",
+        "icon": {
+          "dark": "images/dark/plus.svg",
+          "light": "images/light/plus.svg"
+        }
+      },
+      {
+        "title": "Remove existing adress",
+        "command": "host.remove",
+        "icon": {
+          "dark": "images/dark/minus.svg",
+          "light": "images/light/minus.svg"
+        }
       }
-    ]
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "host.add",
+          "when": "view == host",
+          "group": "navigation"
+        },
+        {
+          "command": "host.remove",
+          "when": "view == host",
+          "group": "navigation"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
