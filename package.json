@@ -24,7 +24,7 @@
       ]
     },
     "views": {
-      "grpc-explorer": [
+      "grpc-clicker": [
         {
           "id": "Host",
           "name": "gRPC Host"
