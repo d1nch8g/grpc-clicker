@@ -4,11 +4,15 @@ import { Storage } from "./storage/storage";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context);
-  const adressList = new AdressList(storage);
+  let adressList = new AdressList(storage);
 
   vscode.window.registerTreeDataProvider("host", adressList);
 
-  vscode.commands.registerCommand("host.add", () => {});
+  vscode.commands.registerCommand("host.add", async () => {
+    let adress = await vscode.window.showInputBox();
+    storage.adresses.add(adress);
+    adressList = new AdressList(storage);
+  });
 
   vscode.commands.registerCommand("host.remove", () => {});
 }
