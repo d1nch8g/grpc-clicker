@@ -10,7 +10,10 @@
     "Other"
   ],
   "activationEvents": [
-    "onView:proto-navigator",
+    "onView:host",
+    "onView:schema",
+    "onView:collections",
+    "onView:history",
     "onCommand:host.add",
     "onCommand:host.remove"
   ],
