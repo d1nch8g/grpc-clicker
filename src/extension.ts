@@ -1,17 +1,14 @@
 import * as vscode from "vscode";
-import { GrpcClickerProvider, GrpcElement } from "./container";
+import { AdressList } from "./adress/tree";
 
 export function activate(context: vscode.ExtensionContext) {
-  const rootPath =
-    vscode.workspace.workspaceFolders &&
-    vscode.workspace.workspaceFolders.length > 0
-      ? vscode.workspace.workspaceFolders[0].uri.fsPath
-      : undefined;
+  const adressList = new AdressList();
 
-  vscode.window.registerTreeDataProvider(
-    "grpc-clicker",
-    new GrpcClickerProvider()
-  );
+  vscode.window.registerTreeDataProvider("host", adressList);
+
+  vscode.commands.registerCommand("host.add", () => {});
+
+  vscode.commands.registerCommand("host.remove", () => {});
 }
 
 export function deactivate() {}
