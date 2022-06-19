@@ -10,7 +10,9 @@
     "Other"
   ],
   "activationEvents": [
-    "onView:proto-navigator"
+    "onView:proto-navigator",
+    "onCommand:host.add",
+    "onCommand:host.remove"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -45,16 +47,16 @@
     },
     "commands": [
       {
-        "title": "Add new adress",
         "command": "host.add",
+        "title": "Add new adress",
         "icon": {
           "dark": "images/dark/plus.svg",
           "light": "images/light/plus.svg"
         }
       },
       {
-        "title": "Remove existing adress",
         "command": "host.remove",
+        "title": "Remove existing adress",
         "icon": {
           "dark": "images/dark/minus.svg",
           "light": "images/light/minus.svg"
