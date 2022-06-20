@@ -34,7 +34,7 @@ export class Adresses {
   }
 
   public getCurret(): string {
-    return this.memento.get<string>(this.currentAdressKey) ?? ``;
+    return this.memento.get<string>(this.currentAdressKey, ``);
   }
 
   public setCurret(adress: string) {
