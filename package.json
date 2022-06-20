@@ -15,7 +15,9 @@
     "onView:collections",
     "onView:history",
     "onCommand:host.add",
-    "onCommand:host.remove"
+    "onCommand:host.remove",
+    "onCommand:schema.add",
+    "onCommand:schema.remove",
   ],
   "main": "./dist/extension.js",
   "contributes": {
