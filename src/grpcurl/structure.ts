@@ -8,7 +8,8 @@ export class Structure {
   public version: string;
   public services: Service[];
   public messages: Message[];
-  constructor(private path: string) {
+  constructor(public path: string) {
+
     let grpcurl = spawn("grpcurl", [
       "-import-path",
       "/",
@@ -16,6 +17,7 @@ export class Structure {
       this.path,
       "describe",
     ]);
+    
     this.error = <string>grpcurl.stderr.read();
     let out = <string>grpcurl.stdout.read();
     let lines = out.split("\n");

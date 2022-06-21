@@ -16,7 +16,8 @@
     "onCommand:host.add",
     "onCommand:host.remove",
     "onCommand:schema.add",
-    "onCommand:schema.remove"
+    "onCommand:schema.remove",
+    "onCommand:schema.refresh"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -77,6 +78,14 @@
           "dark": "images/dark/minus.svg",
           "light": "images/light/minus.svg"
         }
+      },
+      {
+        "command": "schema.refresh",
+        "title": "Remove existing proto file",
+        "icon": {
+          "dark": "images/dark/refresh.svg",
+          "light": "images/light/refresh.svg"
+        }
       }
     ],
     "menus": {
@@ -98,6 +107,11 @@
         },
         {
           "command": "schema.remove",
+          "when": "view == schema",
+          "group": "navigation"
+        },
+        {
+          "command": "schema.refresh",
           "when": "view == schema",
           "group": "navigation"
         }
