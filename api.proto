@@ -1,0 +1,134 @@
+syntax = "proto3";
+package pb.v1;
+option go_package = "/pb";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+
+
+service Basics {
+  rpc DoubleCall(DoubleMes) returns (DoubleMes);
+  rpc FloatCall(FloatMes) returns (FloatMes);
+  rpc Int32Call(Int32Mes) returns (Int32Mes);
+  rpc Int64Call(Int64Mes) returns (Int64Mes);
+  rpc Uint32Call(Uint32Mes) returns (Uint32Mes);
+  rpc Uint64Call(Uint64Mes) returns (Uint64Mes);
+  rpc Sint32Call(Sint32Mes) returns (Sint32Mes);
+  rpc Sint64Call(Sint64Mes) returns (Sint64Mes);
+  rpc Fixed32Call(Fixed32Mes) returns (Fixed32Mes);
+  rpc Fixed64Call(Fixed64Mes) returns (Fixed64Mes);
+  rpc Sfixed32Call(Sfixed32Mes) returns (Sfixed32Mes);
+  rpc Sfixed64Call(Sfixed64Mes) returns (Sfixed64Mes);
+  rpc BoolCall(BoolMes) returns (BoolMes);
+  rpc StringCall(StringMes) returns (StringMes);
+  rpc BytesCall(BytesMes) returns (BytesMes);
+}
+
+service Constructions {
+  rpc EnumCall(EnumMes) returns (EnumMes);
+  rpc AnyCall(google.protobuf.Any) returns (google.protobuf.Any);
+  rpc EmptyCall(google.protobuf.Empty) returns (google.protobuf.Empty);
+  rpc ListCall(ListMes) returns (ListMes);
+  rpc MapCall(MapMes) returns (MapMes);
+  rpc OneofCall(OneofMes) returns (OneofMes);
+  rpc OptionalCall(OptionalMes) returns (OptionalMes);
+  rpc NestedCall(NestedMes) returns (NestedMes);
+}
+
+service Streams {
+  rpc ServerStream(StringMes) returns (stream StringMes);
+  rpc ClientStream(stream StringMes) returns (StringMes);
+  rpc BiDirectioalStream(stream StringMes) returns (stream StringMes);
+}
+
+message DoubleMes{
+  double message = 1;
+}
+
+message FloatMes{
+  float message = 1;
+}
+
+message Int32Mes{
+  int32 message = 1;
+}
+
+message Int64Mes{
+  int64 message = 1;
+}
+
+message Uint32Mes{
+  uint32 message = 1;
+}
+
+message Uint64Mes{
+  uint64 message = 1;
+}
+
+message Sint32Mes{
+  sint32 message = 1;
+}
+
+message Sint64Mes{
+  sint64 message = 1;
+}
+
+message Fixed32Mes{
+  fixed32 message = 1;
+}
+
+message Fixed64Mes{
+  fixed64 message = 1;
+}
+
+message Sfixed32Mes{
+  sfixed32 message = 1;
+}
+
+message Sfixed64Mes{
+  sfixed64 message = 1;
+}
+
+message BoolMes{
+  bool message = 1;
+}
+
+message StringMes{
+  string message = 1;
+}
+
+message BytesMes{
+  bytes message = 1;
+}
+
+enum Enum {
+  FIRST = 0;
+  SECOND = 1;
+}
+
+message EnumMes {
+  Enum message = 1;
+}
+
+message ListMes {
+  repeated string message = 1;
+}
+
+message MapMes {
+  map<string, string> message = 1;
+}
+
+message OneofMes {
+  oneof message {
+    string first = 1;
+    int32 second = 2;
+  }
+}
+
+message OptionalMes {
+  optional string message = 1;
+}
+
+message NestedMes {
+  string title = 1;
+  optional NestedMes nested = 2;
+}
