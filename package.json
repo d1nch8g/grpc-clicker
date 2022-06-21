@@ -81,7 +81,7 @@
       },
       {
         "command": "schema.refresh",
-        "title": "Update existing schemas",
+        "title": "Resresh existing schemas",
         "icon": {
           "dark": "images/dark/refresh.svg",
           "light": "images/light/refresh.svg"
