@@ -17,17 +17,20 @@ export class Structure {
       this.path,
       "describe",
     ]);
-    this.error = <string>grpcurl.stderr.read();
-    let out = <string>grpcurl.stdout.read();
-    let lines = out.split("\n");
-    lines.forEach((line) => {
-      if (line.endsWith(" is a service:")) {
-        this.fullName = line.replace(" is a service:", "");
-        if (this.fullName.includes(".")) {
-          let splitted = line.split(".");
-          
+    grpcurl.stderr.on("data", (data) => {
+      this.error = data as string;
+    });
+    grpcurl.stdout.on("data", (data) => {
+      let out = data as string;
+      let lines = out.split("\n");
+      lines.forEach((line) => {
+        if (line.endsWith(" is a service:")) {
+          this.fullName = line.replace(" is a service:", "");
+          if (this.fullName.includes(".")) {
+            let splitted = line.split(".");
+          }
         }
-      }
+      });
     });
   }
 }
