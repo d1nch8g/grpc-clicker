@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { AdressList } from "./adress/list";
+import { Structure } from "./grpcurl/structure";
 import { ErrStorage } from "./storage/errors";
 import { Storage } from "./storage/storage";
 
@@ -28,6 +29,15 @@ export function activate(context: vscode.ExtensionContext) {
     storage.adressses.remove(adress);
     hosts.refresh();
   });
+
+  vscode.commands.registerCommand("schema.add", async () => {
+    var testPath = "/Users/danilafominyh/grpclicker_vscode/api.proto";
+    var struc = new Structure(testPath);
+  });
+
+  vscode.commands.registerCommand("schema.remove", async () => {});
+
+  vscode.commands.registerCommand("schema.refresh", async () => {});
 }
 
 export function deactivate() {}
