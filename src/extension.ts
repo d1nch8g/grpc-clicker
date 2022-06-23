@@ -32,6 +32,9 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("schema.add", async () => {
     let path = (await vscode.window.showInputBox()) ?? "";
+    if (path === "") {
+      return;
+    }
     var struc = new Structure(path);
   });
 
@@ -41,3 +44,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() {}
+
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
