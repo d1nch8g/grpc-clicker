@@ -18,10 +18,11 @@ export class Structure {
       "describe",
     ]);
     grpcurl.stderr.on("data", (data) => {
-      this.error = data as string;
+      console.log(`stderr: ${data}`);
+      // TODO add error processing
     });
     grpcurl.stdout.on("data", (data) => {
-      let out = data as string;
+      let out = `${data}`;
       let lines = out.split("\n");
       lines.forEach((line) => {
         if (line.endsWith(" is a service:")) {
