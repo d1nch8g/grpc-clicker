@@ -7,7 +7,7 @@ export class Structure {
   public tag: string;
   public version: string;
   public services: Service[] = [];
-  public closed: boolean = false;
+  public built: boolean = false;
   constructor(public path: string) {
     let grpcurl = spawn("grpcurl", [
       "-import-path",
@@ -49,7 +49,7 @@ export class Structure {
       console.log(this);
     });
     grpcurl.on("close", (code) => {
-      this.closed = true;
+      this.built = true;
     });
   }
 }
