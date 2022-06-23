@@ -1,5 +1,5 @@
-import * as vscode from "vscode";
 import { spawn } from "child_process";
+import * as vscode from "vscode";
 import { Service } from "./service";
 
 export class Structure {
@@ -46,9 +46,6 @@ export class Structure {
         this.name = splittedName[0];
         this.version = "";
       }
-      console.log(this);
-    });
-    grpcurl.on("close", (code) => {
       this.built = true;
     });
   }
