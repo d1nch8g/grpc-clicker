@@ -4,7 +4,7 @@ import { Service } from "./service";
 
 export class Structure {
   public name: string;
-  public fullName: string;
+  public tag: string;
   public version: string;
   public services: Service[] = [];
   constructor(public path: string) {
@@ -25,11 +25,11 @@ export class Structure {
       lines.forEach((line) => {
         curLines.push(line);
         if (line.endsWith(" is a service:")) {
-          this.fullName = line.replace(" is a service:", "");
-          if (this.fullName.includes(".")) {
+          this.tag = line.replace(" is a service:", "");
+          if (this.tag.includes(".")) {
             let splitted = line.split(".");
             splitted.pop();
-            this.fullName = splitted.join(".");
+            this.tag = splitted.join(".");
           }
         }
         if (line.endsWith("}")) {
@@ -37,7 +37,7 @@ export class Structure {
           curLines = [];
         }
       });
-      let splittedName = this.fullName.split(".");
+      let splittedName = this.tag.split(".");
       if (splittedName.length === 2) {
         this.name = splittedName[0];
         this.version = splittedName[1];
