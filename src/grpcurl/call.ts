@@ -6,6 +6,6 @@ export class Call {
   public name: string;
   public tag: string;
   constructor(line: string) {
-    
+        
   }
 }

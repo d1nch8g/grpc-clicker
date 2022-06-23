@@ -17,7 +17,9 @@ export class Service {
     this.name = splittedtag[splittedtag.length - 1];
     console.log(lines);
     lines.forEach((line) => {
-      this.calls.push(new Call(line));
+      if (line.startsWith("  rpc")) {
+        this.calls.push(new Call(line));
+      }
     });
   }
 }
