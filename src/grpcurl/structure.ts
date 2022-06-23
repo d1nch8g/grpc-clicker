@@ -6,7 +6,7 @@ export class Structure {
   public name: string;
   public fullName: string;
   public version: string;
-  public services: Service[];
+  public services: Service[] = [];
   constructor(public path: string) {
     let grpcurl = spawn("grpcurl", [
       "-import-path",
@@ -22,7 +22,9 @@ export class Structure {
       let str = `${data}`;
       console.log(`building from string:`);
       let lines = str.split("\n");
+      let curLines: string[] = [];
       lines.forEach((line) => {
+        curLines.push(line);
         if (line.endsWith(" is a service:")) {
           this.fullName = line.replace(" is a service:", "");
           if (this.fullName.includes(".")) {
@@ -31,7 +33,12 @@ export class Structure {
             this.fullName = splitted.join(".");
           }
         }
+        if (line.endsWith("}")) {
+          this.services.push(new Service(curLines));
+          curLines = [];
+        }
       });
     });
+    console.log(path);
   }
 }
