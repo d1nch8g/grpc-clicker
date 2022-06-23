@@ -1,11 +1,10 @@
 import * as vscode from "vscode";
 import { Call } from "./call";
-import { Message } from "./message";
 
 export class Service {
   public name: string;
   public tag: string;
-  public calls: Call[];
+  public calls: Call[] = [];
   constructor(lines: string[]) {
     if (lines.length < 4) {
       vscode.window.showErrorMessage(
@@ -17,5 +16,8 @@ export class Service {
     let splittedtag = this.tag.split(".");
     this.name = splittedtag[splittedtag.length - 1];
     console.log(lines);
+    lines.forEach((line) => {
+      this.calls.push(new Call(line));
+    });
   }
 }

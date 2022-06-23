@@ -5,5 +5,7 @@ export class Call {
   public output: Message;
   public name: string;
   public tag: string;
-  constructor(line: string) {}
+  constructor(line: string) {
+    
+  }
 }
