@@ -20,7 +20,6 @@ export class Structure {
     });
     grpcurl.stdout.on("data", (data) => {
       let str = `${data}`;
-      console.log(`building from string:`);
       let lines = str.split("\n");
       let curLines: string[] = [];
       lines.forEach((line) => {
@@ -38,7 +37,15 @@ export class Structure {
           curLines = [];
         }
       });
+      let splittedName = this.fullName.split(".");
+      if (splittedName.length === 2) {
+        this.name = splittedName[0];
+        this.version = splittedName[1];
+      } else {
+        this.name = splittedName[0];
+        this.version = "";
+      }
+      console.log(this);
     });
-    console.log(path);
   }
 }
