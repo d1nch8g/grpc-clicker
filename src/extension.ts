@@ -31,8 +31,8 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   vscode.commands.registerCommand("schema.add", async () => {
-    var testPath = "/Users/danilafominyh/grpclicker_vscode/api.proto";
-    var struc = new Structure(testPath);
+    let path = (await vscode.window.showInputBox()) ?? "";
+    var struc = new Structure(path);
   });
 
   vscode.commands.registerCommand("schema.remove", async () => {});
