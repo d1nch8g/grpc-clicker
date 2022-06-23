@@ -48,6 +48,7 @@
     },
     "commands": [
       {
+        "category": "gRPC Clicker",
         "command": "host.add",
         "title": "Add new adress",
         "icon": {
@@ -56,6 +57,7 @@
         }
       },
       {
+        "category": "gRPC Clicker",
         "command": "host.remove",
         "title": "Remove existing adress",
         "icon": {
@@ -64,6 +66,7 @@
         }
       },
       {
+        "category": "gRPC Clicker",
         "command": "schema.add",
         "title": "Add new proto file",
         "icon": {
@@ -72,6 +75,7 @@
         }
       },
       {
+        "category": "gRPC Clicker",
         "command": "schema.remove",
         "title": "Remove existing proto file",
         "icon": {
@@ -80,6 +84,7 @@
         }
       },
       {
+        "category": "gRPC Clicker",
         "command": "schema.refresh",
         "title": "Resresh existing schemas",
         "icon": {
