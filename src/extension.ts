@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { AdressList } from "./adress/list";
-import { Structure } from "./grpcurl/structure";
+import { getStructure } from "./grpcurl/structure";
 import { ErrStorage } from "./storage/errors";
 import { Storage } from "./storage/storage";
 
@@ -35,7 +35,8 @@ export function activate(context: vscode.ExtensionContext) {
     if (path === "") {
       return;
     }
-    var struc = new Structure(path);
+    var struc = await getStructure(path);
+    console.log(struc);
   });
 
   vscode.commands.registerCommand("schema.remove", async () => {});

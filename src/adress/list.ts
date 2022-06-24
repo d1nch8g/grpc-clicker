@@ -37,7 +37,6 @@ export class AdressList implements vscode.TreeDataProvider<AdressItem> {
     element: AdressItem,
     token: vscode.CancellationToken
   ): vscode.ProviderResult<vscode.TreeItem> {
-    console.log(element.label);
     this.storage.setCurret(element.label);
     return new AdressItem(element.label);
   }
