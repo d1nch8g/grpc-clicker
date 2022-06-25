@@ -1,13 +1,14 @@
 import * as vscode from "vscode";
+import { Message } from "./message";
 import { Service } from "./service";
 
 export class Proto {
   public name: string;
   public tag: string;
   public version: string;
-  public services: Service[] = [];
   public built: boolean = false;
-  // TODO add all messages and nested messages
+  public services: Service[] = [];
+  public messages: Message[] = [];
   constructor(stdout: string, public path: string) {
     let lines = stdout.split("\n");
     let curLines: string[] = [];
@@ -34,6 +35,11 @@ export class Proto {
       this.name = splittedName[0];
       this.version = "";
     }
-    this.built = true;
+    this.services.forEach((service) => {
+      service.calls.forEach((call) => {
+        this.messages.push(call.input);
+        this.messages.push(call.output);
+      });
+    });
   }
 }
