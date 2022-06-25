@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { AdressList as HostsTreeView } from "./hosts/list";
-import { getProto } from "./grpcurl/structure";
+import { getProto } from "./grpcurl/proto";
 import { Storage } from "./storage/storage";
 
 export function activate(context: vscode.ExtensionContext) {

@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { Memento } from "vscode";
-import { Proto } from "../grpcurl/structure";
+import { Proto } from "../grpcurl/proto";
 
 export class Structures {
   private protosKey: string;
