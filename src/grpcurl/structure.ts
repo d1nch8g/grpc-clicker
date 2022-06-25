@@ -2,7 +2,7 @@ import { spawn } from "child_process";
 import * as vscode from "vscode";
 import { Service } from "./service";
 
-export async function getStructure(path: string) {
+export async function getProto(path: string) {
   const util = require("util");
   const exec = util.promisify(require("child_process").exec);
   const { stdout, stderr } = await exec(
@@ -11,10 +11,10 @@ export async function getStructure(path: string) {
   if (`${stderr}` !== ``) {
     vscode.window.showErrorMessage(`${stderr}`);
   }
-  return new Structure(`${stdout}`, path);
+  return new Proto(`${stdout}`, path);
 }
 
-export class Structure {
+export class Proto {
   public name: string;
   public tag: string;
   public version: string;
