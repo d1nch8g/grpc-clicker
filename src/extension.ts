@@ -4,9 +4,10 @@ import { AdressList as HostsTreeView } from "./hosts/list";
 import { Storage } from "./storage/storage";
 
 export function activate(context: vscode.ExtensionContext) {
-  const storage = new Storage(context.globalState);
-  const hosts = new HostsTreeView(storage.adressses);
   const grpcurl = new Grpcurl();
+  const storage = new Storage(context.globalState);
+
+  const hosts = new HostsTreeView(storage.adressses);
 
   vscode.window.registerTreeDataProvider("host", hosts);
 
@@ -41,7 +42,11 @@ export function activate(context: vscode.ExtensionContext) {
     storage.protos.add(struc);
   });
 
-  vscode.commands.registerCommand("schema.remove", async () => {});
+  vscode.commands.registerCommand("schema.remove", async () => {
+    let protoPathes = storage.protos.pathes();
+    let path = await vscode.window.showQuickPick(protoPathes);
+    storage.protos.remove(path);
+  });
 
   vscode.commands.registerCommand("schema.refresh", async () => {});
 }
