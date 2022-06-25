@@ -40,12 +40,14 @@ export function activate(context: vscode.ExtensionContext) {
     }
     var struc = await grpcurl.getProto(path);
     storage.protos.add(struc);
+    // TODO add protos view refresh
   });
 
   vscode.commands.registerCommand("schema.remove", async () => {
     let protoPathes = storage.protos.pathes();
     let path = await vscode.window.showQuickPick(protoPathes);
     storage.protos.remove(path);
+    // TODO add protos view refresh
   });
 
   vscode.commands.registerCommand("schema.refresh", async () => {});
