@@ -1,11 +1,13 @@
 import * as vscode from "vscode";
+import { Grpcurl } from "./grpcurl/grpcurl";
 import { AdressList as HostsTreeView } from "./hosts/list";
-import { getProto } from "./grpcurl/proto";
 import { Storage } from "./storage/storage";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
   const hosts = new HostsTreeView(storage.adressses);
+  const grpcurl = new Grpcurl();
+
   vscode.window.registerTreeDataProvider("host", hosts);
 
   vscode.commands.registerCommand("host.add", async () => {
@@ -29,7 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
     if (path === "") {
       return;
     }
-    var struc = await getProto(path);
+    var struc = await grpcurl.getProto(path);
     storage.protos.add(struc);
   });
 

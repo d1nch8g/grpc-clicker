@@ -1,17 +1,6 @@
 import * as vscode from "vscode";
 import { Service } from "./service";
 
-export async function getProto(path: string) {
-  const util = require("util");
-  const exec = util.promisify(require("child_process").exec);
-  const call = `grpcurl -import-path / -proto ${path} describe`;
-  const { stdout, stderr } = await exec(call);
-  if (`${stderr}` !== ``) {
-    vscode.window.showErrorMessage(`${stderr}`);
-  }
-  return new Proto(`${stdout}`, path);
-}
-
 export class Proto {
   public name: string;
   public tag: string;
