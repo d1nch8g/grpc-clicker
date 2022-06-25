@@ -1,12 +1,12 @@
 import * as vscode from "vscode";
-import { AdressList } from "./adress/list";
+import { AdressList as HostsTreeView } from "./hosts/list";
 import { getStructure } from "./grpcurl/structure";
 import { ErrStorage } from "./storage/errors";
 import { Storage } from "./storage/storage";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
-  const hosts = new AdressList(storage.adressses);
+  const hosts = new HostsTreeView(storage.adressses);
   vscode.window.registerTreeDataProvider("host", hosts);
 
   vscode.commands.registerCommand("host.add", async () => {
