@@ -5,9 +5,9 @@ export class ProtoItem extends vscode.TreeItem {
   constructor(public readonly label: string) {
     super(label);
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+    super.iconPath = {
+      light: path.join(__filename, "..", "..", "images", "light", "proto.svg"),
+      dark: path.join(__filename, "..", "..", "images", "dark", "proto.svg"),
+    };
   }
-  iconPath = {
-    light: path.join(__filename, "..", "..", "images", "light", "proto.svg"),
-    dark: path.join(__filename, "..", "..", "images", "dark", "proto.svg"),
-  };
 }
