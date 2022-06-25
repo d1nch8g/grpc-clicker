@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
 import { AdressList as HostsTreeView } from "./hosts/list";
 import { getStructure } from "./grpcurl/structure";
-import { ErrStorage } from "./storage/errors";
 import { Storage } from "./storage/storage";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -14,12 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
     if (adress === "") {
       return;
     }
-    let error = storage.adressses.add(adress);
-    if (error === ErrStorage.adressExists) {
-      let msg = `Adress you are trying to add already exists!`;
-      vscode.window.showErrorMessage(msg);
-      return;
-    }
+    storage.adressses.add(adress);
     hosts.refresh();
   });
 

@@ -14,7 +14,7 @@ export async function getStructure(path: string) {
   return new Structure(`${stdout}`, path);
 }
 
-class Structure {
+export class Structure {
   public name: string;
   public tag: string;
   public version: string;

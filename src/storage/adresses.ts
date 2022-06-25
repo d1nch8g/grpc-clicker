@@ -1,9 +1,9 @@
+import * as vscode from "vscode";
 import { Memento } from "vscode";
-import { ErrStorage } from "./errors";
 
 export class Adresses {
-  adressesKey: string;
-  currentAdressKey: string;
+  private adressesKey: string;
+  private currentAdressKey: string;
   constructor(private memento: Memento) {
     this.adressesKey = "grpc-clicker-adresses";
     this.currentAdressKey = "grpc-clicker-curAdress";
@@ -14,14 +14,16 @@ export class Adresses {
     return adresses;
   }
 
-  public add(adress: string): ErrStorage {
+  public add(adress: string) {
     let adresses = this.memento.get<string[]>(this.adressesKey, []);
     if (adresses.includes(adress)) {
-      return ErrStorage.adressExists;
+      let msg = `Adress you are trying to add already exists!`;
+      vscode.window.showErrorMessage(msg);
+      return;
     }
     adresses.push(adress);
     this.memento.update(this.adressesKey, adresses);
-    return ErrStorage.nil;
+    return;
   }
 
   public remove(adress: string) {
