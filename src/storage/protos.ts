@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { Memento } from "vscode";
 import { Proto } from "../grpcurl/proto";
 
-export class Structures {
+export class Protos {
   private protosKey: string;
   constructor(private memento: Memento) {
     this.protosKey = "grpc-clicker-structures";

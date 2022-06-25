@@ -1,6 +1,6 @@
 import { Memento } from "vscode";
 import { Adresses } from "./adresses";
-import { Structures as Protos } from "./structures";
+import { Protos as Protos } from "./protos";
 
 export class Storage {
   public adressses: Adresses;

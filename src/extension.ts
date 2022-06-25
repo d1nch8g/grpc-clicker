@@ -26,6 +26,12 @@ export function activate(context: vscode.ExtensionContext) {
     hosts.refresh();
   });
 
+  vscode.commands.registerCommand("host.switch", async (host: string) => {
+    storage.adressses.setCurret(host);
+    let msg = `Host for gRPC calls being switched: ${host}`;
+    vscode.window.showInformationMessage(msg);
+  });
+
   vscode.commands.registerCommand("schema.add", async () => {
     let path = (await vscode.window.showInputBox()) ?? "";
     if (path === "") {
