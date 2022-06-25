@@ -7,6 +7,7 @@ export class Proto {
   public version: string;
   public services: Service[] = [];
   public built: boolean = false;
+  // TODO add all messages and nested messages
   constructor(stdout: string, public path: string) {
     let lines = stdout.split("\n");
     let curLines: string[] = [];
