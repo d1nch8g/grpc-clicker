@@ -13,6 +13,15 @@ export class Protos {
     return protos;
   }
 
+  public pathes(): string[] {
+    let protos = this.memento.get<Proto[]>(this.protosKey, []);
+    let pathes: string[] = [];
+    protos.forEach((proto) => {
+      pathes.push(proto.path);
+    });
+    return pathes;
+  }
+
   public add(newProto: Proto) {
     let protos = this.memento.get<Proto[]>(this.protosKey, []);
     protos.forEach((storageProto) => {
