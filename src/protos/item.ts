@@ -28,7 +28,7 @@ export class ProtoItem extends vscode.TreeItem {
       svg = "msg.svg";
     }
     if (item instanceof Field) {
-      svg = "";
+      svg = "field.svg";
     }
     super.iconPath = {
       light: path.join(__filename, "..", "..", "images", "light", svg),
