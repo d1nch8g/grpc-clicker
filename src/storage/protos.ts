@@ -32,12 +32,13 @@ export class Protos {
     return adresses;
   }
 
-  public remove(adress: string) {
+  public remove(adress: string): string[] {
     let adresses = this.memento.get<string[]>(this.protosKey, []);
     let idx = adresses.indexOf(adress);
     if (idx !== -1) {
       adresses.splice(idx, 1);
     }
     this.memento.update(this.protosKey, adresses);
+    return adresses;
   }
 }
