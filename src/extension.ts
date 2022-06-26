@@ -12,7 +12,7 @@ export async function activate(context: vscode.ExtensionContext) {
   vscode.window.registerTreeDataProvider("hosts", hostsView);
 
   let protos = await grpcurl.protos(storage.protos.list());
-  const protosView = new ProtosTreeView(protos);
+  const protosView = new ProtosTreeView(grpcurl, protos);
   vscode.window.registerTreeDataProvider("protos", protosView);
 
   vscode.commands.registerCommand("hosts.add", async () => {

@@ -1,10 +1,10 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Service } from "../grpcurl/service";
-import { Proto } from "../grpcurl/proto";
-import { Message } from "../grpcurl/message";
-import { Call } from "../grpcurl/call";
-import { Field } from "../grpcurl/field";
+import { Service } from "../classes/service";
+import { Proto } from "../classes/proto";
+import { Message } from "../classes/message";
+import { Call } from "../classes/call";
+import { Field } from "../classes/field";
 
 export class ProtoItem extends vscode.TreeItem {
   constructor(public item: Proto | Service | Call | Message | Field) {

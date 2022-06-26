@@ -1,5 +1,7 @@
 import * as vscode from "vscode";
-import { Proto } from "./proto";
+import { Field } from "../classes/field";
+import { Message } from "../classes/message";
+import { Proto } from "../classes/proto";
 
 export class Grpcurl {
   async proto(path: string): Promise<Proto> {
@@ -19,5 +21,25 @@ export class Grpcurl {
       protos.push(await this.proto(path));
     }
     return protos;
+  }
+  async getFields(message: Message): Promise<Field[]> {
+    if (message.fields.length > 0) {
+      return message.fields;
+    }
+    const util = require("util");
+    const exec = util.promisify(require("child_process").exec);
+    const call = `grpcurl -import-path / -proto ${message.path} describe ${message.tag}`;
+    const { stdout, stderr } = await exec(call);
+    if (`${stderr}` !== ``) {
+      vscode.window.showErrorMessage(`${stderr}`);
+      return [];
+    }
+    let lines = `${stdout}`.split("\n");
+    lines.forEach((line) => {
+      if (line.includes(" = ") && line.includes(";")) {
+        message.fields.push(new Field(line));
+      }
+    });
+    return message.fields;
   }
 }

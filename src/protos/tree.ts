@@ -1,13 +1,14 @@
 import * as vscode from "vscode";
-import { Call } from "../grpcurl/call";
-import { Message } from "../grpcurl/message";
-import { Proto } from "../grpcurl/proto";
-import { Service } from "../grpcurl/service";
+import { Call } from "../classes/call";
+import { Message } from "../classes/message";
+import { Proto } from "../classes/proto";
+import { Service } from "../classes/service";
+import { Grpcurl } from "../grpcurl/grpcurl";
 import { ProtoItem } from "./item";
 
 export class ProtosTree implements vscode.TreeDataProvider<ProtoItem> {
   private protos: Proto[];
-  constructor(protos: Proto[]) {
+  constructor(private grpcurl: Grpcurl, protos: Proto[]) {
     this.protos = protos;
     this.onChange = new vscode.EventEmitter<ProtoItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
@@ -52,7 +53,7 @@ export class ProtosTree implements vscode.TreeDataProvider<ProtoItem> {
       items.push(new ProtoItem(elem.output));
     }
     if (elem instanceof Message) {
-      let fields = await elem.getFields();
+      let fields = await this.grpcurl.getFields(elem);
       fields.forEach((field) => {
         items.push(new ProtoItem(field));
       });
