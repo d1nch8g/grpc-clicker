@@ -4,14 +4,15 @@ import { AdressList as HostsTreeView } from "./hosts/list";
 import { ProtosTree as ProtosTreeView } from "./protos/tree";
 import { Storage } from "./storage/storage";
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
   const grpcurl = new Grpcurl();
   const storage = new Storage(context.globalState);
 
   const hostsView = new HostsTreeView(storage.hosts.list());
   vscode.window.registerTreeDataProvider("hosts", hostsView);
 
-  const protosView = new ProtosTreeView();
+  let protos = await grpcurl.protos(storage.protos.list());
+  const protosView = new ProtosTreeView(protos);
   vscode.window.registerTreeDataProvider("protos", protosView);
 
   vscode.commands.registerCommand("hosts.add", async () => {
