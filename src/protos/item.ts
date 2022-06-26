@@ -21,11 +21,14 @@ export class ProtoItem extends vscode.TreeItem {
       if (item.inputIsStream || item.outputIsStream) {
         svg = "stream.svg";
       } else {
-        svg = "msg.svg";
+        svg = "unary.svg";
       }
     }
     if (item instanceof Message) {
-      svg = "svc.svg";
+      svg = "msg.svg";
+    }
+    if (item instanceof Field) {
+      svg = "";
     }
     super.iconPath = {
       light: path.join(__filename, "..", "..", "images", "light", svg),
