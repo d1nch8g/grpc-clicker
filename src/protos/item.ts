@@ -24,10 +24,10 @@ export class ProtoItem extends vscode.TreeItem {
       } else {
         svg = "unary.svg";
       }
-      super.contextValue = "host";
+      super.contextValue = "call";
       super.command = {
-        command: "hosts.switch",
-        title: "Switch grpc host",
+        command: "call.trigger",
+        title: "Trigger opening of webview for grpc call",
         arguments: [item.path],
       };
     }

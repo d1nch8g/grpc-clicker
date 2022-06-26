@@ -12,7 +12,7 @@
   "activationEvents": [
     "onView:hosts",
     "onView:schema",
-    "onView:collections",
+    "onView:history",
     "onCommand:hosts.add",
     "onCommand:hosts.remove",
     "onCommand:protos.add",
@@ -41,8 +41,8 @@
           "name": "Protobuf schemas"
         },
         {
-          "id": "collections",
-          "name": "Collections"
+          "id": "history",
+          "name": "History"
         }
       ]
     },
