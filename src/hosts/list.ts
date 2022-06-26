@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
+import { Storage } from "../storage/storage";
 import { HostItem } from "./item";
-import { Adresses } from "../storage/adresses";
 
 export class AdressList implements vscode.TreeDataProvider<HostItem> {
-  constructor(private storage: Adresses) {
+  constructor(private storage: Storage) {
     this.onChange = new vscode.EventEmitter<HostItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
   }
@@ -21,7 +21,7 @@ export class AdressList implements vscode.TreeDataProvider<HostItem> {
 
   getChildren(element?: HostItem): vscode.ProviderResult<HostItem[]> {
     let adressesItems: HostItem[] = [];
-    let adresses = this.storage.list();
+    let adresses = this.storage.adresses.list();
     adresses.forEach((adress) => {
       adressesItems.push(new HostItem(adress));
     });
@@ -37,7 +37,7 @@ export class AdressList implements vscode.TreeDataProvider<HostItem> {
     element: HostItem,
     token: vscode.CancellationToken
   ): vscode.ProviderResult<vscode.TreeItem> {
-    this.storage.setCurret(element.label);
+    this.storage.adresses.setCurret(element.label);
     return new HostItem(element.label);
   }
 }

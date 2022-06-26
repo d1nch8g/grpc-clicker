@@ -7,7 +7,7 @@ export function activate(context: vscode.ExtensionContext) {
   const grpcurl = new Grpcurl();
   const storage = new Storage(context.globalState);
 
-  const hosts = new HostsTreeView(storage.adressses);
+  const hosts = new HostsTreeView(storage.adresses);
 
   vscode.window.registerTreeDataProvider("host", hosts);
 
@@ -16,19 +16,19 @@ export function activate(context: vscode.ExtensionContext) {
     if (adress === "") {
       return;
     }
-    storage.adressses.add(adress);
+    storage.adresses.add(adress);
     hosts.refresh();
   });
 
   vscode.commands.registerCommand("host.remove", async () => {
-    let adresses = storage.adressses.list();
+    let adresses = storage.adresses.list();
     let adress = await vscode.window.showQuickPick(adresses);
-    storage.adressses.remove(adress);
+    storage.adresses.remove(adress);
     hosts.refresh();
   });
 
   vscode.commands.registerCommand("host.switch", async (host: string) => {
-    storage.adressses.setCurret(host);
+    storage.adresses.setCurret(host);
     let msg = `Host for gRPC calls being switched: ${host}`;
     vscode.window.showInformationMessage(msg);
   });
