@@ -5,7 +5,7 @@ export class Service {
   public name: string;
   public tag: string;
   public calls: Call[] = [];
-  constructor(lines: string[]) {
+  constructor(lines: string[], private path: string) {
     if (lines.length < 4) {
       vscode.window.showErrorMessage(
         `Unable to create service from lines:\n${lines}`
@@ -17,7 +17,7 @@ export class Service {
     this.name = splittedtag[splittedtag.length - 1];
     lines.forEach((line) => {
       if (line.startsWith("  rpc")) {
-        this.calls.push(new Call(line));
+        this.calls.push(new Call(line, path));
       }
     });
   }
