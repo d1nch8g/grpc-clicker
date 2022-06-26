@@ -9,5 +9,12 @@ export class Field {
       this.type = `map<${key}, ${value}>`;
       this.name = splitted[4];
     }
+    if (line.includes("repeated") || line.includes("optional")) {
+      this.type = `${splitted[2]} ${splitted[3]}`;
+      this.name = splitted[4];
+    } else {
+      this.type = splitted[2];
+      this.name = splitted[3];
+    }
   }
 }
