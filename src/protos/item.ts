@@ -28,6 +28,7 @@ export class ProtoItem extends vscode.TreeItem {
       svg = "msg.svg";
     }
     if (item instanceof Field) {
+      super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
       svg = "field.svg";
     }
     super.iconPath = {
