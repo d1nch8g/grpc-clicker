@@ -72,6 +72,11 @@
       },
       {
         "category": "gRPC Clicker",
+        "command": "call.trigger",
+        "title": "Trigger opening of webview for grpc call"
+      },
+      {
+        "category": "gRPC Clicker",
         "command": "protos.add",
         "title": "Add new proto file",
         "icon": {
@@ -130,6 +135,10 @@
         {
           "command": "hosts.switch",
           "when": "viewItem == host"
+        },
+        {
+          "command": "call.trigger",
+          "when": "viewItem == call"
         }
       ]
     }

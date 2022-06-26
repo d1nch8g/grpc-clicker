@@ -24,6 +24,12 @@ export class ProtoItem extends vscode.TreeItem {
       } else {
         svg = "unary.svg";
       }
+      super.contextValue = "host";
+      super.command = {
+        command: "hosts.switch",
+        title: "Switch grpc host",
+        arguments: [item.path],
+      };
     }
     if (item instanceof Message) {
       super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;

@@ -10,7 +10,6 @@ export class HostItem extends vscode.TreeItem {
       title: "Switch grpc host",
       arguments: [host],
     };
-    super.tooltip = "hehe";
   }
   iconPath = {
     light: path.join(__filename, "..", "..", "images", "light", "host.svg"),
