@@ -18,6 +18,7 @@ export class ProtoItem extends vscode.TreeItem {
       svg = "svc.svg";
     }
     if (item instanceof Call) {
+      super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
       if (item.inputIsStream || item.outputIsStream) {
         svg = "stream.svg";
       } else {
@@ -25,10 +26,11 @@ export class ProtoItem extends vscode.TreeItem {
       }
     }
     if (item instanceof Message) {
+      super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
       svg = "msg.svg";
     }
     if (item instanceof Field) {
-      super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+      super.collapsibleState = vscode.TreeItemCollapsibleState.None;
       svg = "field.svg";
     }
     super.iconPath = {

@@ -33,7 +33,6 @@ export class ProtosTree implements vscode.TreeDataProvider<ProtoItem> {
       return items;
     }
     let elem = element.item;
-    let stf = elem instanceof Proto;
     if (elem instanceof Proto) {
       elem.services.forEach((svc) => {
         items.push(new ProtoItem(svc));
@@ -57,6 +56,7 @@ export class ProtosTree implements vscode.TreeDataProvider<ProtoItem> {
         items.push(new ProtoItem(field));
       });
     }
+    return items;
   }
 
   getParent?(element: ProtoItem): vscode.ProviderResult<ProtoItem> {
