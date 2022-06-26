@@ -4,16 +4,20 @@ export class Field {
   public name: string;
   constructor(line: string) {
     let splitted = line.split(" ");
-    if (line.includes("Map") && line.includes("<") && line.includes(">")) {
-      var key = line.replace("map<", "").replace(",", "");
-      var value = line.replace(">", "");
+    let isMap = line.includes("map<") && line.includes(">");
+    let isOptional = line.startsWith("  optional");
+    let isRepeated = line.startsWith("  repeated");
+    if (isMap) {
+      var key = splitted[2].replace("map<", "").replace(",", "");
+      var value = splitted[3].replace(">", "");
       this.type = `map<${key}, ${value}>`;
       this.field = splitted[4];
     }
-    if (line.includes("repeated") || line.includes("optional")) {
+    if (isOptional || isRepeated) {
       this.type = `${splitted[2]} ${splitted[3]}`;
       this.field = splitted[4];
-    } else {
+    }
+    if (!isMap && !isOptional && !isRepeated) {
       this.type = splitted[2];
       this.field = splitted[3];
     }
