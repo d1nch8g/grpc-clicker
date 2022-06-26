@@ -4,41 +4,27 @@ import { Service } from "../grpcurl/service";
 import { Proto } from "../grpcurl/proto";
 import { Message } from "../grpcurl/message";
 import { Call } from "../grpcurl/call";
-
-export enum ProtoType {
-  proto,
-  service,
-  unary,
-  stream,
-  message,
-  field,
-}
+import { Field } from "../grpcurl/field";
 
 export class ProtoItem extends vscode.TreeItem {
-  public type: ProtoType;
-  constructor(public readonly item: Proto | Service | Call | Message) {
+  constructor(public item: Proto | Service | Call | Message | Field) {
     super(item.name);
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     let svg = "";
     if (item instanceof Proto) {
-      this.type = ProtoType.proto;
       svg = "proto.svg";
     }
     if (item instanceof Service) {
-      this.type = ProtoType.service;
       svg = "svc.svg";
     }
     if (item instanceof Call) {
       if (item.inputIsStream || item.outputIsStream) {
-        this.type = ProtoType.stream;
         svg = "stream.svg";
       } else {
-        this.type = ProtoType.unary;
         svg = "msg.svg";
       }
     }
     if (item instanceof Message) {
-      this.type = ProtoType.message;
       svg = "svc.svg";
     }
     super.iconPath = {
