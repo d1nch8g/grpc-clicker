@@ -1,3 +1,3 @@
 export class Field {
-  constructor() {}
+  constructor(line: string) {}
 }
