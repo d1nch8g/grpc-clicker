@@ -18,7 +18,7 @@ export class ProtoItem extends vscode.TreeItem {
       svg = "svc.svg";
     }
     if (item instanceof Call) {
-      super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+      super.collapsibleState = vscode.TreeItemCollapsibleState.None;
       if (item.inputIsStream || item.outputIsStream) {
         svg = "stream.svg";
       } else {

@@ -8,12 +8,7 @@ export class Protos {
     this.protosKey = "grpc-clicker-structures";
   }
 
-  public list(): Proto[] {
-    let protos = this.memento.get<Proto[]>(this.protosKey, []);
-    return protos;
-  }
-
-  public pathes(): string[] {
+  public list(): string[] {
     let protos = this.memento.get<Proto[]>(this.protosKey, []);
     let pathes: string[] = [];
     protos.forEach((proto) => {
@@ -22,26 +17,27 @@ export class Protos {
     return pathes;
   }
 
-  public add(newProto: Proto) {
-    let protos = this.memento.get<Proto[]>(this.protosKey, []);
-    protos.forEach((storageProto) => {
-      if (newProto.path === storageProto.path) {
-        let msg = `This proto file already exists!`;
-        vscode.window.showErrorMessage(msg);
-        return;
-      }
-    });
-    protos.push(newProto);
-    this.memento.update(this.protosKey, protos);
+  public add(path: string): string[] {
+    let adresses = this.memento.get<string[]>(this.protosKey, []);
+    if (path === "") {
+      return adresses;
+    }
+    if (adresses.includes(path)) {
+      let msg = `Proto you are trying to add already exists!`;
+      vscode.window.showErrorMessage(msg);
+      return adresses;
+    }
+    adresses.push(path);
+    this.memento.update(this.protosKey, adresses);
+    return adresses;
   }
 
-  public remove(path: string) {
-    let protos = this.memento.get<Proto[]>(this.protosKey, []);
-    protos.forEach((structure, idx) => {
-      if (structure.path === path) {
-        protos.splice(idx, 1);
-      }
-    });
-    this.memento.update(this.protosKey, protos);
+  public remove(adress: string) {
+    let adresses = this.memento.get<string[]>(this.protosKey, []);
+    let idx = adresses.indexOf(adress);
+    if (idx !== -1) {
+      adresses.splice(idx, 1);
+    }
+    this.memento.update(this.protosKey, adresses);
   }
 }

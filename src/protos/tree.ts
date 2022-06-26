@@ -3,11 +3,12 @@ import { Call } from "../grpcurl/call";
 import { Message } from "../grpcurl/message";
 import { Proto } from "../grpcurl/proto";
 import { Service } from "../grpcurl/service";
-import { Storage } from "../storage/storage";
 import { ProtoItem } from "./item";
 
 export class ProtosTree implements vscode.TreeDataProvider<ProtoItem> {
-  constructor(private storage: Storage) {
+  private protos: Proto[];
+  constructor(protos: Proto[]) {
+    this.protos = protos;
     this.onChange = new vscode.EventEmitter<ProtoItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
   }
@@ -15,7 +16,8 @@ export class ProtosTree implements vscode.TreeDataProvider<ProtoItem> {
   private onChange: vscode.EventEmitter<ProtoItem | undefined | void>;
   readonly onDidChangeTreeData: vscode.Event<void | ProtoItem | ProtoItem[]>;
 
-  refresh(): void {
+  refresh(protos: Proto[]): void {
+    this.protos = protos;
     this.onChange.fire();
   }
 
@@ -26,8 +28,7 @@ export class ProtosTree implements vscode.TreeDataProvider<ProtoItem> {
   async getChildren(element?: ProtoItem): Promise<ProtoItem[]> {
     let items: ProtoItem[] = [];
     if (element === undefined) {
-      let protos = this.storage.protos.list();
-      protos.forEach((proto) => {
+      this.protos.forEach((proto) => {
         items.push(new ProtoItem(proto));
       });
       return items;

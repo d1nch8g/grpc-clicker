@@ -1,12 +1,12 @@
 import { Memento } from "vscode";
-import { Adresses } from "./adresses";
+import { Hosts } from "./hosts";
 import { Protos as Protos } from "./protos";
 
 export class Storage {
-  public adresses: Adresses;
+  public adresses: Hosts;
   public protos: Protos;
   constructor(memento: Memento) {
-    this.adresses = new Adresses(memento);
+    this.adresses = new Hosts(memento);
     this.protos = new Protos(memento);
   }
 }

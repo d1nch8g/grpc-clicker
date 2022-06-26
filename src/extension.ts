@@ -4,30 +4,29 @@ import { AdressList as HostsTreeView } from "./hosts/list";
 import { ProtosTree as ProtosTreeView } from "./protos/tree";
 import { Storage } from "./storage/storage";
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
   const grpcurl = new Grpcurl();
   const storage = new Storage(context.globalState);
 
-  const hosts = new HostsTreeView(storage);
-  vscode.window.registerTreeDataProvider("hosts", hosts);
+  const hostsView = new HostsTreeView(storage.adresses.list());
+  vscode.window.registerTreeDataProvider("hosts", hostsView);
 
-  const protos = new ProtosTreeView(storage);
+  const protos = new ProtosTreeView(
+    await grpcurl.protos(storage.protos.list())
+  );
   vscode.window.registerTreeDataProvider("protos", protos);
 
   vscode.commands.registerCommand("hosts.add", async () => {
-    let adress = (await vscode.window.showInputBox()) ?? "";
-    if (adress === "") {
-      return;
-    }
-    storage.adresses.add(adress);
-    hosts.refresh();
+    let host = (await vscode.window.showInputBox()) ?? "";
+    let hosts = storage.adresses.add(host);
+    hostsView.refresh(hosts);
   });
 
   vscode.commands.registerCommand("hosts.remove", async () => {
     let adresses = storage.adresses.list();
     let adress = await vscode.window.showQuickPick(adresses);
     storage.adresses.remove(adress);
-    hosts.refresh();
+    hostsView.refresh();
   });
 
   vscode.commands.registerCommand("hosts.switch", async (host: string) => {
@@ -38,11 +37,8 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("protos.add", async () => {
     let path = (await vscode.window.showInputBox()) ?? "";
-    if (path === "") {
-      return;
-    }
+    storage.protos.add(path);
     var struc = await grpcurl.proto(path);
-    storage.protos.add(struc);
     protos.refresh();
   });
 
