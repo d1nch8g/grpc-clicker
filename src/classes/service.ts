@@ -11,7 +11,7 @@ export class Service {
     this.name = splittedtag[splittedtag.length - 1];
     lines.forEach((line) => {
       if (line.startsWith("  rpc")) {
-        this.calls.push(new Call(line, path));
+        this.calls.push(new Call(line, path, this.tag));
       }
     });
   }

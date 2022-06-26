@@ -28,7 +28,7 @@ export class ProtoItem extends vscode.TreeItem {
       super.command = {
         command: "call.trigger",
         title: "Trigger opening of webview for grpc call",
-        arguments: [item.path],
+        arguments: [item.path, item.tag],
       };
     }
     if (item instanceof Message) {
