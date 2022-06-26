@@ -1,13 +1,15 @@
 import * as vscode from "vscode";
 import { Grpcurl } from "./grpcurl/grpcurl";
 import { AdressList as HostsTreeView } from "./hosts/list";
+import { ProtosTree as ProtosTreeView } from "./protos/tree";
 import { Storage } from "./storage/storage";
 
 export function activate(context: vscode.ExtensionContext) {
   const grpcurl = new Grpcurl();
   const storage = new Storage(context.globalState);
 
-  const hosts = new HostsTreeView(storage.adresses);
+  const hosts = new HostsTreeView(storage);
+  const protos = new ProtosTreeView(storage);
 
   vscode.window.registerTreeDataProvider("host", hosts);
 
@@ -40,14 +42,14 @@ export function activate(context: vscode.ExtensionContext) {
     }
     var struc = await grpcurl.proto(path);
     storage.protos.add(struc);
-    // TODO add protos view refresh
+    protos.refresh();
   });
 
   vscode.commands.registerCommand("schema.remove", async () => {
     let protoPathes = storage.protos.pathes();
     let path = await vscode.window.showQuickPick(protoPathes);
     storage.protos.remove(path);
-    // TODO add protos view refresh
+    protos.refresh();
   });
 
   vscode.commands.registerCommand("schema.refresh", async () => {});
