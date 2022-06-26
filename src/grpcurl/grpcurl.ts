@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import { Field } from "./field";
 import { Proto } from "./proto";
 
 export class Grpcurl {
@@ -13,8 +12,5 @@ export class Grpcurl {
       return null;
     }
     return new Proto(`${stdout}`, path);
-  }
-  async message(path: string, tag: string): Promise<Field[]> {
-    return null;
   }
 }

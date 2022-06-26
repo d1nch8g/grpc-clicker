@@ -1,3 +1,6 @@
+import * as vscode from "vscode";
+import { Field } from "./field";
+
 export class Message {
   public name: string;
   public tag: string;
@@ -7,5 +10,15 @@ export class Message {
     let splittedtag = this.tag.split(".");
     this.name = splittedtag[splittedtag.length - 1];
   }
-  async fields() {}
+  async fields(): Promise<Field[]> {
+    const util = require("util");
+    const exec = util.promisify(require("child_process").exec);
+    const call = `grpcurl -import-path / -proto ${this.path} describe ${this.tag}`;
+    const { stdout, stderr } = await exec(call);
+    if (`${stderr}` !== ``) {
+      vscode.window.showErrorMessage(`${stderr}`);
+      return [];
+    }
+    
+  }
 }
