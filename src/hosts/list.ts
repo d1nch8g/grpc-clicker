@@ -13,7 +13,7 @@ export class AdressList implements vscode.TreeDataProvider<HostItem> {
   readonly onDidChangeTreeData: vscode.Event<void | HostItem | HostItem[]>;
 
   refresh(hosts: string[]): void {
-    hosts = hosts;
+    this.hosts = hosts;
     this.onChange.fire();
   }
 

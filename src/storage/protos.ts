@@ -18,18 +18,18 @@ export class Protos {
   }
 
   public add(path: string): string[] {
-    let adresses = this.memento.get<string[]>(this.protosKey, []);
+    let pathes = this.memento.get<string[]>(this.protosKey, []);
     if (path === "") {
-      return adresses;
+      return pathes;
     }
-    if (adresses.includes(path)) {
+    if (pathes.includes(path)) {
       let msg = `Proto you are trying to add already exists!`;
       vscode.window.showErrorMessage(msg);
-      return adresses;
+      return pathes;
     }
-    adresses.push(path);
-    this.memento.update(this.protosKey, adresses);
-    return adresses;
+    pathes.push(path);
+    this.memento.update(this.protosKey, pathes);
+    return pathes;
   }
 
   public remove(adress: string): string[] {

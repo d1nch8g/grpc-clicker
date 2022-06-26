@@ -7,8 +7,7 @@ import { ProtoItem } from "./item";
 
 export class ProtosTree implements vscode.TreeDataProvider<ProtoItem> {
   private protos: Proto[];
-  constructor(protos: Proto[]) {
-    this.protos = protos;
+  constructor() {
     this.onChange = new vscode.EventEmitter<ProtoItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
   }
