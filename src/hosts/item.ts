@@ -6,7 +6,7 @@ export class HostItem extends vscode.TreeItem {
     super(label);
     super.contextValue = "host";
     super.command = {
-      command: "host.switch",
+      command: "hosts.switch",
       title: "Switch grpc host",
       arguments: [label],
     };
