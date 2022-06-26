@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 import { Memento } from "vscode";
-import { Proto } from "../grpcurl/proto";
 
 export class Protos {
   private protosKey: string;
@@ -9,11 +8,7 @@ export class Protos {
   }
 
   public list(): string[] {
-    let protos = this.memento.get<Proto[]>(this.protosKey, []);
-    let pathes: string[] = [];
-    protos.forEach((proto) => {
-      pathes.push(proto.path);
-    });
+    let pathes = this.memento.get<string[]>(this.protosKey, []);
     return pathes;
   }
 

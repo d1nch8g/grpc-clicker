@@ -15,9 +15,9 @@ export class Grpcurl {
   }
   async protos(pathes: string[]): Promise<Proto[]> {
     let protos: Proto[] = [];
-    pathes.forEach(async (path) => {
+    for (const path of pathes) {
       protos.push(await this.proto(path));
-    });
+    }
     return protos;
   }
 }
