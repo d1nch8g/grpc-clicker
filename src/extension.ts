@@ -35,7 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage(msg);
   });
 
-  vscode.commands.registerCommand("schema.add", async () => {
+  vscode.commands.registerCommand("protos.add", async () => {
     let path = (await vscode.window.showInputBox()) ?? "";
     if (path === "") {
       return;
@@ -45,14 +45,14 @@ export function activate(context: vscode.ExtensionContext) {
     protos.refresh();
   });
 
-  vscode.commands.registerCommand("schema.remove", async () => {
+  vscode.commands.registerCommand("protos.remove", async () => {
     let protoPathes = storage.protos.pathes();
     let path = await vscode.window.showQuickPick(protoPathes);
     storage.protos.remove(path);
     protos.refresh();
   });
 
-  vscode.commands.registerCommand("schema.refresh", async () => {});
+  vscode.commands.registerCommand("protos.refresh", async () => {});
 }
 
 export function deactivate() {}
