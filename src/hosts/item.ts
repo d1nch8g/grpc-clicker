@@ -2,14 +2,15 @@ import * as vscode from "vscode";
 import * as path from "path";
 
 export class HostItem extends vscode.TreeItem {
-  constructor(public readonly label: string) {
-    super(label);
+  constructor(host: string) {
+    super(host);
     super.contextValue = "host";
     super.command = {
       command: "hosts.switch",
       title: "Switch grpc host",
-      arguments: [label],
+      arguments: [host],
     };
+    super.tooltip = "hehe";
   }
   iconPath = {
     light: path.join(__filename, "..", "..", "images", "light", "host.svg"),
