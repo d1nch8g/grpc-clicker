@@ -6,7 +6,6 @@ export class Proto {
   public name: string;
   public tag: string;
   public version: string;
-  public built: boolean = false;
   public services: Service[] = [];
   public messages: Message[] = [];
   constructor(stdout: string, public path: string) {

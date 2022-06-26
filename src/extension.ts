@@ -9,9 +9,10 @@ export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
 
   const hosts = new HostsTreeView(storage);
-  const protos = new ProtosTreeView(storage);
+  vscode.window.registerTreeDataProvider("hosts", hosts);
 
-  vscode.window.registerTreeDataProvider("host", hosts);
+  const protos = new ProtosTreeView(storage);
+  vscode.window.registerTreeDataProvider("protos", protos);
 
   vscode.commands.registerCommand("hosts.add", async () => {
     let adress = (await vscode.window.showInputBox()) ?? "";
@@ -52,7 +53,9 @@ export function activate(context: vscode.ExtensionContext) {
     protos.refresh();
   });
 
-  vscode.commands.registerCommand("protos.refresh", async () => {});
+  vscode.commands.registerCommand("protos.refresh", async () => {
+    protos.refresh();
+  });
 }
 
 export function deactivate() {}

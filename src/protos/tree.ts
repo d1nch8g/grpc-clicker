@@ -25,7 +25,7 @@ export class ProtosTree implements vscode.TreeDataProvider<ProtoItem> {
 
   async getChildren(element?: ProtoItem): Promise<ProtoItem[]> {
     let items: ProtoItem[] = [];
-    if (element === null) {
+    if (element === undefined) {
       let protos = this.storage.protos.list();
       protos.forEach((proto) => {
         items.push(new ProtoItem(proto));
@@ -33,6 +33,7 @@ export class ProtosTree implements vscode.TreeDataProvider<ProtoItem> {
       return items;
     }
     let elem = element.item;
+    let stf = elem instanceof Proto;
     if (elem instanceof Proto) {
       elem.services.forEach((svc) => {
         items.push(new ProtoItem(svc));
