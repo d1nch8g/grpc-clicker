@@ -1,7 +1,7 @@
 export class Message {
   public name: string;
   public tag: string;
-  constructor(rawmessage: string, private path: string) {
+  constructor(rawmessage: string, public path: string) {
     let splitted = rawmessage.split(" ");
     this.tag = splitted[splitted.length - 2];
     let splittedtag = this.tag.split(".");

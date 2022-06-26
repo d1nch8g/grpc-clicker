@@ -38,7 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
     if (path === "") {
       return;
     }
-    var struc = await grpcurl.getProto(path);
+    var struc = await grpcurl.proto(path);
     storage.protos.add(struc);
     // TODO add protos view refresh
   });

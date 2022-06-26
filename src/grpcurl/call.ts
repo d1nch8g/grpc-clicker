@@ -6,7 +6,7 @@ export class Call {
   public output: Message;
   public outputIsStream: boolean = false;
   public name: string;
-  constructor(line: string, private path: string) {
+  constructor(line: string, public path: string) {
     let splittedspace = line.split(" ");
     this.name = splittedspace[3];
     let splittedquote = line.split(")");
