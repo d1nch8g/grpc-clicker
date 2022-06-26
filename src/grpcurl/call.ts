@@ -6,12 +6,12 @@ export class Call {
   public output: Message;
   public outputIsStream: boolean = false;
   public name: string;
-  constructor(line: string) {
+  constructor(line: string, private path: string) {
     let splittedspace = line.split(" ");
     this.name = splittedspace[3];
     let splittedquote = line.split(")");
-    this.input = new Message(splittedquote[0]);
-    this.output = new Message(splittedquote[1]);
+    this.input = new Message(splittedquote[0], path);
+    this.output = new Message(splittedquote[1], path);
     if (splittedquote[0].includes("stream")) {
       this.inputIsStream = true;
     }
