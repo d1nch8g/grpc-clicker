@@ -65,8 +65,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand(
     "call.trigger",
-    async (host: string, tag: string) => {
-      let msg = `Call have been triggered: ${host}, ${tag}`;
+    async (path: string, tag: string) => {
+      let msg = `Call have been triggered: ${tag}\r\n ${path}`;
       vscode.window.showInformationMessage(msg);
     }
   );
