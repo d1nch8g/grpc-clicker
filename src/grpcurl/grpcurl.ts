@@ -5,15 +5,20 @@ import { Proto } from "../classes/proto";
 
 export class Grpcurl {
   async proto(path: string): Promise<Proto> {
-    const util = require("util");
-    const exec = util.promisify(require("child_process").exec);
-    const call = `grpcurl -import-path / -proto ${path} describe`;
-    const { stdout, stderr } = await exec(call);
-    if (`${stderr}` !== ``) {
-      vscode.window.showErrorMessage(`${stderr}`);
-      return null;
+    try {
+      const util = require("util");
+      const exec = util.promisify(require("child_process").exec);
+      const call = `grpcurl -import-path / -proto ${path} describe`;
+      const { stdout, stderr } = await exec(call);
+      if (`${stderr}` !== ``) {
+        vscode.window.showErrorMessage(`${stderr}`);
+        return new Proto("", path);
+      }
+      return new Proto(`${stdout}`, path);
+    } catch (e) {
+      vscode.window.showErrorMessage(`${e}`);
+      return new Proto("", path);
     }
-    return new Proto(`${stdout}`, path);
   }
   async protos(pathes: string[]): Promise<Proto[]> {
     let protos: Proto[] = [];

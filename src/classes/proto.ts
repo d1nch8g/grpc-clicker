@@ -9,6 +9,9 @@ export class Proto {
   public services: Service[] = [];
   public messages: Message[] = [];
   constructor(stdout: string, public path: string) {
+    if (stdout === "") {
+      this.tag = "failed to load";
+    }
     let lines = stdout.split("\n");
     let curLines: string[] = [];
     lines.forEach((line) => {

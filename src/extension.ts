@@ -36,6 +36,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("protos.add", async () => {
     // TODO add protos detection in current dir
+    // await vscode.window.showWorkspaceFolderPick();
     let path = (await vscode.window.showInputBox()) ?? "";
     let pathes = storage.protos.add(path);
     let protos = await grpcurl.protos(pathes);
