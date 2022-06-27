@@ -70,6 +70,6 @@ export class ProtosTree implements vscode.TreeDataProvider<ProtoItem> {
     element: ProtoItem,
     token: vscode.CancellationToken
   ): vscode.ProviderResult<vscode.TreeItem> {
-    throw new Error("Method not implemented.");
+    return element;
   }
 }

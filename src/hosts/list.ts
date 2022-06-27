@@ -38,6 +38,6 @@ export class AdressList implements vscode.TreeDataProvider<HostItem> {
     element: HostItem,
     token: vscode.CancellationToken
   ): vscode.ProviderResult<vscode.TreeItem> {
-    throw new Error("Method not implemented.");
+    return element;
   }
 }
