@@ -23,9 +23,9 @@ export class AdressList implements vscode.TreeDataProvider<HostItem> {
 
   getChildren(element?: HostItem): vscode.ProviderResult<HostItem[]> {
     let hostItems: HostItem[] = [];
-    this.hosts.forEach((adress) => {
-      hostItems.push(new HostItem(adress));
-    });
+    for (const host of this.hosts) {
+      hostItems.push(new HostItem(host));
+    }
     return hostItems;
   }
 

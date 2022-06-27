@@ -4,6 +4,7 @@ import * as path from "path";
 export class HostItem extends vscode.TreeItem {
   constructor(host: string) {
     super(host);
+    super.tooltip = `tooltip`;
     super.contextValue = "host";
     super.command = {
       command: "hosts.switch",

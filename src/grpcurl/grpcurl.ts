@@ -40,11 +40,11 @@ export class Grpcurl {
       return [];
     }
     let lines = `${stdout}`.split("\n");
-    lines.forEach((line) => {
+    for (const line of lines) {
       if (line.includes(" = ") && line.includes(";")) {
         message.fields.push(new Field(line));
       }
-    });
+    }
     return message.fields;
   }
 }

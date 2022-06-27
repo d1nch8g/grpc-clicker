@@ -9,10 +9,10 @@ export class Service {
     this.tag = lines[0].split(" ")[0];
     let splittedtag = this.tag.split(".");
     this.name = splittedtag[splittedtag.length - 1];
-    lines.forEach((line) => {
+    for (const line of lines) {
       if (line.startsWith("  rpc")) {
         this.calls.push(new Call(line, path, this.tag));
       }
-    });
+    }
   }
 }

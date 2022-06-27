@@ -29,24 +29,24 @@ export class ProtosTree implements vscode.TreeDataProvider<ProtoItem> {
   async getChildren(element?: ProtoItem): Promise<ProtoItem[]> {
     let items: ProtoItem[] = [];
     if (element === undefined) {
-      this.protos.forEach((proto) => {
+      for (const proto of this.protos) {
         items.push(new ProtoItem(proto));
-      });
+      }
       return items;
     }
     let elem = element.item;
     if (elem instanceof Proto) {
-      elem.services.forEach((svc) => {
+      for (const svc of elem.services) {
         items.push(new ProtoItem(svc));
-      });
-      elem.messages.forEach((msg) => {
+      }
+      for (const msg of elem.messages) {
         items.push(new ProtoItem(msg));
-      });
+      }
     }
     if (elem instanceof Service) {
-      elem.calls.forEach((call) => {
+      for (const call of elem.calls) {
         items.push(new ProtoItem(call));
-      });
+      }
     }
     if (elem instanceof Call) {
       items.push(new ProtoItem(elem.input));
@@ -54,9 +54,9 @@ export class ProtosTree implements vscode.TreeDataProvider<ProtoItem> {
     }
     if (elem instanceof Message) {
       let fields = await this.grpcurl.getFields(elem);
-      fields.forEach((field) => {
+      for (const field of fields) {
         items.push(new ProtoItem(field));
-      });
+      }
     }
     return items;
   }

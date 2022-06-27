@@ -12,7 +12,7 @@ export class Proto {
     }
     let lines = stdout.split("\n");
     let curLines: string[] = [];
-    lines.forEach((line) => {
+    for (const line of lines) {
       curLines.push(line);
       if (line.endsWith(" is a service:")) {
         this.tag = line.replace(" is a service:", "");
@@ -26,7 +26,7 @@ export class Proto {
         this.services.push(new Service(curLines, path));
         curLines = [];
       }
-    });
+    }
     let splittedName = this.tag.split(".");
     let filename = path.replace(/^.*[\\\/]/, "");
     if (splittedName.length === 2) {
@@ -35,14 +35,14 @@ export class Proto {
       this.name = `${filename} - ${splittedName[0]}`;
     }
     let messages = new Map<string, Message>();
-    this.services.forEach((service) => {
-      service.calls.forEach((call) => {
+    for (const service of this.services) {
+      for (const call of service.calls) {
         messages.set(call.input.tag, call.input);
         messages.set(call.output.tag, call.output);
-      });
-    });
-    messages.forEach((message) => {
-      this.messages.push(message);
+      }
+    }
+    messages.forEach((msg) => {
+      this.messages.push(msg);
     });
   }
 }
