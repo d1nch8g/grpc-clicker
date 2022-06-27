@@ -42,7 +42,8 @@ export async function activate(context: vscode.ExtensionContext) {
         protoFiles: ["proto"],
       },
     };
-    let path = (await vscode.window.showOpenDialog(options))[0].fsPath;
+    let pick = await vscode.window.showOpenDialog(options);
+    let path = pick[0].fsPath;
     let pathes = storage.protos.add(path);
     let protos = await grpcurl.protos(pathes);
     protosView.refresh(protos);
