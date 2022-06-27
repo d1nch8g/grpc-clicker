@@ -1,5 +1,3 @@
-import { stringify } from "querystring";
-import * as vscode from "vscode";
 import { Message } from "./message";
 import { Service } from "./service";
 
