@@ -2,6 +2,8 @@ import * as vscode from "vscode";
 import { Grpcurl } from "./grpcurl/grpcurl";
 import { AdressList as HostsTreeView } from "./hosts/list";
 import { ProtosTree as ProtosTreeView } from "./protos/tree";
+import * as path from "path";
+import * as fs from "fs";
 import { Storage } from "./storage/storage";
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -65,9 +67,19 @@ export async function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand(
     "call.trigger",
-    async (path: string, tag: string) => {
-      let msg = `Call have been triggered: ${tag}\r\n ${path}`;
+    async (protoPath: string, tag: string) => {
+      let msg = `Call have been triggered: ${tag}\r\n ${protoPath}`;
       vscode.window.showInformationMessage(msg);
+      const panel = vscode.window.createWebviewPanel(
+        "callgrpc",
+        "Test panel",
+        vscode.ViewColumn.One,
+        {}
+      );
+      const filePath: vscode.Uri = vscode.Uri.file(
+        path.join(context.extensionPath, "webview", "index.html")
+      );
+      panel.webview.html = fs.readFileSync(filePath.fsPath, "utf8");
     }
   );
 }

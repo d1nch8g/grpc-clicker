@@ -17,7 +17,8 @@
     "onCommand:hosts.remove",
     "onCommand:protos.add",
     "onCommand:protos.remove",
-    "onCommand:protos.refresh"
+    "onCommand:protos.refresh",
+    "onWebviewPanel:callgrpc"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -72,11 +73,6 @@
       },
       {
         "category": "gRPC Clicker",
-        "command": "call.trigger",
-        "title": "Trigger opening of webview for grpc call"
-      },
-      {
-        "category": "gRPC Clicker",
         "command": "protos.add",
         "title": "Add new proto file",
         "icon": {
@@ -101,6 +97,11 @@
           "dark": "images/dark/refresh.svg",
           "light": "images/light/refresh.svg"
         }
+      },
+      {
+        "category": "gRPC Clicker",
+        "command": "call.trigger",
+        "title": "Trigger opening of webview for grpc call"
       }
     ],
     "menus": {
