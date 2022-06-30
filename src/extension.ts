@@ -74,12 +74,27 @@ export async function activate(context: vscode.ExtensionContext) {
         "callgrpc",
         "Test panel",
         vscode.ViewColumn.One,
-        {}
+        {
+          enableScripts: true,
+          localResourceRoots: [
+            vscode.Uri.joinPath(context.extensionUri, "webview", "main.js"),
+            vscode.Uri.joinPath(context.extensionUri, "webview", "style.css"),
+          ],
+        }
       );
-      const filePath: vscode.Uri = vscode.Uri.file(
+      const htmlPath = vscode.Uri.file(
         path.join(context.extensionPath, "webview", "index.html")
       );
-      panel.webview.html = fs.readFileSync(filePath.fsPath, "utf8");
+      const jsfile = vscode.Uri.joinPath(
+        this._extensionUri,
+        "webview",
+        "main.js"
+      );
+      const scriptUri = panel.webview.asWebviewUri(jsfile);
+      let html = fs.readFileSync(htmlPath.fsPath, "utf8");
+      html.replace("main.js", `${scriptUri}`);
+      panel.webview.html = html;
+      console.log("triggered");
     }
   );
 }
