@@ -3,21 +3,22 @@ import { getNonce } from "./nonce";
 
 export class CallView {
   private panel: vscode.WebviewPanel;
-  constructor(context: vscode.ExtensionContext) {
+  constructor(private context: vscode.ExtensionContext) {
     this.panel = vscode.window.createWebviewPanel(
       `callgrpc`,
       `Grpc call`,
       vscode.ViewColumn.One,
       {
         enableScripts: true,
-        localResourceRoots: [
-          vscode.Uri.joinPath(context.extensionUri, `media`),
-        ],
+        localResourceRoots: [this.vscodeUri(`media`)],
       }
     );
 
-    let js = vscode.Uri.joinPath(context.extensionUri, `media`, `main.js`);
+    let scriptPath = this.vscodeUri(`media`, `main.js`);
+    let cssPath = this.vscodeUri(`media`, `vscode.css`);
+  }
 
-    
+  private vscodeUri(...pathes: string[]): vscode.Uri {
+    return vscode.Uri.joinPath(this.context.extensionUri, ...pathes);
   }
 }
