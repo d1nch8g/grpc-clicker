@@ -15,5 +15,9 @@ export class CallView {
         ],
       }
     );
+
+    let js = vscode.Uri.joinPath(context.extensionUri, `media`, `main.js`);
+
+    
   }
 }
