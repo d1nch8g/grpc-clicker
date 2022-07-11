@@ -46,8 +46,8 @@ export class ProtoItem extends vscode.TreeItem {
       svg = "field.svg";
     }
     super.iconPath = {
-      light: path.join(__filename, "..", "..", "light", svg),
-      dark: path.join(__filename, "..", "..", "dark", svg),
+      light: path.join(__filename, "..", "..", "images", svg),
+      dark: path.join(__filename, "..", "..", "images", svg),
     };
   }
 }
