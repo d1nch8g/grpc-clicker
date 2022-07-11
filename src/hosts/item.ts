@@ -13,7 +13,7 @@ export class HostItem extends vscode.TreeItem {
     };
   }
   iconPath = {
-    light: path.join(__filename, "..", "..", "images", "light", "host.svg"),
-    dark: path.join(__filename, "..", "..", "images", "dark", "host.svg"),
+    light: path.join(__filename, "..", "..", "images", "host.svg"),
+    dark: path.join(__filename, "..", "..", "images", "host.svg"),
   };
 }
