@@ -1,54 +1,12 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!-- Generator: Adobe Illustrator 18.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 58.244 58.244" style="enable-background:new 0 0 58.244 58.244;" xml:space="preserve">
+<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 371.62 371.62" style="enable-background:new 0 0 371.62 371.62;" xml:space="preserve">
 <g>
-	<g>
-		<path style="fill:#556080;" d="M54.392,19H3.608C1.616,19,0,17.385,0,15.392V3.609C0,1.616,1.616,0,3.608,0h50.783
-			C56.384,0,58,1.616,58,3.609v11.783C58,17.385,56.384,19,54.392,19z"/>
-		<path style="fill:#38454F;" d="M54.392,38H3.608C1.616,38,0,36.385,0,34.392V22.609C0,20.616,1.616,19,3.608,19h50.783
-			C56.384,19,58,20.616,58,22.609v11.783C58,36.385,56.384,38,54.392,38z"/>
-		<path style="fill:#556080;" d="M54.392,57H3.608C1.616,57,0,55.385,0,53.392V41.609C0,39.616,1.616,38,3.608,38h50.783
-			C56.384,38,58,39.616,58,41.609v11.783C58,55.385,56.384,57,54.392,57z"/>
-		<circle style="fill:#8697CB;" cx="9.5" cy="9.5" r="3.5"/>
-		<circle style="fill:#8697CB;" cx="49" cy="8" r="1"/>
-		<circle style="fill:#8697CB;" cx="45" cy="8" r="1"/>
-		<circle style="fill:#8697CB;" cx="51" cy="11" r="1"/>
-		<circle style="fill:#8697CB;" cx="47" cy="11" r="1"/>
-		<circle style="fill:#8697CB;" cx="41" cy="8" r="1"/>
-		<circle style="fill:#8697CB;" cx="43" cy="11" r="1"/>
-		<circle style="fill:#8697CB;" cx="37" cy="8" r="1"/>
-		<circle style="fill:#8697CB;" cx="39" cy="11" r="1"/>
-		<circle style="fill:#8697CB;" cx="33" cy="8" r="1"/>
-		<circle style="fill:#8697CB;" cx="35" cy="11" r="1"/>
-		<circle style="fill:#8697CB;" cx="9.5" cy="28.5" r="3.5"/>
-		<circle style="fill:#8697CB;" cx="49" cy="27" r="1"/>
-		<circle style="fill:#8697CB;" cx="45" cy="27" r="1"/>
-		<circle style="fill:#8697CB;" cx="51" cy="30" r="1"/>
-		<circle style="fill:#8697CB;" cx="47" cy="30" r="1"/>
-		<circle style="fill:#8697CB;" cx="41" cy="27" r="1"/>
-		<circle style="fill:#8697CB;" cx="43" cy="30" r="1"/>
-		<circle style="fill:#8697CB;" cx="37" cy="27" r="1"/>
-		<circle style="fill:#8697CB;" cx="39" cy="30" r="1"/>
-		<circle style="fill:#8697CB;" cx="33" cy="27" r="1"/>
-		<circle style="fill:#8697CB;" cx="35" cy="30" r="1"/>
-		<circle style="fill:#8697CB;" cx="9.5" cy="47.5" r="3.5"/>
-		<circle style="fill:#8697CB;" cx="49" cy="46" r="1"/>
-		<circle style="fill:#8697CB;" cx="45" cy="46" r="1"/>
-		<circle style="fill:#8697CB;" cx="51" cy="49" r="1"/>
-		<circle style="fill:#8697CB;" cx="47" cy="49" r="1"/>
-		<circle style="fill:#8697CB;" cx="41" cy="46" r="1"/>
-		<circle style="fill:#8697CB;" cx="43" cy="49" r="1"/>
-		<circle style="fill:#8697CB;" cx="37" cy="46" r="1"/>
-		<circle style="fill:#8697CB;" cx="39" cy="49" r="1"/>
-		<circle style="fill:#8697CB;" cx="33" cy="46" r="1"/>
-		<circle style="fill:#8697CB;" cx="35" cy="49" r="1"/>
-	</g>
-	<g>
-		<path style="fill:#B1D3EF;" d="M57.951,56.537l-6.797-6.797l6.483-3.241L40,40l6.499,17.637l3.241-6.484l6.797,6.797
-			c0.195,0.195,0.451,0.293,0.707,0.293s0.512-0.098,0.707-0.293C58.342,57.56,58.342,56.927,57.951,56.537z"/>
-	</g>
+	<path style="fill:#1EA6C6;" d="M62.513,153.087c-0.009-0.525-0.02-1.049-0.02-1.575c0-50.155,40.659-90.814,90.814-90.814
+		c43.222,0,79.388,30.196,88.562,70.643c8.555-4.789,18.409-7.531,28.91-7.531c32.766,0,59.328,26.562,59.328,59.328
+		c0,1.339-0.06,2.664-0.148,3.981c24.325,9.03,41.661,32.444,41.661,59.911c0,35.286-28.605,63.892-63.892,63.892H79.865
+		C35.757,310.921,0,275.164,0,231.056C0,192.907,26.749,161.011,62.513,153.087z"/>
 </g>
 <g>
 </g>
