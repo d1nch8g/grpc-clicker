@@ -65,6 +65,10 @@ export async function activate(context: vscode.ExtensionContext) {
     let protos = await grpcurl.protos(pathes);
     protosView.refresh(protos);
   });
+
+  vscode.commands.registerCommand("call.trigger", async () => {
+    vscode.window.showInformationMessage(`call triggered`);
+  });
 }
 
 export function deactivate() {}

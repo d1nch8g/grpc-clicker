@@ -1,0 +1,3 @@
+- checkout views.Containers as contribution point in vsode api
+- add left side panel for grpc creds
+- add left side panel for grpc meta
