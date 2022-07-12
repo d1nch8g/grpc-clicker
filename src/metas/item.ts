@@ -15,7 +15,7 @@ export class MetaItem extends vscode.TreeItem {
     if (isOn) {
       this.iconName = "meta-on.svg";
     }
-    super.iconPath = {
+    this.iconPath = {
       light: path.join(__filename, "..", "..", "images", this.iconName),
       dark: path.join(__filename, "..", "..", "images", this.iconName),
     };

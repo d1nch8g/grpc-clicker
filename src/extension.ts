@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { Grpcurl } from "./grpcurl/grpcurl";
 import { AdressList as HostsTreeView } from "./hosts/list";
+import { MetasList } from "./metas/list";
 import { ProtosTree as ProtosTreeView } from "./protos/tree";
 import { Storage } from "./storage/storage";
 
@@ -11,9 +12,12 @@ export async function activate(context: vscode.ExtensionContext) {
   const hostsView = new HostsTreeView(storage.hosts.list());
   vscode.window.registerTreeDataProvider("hosts", hostsView);
 
-  let protos = await grpcurl.protos(storage.protos.list());
+  const protos = await grpcurl.protos(storage.protos.list());
   const protosView = new ProtosTreeView(grpcurl, protos);
   vscode.window.registerTreeDataProvider("protos", protosView);
+
+  const metasList = new MetasList(storage.metas.list());
+  vscode.window.registerTreeDataProvider("metas", metasList);
 
   vscode.commands.registerCommand("hosts.add", async () => {
     let host = (await vscode.window.showInputBox()) ?? "";
@@ -65,20 +69,21 @@ export async function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("call.trigger", async () => {
     vscode.window.showInformationMessage(`call triggered`);
-    // TODO write trigger for call
+    let metas = storage.metas.list();
+    metasList.refresh(metas);
   });
 
   vscode.commands.registerCommand("metas.add", async () => {
-    let host = (await vscode.window.showInputBox()) ?? "";
-    let hosts = storage.hosts.add(host);
-    // TODO hostsView.refresh(hosts);
+    let meta = (await vscode.window.showInputBox()) ?? "";
+    let metas = storage.metas.add(meta);
+    metasList.refresh(metas);
   });
 
   vscode.commands.registerCommand("metas.remove", async () => {
-    let hosts = storage.metas.list();
-    let host = await vscode.window.showQuickPick(hosts);
-    hosts = storage.hosts.remove(host);
-    // TODO hostsView.refresh(hosts);
+    let metas = storage.metas.list();
+    let meta = await vscode.window.showQuickPick(metas);
+    metas = storage.hosts.remove(meta);
+    metasList.refresh(metas);
   });
 }
 

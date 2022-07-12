@@ -12,7 +12,7 @@
   "activationEvents": [
     "onView:hosts",
     "onView:schema",
-    "onView:history",
+    "onView:metas",
     "onCommand:hosts.add",
     "onCommand:hosts.remove",
     "onCommand:protos.add",

@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { MetaItem } from "./item";
 
-export class AdressList implements vscode.TreeDataProvider<MetaItem> {
+export class MetasList implements vscode.TreeDataProvider<MetaItem> {
   private metas: string[];
   constructor(metas: string[]) {
     this.metas = metas;
