@@ -1,4 +1,3 @@
-import * as vscode from "vscode";
 import { Call } from "./call";
 
 export class Service {

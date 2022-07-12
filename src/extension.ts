@@ -2,10 +2,7 @@ import * as vscode from "vscode";
 import { Grpcurl } from "./grpcurl/grpcurl";
 import { AdressList as HostsTreeView } from "./hosts/list";
 import { ProtosTree as ProtosTreeView } from "./protos/tree";
-import * as path from "path";
-import * as fs from "fs";
 import { Storage } from "./storage/storage";
-import { getNonce } from "./webview/nonce";
 
 export async function activate(context: vscode.ExtensionContext) {
   const grpcurl = new Grpcurl();
