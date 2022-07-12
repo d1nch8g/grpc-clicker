@@ -65,6 +65,20 @@ export async function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("call.trigger", async () => {
     vscode.window.showInformationMessage(`call triggered`);
+    // TODO write trigger for call
+  });
+
+  vscode.commands.registerCommand("metas.add", async () => {
+    let host = (await vscode.window.showInputBox()) ?? "";
+    let hosts = storage.hosts.add(host);
+    // TODO hostsView.refresh(hosts);
+  });
+
+  vscode.commands.registerCommand("metas.remove", async () => {
+    let hosts = storage.metas.list();
+    let host = await vscode.window.showQuickPick(hosts);
+    hosts = storage.hosts.remove(host);
+    // TODO hostsView.refresh(hosts);
   });
 }
 

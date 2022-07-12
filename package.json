@@ -19,7 +19,6 @@
     "onCommand:protos.remove",
     "onCommand:metas.add",
     "onCommand:metas.remove",
-    "onCommand:metas.switch",
     "onCommand:protos.refresh",
     "onWebviewPanel:callgrpc"
   ],
@@ -73,6 +72,11 @@
         "category": "gRPC Clicker",
         "command": "hosts.switch",
         "title": "Switch grpc host"
+      },
+      {
+        "category": "gRPC Clicker",
+        "command": "metas.switch",
+        "title": "Turn on/off value of context metadata"
       },
       {
         "category": "gRPC Clicker",
@@ -171,6 +175,10 @@
         {
           "command": "call.trigger",
           "when": "viewItem == call"
+        },
+        {
+          "command": "metas.switch",
+          "when": "viewItem == meta"
         }
       ]
     }
