@@ -16,7 +16,7 @@ export async function activate(context: vscode.ExtensionContext) {
   const protosView = new ProtosTreeView(grpcurl, protos);
   vscode.window.registerTreeDataProvider("protos", protosView);
 
-  const metasList = new MetasList(storage.metas.list());
+  const metasList = new MetasList(storage.metas.listMetas());
   vscode.window.registerTreeDataProvider("metas", metasList);
 
   vscode.commands.registerCommand("hosts.add", async () => {
@@ -69,7 +69,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("call.trigger", async () => {
     vscode.window.showInformationMessage(`call triggered`);
-    let metas = storage.metas.list();
+    let metas = storage.metas.listMetas();
     metasList.refresh(metas);
   });
 
@@ -82,8 +82,8 @@ export async function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand("metas.remove", async () => {
     let metas = storage.metas.list();
     let meta = await vscode.window.showQuickPick(metas);
-    metas = storage.hosts.remove(meta);
-    metasList.refresh(metas);
+    let newMetas = storage.metas.remove(meta);
+    metasList.refresh(newMetas);
   });
 }
 

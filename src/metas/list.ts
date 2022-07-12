@@ -1,9 +1,10 @@
 import * as vscode from "vscode";
+import { Meta } from "../classes/meta";
 import { MetaItem } from "./item";
 
 export class MetasList implements vscode.TreeDataProvider<MetaItem> {
-  private metas: string[];
-  constructor(metas: string[]) {
+  private metas: Meta[];
+  constructor(metas: Meta[]) {
     this.metas = metas;
     this.onChange = new vscode.EventEmitter<MetaItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
@@ -12,8 +13,8 @@ export class MetasList implements vscode.TreeDataProvider<MetaItem> {
   private onChange: vscode.EventEmitter<MetaItem | undefined | void>;
   readonly onDidChangeTreeData: vscode.Event<void | MetaItem | MetaItem[]>;
 
-  refresh(hosts: string[]): void {
-    this.metas = hosts;
+  refresh(metas: Meta[]): void {
+    this.metas = metas;
     this.onChange.fire();
   }
 
@@ -24,12 +25,7 @@ export class MetasList implements vscode.TreeDataProvider<MetaItem> {
   getChildren(element?: MetaItem): vscode.ProviderResult<MetaItem[]> {
     let hostItems: MetaItem[] = [];
     for (var meta of this.metas) {
-      if (meta.endsWith("//IS//ON")) {
-        meta = meta.replace("//IS//ON", "");
-        hostItems.push(new MetaItem(meta, true));
-      } else {
-        hostItems.push(new MetaItem(meta, false));
-      }
+      hostItems.push(new MetaItem(meta.name, meta.isOn));
     }
     return hostItems;
   }
