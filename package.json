@@ -17,6 +17,9 @@
     "onCommand:hosts.remove",
     "onCommand:protos.add",
     "onCommand:protos.remove",
+    "onCommand:metas.add",
+    "onCommand:metas.remove",
+    "onCommand:metas.switch",
     "onCommand:protos.refresh",
     "onWebviewPanel:callgrpc"
   ],
@@ -42,8 +45,8 @@
           "name": "Protobuf schemas"
         },
         {
-          "id": "history",
-          "name": "History"
+          "id": "metas",
+          "name": "Request-metadata"
         }
       ]
     },
@@ -91,6 +94,24 @@
       },
       {
         "category": "gRPC Clicker",
+        "command": "metas.add",
+        "title": "Add new metadata to request",
+        "icon": {
+          "dark": "images/dark/plus.svg",
+          "light": "images/light/plus.svg"
+        }
+      },
+      {
+        "category": "gRPC Clicker",
+        "command": "metas.remove",
+        "title": "Remove existing metadata",
+        "icon": {
+          "dark": "images/dark/minus.svg",
+          "light": "images/light/minus.svg"
+        }
+      },
+      {
+        "category": "gRPC Clicker",
         "command": "protos.refresh",
         "title": "Resresh existing proro schemas",
         "icon": {
@@ -124,6 +145,16 @@
         {
           "command": "protos.remove",
           "when": "view == protos",
+          "group": "navigation"
+        },
+        {
+          "command": "metas.add",
+          "when": "view == metas",
+          "group": "navigation"
+        },
+        {
+          "command": "metas.remove",
+          "when": "view == metas",
           "group": "navigation"
         },
         {
