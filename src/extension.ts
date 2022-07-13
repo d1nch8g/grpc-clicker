@@ -38,6 +38,7 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage(msg);
   });
 
+  
   vscode.commands.registerCommand("protos.add", async () => {
     const options: vscode.OpenDialogOptions = {
       canSelectMany: false,
