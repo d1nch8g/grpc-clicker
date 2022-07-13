@@ -1,8 +1,11 @@
+import * as vscode from "vscode";
 import { Event, Uri, Webview, WebviewOptions } from "vscode";
+import { GrpcCallWebViewOptions } from "./options";
 
 export class GrpcCallWebView implements Webview {
-  constructor() {
-    this.options = new WebV
+  constructor(context: vscode.ExtensionContext) {
+    this.options = new GrpcCallWebViewOptions(context);
+    
   }
 
   options: WebviewOptions;
