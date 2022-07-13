@@ -85,6 +85,12 @@ export async function activate(context: vscode.ExtensionContext) {
     let newMetas = storage.metas.remove(meta);
     metasList.refresh(newMetas);
   });
+
+  vscode.commands.registerCommand("metas.switch", async (data: string) => {
+    storage.metas.switchOnOff(data);
+    let metas = storage.metas.listMetas();
+    metasList.refresh(metas);
+  });
 }
 
 export function deactivate() {}
