@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as path from "path";
 
 export class HostItem extends vscode.TreeItem {
-  constructor(host: string) {
+  constructor(host: string, current: boolean) {
     super(host);
     super.tooltip = `Host for making gRPC calls.`;
     super.contextValue = "host";
@@ -11,9 +11,13 @@ export class HostItem extends vscode.TreeItem {
       title: "Switch grpc host",
       arguments: [host],
     };
+    let img = "host-off.svg";
+    if (current) {
+      img = "host-on.svg";
+    }
+    super.iconPath = {
+      light: path.join(__filename, "..", "..", "images", img),
+      dark: path.join(__filename, "..", "..", "images", img),
+    };
   }
-  iconPath = {
-    light: path.join(__filename, "..", "..", "images", "host.svg"),
-    dark: path.join(__filename, "..", "..", "images", "host.svg"),
-  };
 }

@@ -9,7 +9,7 @@ export async function activate(context: vscode.ExtensionContext) {
   const grpcurl = new Grpcurl();
   const storage = new Storage(context.globalState);
 
-  const hostsView = new HostsTreeView(storage.hosts.list());
+  const hostsView = new HostsTreeView(storage.hosts.listAsHosts());
   vscode.window.registerTreeDataProvider("hosts", hostsView);
 
   const protos = await grpcurl.protos(storage.protos.list());
@@ -28,17 +28,15 @@ export async function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand("hosts.remove", async () => {
     let hosts = storage.hosts.list();
     let host = await vscode.window.showQuickPick(hosts);
-    hosts = storage.hosts.remove(host);
-    hostsView.refresh(hosts);
+    let newHosts = storage.hosts.remove(host);
+    hostsView.refresh(newHosts);
   });
 
   vscode.commands.registerCommand("hosts.switch", async (host: string) => {
-    storage.hosts.setCurret(host);
-    let msg = `Host for gRPC calls being switched: ${host}`;
-    vscode.window.showInformationMessage(msg);
+    let newHosts = storage.hosts.setCurret(host);
+    hostsView.refresh(newHosts);
   });
 
-  
   vscode.commands.registerCommand("protos.add", async () => {
     const options: vscode.OpenDialogOptions = {
       canSelectMany: false,
@@ -87,8 +85,8 @@ export async function activate(context: vscode.ExtensionContext) {
     metasList.refresh(newMetas);
   });
 
-  vscode.commands.registerCommand("metas.switch", async (data: string) => {
-    storage.metas.switchOnOff(data);
+  vscode.commands.registerCommand("metas.switch", async (meta: string) => {
+    storage.metas.switchOnOff(meta);
     let metas = storage.metas.listMetas();
     metasList.refresh(metas);
   });

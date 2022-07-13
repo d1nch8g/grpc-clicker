@@ -1,6 +1,6 @@
 import { Memento } from "vscode";
 import { Hosts } from "./hosts";
-import { Metadata as Metas } from "./metadata";
+import { Metadata as Metas } from "./metas";
 import { Protos as Protos } from "./protos";
 
 export class Storage {
