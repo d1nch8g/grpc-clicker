@@ -11,6 +11,19 @@ import {
 } from "vscode";
 
 export class GrpcCallWebViewPanel implements WebviewPanel {
+  constructor(
+    context: vscode.ExtensionContext,
+    viewType: string,
+    title: string
+  ) {
+    this.viewType = viewType;
+    this.title = title;
+
+    let svg = vscode.Uri.joinPath(context.extensionUri, "images", "view.svg");
+    path.join(__filename, "..", "..", "images", "webview.svg");
+    this.iconPath = { light: svg, dark: svg };
+  }
+
   viewType: string;
   title: string;
   iconPath?: Uri | { readonly light: Uri; readonly dark: Uri };
@@ -26,17 +39,5 @@ export class GrpcCallWebViewPanel implements WebviewPanel {
   }
   dispose() {
     throw new Error("Method not implemented.");
-  }
-  constructor(
-    context: vscode.ExtensionContext,
-    viewType: string,
-    title: string
-  ) {
-    this.viewType = viewType;
-    this.title = title;
-
-    let svg = vscode.Uri.joinPath(context.extensionUri, "images", "view.svg");
-    path.join(__filename, "..", "..", "images", "webview.svg");
-    this.iconPath = { light: svg, dark: svg };
   }
 }

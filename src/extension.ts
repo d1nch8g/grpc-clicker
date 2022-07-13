@@ -19,7 +19,7 @@ export async function activate(context: vscode.ExtensionContext) {
   const metasList = new MetasList(storage.metas.listMetas());
   vscode.window.registerTreeDataProvider("metas", metasList);
 
-  vscode.window.registerWebviewPanelSerializer("callgrpc", );
+  // TODO vscode.window.registerWebviewPanelSerializer("callgrpc", );
 
   vscode.commands.registerCommand("hosts.add", async () => {
     let host = (await vscode.window.showInputBox()) ?? "";
