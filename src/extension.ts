@@ -93,7 +93,7 @@ export async function activate(context: vscode.ExtensionContext) {
   });
 
   if (vscode.window.registerWebviewPanelSerializer) {
-    vscode.window.registerWebviewPanelSerializer(CatCodingPanel.viewType, {
+    vscode.window.registerWebviewPanelSerializer("callgrpc", {
       async deserializeWebviewPanel(
         webviewPanel: vscode.WebviewPanel,
         state: any
@@ -120,6 +120,11 @@ const cats = {
 };
 
 class CatCodingPanel {
+  public static currentPanel: CatCodingPanel | undefined;
+  private readonly _panel: vscode.WebviewPanel;
+  private readonly _extensionUri: vscode.Uri;
+  private _disposables: vscode.Disposable[] = [];
+
   private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
     this._panel = panel;
     this._extensionUri = extensionUri;
@@ -147,14 +152,6 @@ class CatCodingPanel {
     );
   }
 
-  public static currentPanel: CatCodingPanel | undefined;
-
-  public static readonly viewType = "callgrpc";
-
-  private readonly _panel: vscode.WebviewPanel;
-  private readonly _extensionUri: vscode.Uri;
-  private _disposables: vscode.Disposable[] = [];
-
   public static createOrShow(extensionUri: vscode.Uri) {
     const column = vscode.window.activeTextEditor
       ? vscode.window.activeTextEditor.viewColumn
@@ -166,7 +163,7 @@ class CatCodingPanel {
     }
 
     const panel = vscode.window.createWebviewPanel(
-      CatCodingPanel.viewType,
+      "callgrpc",
       "Cat Coding",
       column || vscode.ViewColumn.One,
       {
