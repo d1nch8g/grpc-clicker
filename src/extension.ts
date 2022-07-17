@@ -93,7 +93,6 @@ export async function activate(context: vscode.ExtensionContext) {
   });
 
   if (vscode.window.registerWebviewPanelSerializer) {
-    // Make sure we register a serializer in activation event
     vscode.window.registerWebviewPanelSerializer(CatCodingPanel.viewType, {
       async deserializeWebviewPanel(
         webviewPanel: vscode.WebviewPanel,
@@ -113,16 +112,6 @@ export async function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() {}
-
-function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
-  return {
-    // Enable javascript in the webview
-    enableScripts: true,
-
-    // And restrict the webview to only loading content from our extension's `media` directory.
-    localResourceRoots: [vscode.Uri.joinPath(extensionUri, "media")],
-  };
-}
 
 function getNonce() {
   let text = "";
@@ -171,7 +160,10 @@ class CatCodingPanel {
       CatCodingPanel.viewType,
       "Cat Coding",
       column || vscode.ViewColumn.One,
-      getWebviewOptions(extensionUri)
+      {
+        enableScripts: true,
+        localResourceRoots: [vscode.Uri.joinPath(extensionUri, "media")],
+      }
     );
 
     CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri);
