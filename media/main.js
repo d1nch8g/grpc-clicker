@@ -4,6 +4,8 @@
 (function () {
   const vscode = acquireVsCodeApi();
 
+  console.log("hello from vscode");
+
   const oldState = /** @type {{ count: number} | undefined} */ (
     vscode.getState()
   );
