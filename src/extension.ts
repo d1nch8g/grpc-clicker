@@ -130,10 +130,6 @@ class CatCodingPanel {
     );
     this._extensionUri = extensionUri;
 
-    panel.onDidDispose(() => panel.dispose(), null, this._disposables);
-
-    panel.onDidChangeViewState((e) => {}, null, this._disposables);
-    
     panel.webview.onDidReceiveMessage(
       (message) => {
         switch (message.command) {
