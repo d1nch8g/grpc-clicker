@@ -66,14 +66,6 @@ export async function activate(context: vscode.ExtensionContext) {
     protosView.refresh(protos);
   });
 
-  vscode.commands.registerCommand("call.trigger", async () => {
-    vscode.window.showInformationMessage(`call triggered`);
-    let metas = storage.metas.listMetas();
-    metasList.refresh(metas);
-
-    new CatCodingPanel(context.extensionUri);
-  });
-
   vscode.commands.registerCommand("metas.add", async () => {
     let meta = (await vscode.window.showInputBox()) ?? "";
     let metas = storage.metas.add(meta);
@@ -93,38 +85,20 @@ export async function activate(context: vscode.ExtensionContext) {
     metasList.refresh(metas);
   });
 
-  vscode.window.registerWebviewPanelSerializer(
-    "callgrpc",
-    new CallPanelSerializer(context.extensionUri)
-  );
-}
+  vscode.commands.registerCommand("call.trigger", async () => {
+    // vscode.window.showInformationMessage(`call triggered`);
+    // let metas = storage.metas.listMetas();
+    // metasList.refresh(metas);
 
-export function deactivate() {}
-
-class CallPanelSerializer implements vscode.WebviewPanelSerializer {
-  constructor(private extensionUri: vscode.Uri) {}
-  async deserializeWebviewPanel(
-    webviewPanel: vscode.WebviewPanel,
-    state: unknown
-  ): Promise<void> {
-    console.log(`Got state: ${state}`);
-    webviewPanel.webview.options = {
-      enableScripts: true,
-      localResourceRoots: [vscode.Uri.joinPath(this.extensionUri, "media")],
-    };
-    new CatCodingPanel(this.extensionUri);
-  }
-}
-
-class CatCodingPanel {
-  constructor(extensionUri: vscode.Uri) {
     const panel = vscode.window.createWebviewPanel(
       "callgrpc",
       "gRPC call",
       vscode.ViewColumn.Active,
       {
         enableScripts: true,
-        localResourceRoots: [vscode.Uri.joinPath(extensionUri, "media")],
+        localResourceRoots: [
+          vscode.Uri.joinPath(context.extensionUri, "media"),
+        ],
       }
     );
 
@@ -140,32 +114,16 @@ class CatCodingPanel {
       null
     );
 
-    panel.title = "gRPC call";
-
-    panel.webview.postMessage({ command: "refactor" });
-
-    let nonce = "";
-    const possible =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for (let i = 0; i < 32; i++) {
-      nonce += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-
-    const scriptPathOnDisk = vscode.Uri.joinPath(
-      extensionUri,
-      "media",
-      "main.js"
+    const scriptUri = panel.webview.asWebviewUri(
+      vscode.Uri.joinPath(context.extensionUri, "media", "main.js")
     );
-
-    const scriptUri = panel.webview.asWebviewUri(scriptPathOnDisk);
-
     const stylesResetUri = panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(extensionUri, "media", "reset.css")
+      vscode.Uri.joinPath(context.extensionUri, "media", "reset.css")
+    );
+    const stylesMainUri = panel.webview.asWebviewUri(
+      vscode.Uri.joinPath(context.extensionUri, "media", "vscode.css")
     );
 
-    const stylesMainUri = panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(extensionUri, "media", "vscode.css")
-    );
     panel.webview.html = `<!DOCTYPE html>
 			<html lang="en">
 			<head>
@@ -175,7 +133,7 @@ class CatCodingPanel {
 					Use a content security policy to only allow loading images from https or from our extension directory,
 					and only allow scripts that have a specific nonce.
 				-->
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${panel.webview.cspSource}; img-src ${panel.webview.cspSource} https:; script-src 'nonce-${nonce}';">
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${panel.webview.cspSource}; img-src ${panel.webview.cspSource} https:; script-src 'nonce-W3hIwRHaPGdvqvmwfzGey0vuCz2fM6Pn';">
 
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -188,8 +146,10 @@ class CatCodingPanel {
 				<img src="https://grpc.io/img/logos/grpc-icon-color.png" width="300" />
 				<h1 id="lines-of-code-counter">0</h1>
 
-				<script nonce="${nonce}" src="${scriptUri}"></script>
+				<script nonce="W3hIwRHaPGdvqvmwfzGey0vuCz2fM6Pn" src="${scriptUri}"></script>
 			</body>
 			</html>`;
-  }
+  });
 }
+
+export function deactivate() {}
