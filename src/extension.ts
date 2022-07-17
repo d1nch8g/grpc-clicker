@@ -119,17 +119,13 @@ class CatCodingPanel {
   private readonly _panel: vscode.WebviewPanel;
   private readonly _extensionUri: vscode.Uri;
   private _disposables: vscode.Disposable[] = [];
-
   private catGif = "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif";
 
   constructor(extensionUri: vscode.Uri) {
-    const column = vscode.window.activeTextEditor
-      ? vscode.window.activeTextEditor.viewColumn
-      : undefined;
     this._panel = vscode.window.createWebviewPanel(
       "callgrpc",
       "Cat Coding",
-      column || vscode.ViewColumn.One,
+      vscode.ViewColumn.Active,
       {
         enableScripts: true,
         localResourceRoots: [vscode.Uri.joinPath(extensionUri, "media")],
@@ -137,14 +133,7 @@ class CatCodingPanel {
     );
     this._extensionUri = extensionUri;
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
-    this._panel.onDidChangeViewState(
-      (e) => {
-        if (this._panel.visible) {
-        }
-      },
-      null,
-      this._disposables
-    );
+    this._panel.onDidChangeViewState((e) => {}, null, this._disposables);
     this._panel.webview.onDidReceiveMessage(
       (message) => {
         switch (message.command) {
