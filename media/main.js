@@ -4,10 +4,12 @@
 (function () {
   const vscode = acquireVsCodeApi();
 
-  console.log("hello from vscode");
-
   vscode.postMessage({
     command: "alert",
-    text: "🐛  on line ",
+    text: "🐛 das me ",
+  });
+
+  window.addEventListener("message", (event) => {
+    console.log(event.data);
   });
 })();

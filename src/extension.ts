@@ -146,6 +146,8 @@ export async function activate(context: vscode.ExtensionContext) {
     ></script>
   </body>
 </html>`;
+
+    panel.webview.postMessage("🐛 ola es me");
   });
 }
 
