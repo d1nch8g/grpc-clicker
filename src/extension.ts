@@ -113,27 +113,21 @@ export async function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {}
 
-const cats = {
-  "Coding Cat": "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",
-  "Compiling Cat": "https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif",
-  "Testing Cat": "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif",
-};
-
 class CatCodingPanel {
   public static currentPanel: CatCodingPanel | undefined;
   private readonly _panel: vscode.WebviewPanel;
   private readonly _extensionUri: vscode.Uri;
   private _disposables: vscode.Disposable[] = [];
 
+  private catGif = "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif";
+
   private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
     this._panel = panel;
     this._extensionUri = extensionUri;
-    this._update();
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
     this._panel.onDidChangeViewState(
       (e) => {
         if (this._panel.visible) {
-          this._update();
         }
       },
       null,
@@ -150,6 +144,9 @@ class CatCodingPanel {
       null,
       this._disposables
     );
+
+    this._panel.title = "gRPC call";
+    this._panel.webview.html = this._getHtmlForWebview(this._panel.webview);
   }
 
   public static createOrShow(extensionUri: vscode.Uri) {
@@ -196,31 +193,7 @@ class CatCodingPanel {
     }
   }
 
-  private _update() {
-    const webview = this._panel.webview;
-
-    switch (this._panel.viewColumn) {
-      case vscode.ViewColumn.Two:
-        this._updateForCat(webview, "Compiling Cat");
-        return;
-
-      case vscode.ViewColumn.Three:
-        this._updateForCat(webview, "Testing Cat");
-        return;
-
-      case vscode.ViewColumn.One:
-      default:
-        this._updateForCat(webview, "Coding Cat");
-        return;
-    }
-  }
-
-  private _updateForCat(webview: vscode.Webview, catName: keyof typeof cats) {
-    this._panel.title = catName;
-    this._panel.webview.html = this._getHtmlForWebview(webview, cats[catName]);
-  }
-
-  private _getHtmlForWebview(webview: vscode.Webview, catGifPath: string) {
+  private _getHtmlForWebview(webview: vscode.Webview) {
     const scriptPathOnDisk = vscode.Uri.joinPath(
       this._extensionUri,
       "media",
@@ -274,7 +247,7 @@ class CatCodingPanel {
 				<title>Cat Coding</title>
 			</head>
 			<body>
-				<img src="${catGifPath}" width="300" />
+				<img src="${this.catGif}" width="300" />
 				<h1 id="lines-of-code-counter">0</h1>
 
 				<script nonce="${nonce}" src="${scriptUri}"></script>
