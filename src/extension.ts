@@ -146,7 +146,61 @@ class CatCodingPanel {
     );
 
     this._panel.title = "gRPC call";
-    this._panel.webview.html = this._getHtmlForWebview(this._panel.webview);
+
+    const scriptPathOnDisk = vscode.Uri.joinPath(
+      this._extensionUri,
+      "media",
+      "main.js"
+    );
+
+    const scriptUri = this._panel.webview.asWebviewUri(scriptPathOnDisk);
+
+    const styleResetPath = vscode.Uri.joinPath(
+      this._extensionUri,
+      "media",
+      "reset.css"
+    );
+    const stylesPathMainPath = vscode.Uri.joinPath(
+      this._extensionUri,
+      "media",
+      "vscode.css"
+    );
+
+    const stylesResetUri = this._panel.webview.asWebviewUri(styleResetPath);
+    const stylesMainUri = this._panel.webview.asWebviewUri(stylesPathMainPath);
+
+    let nonce = "";
+    const possible =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (let i = 0; i < 32; i++) {
+      nonce += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+
+    this._panel.webview.html = `<!DOCTYPE html>
+			<html lang="en">
+			<head>
+				<meta charset="UTF-8">
+
+				<!--
+					Use a content security policy to only allow loading images from https or from our extension directory,
+					and only allow scripts that have a specific nonce.
+				-->
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${this._panel.webview.cspSource}; img-src ${this._panel.webview.cspSource} https:; script-src 'nonce-${nonce}';">
+
+				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+				<link href="${stylesResetUri}" rel="stylesheet">
+				<link href="${stylesMainUri}" rel="stylesheet">
+
+				<title>Cat Coding</title>
+			</head>
+			<body>
+				<img src="${this.catGif}" width="300" />
+				<h1 id="lines-of-code-counter">0</h1>
+
+				<script nonce="${nonce}" src="${scriptUri}"></script>
+			</body>
+			</html>`;
   }
 
   public static createOrShow(extensionUri: vscode.Uri) {
@@ -193,65 +247,5 @@ class CatCodingPanel {
     }
   }
 
-  private _getHtmlForWebview(webview: vscode.Webview) {
-    const scriptPathOnDisk = vscode.Uri.joinPath(
-      this._extensionUri,
-      "media",
-      "main.js"
-    );
-
-    const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
-
-    const styleResetPath = vscode.Uri.joinPath(
-      this._extensionUri,
-      "media",
-      "reset.css"
-    );
-    const stylesPathMainPath = vscode.Uri.joinPath(
-      this._extensionUri,
-      "media",
-      "vscode.css"
-    );
-
-    const stylesResetUri = webview.asWebviewUri(styleResetPath);
-    const stylesMainUri = webview.asWebviewUri(stylesPathMainPath);
-
-    const nonce = getNonce();
-
-    function getNonce() {
-      let text = "";
-      const possible =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-      for (let i = 0; i < 32; i++) {
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-      }
-      return text;
-    }
-
-    return `<!DOCTYPE html>
-			<html lang="en">
-			<head>
-				<meta charset="UTF-8">
-
-				<!--
-					Use a content security policy to only allow loading images from https or from our extension directory,
-					and only allow scripts that have a specific nonce.
-				-->
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}';">
-
-				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-				<link href="${stylesResetUri}" rel="stylesheet">
-				<link href="${stylesMainUri}" rel="stylesheet">
-
-				<title>Cat Coding</title>
-			</head>
-			<body>
-				<img src="${this.catGif}" width="300" />
-				<h1 id="lines-of-code-counter">0</h1>
-
-				<script nonce="${nonce}" src="${scriptUri}"></script>
-			</body>
-			</html>`;
-  }
+  private _getHtmlForWebview(webview: vscode.Webview) {}
 }
