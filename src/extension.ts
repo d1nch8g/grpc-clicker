@@ -70,7 +70,8 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage(`call triggered`);
     let metas = storage.metas.listMetas();
     metasList.refresh(metas);
-    CatCodingPanel.createOrShow(context.extensionUri);
+
+    new CatCodingPanel(context.extensionUri);
   });
 
   vscode.commands.registerCommand("metas.add", async () => {
@@ -105,7 +106,7 @@ export async function activate(context: vscode.ExtensionContext) {
             vscode.Uri.joinPath(context.extensionUri, "media"),
           ],
         };
-        CatCodingPanel.revive(webviewPanel, context.extensionUri);
+        new CatCodingPanel(context.extensionUri);
       },
     });
   }
@@ -121,8 +122,19 @@ class CatCodingPanel {
 
   private catGif = "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif";
 
-  private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
-    this._panel = panel;
+  constructor(extensionUri: vscode.Uri) {
+    const column = vscode.window.activeTextEditor
+      ? vscode.window.activeTextEditor.viewColumn
+      : undefined;
+    this._panel = vscode.window.createWebviewPanel(
+      "callgrpc",
+      "Cat Coding",
+      column || vscode.ViewColumn.One,
+      {
+        enableScripts: true,
+        localResourceRoots: [vscode.Uri.joinPath(extensionUri, "media")],
+      }
+    );
     this._extensionUri = extensionUri;
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
     this._panel.onDidChangeViewState(
@@ -160,6 +172,7 @@ class CatCodingPanel {
       "media",
       "reset.css"
     );
+
     const stylesPathMainPath = vscode.Uri.joinPath(
       this._extensionUri,
       "media",
@@ -203,33 +216,6 @@ class CatCodingPanel {
 			</html>`;
   }
 
-  public static createOrShow(extensionUri: vscode.Uri) {
-    const column = vscode.window.activeTextEditor
-      ? vscode.window.activeTextEditor.viewColumn
-      : undefined;
-
-    if (CatCodingPanel.currentPanel) {
-      CatCodingPanel.currentPanel._panel.reveal(column);
-      return;
-    }
-
-    const panel = vscode.window.createWebviewPanel(
-      "callgrpc",
-      "Cat Coding",
-      column || vscode.ViewColumn.One,
-      {
-        enableScripts: true,
-        localResourceRoots: [vscode.Uri.joinPath(extensionUri, "media")],
-      }
-    );
-
-    CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri);
-  }
-
-  public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
-    CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri);
-  }
-
   public doRefactor() {
     this._panel.webview.postMessage({ command: "refactor" });
   }
@@ -246,6 +232,4 @@ class CatCodingPanel {
       }
     }
   }
-
-  private _getHtmlForWebview(webview: vscode.Webview) {}
 }
