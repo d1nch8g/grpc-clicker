@@ -93,26 +93,28 @@ export async function activate(context: vscode.ExtensionContext) {
     metasList.refresh(metas);
   });
 
-  if (vscode.window.registerWebviewPanelSerializer) {
-    vscode.window.registerWebviewPanelSerializer("callgrpc", {
-      async deserializeWebviewPanel(
-        webviewPanel: vscode.WebviewPanel,
-        state: any
-      ) {
-        console.log(`Got state: ${state}`);
-        webviewPanel.webview.options = {
-          enableScripts: true,
-          localResourceRoots: [
-            vscode.Uri.joinPath(context.extensionUri, "media"),
-          ],
-        };
-        new CatCodingPanel(context.extensionUri);
-      },
-    });
-  }
+  vscode.window.registerWebviewPanelSerializer(
+    "callgrpc",
+    new CallPanelSerializer(context.extensionUri)
+  );
 }
 
 export function deactivate() {}
+
+class CallPanelSerializer implements vscode.WebviewPanelSerializer {
+  constructor(private extensionUri: vscode.Uri) {}
+  async deserializeWebviewPanel(
+    webviewPanel: vscode.WebviewPanel,
+    state: unknown
+  ): Promise<void> {
+    console.log(`Got state: ${state}`);
+    webviewPanel.webview.options = {
+      enableScripts: true,
+      localResourceRoots: [vscode.Uri.joinPath(this.extensionUri, "media")],
+    };
+    new CatCodingPanel(this.extensionUri);
+  }
+}
 
 class CatCodingPanel {
   constructor(extensionUri: vscode.Uri) {
