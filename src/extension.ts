@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import * as path from "path";
 import { Grpcurl } from "./grpcurl/grpcurl";
 import { AdressList as HostsTreeView } from "./hosts/list";
 import { MetasList } from "./metas/list";
