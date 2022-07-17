@@ -115,13 +115,11 @@ export async function activate(context: vscode.ExtensionContext) {
 export function deactivate() {}
 
 class CatCodingPanel {
-  public static currentPanel: CatCodingPanel | undefined;
-  private readonly _panel: vscode.WebviewPanel;
   private readonly _extensionUri: vscode.Uri;
   private _disposables: vscode.Disposable[] = [];
 
   constructor(extensionUri: vscode.Uri) {
-    this._panel = vscode.window.createWebviewPanel(
+    const panel = vscode.window.createWebviewPanel(
       "callgrpc",
       "Cat Coding",
       vscode.ViewColumn.Active,
@@ -131,9 +129,12 @@ class CatCodingPanel {
       }
     );
     this._extensionUri = extensionUri;
-    this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
-    this._panel.onDidChangeViewState((e) => {}, null, this._disposables);
-    this._panel.webview.onDidReceiveMessage(
+
+    panel.onDidDispose(() => panel.dispose(), null, this._disposables);
+
+    panel.onDidChangeViewState((e) => {}, null, this._disposables);
+    
+    panel.webview.onDidReceiveMessage(
       (message) => {
         switch (message.command) {
           case "alert":
@@ -145,7 +146,7 @@ class CatCodingPanel {
       this._disposables
     );
 
-    this._panel.title = "gRPC call";
+    panel.title = "gRPC call";
 
     const scriptPathOnDisk = vscode.Uri.joinPath(
       this._extensionUri,
@@ -153,13 +154,13 @@ class CatCodingPanel {
       "main.js"
     );
 
-    const scriptUri = this._panel.webview.asWebviewUri(scriptPathOnDisk);
+    const scriptUri = panel.webview.asWebviewUri(scriptPathOnDisk);
 
-    const stylesResetUri = this._panel.webview.asWebviewUri(
+    const stylesResetUri = panel.webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, "media", "reset.css")
     );
 
-    const stylesMainUri = this._panel.webview.asWebviewUri(
+    const stylesMainUri = panel.webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, "media", "vscode.css")
     );
 
@@ -170,7 +171,7 @@ class CatCodingPanel {
       nonce += possible.charAt(Math.floor(Math.random() * possible.length));
     }
 
-    this._panel.webview.html = `<!DOCTYPE html>
+    panel.webview.html = `<!DOCTYPE html>
 			<html lang="en">
 			<head>
 				<meta charset="UTF-8">
@@ -179,7 +180,7 @@ class CatCodingPanel {
 					Use a content security policy to only allow loading images from https or from our extension directory,
 					and only allow scripts that have a specific nonce.
 				-->
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${this._panel.webview.cspSource}; img-src ${this._panel.webview.cspSource} https:; script-src 'nonce-${nonce}';">
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${panel.webview.cspSource}; img-src ${panel.webview.cspSource} https:; script-src 'nonce-${nonce}';">
 
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -195,22 +196,7 @@ class CatCodingPanel {
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
 			</html>`;
-  }
 
-  public doRefactor() {
-    this._panel.webview.postMessage({ command: "refactor" });
-  }
-
-  public dispose() {
-    CatCodingPanel.currentPanel = undefined;
-
-    this._panel.dispose();
-
-    while (this._disposables.length) {
-      const x = this._disposables.pop();
-      if (x) {
-        x.dispose();
-      }
-    }
+    panel.webview.postMessage({ command: "refactor" });
   }
 }
