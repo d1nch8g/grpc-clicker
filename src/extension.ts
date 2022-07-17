@@ -115,8 +115,6 @@ export async function activate(context: vscode.ExtensionContext) {
 export function deactivate() {}
 
 class CatCodingPanel {
-  private _disposables: vscode.Disposable[] = [];
-
   constructor(extensionUri: vscode.Uri) {
     const panel = vscode.window.createWebviewPanel(
       "callgrpc",
@@ -137,7 +135,7 @@ class CatCodingPanel {
         }
       },
       null,
-      this._disposables
+      null
     );
 
     panel.title = "gRPC call";
