@@ -113,29 +113,40 @@ export async function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {}
 
-function getNonce() {
-  let text = "";
-  const possible =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  for (let i = 0; i < 32; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return text;
-}
-
 const cats = {
   "Coding Cat": "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",
   "Compiling Cat": "https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif",
   "Testing Cat": "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif",
 };
 
-/**
- * Manages cat coding webview panels
- */
 class CatCodingPanel {
-  /**
-   * Track the currently panel. Only allow a single panel to exist at a time.
-   */
+  private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
+    this._panel = panel;
+    this._extensionUri = extensionUri;
+    this._update();
+    this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
+    this._panel.onDidChangeViewState(
+      (e) => {
+        if (this._panel.visible) {
+          this._update();
+        }
+      },
+      null,
+      this._disposables
+    );
+    this._panel.webview.onDidReceiveMessage(
+      (message) => {
+        switch (message.command) {
+          case "alert":
+            vscode.window.showErrorMessage(message.text);
+            return;
+        }
+      },
+      null,
+      this._disposables
+    );
+  }
+
   public static currentPanel: CatCodingPanel | undefined;
 
   public static readonly viewType = "callgrpc";
@@ -149,13 +160,11 @@ class CatCodingPanel {
       ? vscode.window.activeTextEditor.viewColumn
       : undefined;
 
-    // If we already have a panel, show it.
     if (CatCodingPanel.currentPanel) {
       CatCodingPanel.currentPanel._panel.reveal(column);
       return;
     }
 
-    // Otherwise, create a new panel.
     const panel = vscode.window.createWebviewPanel(
       CatCodingPanel.viewType,
       "Cat Coding",
@@ -173,52 +182,13 @@ class CatCodingPanel {
     CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri);
   }
 
-  private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
-    this._panel = panel;
-    this._extensionUri = extensionUri;
-
-    // Set the webview's initial html content
-    this._update();
-
-    // Listen for when the panel is disposed
-    // This happens when the user closes the panel or when the panel is closed programmatically
-    this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
-
-    // Update the content based on view changes
-    this._panel.onDidChangeViewState(
-      (e) => {
-        if (this._panel.visible) {
-          this._update();
-        }
-      },
-      null,
-      this._disposables
-    );
-
-    // Handle messages from the webview
-    this._panel.webview.onDidReceiveMessage(
-      (message) => {
-        switch (message.command) {
-          case "alert":
-            vscode.window.showErrorMessage(message.text);
-            return;
-        }
-      },
-      null,
-      this._disposables
-    );
-  }
-
   public doRefactor() {
-    // Send a message to the webview webview.
-    // You can send any JSON serializable data.
     this._panel.webview.postMessage({ command: "refactor" });
   }
 
   public dispose() {
     CatCodingPanel.currentPanel = undefined;
 
-    // Clean up our resources
     this._panel.dispose();
 
     while (this._disposables.length) {
@@ -232,7 +202,6 @@ class CatCodingPanel {
   private _update() {
     const webview = this._panel.webview;
 
-    // Vary the webview's content based on where it is located in the editor.
     switch (this._panel.viewColumn) {
       case vscode.ViewColumn.Two:
         this._updateForCat(webview, "Compiling Cat");
@@ -255,17 +224,14 @@ class CatCodingPanel {
   }
 
   private _getHtmlForWebview(webview: vscode.Webview, catGifPath: string) {
-    // Local path to main script run in the webview
     const scriptPathOnDisk = vscode.Uri.joinPath(
       this._extensionUri,
       "media",
       "main.js"
     );
 
-    // And the uri we use to load this script in the webview
     const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
 
-    // Local path to css styles
     const styleResetPath = vscode.Uri.joinPath(
       this._extensionUri,
       "media",
@@ -277,12 +243,20 @@ class CatCodingPanel {
       "vscode.css"
     );
 
-    // Uri to load styles into webview
     const stylesResetUri = webview.asWebviewUri(styleResetPath);
     const stylesMainUri = webview.asWebviewUri(stylesPathMainPath);
 
-    // Use a nonce to only allow specific scripts to be run
     const nonce = getNonce();
+
+    function getNonce() {
+      let text = "";
+      const possible =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      for (let i = 0; i < 32; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      }
+      return text;
+    }
 
     return `<!DOCTYPE html>
 			<html lang="en">
