@@ -155,20 +155,13 @@ class CatCodingPanel {
 
     const scriptUri = this._panel.webview.asWebviewUri(scriptPathOnDisk);
 
-    const styleResetPath = vscode.Uri.joinPath(
-      this._extensionUri,
-      "media",
-      "reset.css"
+    const stylesResetUri = this._panel.webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, "media", "reset.css")
     );
 
-    const stylesPathMainPath = vscode.Uri.joinPath(
-      this._extensionUri,
-      "media",
-      "vscode.css"
+    const stylesMainUri = this._panel.webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, "media", "vscode.css")
     );
-
-    const stylesResetUri = this._panel.webview.asWebviewUri(styleResetPath);
-    const stylesMainUri = this._panel.webview.asWebviewUri(stylesPathMainPath);
 
     let nonce = "";
     const possible =
