@@ -143,6 +143,8 @@ export async function activate(context: vscode.ExtensionContext) {
   <body>
     <img src="https://grpc.io/img/logos/grpc-icon-color.png" width="300" />
     <h1> Grpc clicker panel </h1>
+    <input />
+    <button> Send call </button>
     <script
       nonce="W3hIwRHaPGdvqvmwfzGey0vuCz2fM6Pn"
       src="${scriptUri}"
