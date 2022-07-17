@@ -115,20 +115,18 @@ export async function activate(context: vscode.ExtensionContext) {
 export function deactivate() {}
 
 class CatCodingPanel {
-  private readonly _extensionUri: vscode.Uri;
   private _disposables: vscode.Disposable[] = [];
 
   constructor(extensionUri: vscode.Uri) {
     const panel = vscode.window.createWebviewPanel(
       "callgrpc",
-      "Cat Coding",
+      "gRPC call",
       vscode.ViewColumn.Active,
       {
         enableScripts: true,
         localResourceRoots: [vscode.Uri.joinPath(extensionUri, "media")],
       }
     );
-    this._extensionUri = extensionUri;
 
     panel.webview.onDidReceiveMessage(
       (message) => {
@@ -144,21 +142,7 @@ class CatCodingPanel {
 
     panel.title = "gRPC call";
 
-    const scriptPathOnDisk = vscode.Uri.joinPath(
-      this._extensionUri,
-      "media",
-      "main.js"
-    );
-
-    const scriptUri = panel.webview.asWebviewUri(scriptPathOnDisk);
-
-    const stylesResetUri = panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, "media", "reset.css")
-    );
-
-    const stylesMainUri = panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, "media", "vscode.css")
-    );
+    panel.webview.postMessage({ command: "refactor" });
 
     let nonce = "";
     const possible =
@@ -167,6 +151,21 @@ class CatCodingPanel {
       nonce += possible.charAt(Math.floor(Math.random() * possible.length));
     }
 
+    const scriptPathOnDisk = vscode.Uri.joinPath(
+      extensionUri,
+      "media",
+      "main.js"
+    );
+
+    const scriptUri = panel.webview.asWebviewUri(scriptPathOnDisk);
+
+    const stylesResetUri = panel.webview.asWebviewUri(
+      vscode.Uri.joinPath(extensionUri, "media", "reset.css")
+    );
+
+    const stylesMainUri = panel.webview.asWebviewUri(
+      vscode.Uri.joinPath(extensionUri, "media", "vscode.css")
+    );
     panel.webview.html = `<!DOCTYPE html>
 			<html lang="en">
 			<head>
@@ -192,7 +191,5 @@ class CatCodingPanel {
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
 			</html>`;
-
-    panel.webview.postMessage({ command: "refactor" });
   }
 }
