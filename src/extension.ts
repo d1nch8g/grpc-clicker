@@ -119,7 +119,6 @@ class CatCodingPanel {
   private readonly _panel: vscode.WebviewPanel;
   private readonly _extensionUri: vscode.Uri;
   private _disposables: vscode.Disposable[] = [];
-  private catGif = "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif";
 
   constructor(extensionUri: vscode.Uri) {
     this._panel = vscode.window.createWebviewPanel(
@@ -197,7 +196,7 @@ class CatCodingPanel {
 				<title>Cat Coding</title>
 			</head>
 			<body>
-				<img src="${this.catGif}" width="300" />
+				<img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
 				<h1 id="lines-of-code-counter">0</h1>
 
 				<script nonce="${nonce}" src="${scriptUri}"></script>
