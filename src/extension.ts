@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import * as path from "path";
 import { Grpcurl } from "./grpcurl/grpcurl";
 import { AdressList as HostsTreeView } from "./hosts/list";
 import { MetasList } from "./metas/list";
@@ -86,10 +87,6 @@ export async function activate(context: vscode.ExtensionContext) {
   });
 
   vscode.commands.registerCommand("call.trigger", async () => {
-    // vscode.window.showInformationMessage(`call triggered`);
-    // let metas = storage.metas.listMetas();
-    // metasList.refresh(metas);
-
     const panel = vscode.window.createWebviewPanel(
       "callgrpc",
       "gRPC call",
@@ -113,6 +110,12 @@ export async function activate(context: vscode.ExtensionContext) {
       null,
       null
     );
+
+    let uri = context.extensionUri;
+    panel.iconPath = {
+      light: vscode.Uri.joinPath(uri, `images`, `light`, `rocket.svg`),
+      dark: vscode.Uri.joinPath(uri, `images`, `dark`, `rocket.svg`),
+    };
 
     const scriptUri = panel.webview.asWebviewUri(
       vscode.Uri.joinPath(context.extensionUri, "media", "main.js")
@@ -139,7 +142,7 @@ export async function activate(context: vscode.ExtensionContext) {
   </head>
   <body>
     <img src="https://grpc.io/img/logos/grpc-icon-color.png" width="300" />
-    <h1 id="lines-of-code-counter">0</h1>
+    <h1> Grpc clicker panel </h1>
     <script
       nonce="W3hIwRHaPGdvqvmwfzGey0vuCz2fM6Pn"
       src="${scriptUri}"
