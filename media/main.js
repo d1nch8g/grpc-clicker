@@ -6,7 +6,7 @@
 
   vscode.postMessage({
     command: "alert",
-    text: "🐛 das me ",
+    text: "TODO output",
   });
 
   window.addEventListener("message", (event) => {
