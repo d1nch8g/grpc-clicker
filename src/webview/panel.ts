@@ -5,7 +5,7 @@ import { PanelInput } from "./input";
 export class GrpcClickerView {
   constructor(private uri: vscode.Uri) {}
 
-  create(request: PanelInput) {
+  create(input: PanelInput) {
     const panel = vscode.window.createWebviewPanel(
       "callgrpc",
       "gRPC call",
@@ -56,12 +56,11 @@ export class GrpcClickerView {
     </body>
   </html>`;
 
-    panel.webview.postMessage(request.toString());
+    panel.webview.postMessage(input.message);
 
     panel.webview.onDidReceiveMessage(
       (output: string) => {
-        const request = new PanelInput("1", "2", false, "4", false);
-        vscode.window.showInformationMessage(request.message);
+        vscode.window.showInformationMessage(output);
       },
       null,
       null

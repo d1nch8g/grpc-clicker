@@ -1,12 +1,12 @@
 export class PanelInput {
-  public message: string;
   constructor(
     public proto: string,
     public adress: string,
     public tls: boolean,
     public json: string,
-    public stream: boolean
+    public stream: boolean,
+    public message: string
   ) {
-    this.message = `${proto}|${adress}|${tls}|${json}|${stream}`;
+    this.message = `${proto}|${adress}|${tls}|${json}|${stream}|${message}`;
   }
 }
