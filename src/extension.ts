@@ -87,10 +87,10 @@ export async function activate(context: vscode.ExtensionContext) {
   });
 
   vscode.commands.registerCommand("call.trigger", async (input: PanelInput) => {
-    if (input.stream) {
-      vscode.window.showWarningMessage("Stream calls are not available yet!");
-      return;
-    }
+    // if (input.stream) {
+    //   vscode.window.showWarningMessage("Stream calls are not available yet!");
+    //   return;
+    // }
     webview.create(input);
   });
 }

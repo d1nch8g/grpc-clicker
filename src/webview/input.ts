@@ -1,12 +1,21 @@
 export class PanelInput {
-  constructor(
-    public proto: string,
-    public adress: string,
-    public tls: boolean,
-    public json: string,
-    public stream: boolean,
-    public message: string
-  ) {
-    this.message = `${proto}|${adress}|${tls}|${json}|${stream}|${message}`;
+  public description: string;
+  constructor() {
+    this.description = `nan`;
   }
 }
+
+// public proto: string,
+// public adress: string,
+// public tls: boolean,
+// public stream: boolean,
+// public description: string,
+
+// public callTag: string,
+// public callName: string,
+
+// public inputMsgTag: string,
+// public inputMsgName: string,
+
+// public outputMsgTag: string,
+// public outputMsgName: string

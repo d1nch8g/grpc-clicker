@@ -16,6 +16,18 @@ export class GrpcClickerView {
       }
     );
 
+    panel.webview.onDidReceiveMessage(
+      (message) => {
+        switch (message.command) {
+          case "alert":
+            vscode.window.showErrorMessage(message.text);
+            return;
+        }
+      },
+      null,
+      null
+    );
+
     panel.iconPath = {
       light: vscode.Uri.joinPath(this.uri, `images`, `light`, `rocket.svg`),
       dark: vscode.Uri.joinPath(this.uri, `images`, `dark`, `rocket.svg`),
@@ -56,14 +68,6 @@ export class GrpcClickerView {
     </body>
   </html>`;
 
-    panel.webview.postMessage(input.message);
-
-    panel.webview.onDidReceiveMessage(
-      (output: string) => {
-        vscode.window.showInformationMessage(output);
-      },
-      null,
-      null
-    );
+    panel.webview.postMessage(`TODO input`);
   }
 }
