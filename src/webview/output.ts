@@ -1,4 +1,4 @@
-export interface Input {
+export interface Output {
   proto: string;
   version: string;
   requestName: string;
@@ -10,4 +10,7 @@ export interface Input {
   tls: boolean;
   stream: boolean;
   meta: string[];
+  time: string;
+  code: number;
+  response: string;
 }
