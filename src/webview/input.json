@@ -1,0 +1,13 @@
+{
+  "proto": "val",
+  "version": "val",
+  "requestName": "val",
+  "requestRepresentation": "val",
+  "responseName": "val",
+  "responseRepresentation": "val",
+  "adress": "val",
+  "call": "val",
+  "tls": false,
+  "stream": false,
+  "meta": ["val"]
+}
