@@ -36,11 +36,8 @@ export class GrpcClickerView {
     const scriptUri = panel.webview.asWebviewUri(
       vscode.Uri.joinPath(this.uri, "media", "main.js")
     );
-    const stylesResetUri = panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.uri, "media", "reset.css")
-    );
     const stylesMainUri = panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.uri, "media", "vscode.css")
+      vscode.Uri.joinPath(this.uri, "media", "styles.css")
     );
 
     panel.webview.html = `<!DOCTYPE html>
@@ -52,7 +49,6 @@ export class GrpcClickerView {
         content="default-src 'none'; style-src ${panel.webview.cspSource}; img-src ${panel.webview.cspSource} https:; script-src 'nonce-W3hIwRHaPGdvqvmwfzGey0vuCz2fM6Pn';"
       />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link href="${stylesResetUri}" rel="stylesheet" />
       <link href="${stylesMainUri}" rel="stylesheet" />
       <title>Cat Coding</title>
     </head>
