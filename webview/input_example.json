@@ -1,0 +1,13 @@
+{
+  "proto": "api.proto - pb - v1",
+  "version": "v1",
+  "requestName": "Sint64Mes",
+  "requestRepresentation": "sint64|sint64 message\n",
+  "responseName": "Sint64Mes",
+  "responseRepresentation": "sint64|sint64 message\n",
+  "adress": "TODO|adress",
+  "callName": "Sint64Call",
+  "call": "pb.v1.Basics.Sint64Call",
+  "stream": false,
+  "meta": ["TODO: metas"]
+}
