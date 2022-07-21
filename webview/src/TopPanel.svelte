@@ -32,9 +32,6 @@
 
 <style>
   table {
-    padding-top: 16px;
-    padding-left: 82px;
-    padding-right: 82px;
     margin: 4px;
     border: 1px solid;
     border-collapse: collapse;
@@ -48,5 +45,15 @@
   }
   .expanded {
     width: 100%;
+    padding-left: 8px;
+    padding-right: 16px;
+  }
+  input {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  button {
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
 </style>

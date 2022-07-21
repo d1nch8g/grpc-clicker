@@ -29,9 +29,14 @@
   };
 </script>
 
-<div>
+<div class="container">
   <TopPanel />
 </div>
 
 <style>
+  .container {
+    padding-top: 0.5%;
+    padding-left: 6%;
+    padding-right: 6%;
+  }
 </style>
