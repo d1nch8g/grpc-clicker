@@ -119,7 +119,7 @@
     position: relative;
     border-collapse: collapse;
     width: 100%;
-    margin: 8px;
+    margin: 2px;
   }
 
   td {
