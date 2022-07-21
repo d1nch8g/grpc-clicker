@@ -33,14 +33,8 @@ func main() {
 		}
 	}
 
-	err = os.Remove(out + `main.js`)
-	if err != nil {
-		panic(err)
-	}
-	err = os.Remove(out + `styles.css`)
-	if err != nil {
-		panic(err)
-	}
+	os.Remove(out + `main.js`)
+	os.Remove(out + `styles.css`)
 
 	err = os.Rename(in+`main.js`, out+`main.js`)
 	if err != nil {
