@@ -33,6 +33,8 @@ func main() {
 		}
 	}
 
+	os.Mkdir(`media`, os.ModePerm)
+
 	os.Remove(out + `main.js`)
 	os.Remove(out + `styles.css`)
 
