@@ -1,5 +1,4 @@
 <script>
-  import Adress from "./Adress.svelte";
   export let proto = "petstore";
   export let version = "v1";
   export let service = "petstore";
@@ -16,9 +15,8 @@
     <td>{proto}</td>
     <th>service</th>
     <td>{service}</td>
-
     <td class="expanded">
-      <Adress adress="{adress}" adresses="{adresses}" />
+      <input type="text" name="" id="" />
     </td>
   </tr>
   <tr>
@@ -34,7 +32,19 @@
 
 <style>
   table {
+    padding-top: 16px;
+    padding-left: 82px;
+    padding-right: 82px;
     margin: 4px;
+    border: 1px solid;
+    border-collapse: collapse;
+  }
+  td,
+  th {
+    margin: 6px;
+    padding: 6px;
+    border: 1px solid;
+    border-collapse: collapse;
   }
   .expanded {
     width: 100%;
