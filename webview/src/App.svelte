@@ -33,6 +33,7 @@
     <h2>Metadata</h2>
 
     <table>
+      <th>Call info</th>
       <tr>
         <td>Proto </td>
         <td>{input.proto} </td>
@@ -56,9 +57,7 @@
     </table>
 
     <table>
-      <tr>
-        <td>Input message</td>
-      </tr>
+      <th>Input message</th>
       {#each input.requestRepresentation as { name, type }, i}
         <tr>
           <td>
@@ -70,9 +69,7 @@
     </table>
 
     <table>
-      <tr>
-        <td>Output message</td>
-      </tr>
+      <th>Output message</th>
       {#each input.responseRepresentation as { name, type }, i}
         <tr>
           <td>
@@ -85,7 +82,7 @@
 
     <table>
       <tr>
-        <td>Metadata</td>
+        <th>Metadata</th>
       </tr>
       {#each input.meta as elem, i}
         <tr>
@@ -109,6 +106,9 @@
 </div>
 
 <style>
+  th {
+    text-align: center;
+  }
   h2 {
     width: 100%;
     text-align: center;
@@ -138,14 +138,14 @@
   }
 
   .left {
-    width: 20%;
+    min-width: 20%;
     border-right: 1px solid #6e6e6e;
   }
   .right {
-    width: 40%;
+    min-width: 20%;
   }
   .middle {
-    width: 40%;
+    min-width: 30%;
     border-right: 1px solid #6e6e6e;
   }
 </style>
