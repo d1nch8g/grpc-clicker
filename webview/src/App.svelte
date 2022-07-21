@@ -35,7 +35,7 @@
 
 <style>
   .container {
-    padding-top: 0.5%;
+    padding-top: 2%;
     padding-left: 6%;
     padding-right: 6%;
   }
