@@ -9,7 +9,11 @@
     requestName: "Pet",
     requestRepresentation: [
       {
-        name: "string",
+        name: "name",
+        type: "string",
+      },
+      {
+        name: "age",
         type: "int32",
       },
     ],
@@ -55,18 +59,41 @@
       <tr>
         <td>Input message</td>
       </tr>
+      {#each input.requestRepresentation as { name, type }, i}
+        <tr>
+          <td>
+            {type}
+            {name}
+          </td>
+        </tr>
+      {/each}
     </table>
 
     <table>
       <tr>
         <td>Output message</td>
       </tr>
+      {#each input.responseRepresentation as { name, type }, i}
+        <tr>
+          <td>
+            {type}
+            {name}
+          </td>
+        </tr>
+      {/each}
     </table>
 
     <table>
       <tr>
         <td>Metadata</td>
       </tr>
+      {#each input.meta as elem, i}
+        <tr>
+          <td>
+            {elem}
+          </td>
+        </tr>
+      {/each}
     </table>
   </div>
 
