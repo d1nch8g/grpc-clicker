@@ -1,11 +1,27 @@
-<script lang="ts">
-  let protoName = "petstore";
-  let protoVersion = "v1";
-  let protoAdress = "localhost:8080";
-  let serviceName = "PetSerivce";
-  let protoCallName = "GetPets";
-  let inputRepresentation = `reqs = 1`;
-  let outputRepresentation = `reqs = 1`;
+<script>
+  let input = {
+    proto: "petstore",
+    version: "v1",
+    adress: "val",
+    call: "GetPet",
+    tls: false,
+    stream: false,
+    requestName: "Pet",
+    requestRepresentation: [
+      {
+        name: "string",
+        type: "int32",
+      },
+    ],
+    responseName: "Pet",
+    responseRepresentation: [
+      {
+        name: "string",
+        type: "int32",
+      },
+    ],
+    meta: ["username: user", "password: pass"],
+  };
 </script>
 
 <div class="row">
@@ -15,27 +31,23 @@
     <table>
       <tr>
         <td>Proto </td>
-        <td>{protoName} </td>
+        <td>{input.proto} </td>
       </tr>
       <tr>
         <td>Version </td>
-        <td>{protoVersion} </td>
+        <td>{input.proto} </td>
       </tr>
       <tr>
         <td>Adress </td>
-        <td>{protoAdress} </td>
+        <td>{input.adress} </td>
       </tr>
       <tr>
         <td>Service </td>
-        <td>{serviceName} </td>
+        <td>{input.call} </td>
       </tr>
       <tr>
         <td>Call </td>
-        <td>{protoCallName} </td>
-      </tr>
-      <tr>
-        <td>Call </td>
-        <td>{protoCallName} </td>
+        <td>{input.call} </td>
       </tr>
     </table>
 
@@ -43,26 +55,17 @@
       <tr>
         <td>Input message</td>
       </tr>
-      <tr>
-        <td>{inputRepresentation} </td>
-      </tr>
     </table>
 
     <table>
       <tr>
         <td>Output message</td>
       </tr>
-      <tr>
-        <td>{outputRepresentation} </td>
-      </tr>
     </table>
 
     <table>
       <tr>
         <td>Metadata</td>
-      </tr>
-      <tr>
-        <td>{outputRepresentation} </td>
       </tr>
     </table>
   </div>
@@ -104,7 +107,7 @@
   .column {
     float: left;
     padding: 10px;
-    height: 800px; /* Should be removed. Only for demonstration */
+    height: 800px;
   }
 
   .left {

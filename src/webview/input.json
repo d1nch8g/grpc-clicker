@@ -2,9 +2,15 @@
   "proto": "val",
   "version": "val",
   "requestName": "val",
-  "requestRepresentation": "val",
+  "requestRepresentation": {
+    "field1": "value",
+    "field2": "value"
+  },
   "responseName": "val",
-  "responseRepresentation": "val",
+  "responseRepresentation": {
+    "field1": "value",
+    "field2": "value"
+  },
   "adress": "val",
   "call": "val",
   "tls": false,

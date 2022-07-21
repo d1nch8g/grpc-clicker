@@ -50,13 +50,9 @@ export class GrpcClickerView {
       />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link href="${stylesMainUri}" rel="stylesheet" />
-      <title>Cat Coding</title>
     </head>
-    <body>
-      <img src="https://grpc.io/img/logos/grpc-icon-color.png" width="300" />
-      <h1> Grpc clicker panel </h1>
-      <input />
-      <button> Send call </button>
+    <body>      
+      <div id="app"></div>
       <script
         nonce="W3hIwRHaPGdvqvmwfzGey0vuCz2fM6Pn"
         src="${scriptUri}"
