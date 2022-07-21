@@ -17,19 +17,12 @@ func main() {
 		panic(err)
 	}
 
-	first := files[0].Name()
-	second := files[1].Name()
-
-	if strings.HasSuffix(first, ".css") {
-		err = os.Rename(in+first, in+`styles.css`)
-		if err != nil {
-			panic(err)
+	for _, file := range files {
+		if strings.HasSuffix(file.Name(), ".css") {
+			err = os.Rename(in+file.Name(), in+`styles.css`)
 		}
-	}
-	if strings.HasSuffix(second, ".js") {
-		err = os.Rename(in+second, in+`main.js`)
-		if err != nil {
-			panic(err)
+		if strings.HasSuffix(file.Name(), ".js") {
+			err = os.Rename(in+file.Name(), in+`main.js`)
 		}
 	}
 
