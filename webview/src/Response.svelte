@@ -1,13 +1,15 @@
 <script>
+  export let name = "";
   export let response = "";
   $: innerHeight = 0;
   $: height = innerHeight - 220;
 </script>
 
 <svelte:window bind:innerHeight />
+
 <div>
   <center>
-    <p1>RESPONSE</p1>
+    <p1>RESPONSE - {name}</p1>
   </center>
 
   <textarea
@@ -21,15 +23,14 @@
 </div>
 
 <style>
-  p1 {
-    padding: 3%;
+  center {
+    padding: 1.5%;
   }
   div {
-    padding-right: 5%;
+    padding: 5%;
   }
   textarea {
     resize: none;
-    margin: 20px;
     height: var(--height);
   }
 </style>

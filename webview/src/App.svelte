@@ -2,10 +2,19 @@
   import TopPanel from "./TopPanel.svelte";
   import Request from "./Request.svelte";
   import Response from "./Response.svelte";
+  const vscode = acquireVsCodeApi();
+
+  window.addEventListener("init", (event) => {
+    console.log(event.data);
+  });
+
+  window.addEventListener("response", (event) => {
+    console.log(event.data);
+  });
 </script>
 
 <div class="top-container">
-  <TopPanel />
+  <TopPanel  />
 </div>
 
 <table>
