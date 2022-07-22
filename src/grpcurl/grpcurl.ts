@@ -60,15 +60,25 @@ export class Grpcurl {
     adress: string,
     method: string,
     tlsOn: boolean
-  ): Promise<[string, string]> {
-    const util = require("util");
-    const exec = util.promisify(require("child_process").exec);
-    let tls = ``;
-    if (!tlsOn) {
-      tls = `-plaintext `;
+  ): Promise<string> {
+    try {
+      const util = require("util");
+      const exec = util.promisify(require("child_process").exec);
+      let tls = ``;
+      if (!tlsOn) {
+        tls = `-plaintext `;
+      }
+
+      req = req.replace(" ", "");
+
+      const call = `grpcurl -import-path / -proto ${path} -d '${req}' ${tls} ${adress} ${method}`;
+      const { stdout, stderr } = await exec(call);
+      if (`${stderr}` !== "") {
+        return `${stderr}`;
+      }
+      return `${stdout}`;
+    } catch (e) {
+      return `${e}`;
     }
-    const call = `grpcurl -import-path / -proto ${path} -d ${req} ${tls} ${adress} ${method}`;
-    const { stdout, stderr } = await exec(call);
-    return [`${stdout}`, `${stderr}`];
   }
 }

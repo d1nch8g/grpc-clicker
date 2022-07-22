@@ -21,14 +21,14 @@ export class GrpcClickerView {
       async (message) => {
         switch (message.command) {
           case "req":
-            await grpcurl.sendCall(
+            let resp = await grpcurl.sendCall(
               input.path,
               message.text,
               input.adress,
               input.methodTag,
               false
             );
-            vscode.window.showErrorMessage(message.text);
+            vscode.window.showErrorMessage(resp);
             return;
         }
       },
