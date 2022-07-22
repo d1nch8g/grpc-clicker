@@ -1,11 +1,12 @@
 import { request } from "http";
 import * as vscode from "vscode";
+import { Grpcurl } from "../grpcurl/grpcurl";
 import { Input } from "./input";
 
 export class GrpcClickerView {
   constructor(private uri: vscode.Uri) {}
 
-  create(input: Input) {
+  create(input: Input, grpcurl: Grpcurl) {
     const panel = vscode.window.createWebviewPanel(
       "callgrpc",
       "gRPC Request",
@@ -17,9 +18,16 @@ export class GrpcClickerView {
     );
 
     panel.webview.onDidReceiveMessage(
-      (message) => {
+      async (message) => {
         switch (message.command) {
           case "req":
+            await grpcurl.sendCall(
+              input.path,
+              message.text,
+              input.adress,
+              input.methodTag,
+              false
+            );
             vscode.window.showErrorMessage(message.text);
             return;
         }

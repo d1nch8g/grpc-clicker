@@ -36,10 +36,12 @@ export class ProtoItem extends vscode.TreeItem {
         title: "Trigger opening of webview for grpc call",
         arguments: [
           new Input(
+            item.proto.path,
             item.proto.shortName,
             item.proto.version,
             item.service,
             item.name,
+            item.tag,
             `to fill`,
             item.input.name,
             item.output.name,

@@ -97,7 +97,7 @@ export async function activate(context: vscode.ExtensionContext) {
     }
     const adress = storage.hosts.getCurret();
     input.adress = adress;
-    webview.create(input);
+    webview.create(input, grpcurl);
   });
 }
 
