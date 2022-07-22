@@ -69,7 +69,11 @@ export class Grpcurl {
         tls = `-plaintext `;
       }
 
-      req = req.replace(" ", "");
+      req = req.replaceAll(" ", "");
+      req = req.replaceAll("\n", "");
+      if (process.platform === "win32") {
+        req = req.replaceAll('"', '\\"');
+      }
 
       const call = `grpcurl -import-path / -proto ${path} -d '${req}' ${tls} ${adress} ${method}`;
       const { stdout, stderr } = await exec(call);
