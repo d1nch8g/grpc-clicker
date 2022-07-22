@@ -3,8 +3,7 @@
   export let version = "v1";
   export let service = "petstore";
   export let call = "call";
-  export let adress = "adress";
-  $: adress = adress;
+  export let adress = "http://localhost:12201";
 </script>
 
 <table>
@@ -14,7 +13,7 @@
     <th>service</th>
     <td>{service}</td>
     <td class="expanded">
-      <input type="text" name="" id="" />
+      <input type="text" name="" id="" value="{adress}" />
     </td>
   </tr>
   <tr>

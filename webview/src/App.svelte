@@ -57,7 +57,7 @@
   }
 
   .solid {
-    border-top: 1px solid;
+    border-top: 0.5px solid;
     margin-left: 3%;
     margin-right: 3%;
     margin-top: 1%;
