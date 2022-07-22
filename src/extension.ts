@@ -95,6 +95,8 @@ export async function activate(context: vscode.ExtensionContext) {
       vscode.window.showWarningMessage("Stream calls are not available yet!");
       return;
     }
+    const adress = storage.hosts.getCurret();
+    input.adress = adress;
     webview.create(input);
   });
 }

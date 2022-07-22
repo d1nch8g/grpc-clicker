@@ -4,8 +4,25 @@
   import Response from "./Response.svelte";
   const vscode = acquireVsCodeApi();
 
-  window.addEventListener("init", (event) => {
+  $: proto = "";
+  $: version = "";
+  $: service = "";
+  $: call = "";
+  $: adress = "";
+
+  $: reqName = "";
+  $: respName = "";
+
+  window.addEventListener("message", (event) => {
     console.log(event.data);
+    const obj = JSON.parse(`${event.data}`);
+    proto = obj.proto;
+    version = obj.version;
+    service = obj.service;
+    call = obj.call;
+    adress = obj.adress;
+    reqName = obj.reqName;
+    respName = obj.respName;
   });
 
   window.addEventListener("response", (event) => {
@@ -14,16 +31,22 @@
 </script>
 
 <div class="top-container">
-  <TopPanel  />
+  <TopPanel
+    proto="{proto}"
+    version="{version}"
+    service="{service}"
+    call="{call}"
+    adress="{adress}"
+  />
 </div>
 
 <table>
   <td class="left">
-    <Request />
+    <Request reqName="{reqName}" />
   </td>
 
   <td>
-    <Response />
+    <Response respName="{respName}" />
   </td>
 </table>
 

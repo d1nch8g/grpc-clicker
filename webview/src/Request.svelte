@@ -1,5 +1,5 @@
 <script>
-  export let name = "";
+  export let reqName = "";
   $: innerHeight = 0;
   $: height = innerHeight - 220;
 </script>
@@ -8,7 +8,7 @@
 
 <div>
   <center>
-    <p1>REQUEST - {name}</p1>
+    <p1>REQUEST - {reqName}</p1>
   </center>
 
   <textarea name="" id="" cols="30" rows="10" style="--height: {height}px"

@@ -3,6 +3,7 @@ import { Service } from "./service";
 
 export class Proto {
   public name: string;
+  public shortName: string;
   public tag: string;
   public version: string;
   public services: Service[] = [];
@@ -39,6 +40,7 @@ export class Proto {
     } else {
       this.name = `${filename} - ${splittedName[0]}`;
     }
+    this.shortName = splittedName[0];
     let messages = new Map<string, Message>();
     for (const service of this.services) {
       for (const call of service.calls) {

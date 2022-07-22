@@ -8,7 +8,8 @@ export class Call {
   public outputIsStream: boolean = false;
   public name: string;
   public tag: string;
-  constructor(line: string, public service: string, public proto: Proto) {
+  public service: string;
+  constructor(line: string, svc: string, public proto: Proto) {
     let splittedspace = line.split(" ");
     this.name = splittedspace[3];
     let splittedquote = line.split(")");
@@ -20,6 +21,8 @@ export class Call {
     if (splittedquote[1].includes("stream")) {
       this.outputIsStream = true;
     }
-    this.tag = `${service}.${this.name}`;
+    this.tag = `${svc}.${this.name}`;
+    let splitted = svc.split(`.`);
+    this.service = splitted[splitted.length - 1];
   }
 }
