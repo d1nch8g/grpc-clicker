@@ -4,6 +4,7 @@
   export let service = "petstore";
   export let call = "call";
   export let adress = "http://localhost:12201";
+  export let onClick;
 </script>
 
 <table>
@@ -22,7 +23,7 @@
     <th>call</th>
     <td>{call}</td>
     <td>
-      <center> <button>SEND</button></center>
+      <center> <button on:click="{onClick}">SEND</button></center>
     </td>
   </tr>
 </table>

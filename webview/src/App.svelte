@@ -27,10 +27,10 @@
     respName = obj.respName;
   });
 
-  function sendVscMsg() {
+  function sendMessageToVscode() {
     vscode.postMessage({
       command: "alert",
-      text: "🐛 das me ",
+      text: reqJson,
     });
   }
 </script>
@@ -42,6 +42,7 @@
     service="{service}"
     call="{call}"
     adress="{adress}"
+    onClick="{sendMessageToVscode}"
   />
 </div>
 
