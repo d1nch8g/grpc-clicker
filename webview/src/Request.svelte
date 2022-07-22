@@ -28,7 +28,7 @@
   div {
     padding-top: 2%;
     padding-left: 7%;
-    padding-right: 7%;
+    padding-right: 3%;
     padding-bottom: 5%;
   }
   textarea {

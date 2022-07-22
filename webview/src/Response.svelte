@@ -28,7 +28,7 @@
   }
   div {
     padding-top: 2%;
-    padding-left: 7%;
+    padding-left: 3%;
     padding-right: 7%;
     padding-bottom: 5%;
   }
