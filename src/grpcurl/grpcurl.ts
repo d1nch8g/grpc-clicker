@@ -14,7 +14,14 @@ export class Grpcurl {
         vscode.window.showErrorMessage(`${stderr}`);
         return new Proto("", path);
       }
-      return new Proto(`${stdout}`, path);
+      let proto = new Proto(`${stdout}`, path);
+      for (const svc of proto.services) {
+        for (const call of svc.calls) {
+          call.input.fields = await this.getFields(call.input);
+          call.output.fields = await this.getFields(call.output);
+        }
+      }
+      return proto;
     } catch (e) {
       vscode.window.showErrorMessage(`${e}`);
       return new Proto("", path);

@@ -49,6 +49,8 @@ export class ProtosTree implements vscode.TreeDataProvider<ProtoItem> {
       }
     }
     if (elem instanceof Call) {
+      elem.input.fields = await this.grpcurl.getFields(elem.input);
+      elem.output.fields = await this.grpcurl.getFields(elem.output);
       items.push(new ProtoItem(elem.input));
       items.push(new ProtoItem(elem.output));
     }

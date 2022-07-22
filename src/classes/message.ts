@@ -10,4 +10,11 @@ export class Message {
     let splittedtag = this.tag.split(".");
     this.name = splittedtag[splittedtag.length - 1];
   }
+  representation(): string {
+    let representation = "";
+    for (const field of this.fields) {
+      representation += `${field.type}|${field.name}\n`;
+    }
+    return representation;
+  }
 }

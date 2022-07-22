@@ -1,13 +1,15 @@
 export class Input {
-  proto: string;
-  version: string;
-  requestName: string;
-  requestRepresentation: string;
-  responseName: string;
-  responseRepresentation: string;
-  adress: string;
-  call: string;
-  tls: boolean;
-  stream: boolean;
-  meta: string[];
+  constructor(
+    public proto: string,
+    public version: string,
+    public requestName: string,
+    public requestRepresentation: string,
+    public responseName: string,
+    public responseRepresentation: string,
+    public adress: string,
+    public callName: string,
+    public call: string,
+    public stream: boolean,
+    public meta: string[]
+  ) {}
 }

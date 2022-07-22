@@ -1,4 +1,5 @@
 import { Message } from "./message";
+import { Proto } from "./proto";
 
 export class Call {
   public input: Message;
@@ -7,12 +8,12 @@ export class Call {
   public outputIsStream: boolean = false;
   public name: string;
   public tag: string;
-  constructor(line: string, public path: string, service: string) {
+  constructor(line: string, service: string, public proto: Proto) {
     let splittedspace = line.split(" ");
     this.name = splittedspace[3];
     let splittedquote = line.split(")");
-    this.input = new Message(splittedquote[0], path);
-    this.output = new Message(splittedquote[1], path);
+    this.input = new Message(splittedquote[0], proto.path);
+    this.output = new Message(splittedquote[1], proto.path);
     if (splittedquote[0].includes("stream")) {
       this.inputIsStream = true;
     }

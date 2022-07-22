@@ -45,7 +45,7 @@
         },
         {
           "id": "metas",
-          "name": "Request-metadata"
+          "name": "Request metadata"
         }
       ]
     },

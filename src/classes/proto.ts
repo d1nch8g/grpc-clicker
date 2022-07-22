@@ -4,6 +4,7 @@ import { Service } from "./service";
 export class Proto {
   public name: string;
   public tag: string;
+  public version: string;
   public services: Service[] = [];
   public messages: Message[] = [];
   constructor(stdout: string, public path: string) {
@@ -20,10 +21,14 @@ export class Proto {
           let splitted = line.split(".");
           splitted.pop();
           this.tag = splitted.join(".");
+          let splittedTag = this.tag.split(".");
+          if (splittedTag.length === 2) {
+            this.version = splittedTag[1];
+          }
         }
       }
       if (line.endsWith("}")) {
-        this.services.push(new Service(curLines, path));
+        this.services.push(new Service(curLines, this));
         curLines = [];
       }
     }
