@@ -8,7 +8,7 @@ export class Call {
   public outputIsStream: boolean = false;
   public name: string;
   public tag: string;
-  constructor(line: string, service: string, public proto: Proto) {
+  constructor(line: string, public service: string, public proto: Proto) {
     let splittedspace = line.split(" ");
     this.name = splittedspace[3];
     let splittedquote = line.split(")");

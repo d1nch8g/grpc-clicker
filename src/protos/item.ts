@@ -38,15 +38,13 @@ export class ProtoItem extends vscode.TreeItem {
           new Input(
             item.proto.name,
             item.proto.version,
-            item.input.name,
-            item.input.representation(),
-            item.output.name,
-            item.output.representation(),
-            `TODO|adress`,
+            item.service,
             item.name,
-            item.tag,
-            isStream,
-            [`TODO: metas`]
+            `to fill`,
+            item.input.name,
+            item.output.name,
+            item.input.representation(),
+            isStream
           ),
         ],
       };

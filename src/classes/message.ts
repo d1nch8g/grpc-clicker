@@ -11,10 +11,12 @@ export class Message {
     this.name = splittedtag[splittedtag.length - 1];
   }
   representation(): string {
-    let representation = "";
+    let representation = `{\n`;
     for (const field of this.fields) {
-      representation += `${field.type}|${field.name}\n`;
+      representation += `    "${field.type}": "${field.name}",\n`;
     }
+    representation.substring(0, representation.length - 3);
+    representation += `\n}`;
     return representation;
   }
 }
