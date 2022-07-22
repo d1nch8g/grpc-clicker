@@ -13,7 +13,7 @@
     <th>service</th>
     <td>{service}</td>
     <td class="expanded">
-      <input type="text" name="" id="" value="{adress}" />
+      <input type="text" name="" id="" value="{adress}" readonly />
     </td>
   </tr>
   <tr>
