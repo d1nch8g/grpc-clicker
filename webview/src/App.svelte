@@ -52,7 +52,7 @@
 </div>
 
 <table>
-  <td class="left">
+  <td>
     <Request reqName="{reqName}" bind:reqJson />
   </td>
 
@@ -75,9 +75,5 @@
   td {
     height: 100%;
     width: 50%;
-  }
-
-  td.left {
-    border-right: 1px solid;
   }
 </style>

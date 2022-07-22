@@ -2,7 +2,7 @@
   export let reqName = "";
   export let reqJson = "";
   $: innerHeight = 0;
-  $: height = innerHeight - 220;
+  $: height = innerHeight - 200;
 </script>
 
 <svelte:window bind:innerHeight />
