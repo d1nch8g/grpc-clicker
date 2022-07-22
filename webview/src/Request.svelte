@@ -34,5 +34,6 @@
   textarea {
     resize: none;
     height: var(--height);
+    padding: 1.5px;
   }
 </style>

@@ -49,6 +49,7 @@
   input {
     padding-top: 4px;
     padding-bottom: 4px;
+    padding: 1.5px;
   }
   button {
     padding-top: 4px;
