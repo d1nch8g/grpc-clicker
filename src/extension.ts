@@ -5,7 +5,7 @@ import { MetasList } from "./metas/list";
 import { ProtosTree as ProtosTreeView } from "./protos/tree";
 import { Storage } from "./storage/storage";
 import { Input } from "./webview/input";
-import { GrpcClickerView } from "./webview/panel";
+import { WebViewFactory } from "./webview/panel";
 
 export async function activate(context: vscode.ExtensionContext) {
   const grpcurl = new Grpcurl();
@@ -18,7 +18,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
   const metasList = new MetasList(storage.metas.listMetas());
 
-  const webview = new GrpcClickerView(context.extensionUri);
+  const webviewFactory = new WebViewFactory(context.extensionUri, grpcurl);
 
   vscode.window.registerTreeDataProvider("hosts", hostsView);
   vscode.window.registerTreeDataProvider("protos", protosView);
@@ -97,7 +97,7 @@ export async function activate(context: vscode.ExtensionContext) {
     }
     const adress = storage.hosts.getCurret();
     input.adress = adress;
-    webview.create(input, grpcurl);
+    webviewFactory.create(input);
   });
 }
 

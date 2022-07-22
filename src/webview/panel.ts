@@ -4,13 +4,20 @@ import { Grpcurl } from "../grpcurl/grpcurl";
 import { Input } from "./input";
 import { Response } from "./response";
 
-export class GrpcClickerView {
-  constructor(private uri: vscode.Uri) {}
+export class WebViewFactory {
+  constructor(private uri: vscode.Uri, private grpcurl: Grpcurl) {}
 
-  create(input: Input, grpcurl: Grpcurl) {
-    const panel = vscode.window.createWebviewPanel(
+  create(input: Input) {
+    new GrpcClickerView(this.uri, input, this.grpcurl);
+  }
+}
+
+class GrpcClickerView {
+  private panel: vscode.WebviewPanel;
+  constructor(private uri: vscode.Uri, private input: Input, grpcurl: Grpcurl) {
+    this.panel = vscode.window.createWebviewPanel(
       "callgrpc",
-      "gRPC Request",
+      input.call,
       vscode.ViewColumn.Active,
       {
         enableScripts: true,
@@ -18,7 +25,7 @@ export class GrpcClickerView {
       }
     );
 
-    panel.webview.onDidReceiveMessage(
+    this.panel.webview.onDidReceiveMessage(
       async (message) => {
         switch (message.command) {
           case "req":
@@ -29,7 +36,7 @@ export class GrpcClickerView {
               input.methodTag,
               false
             );
-            panel.webview.postMessage(JSON.stringify(new Response(resp)));
+            this.panel.webview.postMessage(JSON.stringify(new Response(resp)));
             return;
         }
       },
@@ -37,25 +44,39 @@ export class GrpcClickerView {
       null
     );
 
-    panel.iconPath = {
-      light: vscode.Uri.joinPath(this.uri, `images`, `light`, `rocket.svg`),
-      dark: vscode.Uri.joinPath(this.uri, `images`, `dark`, `rocket.svg`),
+    this.panel.onDidChangeViewState(
+      (e) => {
+        if (this.panel.visible) {
+          this.init();
+        }
+      },
+      null,
+      null
+    );
+
+    this.init();
+  }
+
+  private init() {
+    this.panel.iconPath = {
+      light: vscode.Uri.joinPath(this.uri, `images`, `view.svg`),
+      dark: vscode.Uri.joinPath(this.uri, `images`, `view.svg`),
     };
 
-    const scriptUri = panel.webview.asWebviewUri(
+    const scriptUri = this.panel.webview.asWebviewUri(
       vscode.Uri.joinPath(this.uri, "media", "main.js")
     );
-    const stylesMainUri = panel.webview.asWebviewUri(
+    const stylesMainUri = this.panel.webview.asWebviewUri(
       vscode.Uri.joinPath(this.uri, "media", "styles.css")
     );
 
-    panel.webview.html = `<!DOCTYPE html>
+    this.panel.webview.html = `<!DOCTYPE html>
   <html lang="en">
     <head>
       <meta charset="UTF-8" />
       <meta
         http-equiv="Content-Security-Policy"
-        content="default-src 'none'; style-src ${panel.webview.cspSource}; img-src ${panel.webview.cspSource} https:; script-src 'nonce-W3hIwRHaPGdvqvmwfzGey0vuCz2fM6Pn';"
+        content="default-src 'none'; style-src ${this.panel.webview.cspSource}; img-src ${this.panel.webview.cspSource} https:; script-src 'nonce-W3hIwRHaPGdvqvmwfzGey0vuCz2fM6Pn';"
       />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link href="${stylesMainUri}" rel="stylesheet" />
@@ -69,6 +90,6 @@ export class GrpcClickerView {
     </body>
   </html>`;
 
-    panel.webview.postMessage(JSON.stringify(input));
+    this.panel.webview.postMessage(JSON.stringify(this.input));
   }
 }
