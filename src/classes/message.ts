@@ -15,8 +15,8 @@ export class Message {
     for (const field of this.fields) {
       representation += `    "${field.type}": "${field.name}",\n`;
     }
-    representation.substring(0, representation.length - 3);
-    representation += `\n}`;
+    representation = representation.substring(0, representation.length - 3);
+    representation += `"\n}`;
     return representation;
   }
 }

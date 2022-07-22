@@ -9,7 +9,7 @@
 
 <div>
   <center>
-    <p1>RESPONSE - {respName}</p1>
+    <p1>Response - {respName}</p1>
   </center>
 
   <textarea

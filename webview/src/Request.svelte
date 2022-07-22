@@ -1,5 +1,6 @@
 <script>
   export let reqName = "";
+  export let reqJson = "";
   $: innerHeight = 0;
   $: height = innerHeight - 220;
 </script>
@@ -8,11 +9,16 @@
 
 <div>
   <center>
-    <p1>REQUEST - {reqName}</p1>
+    <p1>Request - {reqName}</p1>
   </center>
 
-  <textarea name="" id="" cols="30" rows="10" style="--height: {height}px"
-  ></textarea>
+  <textarea
+    name=""
+    id=""
+    cols="30"
+    rows="10"
+    style="--height: {height}px"
+    bind:value="{reqJson}"></textarea>
 </div>
 
 <style>

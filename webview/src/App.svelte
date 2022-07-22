@@ -11,6 +11,7 @@
   $: adress = "";
 
   $: reqName = "";
+  $: reqJson = "";
   $: respName = "";
 
   window.addEventListener("message", (event) => {
@@ -22,12 +23,11 @@
     call = obj.call;
     adress = obj.adress;
     reqName = obj.reqName;
+    reqJson = obj.reqJson;
     respName = obj.respName;
   });
 
-  window.addEventListener("response", (event) => {
-    console.log(event.data);
-  });
+  function sendVscMsg() {}
 </script>
 
 <div class="top-container">
@@ -42,7 +42,7 @@
 
 <table>
   <td class="left">
-    <Request reqName="{reqName}" />
+    <Request reqName="{reqName}" bind:reqJson />
   </td>
 
   <td>
