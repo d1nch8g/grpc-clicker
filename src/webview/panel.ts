@@ -19,7 +19,7 @@ export class GrpcClickerView {
     panel.webview.onDidReceiveMessage(
       (message) => {
         switch (message.command) {
-          case "alert":
+          case "req":
             vscode.window.showErrorMessage(message.text);
             return;
         }

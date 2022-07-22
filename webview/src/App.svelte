@@ -29,7 +29,7 @@
 
   function sendMessageToVscode() {
     vscode.postMessage({
-      command: "alert",
+      command: "req",
       text: reqJson,
     });
   }
