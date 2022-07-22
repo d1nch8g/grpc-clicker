@@ -24,7 +24,7 @@
 
 <style>
   center {
-    padding: 1.5%;
+    padding-bottom: 10px;
   }
   div {
     padding: 5%;
