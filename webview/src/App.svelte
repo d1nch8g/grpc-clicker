@@ -27,7 +27,12 @@
     respName = obj.respName;
   });
 
-  function sendVscMsg() {}
+  function sendVscMsg() {
+    vscode.postMessage({
+      command: "alert",
+      text: "🐛 das me ",
+    });
+  }
 </script>
 
 <div class="top-container">
@@ -61,8 +66,7 @@
     width: 100%;
   }
 
-  td,
-  tr {
+  td {
     height: 100%;
     width: 50%;
   }

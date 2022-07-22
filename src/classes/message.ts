@@ -13,7 +13,7 @@ export class Message {
   representation(): string {
     let representation = `{\n`;
     for (const field of this.fields) {
-      representation += `    "${field.type}": "${field.name}",\n`;
+      representation += `    "${field.field}": "${field.type}",\n`;
     }
     representation = representation.substring(0, representation.length - 3);
     representation += `"\n}`;
