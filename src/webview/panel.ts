@@ -2,6 +2,7 @@ import { request } from "http";
 import * as vscode from "vscode";
 import { Grpcurl } from "../grpcurl/grpcurl";
 import { Input } from "./input";
+import { Response } from "./response";
 
 export class GrpcClickerView {
   constructor(private uri: vscode.Uri) {}
@@ -28,7 +29,7 @@ export class GrpcClickerView {
               input.methodTag,
               false
             );
-            vscode.window.showErrorMessage(resp);
+            panel.webview.postMessage(JSON.stringify(new Response(resp)));
             return;
         }
       },

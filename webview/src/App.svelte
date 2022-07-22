@@ -12,11 +12,16 @@
 
   $: reqName = "";
   $: reqJson = "";
+
   $: respName = "";
+  $: response = "";
 
   window.addEventListener("message", (event) => {
-    console.log(event.data);
     const obj = JSON.parse(`${event.data}`);
+    if (obj.rez) {
+      response = obj.output;
+      return;
+    }
     proto = obj.proto;
     version = obj.version;
     service = obj.service;
@@ -52,7 +57,7 @@
   </td>
 
   <td>
-    <Response respName="{respName}" />
+    <Response respName="{respName}" bind:response />
   </td>
 </table>
 
