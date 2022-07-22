@@ -26,7 +26,10 @@
     padding-bottom: 10px;
   }
   div {
-    padding: 5%;
+    padding-top: 2%;
+    padding-left: 7%;
+    padding-right: 7%;
+    padding-bottom: 5%;
   }
   textarea {
     resize: none;
