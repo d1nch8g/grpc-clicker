@@ -3,8 +3,6 @@
   export let version = "v1";
   export let service = "petstore";
   export let call = "call";
-
-  export let adresses = [];
   export let adress = "adress";
   $: adress = adress;
 </script>
@@ -46,7 +44,7 @@
   .expanded {
     width: 100%;
     padding-left: 8px;
-    padding-right: 16px;
+    padding-right: 8px;
   }
   input {
     padding-top: 4px;

@@ -5,7 +5,6 @@ import { Proto } from "../classes/proto";
 import { Message } from "../classes/message";
 import { Call } from "../classes/call";
 import { Field } from "../classes/field";
-import { PanelInput } from "../webview/input";
 
 export class ProtoItem extends vscode.TreeItem {
   constructor(public item: Proto | Service | Call | Message | Field) {
@@ -35,7 +34,7 @@ export class ProtoItem extends vscode.TreeItem {
       super.command = {
         command: "call.trigger",
         title: "Trigger opening of webview for grpc call",
-        arguments: [new PanelInput()],
+        arguments: ["some input"],
       };
     }
     if (item instanceof Message) {

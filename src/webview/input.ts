@@ -1,4 +1,4 @@
-export interface Input {
+export class Input {
   proto: string;
   version: string;
   requestName: string;
