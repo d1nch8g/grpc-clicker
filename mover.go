@@ -11,6 +11,8 @@ const (
 	out = `media/`
 )
 
+// ext manage page: https://marketplace.visualstudio.com/manage/publishers/dancheg97
+
 func main() {
 	files, err := ioutil.ReadDir(in)
 	if err != nil {
