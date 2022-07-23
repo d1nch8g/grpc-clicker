@@ -22,3 +22,7 @@ Extension provides following functionality:
 - Removed async extension initialization
 - Fixed host issue on app initialization
 - Added request metadata
+
+## [0.0.4]
+
+- Added walkthrow to extension launch

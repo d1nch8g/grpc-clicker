@@ -3,7 +3,7 @@
   "displayName": "gRPC Clicker",
   "description": "Call gRPC services directly from VSCode",
   "icon": "docs/extension.png",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.68.0"
   },
