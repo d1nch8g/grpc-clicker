@@ -90,6 +90,7 @@ export class Grpcurl {
       return `${e}`;
     }
   }
+
   inputPreprocess(input: string): string {
     input = input.replaceAll("\n", "");
     if (process.platform === "win32") {
