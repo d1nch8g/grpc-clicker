@@ -14,3 +14,11 @@ Extension provides following functionality:
 ## [0.0.2]
 
 - Files with authoring and documentation
+
+## [0.0.3]
+
+- Fixes in `package.json`
+- Fixes in documentation
+- Removed async extension initialization
+- Fixed host issue on app initialization
+- Added request metadata
