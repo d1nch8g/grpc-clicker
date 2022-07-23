@@ -1,12 +1,12 @@
 # <p  align="center" style="font-family:courier;font-size:180%" size=212px> gRPC Clicker </p>
 
 <p align="center">
-<img align="left" style="padding: 10px"  height="238px" src="images/view.svg" /> 
+<img align="center" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="238px" height="238px" src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/747c5eca96147d865ee53f48824ae36a28bce49e/images/view.svg" /> 
 </p>
 
 [![Generic badge](https://img.shields.io/badge/LICENSE-MIT-red.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/LICENSE)
 [![Generic badge](https://img.shields.io/badge/VSCode-marketplace-blue.svg)]()
-[![Generic badge](https://img.shields.io/badge/GitHub-repository-orange.svg)](https://github.com/Dancheg97/grpclicker_vscode)
+[![Generic badge](https://img.shields.io/badge/GitHub-repo-orange.svg)](https://github.com/Dancheg97/grpclicker_vscode)
 [![Generic badge](https://img.shields.io/badge/VERSION-0.0.1-cyan.svg)]()
 [![Generic badge](https://img.shields.io/badge/DONATIONS-nano-green.svg)]()
 
@@ -23,19 +23,21 @@ Extension provides following functionality:
 - easily save and switch between proto hosts
 - add metadata to request, enable and disable it with one click
 
+---
+
 ## Get started
 
 1. Open extension on side panel activity bar
-   <img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/1.png" height="200px">
+   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/1.png" height="200px"></p>
 2. Add `proto` file definition
-   <img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/2.png" height="200px">
+   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/2.png" height="200px"></p>
 3. Add `host` for gRPC calls
-   <img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/3.png" height="200px">
+   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/3.png" height="200px"></p>
 4. Add request `metadata` if required (enabled is marked with blue)
-   <img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/4.png" height="200px">
+   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/4.png" height="200px"></p>
 5. Click on the call you want to execute in `proto` schema explorer
-   <img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/5.png" height="200px">
+   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/5.png" height="200px"></p>
 6. Paste message you want to send as json
-   <img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/6.png" height="200px">
+   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/6.png" height="200px"></p>
 7. Execute call
-   <img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/7.png" height="200px">
+   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/7.png" height="200px"></p>
