@@ -26,16 +26,16 @@ Extension provides following functionality:
 ## Get started
 
 1. Open extension on side panel activity bar
-   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/1.png =250px)
+   <img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/1.png" height="200px">
 2. Add `proto` file definition
-   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/2.png =250px)
+   <img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/2.png" height="200px">
 3. Add `host` for gRPC calls
-   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/3.png =250px)
+   <img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/3.png" height="200px">
 4. Add request `metadata` if required (enabled is marked with blue)
-   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/4.png =250px)
+   <img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/4.png" height="200px">
 5. Click on the call you want to execute in `proto` schema explorer
-   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/5.png =250px)
+   <img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/5.png" height="200px">
 6. Paste message you want to send as json
-   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/6.png =250px)
+   <img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/6.png" height="200px">
 7. Execute call
-   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/7.png =250px)
+   <img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/7.png" height="200px">
