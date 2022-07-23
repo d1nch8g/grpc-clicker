@@ -2,8 +2,11 @@ import * as vscode from "vscode";
 import { Field } from "../classes/field";
 import { Message } from "../classes/message";
 import { Proto } from "../classes/proto";
+import { Storage } from "../storage/storage";
 
 export class Grpcurl {
+  constructor(private storage: Storage) {}
+
   async proto(path: string): Promise<Proto> {
     try {
       const util = require("util");
@@ -69,6 +72,12 @@ export class Grpcurl {
         tls = `-plaintext `;
       }
 
+      let metadata = ``;
+      const metas = this.storage.metas.listActive();
+      for (const meta of metas) {
+        metadata = metadata + `-H '${meta}' `;
+      }
+
       req = req.replaceAll("\n", "");
       if (process.platform === "win32") {
         req = req.replaceAll('"', '\\"');
@@ -77,7 +86,7 @@ export class Grpcurl {
         req = `'${req}'`;
       }
 
-      const call = `grpcurl -import-path / -proto ${path} -d ${req} ${tls} ${adress} ${method}`;
+      const call = `grpcurl ${metadata} -import-path / -proto ${path} -d ${req} ${tls} ${adress} ${method}`;
       const { stdout, stderr } = await exec(call);
       if (`${stderr}` !== "") {
         return `${stderr}`;
