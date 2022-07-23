@@ -1,7 +1,7 @@
 # <p  align="center" style="font-family:courier;font-size:180%" size=212px> gRPC Clicker </p>
 
 <p align="center">
-<img align="center" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="238px" height="238px" src="images/view.svg" /> 
+<img align="left" style="padding: 10px"  height="238px" src="images/view.svg" /> 
 </p>
 
 [![Generic badge](https://img.shields.io/badge/LICENSE-MIT-red.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/LICENSE)
@@ -26,16 +26,16 @@ Extension provides following functionality:
 ## Get started
 
 1. Open extension on side panel activity bar
-   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/1.png)
+   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/1.png =250px)
 2. Add `proto` file definition
-   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/2.png)
+   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/2.png =250px)
 3. Add `host` for gRPC calls
-   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/3.png)
+   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/3.png =250px)
 4. Add request `metadata` if required (enabled is marked with blue)
-   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/4.png)
+   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/4.png =250px)
 5. Click on the call you want to execute in `proto` schema explorer
-   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/5.png)
+   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/5.png =250px)
 6. Paste message you want to send as json
-   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/6.png)
+   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/6.png =250px)
 7. Execute call
-   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/7.png)
+   ![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/7.png =250px)
