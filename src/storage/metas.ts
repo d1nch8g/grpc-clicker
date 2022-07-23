@@ -36,6 +36,17 @@ export class Metadata {
     return metas;
   }
 
+  public listActive(): string[] {
+    let response = [];
+    let metas = this.memento.get<string[]>(this.metadataKey, []);
+    for (const meta of metas) {
+      if (this.isOn(meta)) {
+        response.push(meta);
+      }
+    }
+    return response;
+  }
+
   public add(meta: string): Meta[] {
     let metas = this.memento.get<string[]>(this.metadataKey, []);
     if (meta === "") {

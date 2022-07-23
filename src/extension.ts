@@ -8,8 +8,8 @@ import { Input } from "./webview/input";
 import { WebViewFactory } from "./webview/panel";
 
 export function activate(context: vscode.ExtensionContext) {
-  const grpcurl = new Grpcurl();
   const storage = new Storage(context.globalState);
+  const grpcurl = new Grpcurl();
 
   const hostsView = new HostsTreeView(storage.hosts.listAsHosts());
   const protosView = new ProtosTreeView(grpcurl, storage.protos.list());
