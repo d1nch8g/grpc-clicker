@@ -7,17 +7,13 @@ import { Storage } from "./storage/storage";
 import { Input } from "./webview/input";
 import { WebViewFactory } from "./webview/panel";
 
-export async function activate(context: vscode.ExtensionContext) {
+export function activate(context: vscode.ExtensionContext) {
   const grpcurl = new Grpcurl();
   const storage = new Storage(context.globalState);
 
   const hostsView = new HostsTreeView(storage.hosts.listAsHosts());
-
-  const protos = await grpcurl.protos(storage.protos.list());
-  const protosView = new ProtosTreeView(grpcurl, protos);
-
+  const protosView = new ProtosTreeView(grpcurl, storage.protos.list());
   const metasList = new MetasList(storage.metas.listMetas());
-
   const webviewFactory = new WebViewFactory(context.extensionUri, grpcurl);
 
   vscode.window.registerTreeDataProvider("hosts", hostsView);
@@ -53,22 +49,19 @@ export async function activate(context: vscode.ExtensionContext) {
     let pick = await vscode.window.showOpenDialog(options);
     let path = pick[0].fsPath;
     let pathes = storage.protos.add(path);
-    let protos = await grpcurl.protos(pathes);
-    protosView.refresh(protos);
+    protosView.refresh(pathes);
   });
 
   vscode.commands.registerCommand("protos.remove", async () => {
     let pathes = storage.protos.list();
     let path = await vscode.window.showQuickPick(pathes);
     pathes = storage.protos.remove(path);
-    let protos = await grpcurl.protos(pathes);
-    protosView.refresh(protos);
+    protosView.refresh(pathes);
   });
 
   vscode.commands.registerCommand("protos.refresh", async () => {
     let pathes = storage.protos.list();
-    let protos = await grpcurl.protos(pathes);
-    protosView.refresh(protos);
+    protosView.refresh(pathes);
   });
 
   vscode.commands.registerCommand("metas.add", async () => {
