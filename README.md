@@ -7,7 +7,7 @@
 [![Generic badge](https://img.shields.io/badge/LICENSE-MIT-red.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/LICENSE)
 [![Generic badge](https://img.shields.io/badge/VSCode-marketplace-blue.svg)]()
 [![Generic badge](https://img.shields.io/badge/GitHub-repo-orange.svg)](https://github.com/Dancheg97/grpclicker_vscode)
-[![Generic badge](https://img.shields.io/badge/VERSION-0.0.1-cyan.svg)]()
+[![Generic badge](https://img.shields.io/badge/CHANGELOG-v0.0.1-cyan.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/docs/CHANGELOG.md)
 [![Generic badge](https://img.shields.io/badge/DONATIONS-nano-green.svg)]()
 
 This extension provides ability to execute gRPC calls from VSCode, using [`grpcurl`](https://github.com/fullstorydev/grpcurl) under the hood.

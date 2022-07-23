@@ -4,3 +4,7 @@ build:
 
 run:
 	npm run dev --prefix webview
+
+publish:
+	vsce package
+	vsce publish
