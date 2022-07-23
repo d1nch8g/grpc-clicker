@@ -1,12 +1,18 @@
 {
   "name": "grpc-clicker",
-  "displayName": "grpc_clicker",
-  "description": "",
+  "displayName": "gRPC Clicker",
+  "description": "- execute `gRPC` calls from `VSCode`\n- view comlpete proto definition with field, message and service description\n- easily save and switch between proto hosts\n- add metadata to request, enable and disable it with one click",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.68.0"
   },
-  "publisher": "DANCHE",
+  "publisher": "Dancheg97",
+  "author": {
+    "name": "Dancheg97",
+    "email": "dangdancheg@gmail.com",
+    "url": "https://github.com/Dancheg97"
+  },
+  "publishConfig": {},
   "repository": "https://github.com/Dancheg97/grpclicker_vscode",
   "categories": [
     "Other"
