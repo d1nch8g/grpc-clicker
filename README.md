@@ -1,4 +1,4 @@
-## <center> gRPC-Clicker</center>
+## <p align="center"> gRPC-Clicker</p>
 
 <p align="center">
 <img align="center" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="238px" height="238px" src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/extension.png" /> 
