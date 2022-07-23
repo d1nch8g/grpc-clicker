@@ -22,7 +22,7 @@ export class Hosts {
     return this.memento.get<boolean>(`${this.hostsKey}:${host}`, false);
   }
 
-  public listAsHosts(): Host[] {
+  public hosts(): Host[] {
     let hosts = this.memento.get<string[]>(this.hostsKey, []);
     return this.listToHosts(hosts);
   }
@@ -66,6 +66,6 @@ export class Hosts {
     this.memento.update(`${this.hostsKey}:${previous}`, false);
     this.memento.update(this.currentHostKey, host);
     this.memento.update(`${this.hostsKey}:${host}`, true);
-    return this.listAsHosts();
+    return this.hosts();
   }
 }

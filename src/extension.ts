@@ -11,7 +11,7 @@ export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
   const grpcurl = new Grpcurl(storage);
 
-  const hostsView = new HostsTreeView(storage.hosts.listAsHosts());
+  const hostsView = new HostsTreeView(storage.hosts.hosts());
   const protosView = new ProtosTreeView(grpcurl, storage.protos.list());
   const metasList = new MetasList(storage.metas.listMetas());
   const webviewFactory = new WebViewFactory(context.extensionUri, grpcurl);
