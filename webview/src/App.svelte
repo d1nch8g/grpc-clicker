@@ -40,16 +40,14 @@
   }
 </script>
 
-<div class="top-container">
-  <TopPanel
-    proto="{proto}"
-    version="{version}"
-    service="{service}"
-    call="{call}"
-    adress="{adress}"
-    onClick="{sendMessageToVscode}"
-  />
-</div>
+<TopPanel
+  proto="{proto}"
+  version="{version}"
+  service="{service}"
+  call="{call}"
+  adress="{adress}"
+  onClick="{sendMessageToVscode}"
+/>
 
 <table>
   <td>
@@ -62,12 +60,6 @@
 </table>
 
 <style>
-  .top-container {
-    padding-top: 2%;
-    padding-left: 6%;
-    padding-right: 6%;
-  }
-
   table {
     width: 100%;
   }

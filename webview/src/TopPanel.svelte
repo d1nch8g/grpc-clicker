@@ -7,28 +7,35 @@
   export let onClick;
 </script>
 
-<table>
-  <tr>
-    <th>proto</th>
-    <td>{proto}</td>
-    <th>service</th>
-    <td>{service}</td>
-    <td class="expanded">
-      <input type="text" name="" id="" value="{adress}" readonly />
-    </td>
-  </tr>
-  <tr>
-    <th>version</th>
-    <td>{version}</td>
-    <th>call</th>
-    <td>{call}</td>
-    <td>
-      <center> <button on:click="{onClick}">SEND</button></center>
-    </td>
-  </tr>
-</table>
+<div class="top-container">
+  <table>
+    <tr>
+      <th>proto</th>
+      <td>{proto}</td>
+      <th>service</th>
+      <td>{service}</td>
+      <td class="expanded">
+        <input type="text" name="" id="" value="{adress}" readonly />
+      </td>
+    </tr>
+    <tr>
+      <th>version</th>
+      <td>{version}</td>
+      <th>call</th>
+      <td>{call}</td>
+      <td>
+        <center> <button on:click="{onClick}">SEND</button></center>
+      </td>
+    </tr>
+  </table>
+</div>
 
 <style>
+  .top-container {
+    padding-top: 2%;
+    padding-left: 6%;
+    padding-right: 6%;
+  }
   table {
     margin: 4px;
     border: 1px solid;
