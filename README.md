@@ -1,7 +1,7 @@
 # <p  align="center" style="font-family:courier;font-size:180%" size=212px> gRPC Clicker </p>
 
 <p align="center">
-<img align="center" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="238px" height="238px" src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/747c5eca96147d865ee53f48824ae36a28bce49e/images/view.svg" /> 
+<img align="center" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="238px" height="238px" src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/747c5eca96147d865ee53f48824ae36a28bce49e/docs/extension.png" /> 
 </p>
 
 [![Generic badge](https://img.shields.io/badge/LICENSE-MIT-red.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/LICENSE)
