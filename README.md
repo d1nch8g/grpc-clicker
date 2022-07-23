@@ -4,9 +4,9 @@
 <img align="center" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="238px" height="238px" src="images/view.svg" /> 
 </p>
 
-[![Generic badge](https://img.shields.io/badge/LICENSE-MIT-orange.svg)](LICENSE)
+[![Generic badge](https://img.shields.io/badge/LICENSE-MIT-red.svg)](LICENSE)
 [![Generic badge](https://img.shields.io/badge/VSCode-marketplace-blue.svg)]()
-[![Generic badge](https://img.shields.io/badge/GitHub-repository-black.svg)]()
+[![Generic badge](https://img.shields.io/badge/GitHub-repository-orange.svg)](https://github.com/Dancheg97/grpclicker_vscode)
 [![Generic badge](https://img.shields.io/badge/VERSION-0.0.1-cyan.svg)]()
 [![Generic badge](https://img.shields.io/badge/DONATIONS-nano-green.svg)]()
 
@@ -25,4 +25,8 @@ Extension provides following functionality:
 
 ## Get started
 
-1)
+1) Open extension on side panel activity bar
+![](docs/1.png)
+2) Add `proto` file definition
+![](docs/2.png)
+3) 
