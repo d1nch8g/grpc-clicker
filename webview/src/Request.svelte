@@ -2,7 +2,7 @@
   export let reqName = "";
   export let reqJson = "";
   $: innerHeight = 0;
-  $: height = innerHeight - 200;
+  $: height = innerHeight - 170;
 </script>
 
 <svelte:window bind:innerHeight />
@@ -29,7 +29,6 @@
     padding-top: 2%;
     padding-left: 7%;
     padding-right: 3%;
-    padding-bottom: 5%;
   }
   textarea {
     resize: none;

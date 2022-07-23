@@ -2,7 +2,7 @@
   export let respName = "";
   export let response = "";
   $: innerHeight = 0;
-  $: height = innerHeight - 200;
+  $: height = innerHeight - 170;
 </script>
 
 <svelte:window bind:innerHeight />
@@ -30,7 +30,6 @@
     padding-top: 2%;
     padding-left: 3%;
     padding-right: 7%;
-    padding-bottom: 5%;
   }
   textarea {
     resize: none;
