@@ -75,18 +75,12 @@ export class Grpcurl {
       let metadata = ``;
       const metas = this.storage.metas.listActive();
       for (const meta of metas) {
-        metadata = metadata + `-H '${meta}' `;
+        metadata = metadata + `-H ${this.inputPreprocess(meta)} `;
       }
 
-      req = req.replaceAll("\n", "");
-      if (process.platform === "win32") {
-        req = req.replaceAll('"', '\\"');
-        req = `"${req}"`;
-      } else {
-        req = `'${req}'`;
-      }
-
-      const call = `grpcurl ${metadata} -import-path / -proto ${path} -d ${req} ${tls} ${adress} ${method}`;
+      const call = `grpcurl ${metadata} -import-path / -proto ${path} -d ${this.inputPreprocess(
+        req
+      )} ${tls} ${adress} ${method}`;
       const { stdout, stderr } = await exec(call);
       if (`${stderr}` !== "") {
         return `${stderr}`;
@@ -95,5 +89,15 @@ export class Grpcurl {
     } catch (e) {
       return `${e}`;
     }
+  }
+  inputPreprocess(input: string): string {
+    input = input.replaceAll("\n", "");
+    if (process.platform === "win32") {
+      input = input.replaceAll('"', '\\"');
+      input = `"${input}"`;
+    } else {
+      input = `'${input}'`;
+    }
+    return input;
   }
 }
