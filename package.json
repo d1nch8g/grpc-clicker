@@ -6,6 +6,8 @@
   "engines": {
     "vscode": "^1.68.0"
   },
+  "publisher": "DANCHE",
+  "repository": "https://github.com/Dancheg97/grpclicker_vscode",
   "categories": [
     "Other"
   ],

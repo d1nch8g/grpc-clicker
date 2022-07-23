@@ -6,3 +6,4 @@ node_modules
 .vscode
 media/
 media
+docs/PAT.pem
