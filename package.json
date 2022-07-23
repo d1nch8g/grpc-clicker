@@ -1,7 +1,7 @@
 {
   "name": "grpc-clicker",
   "displayName": "gRPC Clicker",
-  "description": "- execute `gRPC` calls from `VSCode`\n- view comlpete proto definition with field, message and service description\n- easily save and switch between proto hosts\n- add metadata to request, enable and disable it with one click",
+  "description": "Call gRPC services directly from VSCode",
   "icon": "docs/extension.png",
   "version": "0.0.2",
   "engines": {
