@@ -1,13 +1,13 @@
 # <p  align="center" style="font-family:courier;font-size:180%" size=212px> gRPC Clicker </p>
 
 <p align="center">
-<img align="center" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="238px" height="238px" src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/747c5eca96147d865ee53f48824ae36a28bce49e/docs/extension.png" /> 
+<img align="center" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="238px" height="238px" src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/extension.png" /> 
 </p>
 
 [![Generic badge](https://img.shields.io/badge/LICENSE-MIT-red.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/LICENSE)
 [![Generic badge](https://img.shields.io/badge/VSCode-marketplace-blue.svg)]()
 [![Generic badge](https://img.shields.io/badge/GitHub-repo-orange.svg)](https://github.com/Dancheg97/grpclicker_vscode)
-[![Generic badge](https://img.shields.io/badge/CHANGELOG-v0.0.1-cyan.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/docs/CHANGELOG.md)
+[![Generic badge](https://img.shields.io/badge/CHANGELOG-v0.0.2-cyan.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/docs/CHANGELOG.md)
 [![Generic badge](https://img.shields.io/badge/DONATIONS-nano-green.svg)]()
 
 This extension provides ability to execute gRPC calls from VSCode, using [`grpcurl`](https://github.com/fullstorydev/grpcurl) under the hood.
