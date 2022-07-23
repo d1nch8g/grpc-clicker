@@ -10,16 +10,16 @@ export class Hosts {
     this.currentHostKey = "grpc-clicker-curHost";
   }
 
-  private listToHosts(metasNames: string[]): Host[] {
+  private listToHosts(hosts: string[]): Host[] {
     let metas: Host[] = [];
-    for (const name of metasNames) {
+    for (const name of hosts) {
       metas.push(new Host(name, this.isCurrent(name)));
     }
     return metas;
   }
 
   private isCurrent(host: string): boolean {
-    return this.memento.get<boolean>(`${this.hostsKey}${host}`, false);
+    return this.memento.get<boolean>(`${this.hostsKey}:${host}`, false);
   }
 
   public listAsHosts(): Host[] {
@@ -63,9 +63,9 @@ export class Hosts {
 
   public setCurret(host: string): Host[] {
     let previous = this.getCurret();
-    this.memento.update(`${this.hostsKey}${previous}`, false);
+    this.memento.update(`${this.hostsKey}:${previous}`, false);
     this.memento.update(this.currentHostKey, host);
-    this.memento.update(`${this.hostsKey}${host}`, true);
+    this.memento.update(`${this.hostsKey}:${host}`, true);
     return this.listAsHosts();
   }
 }
