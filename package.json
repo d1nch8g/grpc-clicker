@@ -190,7 +190,88 @@
           "when": "viewItem == meta"
         }
       ]
-    }
+    },
+    "walkthroughs": [
+      {
+        "id": "grpc-clicker-walkthrow",
+        "title": "Get started with gRPC inside vscode",
+        "description": "Lets make some gRPC calls!",
+        "steps": [
+          {
+            "id": "1",
+            "title": "Install grpcurl",
+            "description": "First - you need to have [grpcurl](https://github.com/fullstorydev/grpcurl) installed on your pc.",
+            "media": {
+              "image": "docs/extension.png",
+              "altText": "gRPC-Clicker"
+            }
+          },
+          {
+            "id": "2",
+            "title": "Open extension side panel",
+            "description": "This command will reveal extension in __vscode__ activity bar",
+            "media": {
+              "image": "docs/1.png",
+              "altText": "gRPC-Clicker"
+            }
+          },
+          {
+            "id": "3",
+            "title": "Add protobuf definition",
+            "description": "Chose __proto__ file in from your local files",
+            "media": {
+              "image": "docs/2.png",
+              "altText": "gRPC-Clicker"
+            }
+          },
+          {
+            "id": "4",
+            "title": "Add host for calls",
+            "description": "You can add multiple and easily switch between them by clicking",
+            "media": {
+              "image": "docs/3.png",
+              "altText": "gRPC-Clicker"
+            }
+          },
+          {
+            "id": "5",
+            "title": "Add request metadata",
+            "description": "This step is optional, you can add metadata to request if required. Enabled metadata is marked with blue.",
+            "media": {
+              "image": "docs/4.png",
+              "altText": "gRPC-Clicker"
+            }
+          },
+          {
+            "id": "6",
+            "title": "Click on call from in gRPC-Explorer",
+            "description": "Click on the call you want to execute in proto schema explorer",
+            "media": {
+              "image": "docs/5.png",
+              "altText": "gRPC-Clicker"
+            }
+          },
+          {
+            "id": "7",
+            "title": "Edit message to send",
+            "description": "Input supports only json format",
+            "media": {
+              "image": "docs/6.png",
+              "altText": "gRPC-Clicker"
+            }
+          },
+          {
+            "id": "8",
+            "title": "Execute call",
+            "description": "Click on send button in view, and wait for result!",
+            "media": {
+              "image": "docs/7.png",
+              "altText": "gRPC-Clicker"
+            }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

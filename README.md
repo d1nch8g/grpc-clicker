@@ -10,6 +10,8 @@
 [![Generic badge](https://img.shields.io/badge/CHANGELOG-v0.0.3-cyan.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/docs/CHANGELOG.md)
 [![Generic badge](https://img.shields.io/badge/DONATIONS-nano-green.svg)]()
 
+To use this extension, first, you need to install [`grpcurl`](https://github.com/fullstorydev/grpcurl).
+
 This extension provides ability to execute gRPC calls from VSCode, using [`grpcurl`](https://github.com/fullstorydev/grpcurl) under the hood.
 
 Extension is currently in _alpha_ stage, so it might feel a bit buggy. Contributing is highly appreciated, any extension improvements will be included as fast as possible.
