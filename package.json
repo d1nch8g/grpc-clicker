@@ -3,7 +3,7 @@
   "displayName": "gRPC Clicker",
   "description": "Call gRPC services directly from VSCode",
   "icon": "docs/extension.png",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "engines": {
     "vscode": "^1.68.0"
   },
@@ -16,7 +16,14 @@
   "publishConfig": {},
   "repository": "https://github.com/Dancheg97/grpclicker_vscode",
   "categories": [
-    "Other"
+    "Testing"
+  ],
+  "tags": [
+    "grpc",
+    "grpcurl",
+    "tests",
+    "rpc",
+    "client"
   ],
   "activationEvents": [
     "onView:hosts",

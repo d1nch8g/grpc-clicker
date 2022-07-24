@@ -26,3 +26,8 @@ Extension provides following functionality:
 ## [0.0.4]
 
 - Added walkthrow to extension launch
+
+## [0.0.5]
+
+- Added tags for search to `package.json`
+- Documentation corrections
