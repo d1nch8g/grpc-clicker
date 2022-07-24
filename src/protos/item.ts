@@ -46,7 +46,8 @@ export class ProtoItem extends vscode.TreeItem {
             item.input.name,
             item.output.name,
             item.input.representation(),
-            isStream
+            isStream,
+            ""
           ),
         ],
       };
