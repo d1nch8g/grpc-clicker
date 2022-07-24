@@ -3,10 +3,8 @@ import { Memento } from "vscode";
 import { Meta } from "../classes/meta";
 
 export class Metadata {
-  private metadataKey: string;
-  constructor(private memento: Memento) {
-    this.metadataKey = "grpc-clicker-metadata";
-  }
+  private readonly key: string = "grpc-clicker-metadata";
+  constructor(private memento: Memento) {}
 
   private listToMetas(metasNames: string[]): Meta[] {
     let metas: Meta[] = [];
@@ -17,28 +15,28 @@ export class Metadata {
   }
 
   private isOn(meta: string): boolean {
-    return this.memento.get<boolean>(`${this.metadataKey}${meta}`, false);
+    return this.memento.get<boolean>(`${this.key}${meta}`, false);
   }
 
   public switchOnOff(meta: string) {
-    let isOn = this.memento.get<boolean>(`${this.metadataKey}${meta}`, false);
+    let isOn = this.memento.get<boolean>(`${this.key}${meta}`, false);
     isOn = !isOn;
-    this.memento.update(`${this.metadataKey}${meta}`, isOn);
+    this.memento.update(`${this.key}${meta}`, isOn);
   }
 
   public listMetas(): Meta[] {
-    let metas = this.memento.get<string[]>(this.metadataKey, []);
+    let metas = this.memento.get<string[]>(this.key, []);
     return this.listToMetas(metas);
   }
 
   public list(): string[] {
-    let metas = this.memento.get<string[]>(this.metadataKey, []);
+    let metas = this.memento.get<string[]>(this.key, []);
     return metas;
   }
 
   public listActive(): string[] {
     let response = [];
-    let metas = this.memento.get<string[]>(this.metadataKey, []);
+    let metas = this.memento.get<string[]>(this.key, []);
     for (const meta of metas) {
       if (this.isOn(meta)) {
         response.push(meta);
@@ -48,7 +46,7 @@ export class Metadata {
   }
 
   public add(meta: string): Meta[] {
-    let metas = this.memento.get<string[]>(this.metadataKey, []);
+    let metas = this.memento.get<string[]>(this.key, []);
     if (meta === "") {
       return this.listToMetas(metas);
     }
@@ -61,17 +59,17 @@ export class Metadata {
       return this.listToMetas(metas);
     }
     metas.push(meta);
-    this.memento.update(this.metadataKey, metas);
+    this.memento.update(this.key, metas);
     return this.listToMetas(metas);
   }
 
   public remove(meta: string): Meta[] {
-    let metas = this.memento.get<string[]>(this.metadataKey, []);
+    let metas = this.memento.get<string[]>(this.key, []);
     let idx = metas.indexOf(meta);
     if (idx !== -1) {
       metas.splice(idx, 1);
     }
-    this.memento.update(this.metadataKey, metas);
+    this.memento.update(this.key, metas);
     return this.listToMetas(metas);
   }
 }

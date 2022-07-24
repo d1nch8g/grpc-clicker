@@ -2,18 +2,16 @@ import * as vscode from "vscode";
 import { Memento } from "vscode";
 
 export class Protos {
-  private protosKey: string;
-  constructor(private memento: Memento) {
-    this.protosKey = "grpc-clicker-structures";
-  }
+  private readonly key: string = "grpc-clicker-structures";
+  constructor(private memento: Memento) {}
 
   public list(): string[] {
-    let pathes = this.memento.get<string[]>(this.protosKey, []);
+    let pathes = this.memento.get<string[]>(this.key, []);
     return pathes;
   }
 
   public add(path: string): string[] {
-    let pathes = this.memento.get<string[]>(this.protosKey, []);
+    let pathes = this.memento.get<string[]>(this.key, []);
     if (path === "") {
       return pathes;
     }
@@ -23,17 +21,17 @@ export class Protos {
       return pathes;
     }
     pathes.push(path);
-    this.memento.update(this.protosKey, pathes);
+    this.memento.update(this.key, pathes);
     return pathes;
   }
 
   public remove(adress: string): string[] {
-    let adresses = this.memento.get<string[]>(this.protosKey, []);
+    let adresses = this.memento.get<string[]>(this.key, []);
     let idx = adresses.indexOf(adress);
     if (idx !== -1) {
       adresses.splice(idx, 1);
     }
-    this.memento.update(this.protosKey, adresses);
+    this.memento.update(this.key, adresses);
     return adresses;
   }
 }
