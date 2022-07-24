@@ -1,6 +1,6 @@
-compile:
-	npm run build --prefix webview
-	go run mover.go
+install:
+	npm i
+	npm i --prefix webview
 
 build:
 	vsce package
