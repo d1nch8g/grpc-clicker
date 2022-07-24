@@ -4,7 +4,11 @@ import { Grpcurl } from "./grpcurl";
 
 export class WebViewFactory {
   private views: GrpcClickerView[] = [];
-  constructor(private uri: vscode.Uri, private grpcurl: Grpcurl) {}
+  constructor(
+    private uri: vscode.Uri,
+    private grpcurl: Grpcurl,
+    private callback: (request: Request) => void
+  ) {}
 
   create(input: Request) {
     this.removeClosedPanels();
@@ -21,7 +25,12 @@ export class WebViewFactory {
         return;
       }
     }
-    const view = new GrpcClickerView(this.uri, input, this.grpcurl);
+    const view = new GrpcClickerView(
+      this.uri,
+      input,
+      this.callback,
+      this.grpcurl
+    );
     this.views.push(view);
   }
 
@@ -50,6 +59,7 @@ class GrpcClickerView {
   constructor(
     private uri: vscode.Uri,
     public input: Request,
+    private callback: (request: Request) => void,
     grpcurl: Grpcurl
   ) {
     const options = {
@@ -75,7 +85,8 @@ class GrpcClickerView {
             false
           );
           this.input.response = resp;
-          this.panel.webview.postMessage(JSON.stringify(input));
+          this.panel.webview.postMessage(JSON.stringify(this.input));
+          this.callback(this.input);
           return;
         case "input":
           this.input.reqJson = out.text;

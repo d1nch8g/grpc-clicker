@@ -103,7 +103,7 @@ class ProtoItem extends vscode.TreeItem {
       let isStream = item.inputIsStream || item.outputIsStream;
       super.contextValue = "call";
       super.command = {
-        command: "call.trigger",
+        command: "webview.open",
         title: "Trigger opening of webview for grpc call",
         arguments: [
           new Request(

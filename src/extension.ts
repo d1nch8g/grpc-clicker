@@ -7,9 +7,7 @@ import { WebViewFactory } from "./webview";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
-
   const grpcurl = new Grpcurl(storage);
-
   const treeviews = new TreeViews(
     storage.hosts.hosts(),
     storage.metas.listMetas(),
@@ -17,8 +15,14 @@ export function activate(context: vscode.ExtensionContext) {
     storage.protos.list(),
     grpcurl
   );
-
-  const webviewFactory = new WebViewFactory(context.extensionUri, grpcurl);
+  const webviewFactory = new WebViewFactory(
+    context.extensionUri,
+    grpcurl,
+    (request: Request) => {
+      const requests = storage.history.add(request);
+      treeviews.history.update(requests);
+    }
+  );
 
   vscode.commands.registerCommand("hosts.add", async () => {
     let host = (await vscode.window.showInputBox()) ?? "";
@@ -84,7 +88,7 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.metadata.refresh(metadata);
   });
 
-  vscode.commands.registerCommand("call.trigger", async (input: Request) => {
+  vscode.commands.registerCommand("webview.open", async (input: Request) => {
     if (input.isStream) {
       vscode.window.showWarningMessage("Stream calls are not available yet!");
       return;

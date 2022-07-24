@@ -146,7 +146,7 @@
       },
       {
         "category": "gRPC Clicker",
-        "command": "call.trigger",
+        "command": "webview.open",
         "title": "Trigger opening of webview for grpc call"
       }
     ],
@@ -194,7 +194,7 @@
           "when": "viewItem == host"
         },
         {
-          "command": "call.trigger",
+          "command": "webview.open",
           "when": "viewItem == call"
         },
         {

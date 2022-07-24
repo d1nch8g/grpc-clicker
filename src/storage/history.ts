@@ -33,12 +33,13 @@ export class History {
     return requests;
   }
 
-  public add(request: Request) {
+  public add(request: Request): Request[] {
     let requestStrings = this.memento.get<string[]>(this.key, []);
     if (requestStrings.length >= 100) {
       requestStrings.pop();
     }
     requestStrings = [JSON.stringify(request)].concat(requestStrings);
     this.memento.update(this.key, requestStrings);
+    return this.list();
   }
 }
