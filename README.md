@@ -7,7 +7,7 @@
 [![Generic badge](https://img.shields.io/badge/LICENSE-MIT-red.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/LICENSE)
 [![Generic badge](https://img.shields.io/badge/VSCode-marketplace-blue.svg)](https://marketplace.visualstudio.com/items?itemName=Dancheg97.grpc-clicker)
 [![Generic badge](https://img.shields.io/badge/GitHub-repo-orange.svg)](https://github.com/Dancheg97/grpclicker_vscode)
-[![Generic badge](https://img.shields.io/badge/CHANGELOG-v0.0.6-cyan.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/docs/CHANGELOG.md)
+[![Generic badge](https://img.shields.io/badge/CHANGELOG-v0.0.7-cyan.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/docs/CHANGELOG.md)
 
 To use this extension, first, you need to install [`grpcurl`](https://github.com/fullstorydev/grpcurl).
 

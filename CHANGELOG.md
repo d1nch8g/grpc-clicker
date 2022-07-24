@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.0.7]
+
+> July 24, 2022
+
+- Fixed webview lifecicle, corrected dispose listener in webview
+- grpcurl module refactoring
+- made host and metadata in webview updatable
+
 ## [0.0.6]
 
 > July 24, 2022
