@@ -32,7 +32,7 @@
 
 <style>
   .top-container {
-    padding-top: 2%;
+    padding-top: 1%;
     padding-left: 6%;
     padding-right: 6%;
   }
