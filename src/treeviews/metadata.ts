@@ -2,9 +2,8 @@ import * as vscode from "vscode";
 import * as path from "path";
 import { Meta } from "../classes/meta";
 
-export class MetasList implements vscode.TreeDataProvider<MetaItem> {
-  private metas: Meta[];
-  constructor(metas: Meta[]) {
+export class MetadataTreeView implements vscode.TreeDataProvider<MetaItem> {
+  constructor(private metas: Meta[]) {
     this.metas = metas;
     this.onChange = new vscode.EventEmitter<MetaItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;

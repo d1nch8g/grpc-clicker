@@ -26,7 +26,7 @@ func main() {
 		if strings.HasSuffix(file.Name(), ".js") {
 			err = os.Rename(in+file.Name(), in+`main.js`)
 		}
-	} remove adresses to hosts evrywhere
+	}
 
 	os.Mkdir(`dist`, os.ModePerm)
 

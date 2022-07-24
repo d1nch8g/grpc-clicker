@@ -15,7 +15,7 @@ export class History {
       obj.service,
       obj.call,
       obj.methodTag,
-      obj.adress,
+      obj.host,
       obj.reqName,
       obj.respName,
       obj.reqJson,

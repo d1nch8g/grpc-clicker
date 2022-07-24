@@ -1,41 +1,41 @@
 import * as vscode from "vscode";
 import { Request } from "./classes/request";
 import { Grpcurl } from "./grpcurl";
-import { AdressList as HostsTreeView } from "./treeviews/hosts";
-import { MetasList } from "./treeviews/metadata";
-import { ProtosTree as ProtosTreeView } from "./treeviews/protos";
 import { Storage } from "./storage/storage";
+import { TreeViews } from "./treeviews/treeviews";
 import { WebViewFactory } from "./webview";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
+
   const grpcurl = new Grpcurl(storage);
 
-  const hostsView = new HostsTreeView(storage.hosts.hosts());
-  const protosView = new ProtosTreeView(grpcurl, storage.protos.list());
-  const metasList = new MetasList(storage.metas.listMetas());
-  const webviewFactory = new WebViewFactory(context.extensionUri, grpcurl);
+  const treeviews = new TreeViews(
+    storage.hosts.hosts(),
+    storage.metas.listMetas(),
+    storage.history.list(),
+    storage.protos.list(),
+    grpcurl
+  );
 
-  vscode.window.registerTreeDataProvider("hosts", hostsView);
-  vscode.window.registerTreeDataProvider("protos", protosView);
-  vscode.window.registerTreeDataProvider("metas", metasList);
+  const webviewFactory = new WebViewFactory(context.extensionUri, grpcurl);
 
   vscode.commands.registerCommand("hosts.add", async () => {
     let host = (await vscode.window.showInputBox()) ?? "";
     let hosts = storage.hosts.add(host);
-    hostsView.refresh(hosts);
+    treeviews.hosts.update(hosts);
   });
 
   vscode.commands.registerCommand("hosts.remove", async () => {
-    let hosts = storage.hosts.list();
-    let host = await vscode.window.showQuickPick(hosts);
-    let newHosts = storage.hosts.remove(host);
-    hostsView.refresh(newHosts);
+    let oldHosts = storage.hosts.list();
+    let host = await vscode.window.showQuickPick(oldHosts);
+    let hosts = storage.hosts.remove(host);
+    treeviews.hosts.update(hosts);
   });
 
   vscode.commands.registerCommand("hosts.switch", async (host: string) => {
     let newHosts = storage.hosts.setCurret(host);
-    hostsView.refresh(newHosts);
+    treeviews.hosts.update(newHosts);
     webviewFactory.update(host);
   });
 
@@ -50,38 +50,38 @@ export function activate(context: vscode.ExtensionContext) {
     let pick = await vscode.window.showOpenDialog(options);
     let path = pick[0].fsPath;
     let pathes = storage.protos.add(path);
-    protosView.refresh(pathes);
+    treeviews.protos.update(pathes);
   });
 
   vscode.commands.registerCommand("protos.remove", async () => {
     let pathes = storage.protos.list();
     let path = await vscode.window.showQuickPick(pathes);
     pathes = storage.protos.remove(path);
-    protosView.refresh(pathes);
+    treeviews.protos.update(pathes);
   });
 
   vscode.commands.registerCommand("protos.refresh", async () => {
-    let pathes = storage.protos.list();
-    protosView.refresh(pathes);
+    let protoPathes = storage.protos.list();
+    treeviews.protos.update(protoPathes);
   });
 
   vscode.commands.registerCommand("metas.add", async () => {
     let meta = (await vscode.window.showInputBox()) ?? "";
-    let metas = storage.metas.add(meta);
-    metasList.refresh(metas);
+    let metadata = storage.metas.add(meta);
+    treeviews.metadata.refresh(metadata);
   });
 
   vscode.commands.registerCommand("metas.remove", async () => {
-    let metas = storage.metas.list();
-    let meta = await vscode.window.showQuickPick(metas);
-    let newMetas = storage.metas.remove(meta);
-    metasList.refresh(newMetas);
+    let oldMetadata = storage.metas.list();
+    let meta = await vscode.window.showQuickPick(oldMetadata);
+    let metadata = storage.metas.remove(meta);
+    treeviews.metadata.refresh(metadata);
   });
 
   vscode.commands.registerCommand("metas.switch", async (meta: string) => {
     storage.metas.switchOnOff(meta);
-    let metas = storage.metas.listMetas();
-    metasList.refresh(metas);
+    let metadata = storage.metas.listMetas();
+    treeviews.metadata.refresh(metadata);
   });
 
   vscode.commands.registerCommand("call.trigger", async (input: Request) => {
@@ -89,8 +89,8 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.window.showWarningMessage("Stream calls are not available yet!");
       return;
     }
-    const adress = storage.hosts.getCurret();
-    input.adress = adress;
+    const host = storage.hosts.getCurret();
+    input.host = host;
     webviewFactory.create(input);
   });
 }

@@ -60,7 +60,7 @@ export class Grpcurl {
   async sendCall(
     path: string,
     req: string,
-    adress: string,
+    host: string,
     method: string,
     tlsOn: boolean
   ): Promise<string> {
@@ -80,7 +80,7 @@ export class Grpcurl {
 
       const requset = this.inputPreprocess(req);
 
-      const call = `grpcurl ${metadata} -import-path / -proto ${path} -d ${requset} ${tls} ${adress} ${method}`;
+      const call = `grpcurl ${metadata} -import-path / -proto ${path} -d ${requset} ${tls} ${host} ${method}`;
       const { stdout, stderr } = await exec(call);
       if (`${stderr}` !== "") {
         return `${stderr}`;

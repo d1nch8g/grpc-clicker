@@ -2,10 +2,8 @@ import * as vscode from "vscode";
 import * as path from "path";
 import { Host } from "../classes/host";
 
-export class AdressList implements vscode.TreeDataProvider<HostItem> {
-  private hosts: Host[];
-  constructor(hosts: Host[]) {
-    this.hosts = hosts;
+export class HostsTreeView implements vscode.TreeDataProvider<HostItem> {
+  constructor(private hosts: Host[]) {
     this.onChange = new vscode.EventEmitter<HostItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
   }
@@ -13,7 +11,7 @@ export class AdressList implements vscode.TreeDataProvider<HostItem> {
   private onChange: vscode.EventEmitter<HostItem | undefined | void>;
   readonly onDidChangeTreeData: vscode.Event<void | HostItem | HostItem[]>;
 
-  refresh(hosts: Host[]): void {
+  update(hosts: Host[]): void {
     this.hosts = hosts;
     this.onChange.fire();
   }

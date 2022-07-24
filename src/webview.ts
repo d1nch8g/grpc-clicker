@@ -25,10 +25,10 @@ export class WebViewFactory {
     this.views.push(view);
   }
 
-  update(adress: string) {
+  update(host: string) {
     this.removeClosedPanels();
     for (const view of this.views) {
-      view.input.adress = adress;
+      view.input.host = host;
       view.update();
     }
   }
@@ -70,7 +70,7 @@ class GrpcClickerView {
           let resp = await grpcurl.sendCall(
             input.path,
             out.text,
-            input.adress,
+            input.host,
             input.methodTag,
             false
           );
@@ -129,7 +129,6 @@ class GrpcClickerView {
       ></script>
     </body>
   </html>`;
-
     this.panel.webview.postMessage(JSON.stringify(this.input));
   }
 }

@@ -8,7 +8,7 @@ import { Grpcurl } from "../grpcurl";
 import { Field } from "../classes/field";
 import { Request } from "../classes/request";
 
-export class ProtosTree implements vscode.TreeDataProvider<ProtoItem> {
+export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
   constructor(private grpcurl: Grpcurl, private protos: string[]) {
     this.protos = protos;
     this.onChange = new vscode.EventEmitter<ProtoItem | undefined | void>();
@@ -18,7 +18,7 @@ export class ProtosTree implements vscode.TreeDataProvider<ProtoItem> {
   private onChange: vscode.EventEmitter<ProtoItem | undefined | void>;
   readonly onDidChangeTreeData: vscode.Event<void | ProtoItem | ProtoItem[]>;
 
-  async refresh(protos: string[]) {
+  async update(protos: string[]) {
     this.protos = protos;
     this.onChange.fire();
   }
@@ -100,8 +100,8 @@ class ProtoItem extends vscode.TreeItem {
         super.tooltip = "gRPC unary call";
         svg = "unary.svg";
       }
-      super.contextValue = "call";
       let isStream = item.inputIsStream || item.outputIsStream;
+      super.contextValue = "call";
       super.command = {
         command: "call.trigger",
         title: "Trigger opening of webview for grpc call",

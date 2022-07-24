@@ -25,13 +25,13 @@ export class Protos {
     return pathes;
   }
 
-  public remove(adress: string): string[] {
-    let adresses = this.memento.get<string[]>(this.key, []);
-    let idx = adresses.indexOf(adress);
+  public remove(host: string): string[] {
+    let hosts = this.memento.get<string[]>(this.key, []);
+    let idx = hosts.indexOf(host);
     if (idx !== -1) {
-      adresses.splice(idx, 1);
+      hosts.splice(idx, 1);
     }
-    this.memento.update(this.key, adresses);
-    return adresses;
+    this.memento.update(this.key, hosts);
+    return hosts;
   }
 }
