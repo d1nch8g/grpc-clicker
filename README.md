@@ -8,7 +8,6 @@
 [![Generic badge](https://img.shields.io/badge/VSCode-marketplace-blue.svg)]()
 [![Generic badge](https://img.shields.io/badge/GitHub-repo-orange.svg)](https://github.com/Dancheg97/grpclicker_vscode)
 [![Generic badge](https://img.shields.io/badge/CHANGELOG-v0.0.4-cyan.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/docs/CHANGELOG.md)
-[![Generic badge](https://img.shields.io/badge/DONATIONS-nano-green.svg)]()
 
 To use this extension, first, you need to install [`grpcurl`](https://github.com/fullstorydev/grpcurl).
 
