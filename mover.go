@@ -41,4 +41,13 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	script, err := ioutil.ReadFile(out + `main.js`)
+	if err != nil {
+		panic(err)
+	}
+
+	script = append([]byte(`const vscode = acquireVsCodeApi();`), script...)
+	os.Remove(out + `main.js`)
+	ioutil.WriteFile(out+`main.js`, script, os.ModePerm)
 }

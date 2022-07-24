@@ -2,7 +2,6 @@
   import TopPanel from "./TopPanel.svelte";
   import Request from "./Request.svelte";
   import Response from "./Response.svelte";
-  const vscode = acquireVsCodeApi();
 
   $: proto = "";
   $: version = "";
