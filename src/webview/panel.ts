@@ -91,7 +91,7 @@ class GrpcClickerView {
     this.update();
   }
 
-  public update() {
+  update() {
     this.panel.iconPath = {
       light: vscode.Uri.joinPath(this.uri, `images`, `view.svg`),
       dark: vscode.Uri.joinPath(this.uri, `images`, `view.svg`),
