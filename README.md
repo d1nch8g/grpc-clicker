@@ -5,15 +5,15 @@
 </p>
 
 [![Generic badge](https://img.shields.io/badge/LICENSE-MIT-red.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/LICENSE)
-[![Generic badge](https://img.shields.io/badge/VSCode-marketplace-blue.svg)]()
+[![Generic badge](https://img.shields.io/badge/VSCode-marketplace-blue.svg)](https://marketplace.visualstudio.com/items?itemName=Dancheg97.grpc-clicker)
 [![Generic badge](https://img.shields.io/badge/GitHub-repo-orange.svg)](https://github.com/Dancheg97/grpclicker_vscode)
 [![Generic badge](https://img.shields.io/badge/CHANGELOG-v0.0.4-cyan.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/docs/CHANGELOG.md)
 
 To use this extension, first, you need to install [`grpcurl`](https://github.com/fullstorydev/grpcurl).
 
-This extension provides ability to execute gRPC calls from VSCode, using [`grpcurl`](https://github.com/fullstorydev/grpcurl) under the hood.
+This extension provides ability to execute gRPC calls from VSCode, using [`grpcurl`](https://github.com/fullstorydev/grpcurl) CLI under the hood.
 
-Extension is currently in _alpha_ stage, so it might feel a bit buggy. Contributing is highly appreciated, any extension improvements will be included as fast as possible.
+Currently in _alpha_ stage, so it might feel a bit buggy. Contributing is highly appreciated, any extension improvements will be included as fast as possible.
 
 ## Functionality:
 
