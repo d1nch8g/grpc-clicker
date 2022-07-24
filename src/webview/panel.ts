@@ -21,7 +21,7 @@ class GrpcClickerView {
       vscode.ViewColumn.Active,
       {
         enableScripts: true,
-        localResourceRoots: [vscode.Uri.joinPath(this.uri, "media")],
+        localResourceRoots: [vscode.Uri.joinPath(this.uri, "dist")],
       }
     );
 
@@ -67,10 +67,10 @@ class GrpcClickerView {
     };
 
     const scriptUri = this.panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.uri, "media", "main.js")
+      vscode.Uri.joinPath(this.uri, "dist", "main.js")
     );
     const stylesMainUri = this.panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.uri, "media", "styles.css")
+      vscode.Uri.joinPath(this.uri, "dist", "styles.css")
     );
 
     this.panel.webview.html = `<!DOCTYPE html>

@@ -4,6 +4,3 @@ node_modules
 .vscode-test/
 *.vsix
 .vscode
-media/
-media
-docs/PAT.pem

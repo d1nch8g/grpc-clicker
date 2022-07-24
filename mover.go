@@ -8,7 +8,7 @@ import (
 
 const (
 	in  = `webview/dist/assets/`
-	out = `media/`
+	out = `dist/`
 )
 
 // ext manage page: https://marketplace.visualstudio.com/manage/publishers/dancheg97
@@ -28,7 +28,7 @@ func main() {
 		}
 	}
 
-	os.Mkdir(`media`, os.ModePerm)
+	os.Mkdir(`dist`, os.ModePerm)
 
 	os.Remove(out + `main.js`)
 	os.Remove(out + `styles.css`)
