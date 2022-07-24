@@ -78,9 +78,9 @@ export class Grpcurl {
         metadata = metadata + `-H ${this.inputPreprocess(meta)} `;
       }
 
-      const call = `grpcurl ${metadata} -import-path / -proto ${path} -d ${this.inputPreprocess(
-        req
-      )} ${tls} ${adress} ${method}`;
+      const requset = this.inputPreprocess(req);
+
+      const call = `grpcurl ${metadata} -import-path / -proto ${path} -d ${requset} ${tls} ${adress} ${method}`;
       const { stdout, stderr } = await exec(call);
       if (`${stderr}` !== "") {
         return `${stderr}`;
