@@ -1,11 +1,11 @@
 import * as vscode from "vscode";
-import { Grpcurl } from "./grpcurl/grpcurl";
-import { AdressList as HostsTreeView } from "./hosts/list";
-import { MetasList } from "./metas/list";
-import { ProtosTree as ProtosTreeView } from "./protos/tree";
+import { Request } from "./classes/request";
+import { Grpcurl } from "./grpcurl";
+import { AdressList as HostsTreeView } from "./treeviews/hosts";
+import { MetasList } from "./treeviews/metadata";
+import { ProtosTree as ProtosTreeView } from "./treeviews/protos";
 import { Storage } from "./storage/storage";
-import { Input } from "./webview/data";
-import { WebViewFactory } from "./webview/panel";
+import { WebViewFactory } from "./webview";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand("hosts.switch", async (host: string) => {
     let newHosts = storage.hosts.setCurret(host);
     hostsView.refresh(newHosts);
-    webviewFactory.updateAdress(host);
+    webviewFactory.update(host);
   });
 
   vscode.commands.registerCommand("protos.add", async () => {
@@ -84,7 +84,7 @@ export function activate(context: vscode.ExtensionContext) {
     metasList.refresh(metas);
   });
 
-  vscode.commands.registerCommand("call.trigger", async (input: Input) => {
+  vscode.commands.registerCommand("call.trigger", async (input: Request) => {
     if (input.isStream) {
       vscode.window.showWarningMessage("Stream calls are not available yet!");
       return;

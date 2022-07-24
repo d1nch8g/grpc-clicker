@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
-import { Field } from "../classes/field";
-import { Message } from "../classes/message";
-import { Proto } from "../classes/proto";
-import { Storage } from "../storage/storage";
+import { Field } from "./classes/field";
+import { Message } from "./classes/message";
+import { Proto } from "./classes/proto";
+import { Storage } from "./storage/storage";
 
 export class Grpcurl {
   constructor(private storage: Storage) {}
