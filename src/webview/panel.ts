@@ -7,15 +7,16 @@ export class WebViewFactory {
   constructor(private uri: vscode.Uri, private grpcurl: Grpcurl) {}
 
   create(input: Input) {
+    this.removeDisposedPanels();
     for (const view of this.views) {
-      if (
+      const panelIsActive =
         input.path === view.input.path &&
         input.proto === view.input.proto &&
         input.version === view.input.version &&
         input.service === view.input.service &&
         input.call === view.input.call &&
-        input.methodTag === view.input.methodTag
-      ) {
+        input.methodTag === view.input.methodTag;
+      if (panelIsActive) {
         view.panel.reveal();
         return;
       }
@@ -25,21 +26,27 @@ export class WebViewFactory {
   }
 
   updateAdress(adress: string) {
+    this.removeDisposedPanels();
+    for (const view of this.views) {
+      view.input.adress = adress;
+      view.update();
+    }
+  }
+
+  private removeDisposedPanels() {
     var i = this.views.length;
     while (i--) {
-      if (this.views[i].isDisposed) {
+      if (this.views[i].closed) {
         this.views.splice(i, 1);
         continue;
       }
-      this.views[i].input.adress = adress;
-      this.views[i].update();
     }
   }
 }
 
 class GrpcClickerView {
   public panel: vscode.WebviewPanel;
-  public isDisposed = false;
+  public closed: boolean = false;
   constructor(private uri: vscode.Uri, public input: Input, grpcurl: Grpcurl) {
     this.panel = vscode.window.createWebviewPanel(
       "callgrpc",
@@ -51,46 +58,35 @@ class GrpcClickerView {
       }
     );
 
-    this.panel.webview.onDidReceiveMessage(
-      async (out) => {
-        switch (out.command) {
-          case "req":
-            let resp = await grpcurl.sendCall(
-              input.path,
-              out.text,
-              input.adress,
-              input.methodTag,
-              false
-            );
-            this.input.response = resp;
-            this.panel.webview.postMessage(JSON.stringify(input));
-            return;
-          case "input":
-            this.input.reqJson = out.text;
-            return;
-        }
-      },
-      null,
-      null
-    );
+    this.panel.webview.onDidReceiveMessage(async (out) => {
+      switch (out.command) {
+        case "req":
+          let resp = await grpcurl.sendCall(
+            input.path,
+            out.text,
+            input.adress,
+            input.methodTag,
+            false
+          );
+          this.input.response = resp;
+          this.panel.webview.postMessage(JSON.stringify(input));
+          return;
+        case "input":
+          this.input.reqJson = out.text;
+          return;
+      }
+    });
 
-    this.panel.onDidDispose(
-      () => {
-        this.isDisposed = true;
-      },
-      null,
-      null
-    );
+    this.panel.onDidChangeViewState((e) => {
+      if (this.panel.visible) {
+        this.update();
+      }
+    });
 
-    this.panel.onDidChangeViewState(
-      (e) => {
-        if (this.panel.visible) {
-          this.update();
-        }
-      },
-      null,
-      null
-    );
+    this.panel.onDidDispose(() => {
+      this.panel.dispose();
+      this.closed = true;
+    });
 
     this.update();
   }
