@@ -12,9 +12,10 @@
         "reveal": "never",
         "group": "watchers"
       },
-      "group": "build",
-      "label": "npm: watch",
-      "detail": "webpack --watch"
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     },
     {
       "type": "npm",
@@ -31,16 +32,6 @@
       "label": "tasks: watch-tests",
       "dependsOn": ["npm: watch", "npm: watch-tests"],
       "problemMatcher": []
-    },
-    {
-      "label": "compile-svelte",
-      "type": "shell",
-      "command": "npm run build --prefix webview;go run mover.go",
-      "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
     }
   ]
 }
