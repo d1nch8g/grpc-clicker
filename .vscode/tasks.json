@@ -4,6 +4,15 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "compile",
+      "type": "shell",
+      "command": "go run webview_watcher.go",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
       "type": "npm",
       "script": "watch",
       "problemMatcher": ["$ts-webpack-watch", "$tslint-webpack-watch"],
@@ -15,7 +24,9 @@
       "group": {
         "kind": "build",
         "isDefault": true
-      }
+      },
+      "label": "npm: watch",
+      "detail": "webpack --watch"
     },
     {
       "type": "npm",
