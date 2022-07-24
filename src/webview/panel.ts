@@ -7,6 +7,19 @@ export class WebViewFactory {
   constructor(private uri: vscode.Uri, private grpcurl: Grpcurl) {}
 
   create(input: Input) {
+    for (const view of this.views) {
+      if (
+        input.path === view.input.path &&
+        input.proto === view.input.proto &&
+        input.version === view.input.version &&
+        input.service === view.input.service &&
+        input.call === view.input.call &&
+        input.methodTag === view.input.methodTag
+      ) {
+        view.panel.reveal();
+        return;
+      }
+    }
     const view = new GrpcClickerView(this.uri, input, this.grpcurl);
     this.views.push(view);
   }
@@ -25,7 +38,7 @@ export class WebViewFactory {
 }
 
 class GrpcClickerView {
-  private panel: vscode.WebviewPanel;
+  public panel: vscode.WebviewPanel;
   public isDisposed = false;
   constructor(private uri: vscode.Uri, public input: Input, grpcurl: Grpcurl) {
     this.panel = vscode.window.createWebviewPanel(
