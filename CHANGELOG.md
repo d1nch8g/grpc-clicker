@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.0.6]
+
+> July 24, 2022
+
+- Added caching of input values in input panel
+- Corrected metadata on request
+
 ## [0.0.5]
 
 > July 24, 2022
