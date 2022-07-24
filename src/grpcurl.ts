@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
-import { Field } from "../classes/field";
-import { Message } from "../classes/message";
-import { Proto } from "../classes/proto";
-import { Storage } from "../storage/storage";
+import { Field } from "./classes/field";
+import { Message } from "./classes/message";
+import { Proto } from "./classes/proto";
+import { Storage } from "./storage/storage";
 
 export class Grpcurl {
   constructor(private storage: Storage) {}
@@ -60,7 +60,7 @@ export class Grpcurl {
   async sendCall(
     path: string,
     req: string,
-    adress: string,
+    host: string,
     method: string,
     tlsOn: boolean
   ): Promise<string> {
@@ -80,7 +80,7 @@ export class Grpcurl {
 
       const requset = this.inputPreprocess(req);
 
-      const call = `grpcurl ${metadata} -import-path / -proto ${path} -d ${requset} ${tls} ${adress} ${method}`;
+      const call = `grpcurl ${metadata} -import-path / -proto ${path} -d ${requset} ${tls} ${host} ${method}`;
       const { stdout, stderr } = await exec(call);
       if (`${stderr}` !== "") {
         return `${stderr}`;

@@ -3,7 +3,7 @@
   export let version = "v1";
   export let service = "petstore";
   export let call = "call";
-  export let adress = "http://localhost:12201";
+  export let host = "http://localhost:12201";
   export let onClick;
 </script>
 
@@ -15,7 +15,7 @@
       <th>service</th>
       <td>{service}</td>
       <td class="expanded">
-        <input type="text" name="" id="" value="{adress}" readonly />
+        <input type="text" name="" id="" value="{host}" readonly />
       </td>
     </tr>
     <tr>

@@ -3,7 +3,7 @@
   "displayName": "gRPC Clicker",
   "description": "Call gRPC services directly from VSCode",
   "icon": "docs/extension.png",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "engines": {
     "vscode": "^1.68.0"
   },
@@ -29,6 +29,7 @@
     "onView:hosts",
     "onView:schema",
     "onView:metas",
+    "onView:history",
     "onCommand:hosts.add",
     "onCommand:hosts.remove",
     "onCommand:protos.add",
@@ -57,11 +58,15 @@
         },
         {
           "id": "protos",
-          "name": "Protobuf schemas"
+          "name": "Proto schema explorer"
         },
         {
           "id": "metas",
           "name": "Request metadata"
+        },
+        {
+          "id": "history",
+          "name": "Requst history"
         }
       ]
     },
@@ -69,7 +74,7 @@
       {
         "category": "gRPC Clicker",
         "command": "hosts.add",
-        "title": "Add new adress",
+        "title": "Add new host",
         "icon": {
           "dark": "images/dark/plus.svg",
           "light": "images/light/plus.svg"
@@ -78,7 +83,7 @@
       {
         "category": "gRPC Clicker",
         "command": "hosts.remove",
-        "title": "Remove existing adress",
+        "title": "Remove existing host",
         "icon": {
           "dark": "images/dark/minus.svg",
           "light": "images/light/minus.svg"
@@ -141,7 +146,7 @@
       },
       {
         "category": "gRPC Clicker",
-        "command": "call.trigger",
+        "command": "webview.open",
         "title": "Trigger opening of webview for grpc call"
       }
     ],
@@ -189,7 +194,7 @@
           "when": "viewItem == host"
         },
         {
-          "command": "call.trigger",
+          "command": "webview.open",
           "when": "viewItem == call"
         },
         {

@@ -7,7 +7,7 @@
   $: version = "";
   $: service = "";
   $: call = "";
-  $: adress = "";
+  $: host = "";
 
   $: reqName = "";
   $: reqJson = "";
@@ -21,7 +21,7 @@
     version = obj.version;
     service = obj.service;
     call = obj.call;
-    adress = obj.adress;
+    host = obj.host;
     reqName = obj.reqName;
     reqJson = obj.reqJson;
     respName = obj.respName;
@@ -48,7 +48,7 @@
   version="{version}"
   service="{service}"
   call="{call}"
-  adress="{adress}"
+  host="{host}"
   onClick="{sendMessageToVscode}"
 />
 

@@ -1,13 +1,17 @@
 import * as vscode from "vscode";
-import { Grpcurl } from "../grpcurl/grpcurl";
-import { Input } from "./data";
+import { Request } from "./classes/request";
+import { Grpcurl } from "./grpcurl";
 
 export class WebViewFactory {
   private views: GrpcClickerView[] = [];
-  constructor(private uri: vscode.Uri, private grpcurl: Grpcurl) {}
+  constructor(
+    private uri: vscode.Uri,
+    private grpcurl: Grpcurl,
+    private callback: (request: Request) => void
+  ) {}
 
-  create(input: Input) {
-    this.removeDisposedPanels();
+  create(input: Request) {
+    this.removeClosedPanels();
     for (const view of this.views) {
       const panelIsActive =
         input.path === view.input.path &&
@@ -21,19 +25,24 @@ export class WebViewFactory {
         return;
       }
     }
-    const view = new GrpcClickerView(this.uri, input, this.grpcurl);
+    const view = new GrpcClickerView(
+      this.uri,
+      input,
+      this.callback,
+      this.grpcurl
+    );
     this.views.push(view);
   }
 
-  updateAdress(adress: string) {
-    this.removeDisposedPanels();
+  update(host: string) {
+    this.removeClosedPanels();
     for (const view of this.views) {
-      view.input.adress = adress;
+      view.input.host = host;
       view.update();
     }
   }
 
-  private removeDisposedPanels() {
+  private removeClosedPanels() {
     var i = this.views.length;
     while (i--) {
       if (this.views[i].closed) {
@@ -45,17 +54,24 @@ export class WebViewFactory {
 }
 
 class GrpcClickerView {
-  public panel: vscode.WebviewPanel;
+  public readonly panel: vscode.WebviewPanel;
   public closed: boolean = false;
-  constructor(private uri: vscode.Uri, public input: Input, grpcurl: Grpcurl) {
+  constructor(
+    private uri: vscode.Uri,
+    public input: Request,
+    private callback: (request: Request) => void,
+    grpcurl: Grpcurl
+  ) {
+    const options = {
+      enableScripts: true,
+      localResourceRoots: [vscode.Uri.joinPath(this.uri, "dist")],
+    };
+
     this.panel = vscode.window.createWebviewPanel(
       "callgrpc",
       input.call,
       vscode.ViewColumn.Active,
-      {
-        enableScripts: true,
-        localResourceRoots: [vscode.Uri.joinPath(this.uri, "dist")],
-      }
+      options
     );
 
     this.panel.webview.onDidReceiveMessage(async (out) => {
@@ -64,15 +80,18 @@ class GrpcClickerView {
           let resp = await grpcurl.sendCall(
             input.path,
             out.text,
-            input.adress,
+            input.host,
             input.methodTag,
             false
           );
-          this.input.response = resp;
+          input.response = resp;
+          const dateTime = new Date();
+          input.date = dateTime.toISOString();
           this.panel.webview.postMessage(JSON.stringify(input));
+          this.callback(input);
           return;
         case "input":
-          this.input.reqJson = out.text;
+          input.reqJson = out.text;
           return;
       }
     });
@@ -123,7 +142,6 @@ class GrpcClickerView {
       ></script>
     </body>
   </html>`;
-
     this.panel.webview.postMessage(JSON.stringify(this.input));
   }
 }

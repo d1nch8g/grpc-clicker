@@ -1,5 +1,4 @@
-export class Input {
-  public type = "init";
+export class Request {
   constructor(
     public path: string,
     public proto: string,
@@ -7,11 +6,12 @@ export class Input {
     public service: string,
     public call: string,
     public methodTag: string,
-    public adress: string,
+    public host: string,
     public reqName: string,
     public respName: string,
     public reqJson: string,
     public isStream: boolean,
-    public response: string
+    public response: string,
+    public date: string
   ) {}
 }

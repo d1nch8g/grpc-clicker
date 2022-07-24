@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. Dates are d
 
 ## [0.0.7]
 
+> July 25, 2022
+
+- Added request history
+
+## [0.0.7]
+
 > July 24, 2022
 
 - Fixed webview lifecicle, corrected dispose listener in webview
