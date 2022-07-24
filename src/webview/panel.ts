@@ -26,17 +26,20 @@ class GrpcClickerView {
     );
 
     this.panel.webview.onDidReceiveMessage(
-      async (message) => {
-        switch (message.command) {
+      async (out) => {
+        switch (out.command) {
           case "req":
             let resp = await grpcurl.sendCall(
               input.path,
-              message.text,
+              out.text,
               input.adress,
               input.methodTag,
               false
             );
             this.panel.webview.postMessage(JSON.stringify(new Response(resp)));
+            return;
+          case "input":
+            this.input.reqJson = out.text;
             return;
         }
       },

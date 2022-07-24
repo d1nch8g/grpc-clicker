@@ -37,6 +37,13 @@
       text: reqJson,
     });
   }
+
+  function onInputEdited() {
+    vscode.postMessage({
+      command: "input",
+      text: reqJson,
+    });
+  }
 </script>
 
 <TopPanel
@@ -50,7 +57,7 @@
 
 <table>
   <td>
-    <Request reqName="{reqName}" bind:reqJson />
+    <Request reqName="{reqName}" onChange="{onInputEdited}" bind:reqJson />
   </td>
 
   <td>
