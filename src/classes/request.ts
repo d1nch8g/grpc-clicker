@@ -1,6 +1,4 @@
 export class Request {
-  public response: string = "";
-  public date: string = "";
   constructor(
     public path: string,
     public proto: string,
@@ -12,6 +10,8 @@ export class Request {
     public reqName: string,
     public respName: string,
     public reqJson: string,
-    public isStream: boolean
+    public isStream: boolean,
+    public response: string,
+    public date: string
   ) {}
 }

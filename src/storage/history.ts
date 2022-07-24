@@ -19,7 +19,9 @@ export class History {
       obj.reqName,
       obj.respName,
       obj.reqJson,
-      obj.isStream
+      obj.isStream,
+      obj.response,
+      obj.date
     );
     return req;
   }

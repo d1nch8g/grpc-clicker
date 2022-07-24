@@ -47,7 +47,8 @@ export class HistoryTreeView implements vscode.TreeDataProvider<HistoryItem> {
 class HistoryItem extends vscode.TreeItem {
   constructor(request: Request) {
     super(`${request.proto} - ${request.call}`);
-    super.description = `Executed gRPC call`;
+
+    super.description = request.date;
     super.contextValue = "host";
 
     super.tooltip = `File: ${request.path}\n

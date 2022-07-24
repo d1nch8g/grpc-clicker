@@ -84,12 +84,14 @@ class GrpcClickerView {
             input.methodTag,
             false
           );
-          this.input.response = resp;
-          this.panel.webview.postMessage(JSON.stringify(this.input));
-          this.callback(this.input);
+          input.response = resp;
+          const dateTime = new Date();
+          input.date = dateTime.toISOString();
+          this.panel.webview.postMessage(JSON.stringify(input));
+          this.callback(input);
           return;
         case "input":
-          this.input.reqJson = out.text;
+          input.reqJson = out.text;
           return;
       }
     });
