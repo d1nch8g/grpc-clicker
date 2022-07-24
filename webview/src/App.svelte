@@ -17,10 +17,6 @@
 
   window.addEventListener("message", (event) => {
     const obj = JSON.parse(`${event.data}`);
-    if (obj.rez) {
-      response = obj.output;
-      return;
-    }
     proto = obj.proto;
     version = obj.version;
     service = obj.service;
@@ -29,6 +25,7 @@
     reqName = obj.reqName;
     reqJson = obj.reqJson;
     respName = obj.respName;
+    response = obj.response;
   });
 
   function sendMessageToVscode() {

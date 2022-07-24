@@ -4,7 +4,7 @@ import { AdressList as HostsTreeView } from "./hosts/list";
 import { MetasList } from "./metas/list";
 import { ProtosTree as ProtosTreeView } from "./protos/tree";
 import { Storage } from "./storage/storage";
-import { Input } from "./webview/input";
+import { Input } from "./webview/data";
 import { WebViewFactory } from "./webview/panel";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -36,6 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand("hosts.switch", async (host: string) => {
     let newHosts = storage.hosts.setCurret(host);
     hostsView.refresh(newHosts);
+    webviewFactory.updateAdress(host);
   });
 
   vscode.commands.registerCommand("protos.add", async () => {

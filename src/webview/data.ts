@@ -1,4 +1,5 @@
 export class Input {
+  public type = "init";
   constructor(
     public path: string,
     public proto: string,
@@ -10,6 +11,7 @@ export class Input {
     public reqName: string,
     public respName: string,
     public reqJson: string,
-    public isStream: boolean
+    public isStream: boolean,
+    public response: string
   ) {}
 }

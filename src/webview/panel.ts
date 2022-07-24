@@ -1,20 +1,46 @@
-import { request } from "http";
 import * as vscode from "vscode";
 import { Grpcurl } from "../grpcurl/grpcurl";
-import { Input } from "./input";
-import { Response } from "./response";
+import { Input } from "./data";
 
 export class WebViewFactory {
+  private views: GrpcClickerView[] = [];
   constructor(private uri: vscode.Uri, private grpcurl: Grpcurl) {}
 
   create(input: Input) {
-    new GrpcClickerView(this.uri, input, this.grpcurl);
+    for (const view of this.views) {
+      if (
+        input.path === view.input.path &&
+        input.proto === view.input.proto &&
+        input.version === view.input.version &&
+        input.service === view.input.service &&
+        input.call === view.input.call &&
+        input.methodTag === view.input.methodTag
+      ) {
+        view.panel.reveal();
+        return;
+      }
+    }
+    const view = new GrpcClickerView(this.uri, input, this.grpcurl);
+    this.views.push(view);
+  }
+
+  updateAdress(adress: string) {
+    var i = this.views.length;
+    while (i--) {
+      if (this.views[i].isDisposed) {
+        this.views.splice(i, 1);
+        continue;
+      }
+      this.views[i].input.adress = adress;
+      this.views[i].update();
+    }
   }
 }
 
 class GrpcClickerView {
-  private panel: vscode.WebviewPanel;
-  constructor(private uri: vscode.Uri, private input: Input, grpcurl: Grpcurl) {
+  public panel: vscode.WebviewPanel;
+  public isDisposed = false;
+  constructor(private uri: vscode.Uri, public input: Input, grpcurl: Grpcurl) {
     this.panel = vscode.window.createWebviewPanel(
       "callgrpc",
       input.call,
@@ -36,7 +62,8 @@ class GrpcClickerView {
               input.methodTag,
               false
             );
-            this.panel.webview.postMessage(JSON.stringify(new Response(resp)));
+            this.input.response = resp;
+            this.panel.webview.postMessage(JSON.stringify(input));
             return;
           case "input":
             this.input.reqJson = out.text;
@@ -47,20 +74,28 @@ class GrpcClickerView {
       null
     );
 
+    this.panel.onDidDispose(
+      () => {
+        this.isDisposed = true;
+      },
+      null,
+      null
+    );
+
     this.panel.onDidChangeViewState(
       (e) => {
         if (this.panel.visible) {
-          this.init();
+          this.update();
         }
       },
       null,
       null
     );
 
-    this.init();
+    this.update();
   }
 
-  private init() {
+  public update() {
     this.panel.iconPath = {
       light: vscode.Uri.joinPath(this.uri, `images`, `view.svg`),
       dark: vscode.Uri.joinPath(this.uri, `images`, `view.svg`),

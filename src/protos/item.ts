@@ -5,7 +5,7 @@ import { Proto } from "../classes/proto";
 import { Message } from "../classes/message";
 import { Call } from "../classes/call";
 import { Field } from "../classes/field";
-import { Input } from "../webview/input";
+import { Input } from "../webview/data";
 
 export class ProtoItem extends vscode.TreeItem {
   constructor(public item: Proto | Service | Call | Message | Field) {
@@ -46,7 +46,8 @@ export class ProtoItem extends vscode.TreeItem {
             item.input.name,
             item.output.name,
             item.input.representation(),
-            isStream
+            isStream,
+            ""
           ),
         ],
       };
