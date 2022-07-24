@@ -1,7 +1,7 @@
 import { request } from "http";
 import * as vscode from "vscode";
 import { Grpcurl } from "../grpcurl/grpcurl";
-import { Input, Response } from "./data";
+import { Input } from "./data";
 
 export class WebViewFactory {
   constructor(private uri: vscode.Uri, private grpcurl: Grpcurl) {}
@@ -28,16 +28,15 @@ class GrpcClickerView {
       async (out) => {
         switch (out.command) {
           case "req":
-            let resp = new Response(
-              await grpcurl.sendCall(
-                input.path,
-                out.text,
-                input.adress,
-                input.methodTag,
-                false
-              )
+            let resp = await grpcurl.sendCall(
+              input.path,
+              out.text,
+              input.adress,
+              input.methodTag,
+              false
             );
-            this.panel.webview.postMessage(resp.toJsonString());
+            this.input.response = resp;
+            this.panel.webview.postMessage(JSON.stringify(input));
             return;
           case "input":
             this.input.reqJson = out.text;
@@ -94,6 +93,6 @@ class GrpcClickerView {
     </body>
   </html>`;
 
-    this.panel.webview.postMessage(this.input.toJsonString());
+    this.panel.webview.postMessage(JSON.stringify(this.input));
   }
 }

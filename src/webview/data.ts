@@ -11,28 +11,7 @@ export class Input {
     public reqName: string,
     public respName: string,
     public reqJson: string,
-    public isStream: boolean
+    public isStream: boolean,
+    public response: string
   ) {}
-
-  toJsonString(): string {
-    return JSON.stringify(this);
-  }
-}
-
-export class Response {
-  public type = "response";
-  constructor(public output: string) {}
-
-  toJsonString(): string {
-    return JSON.stringify(this);
-  }
-}
-
-export class NewMetadata {
-  public type = "adress";
-  constructor(public adress: string) {}
-
-  toJsonString(): string {
-    return JSON.stringify(this);
-  }
 }
