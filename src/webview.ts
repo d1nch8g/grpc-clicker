@@ -77,7 +77,7 @@ class GrpcClickerView {
     this.panel.webview.onDidReceiveMessage(async (out) => {
       switch (out.command) {
         case "req":
-          let resp = await grpcurl.sendCall(
+          let resp = await grpcurl.send(
             input.path,
             out.text,
             input.host,

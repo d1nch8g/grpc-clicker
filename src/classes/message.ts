@@ -11,6 +11,9 @@ export class Message {
     this.name = splittedtag[splittedtag.length - 1];
   }
   representation(): string {
+    if (this.fields.length === 0) {
+      return `{}`;
+    }
     let representation = `{\n`;
     for (const field of this.fields) {
       representation += `    "${field.field}": "${field.type}",\n`;
