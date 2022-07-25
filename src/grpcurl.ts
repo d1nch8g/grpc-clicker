@@ -57,7 +57,7 @@ export class Grpcurl {
     }
     return message.fields;
   }
-  async sendCall(
+  async send(
     path: string,
     req: string,
     host: string,
