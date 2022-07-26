@@ -119,6 +119,7 @@ class ProtoItem extends vscode.TreeItem {
             item.input.representation(),
             isStream,
             "",
+            "",
             ""
           ),
         ],

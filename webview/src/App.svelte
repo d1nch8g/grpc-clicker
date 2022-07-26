@@ -26,6 +26,7 @@
     reqJson = obj.reqJson;
     respName = obj.respName;
     response = obj.response;
+    response = response + obj.error;
   });
 
   function sendMessageToVscode() {

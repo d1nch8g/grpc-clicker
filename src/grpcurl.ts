@@ -63,7 +63,7 @@ export class Grpcurl {
     host: string,
     method: string,
     tlsOn: boolean
-  ): Promise<string> {
+  ): Promise<[string, string]> {
     try {
       const util = require("util");
       const exec = util.promisify(require("child_process").exec);
@@ -83,11 +83,11 @@ export class Grpcurl {
       const call = `grpcurl ${metadata} -import-path / -proto ${path} -d ${requset} ${tls} ${host} ${method}`;
       const { stdout, stderr } = await exec(call);
       if (`${stderr}` !== "") {
-        return `${stderr}`;
+        return [``, `${stderr}`];
       }
-      return `${stdout}`;
-    } catch (e) {
-      return `${e}`;
+      return [`${stdout}`, ``];
+    } catch (exception) {
+      return [``, `${exception}`];
     }
   }
 

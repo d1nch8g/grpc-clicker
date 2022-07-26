@@ -77,7 +77,7 @@ class GrpcClickerView {
     this.panel.webview.onDidReceiveMessage(async (out) => {
       switch (out.command) {
         case "req":
-          let resp = await grpcurl.send(
+          let [resp, error] = await grpcurl.send(
             input.path,
             out.text,
             input.host,
@@ -85,8 +85,9 @@ class GrpcClickerView {
             false
           );
           input.response = resp;
+          input.error = error;
           const dateTime = new Date();
-          input.date = dateTime.toISOString();
+          input.date = dateTime.toUTCString();
           this.panel.webview.postMessage(JSON.stringify(input));
           this.callback(input);
           return;

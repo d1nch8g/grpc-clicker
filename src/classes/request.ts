@@ -12,6 +12,7 @@ export class Request {
     public reqJson: string,
     public isStream: boolean,
     public response: string,
+    public error: string,
     public date: string
   ) {}
 }
