@@ -68,9 +68,14 @@ Output format: ${request.respName}\n`;
       arguments: [request],
     };
 
+    let icon = `success.svg`;
+    if (request.error !== ``) {
+      icon = `error.svg`;
+    }
+
     super.iconPath = {
-      light: path.join(__filename, "..", "..", "images", `history.svg`),
-      dark: path.join(__filename, "..", "..", "images", `history.svg`),
+      light: path.join(__filename, "..", "..", "images", icon),
+      dark: path.join(__filename, "..", "..", "images", icon),
     };
   }
 }

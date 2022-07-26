@@ -21,6 +21,7 @@ export class History {
       obj.reqJson,
       obj.isStream,
       obj.response,
+      obj.error,
       obj.date
     );
     return req;
