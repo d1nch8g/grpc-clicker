@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.0.9]
+
+> July 26, 2022
+
+- Made responses colorizable due to error/success response in response panel
+- Corrected empty request parsing mechanism
+
 ## [0.0.8]
 
 > July 25, 2022
