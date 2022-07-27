@@ -17,10 +17,21 @@ export function activate(context: vscode.ExtensionContext) {
   );
   const webviewFactory = new WebViewFactory(
     context.extensionUri,
-    grpcurl,
-    (request: Request) => {
+    async (request: Request): Promise<Request> => {
+      const dateTime = new Date();
+      let [resp, error] = await grpcurl.send(
+        request.path,
+        request.reqJson,
+        request.host,
+        request.methodTag,
+        false
+      );
+      request.response = resp;
+      request.error = error;
+      request.date = dateTime.toUTCString();
       const requests = storage.history.add(request);
       treeviews.history.update(requests);
+      return request;
     }
   );
 
