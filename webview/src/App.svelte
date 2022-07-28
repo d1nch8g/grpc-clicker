@@ -6,7 +6,7 @@
   $: proto = "";
   $: service = "";
   $: call = "";
-  $: host = "";
+  $: hosts = [];
 
   $: reqName = "";
   $: reqJson = "";
@@ -19,7 +19,9 @@
     proto = obj.proto;
     service = obj.service;
     call = obj.call;
-    host = obj.host;
+    hosts = obj.hosts;
+    hosts.splice(hosts.indexOf(obj.host), 1);
+    hosts = [obj.host].concat(hosts);
     reqName = obj.reqName;
     reqJson = obj.reqJson;
     respName = obj.respName;
@@ -27,16 +29,16 @@
     response = response + obj.error;
   });
 
-  function sendMessageToVscode() {
+  function send() {
     vscode.postMessage({
-      command: "req",
+      command: "send",
       text: reqJson,
     });
   }
 
-  function onInputEdited() {
+  function edit() {
     vscode.postMessage({
-      command: "input",
+      command: "edit",
       text: reqJson,
     });
   }
@@ -46,13 +48,13 @@
   proto="{proto}"
   service="{service}"
   call="{call}"
-  host="{host}"
-  onClick="{sendMessageToVscode}"
+  hosts="{hosts}"
+  onSend="{send}"
 />
 
 <table>
   <td>
-    <Request reqName="{reqName}" onChange="{onInputEdited}" bind:reqJson />
+    <Request reqName="{reqName}" onChange="{edit}" bind:reqJson />
   </td>
 
   <td>

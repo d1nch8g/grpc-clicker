@@ -106,6 +106,8 @@ export function activate(context: vscode.ExtensionContext) {
     }
     const host = storage.hosts.getCurret();
     input.host = host;
+    const hosts = storage.hosts.list();
+    input.hosts = hosts;
     webviewFactory.create(input);
   });
 }

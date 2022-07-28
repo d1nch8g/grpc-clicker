@@ -113,6 +113,7 @@ class ProtoItem extends vscode.TreeItem {
             item.name,
             item.tag,
             `to fill`,
+            [],
             item.input.name,
             item.output.name,
             item.input.representation(),

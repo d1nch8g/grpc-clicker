@@ -1,21 +1,34 @@
 <script>
-  export let proto = "petstore";
-  export let service = "petstore";
-  export let call = "call";
-  export let host = "http://localhost:12201";
-  export let onClick;
+  export let proto = "";
+  export let version = "";
+  export let service = "";
+  export let call = "";
+  export let hosts = ["http://localhost:12201"];
+  export let onSend;
 </script>
 
 <div class="top-container">
   <table>
     <tr>
       <td><vscode-badge>{proto}</vscode-badge></td>
+      <td><vscode-badge>{version}</vscode-badge></td>
       <td><vscode-badge>{service}</vscode-badge></td>
       <td><vscode-badge>{call}</vscode-badge></td>
       <td class="expanded">
-        <input type="text" name="" id="" value="{host}" readonly />
+        <vscode-dropdown>
+          {#each hosts as host}
+            <vscode-option
+              on:click="{() => {
+                vscode.postMessage({
+                  command: 'host',
+                  text: host,
+                });
+              }}">{host}</vscode-option
+            >
+          {/each}
+        </vscode-dropdown>
       </td>
-      <td><vscode-button on:click="{onClick}">Send</vscode-button></td>
+      <td><vscode-button on:click="{onSend}">Send</vscode-button></td>
     </tr>
   </table>
 </div>
@@ -37,10 +50,8 @@
     border: 0.2px solid;
     border-collapse: collapse;
   }
-  input {
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding: 1.5px;
+  vscode-dropdown {
+    width: 100%;
   }
   .expanded {
     width: 100%;
