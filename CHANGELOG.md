@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.0.11]
+
+> July 28, 2022
+
+- Fixed toolkit reference
+
 ## [0.0.10]
 
 > July 28, 2022
