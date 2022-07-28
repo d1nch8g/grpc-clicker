@@ -10,10 +10,10 @@
 <div class="top-container">
   <table>
     <tr>
-      <td>{proto}</td>
-      <td>{version}</td>
-      <td>{service}</td>
-      <td>{call}</td>
+      <td><vscode-badge>{proto}</vscode-badge></td>
+      <td><vscode-badge>{version}</vscode-badge></td>
+      <td><vscode-badge>{service}</vscode-badge></td>
+      <td><vscode-badge>{call}</vscode-badge></td>
       <td class="expanded">
         <input type="text" name="" id="" value="{host}" readonly />
       </td>
@@ -30,14 +30,13 @@
   }
   table {
     margin: 4px;
-    border: 1px solid;
+    border: 0.2px solid;
     border-collapse: collapse;
   }
-  td,
-  th {
+  td {
     margin: 6px;
     padding: 6px;
-    border: 1px solid;
+    border: 0.2px solid;
     border-collapse: collapse;
   }
   input {

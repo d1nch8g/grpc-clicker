@@ -53,6 +53,8 @@
   onClick="{sendMessageToVscode}"
 />
 
+<vscode-divider></vscode-divider>
+
 <table>
   <td>
     <Request reqName="{reqName}" onChange="{onInputEdited}" bind:reqJson />
