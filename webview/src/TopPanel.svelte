@@ -23,9 +23,7 @@
       <td>{version}</td>
       <th>call</th>
       <td>{call}</td>
-      <td>
-        <center> <button on:click="{onClick}">SEND</button></center>
-      </td>
+      <td><vscode-button on:click="{onClick}">Send</vscode-button></td>
     </tr>
   </table>
 </div>
@@ -48,18 +46,14 @@
     border: 1px solid;
     border-collapse: collapse;
   }
-  .expanded {
-    width: 100%;
-    padding-left: 8px;
-    padding-right: 8px;
-  }
   input {
     padding-top: 4px;
     padding-bottom: 4px;
     padding: 1.5px;
   }
-  button {
-    padding-top: 4px;
-    padding-bottom: 4px;
+  .expanded {
+    width: 100%;
+    padding-left: 8px;
+    padding-right: 8px;
   }
 </style>
