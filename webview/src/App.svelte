@@ -4,7 +4,6 @@
   import Response from "./Response.svelte";
 
   $: proto = "";
-  $: version = "";
   $: service = "";
   $: call = "";
   $: hosts = [];
@@ -18,7 +17,6 @@
   window.addEventListener("message", (event) => {
     const obj = JSON.parse(`${event.data}`);
     proto = obj.proto;
-    version = obj.version;
     service = obj.service;
     call = obj.call;
     hosts = obj.hosts;
@@ -48,7 +46,6 @@
 
 <TopPanel
   proto="{proto}"
-  version="{version}"
   service="{service}"
   call="{call}"
   hosts="{hosts}"
