@@ -52,8 +52,7 @@ class HistoryItem extends vscode.TreeItem {
     super.contextValue = "host";
 
     super.tooltip = `File: ${request.path}\n
-Proto name: ${request.proto}\n
-Proto version: ${request.version}\n
+Proto: ${request.proto}\n
 Service: ${request.service}\n
 Rpc: ${request.call}\n
 Tag: ${request.methodTag}\n

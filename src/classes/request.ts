@@ -2,7 +2,6 @@ export class Request {
   constructor(
     public path: string,
     public proto: string,
-    public version: string,
     public service: string,
     public call: string,
     public methodTag: string,

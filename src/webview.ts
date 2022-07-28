@@ -15,7 +15,6 @@ export class WebViewFactory {
       const panelIsActive =
         request.path === view.request.path &&
         request.proto === view.request.proto &&
-        request.version === view.request.version &&
         request.service === view.request.service &&
         request.call === view.request.call &&
         request.methodTag === view.request.methodTag;
