@@ -64,7 +64,7 @@ class GrpcClickerView {
 
     this.panel.webview.onDidReceiveMessage(async (out) => {
       switch (out.command) {
-        case "req":
+        case "send":
           const updatedRequest = await this.callback(request);
           this.request = updatedRequest;
           this.panel.webview.postMessage(JSON.stringify(request));
@@ -72,6 +72,8 @@ class GrpcClickerView {
         case "input":
           request.reqJson = out.text;
           return;
+        case "host":
+          request.host = out.text;
       }
     });
 

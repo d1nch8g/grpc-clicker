@@ -7,6 +7,7 @@ export class Request {
     public call: string,
     public methodTag: string,
     public host: string,
+    public hosts: string[],
     public reqName: string,
     public respName: string,
     public reqJson: string,
