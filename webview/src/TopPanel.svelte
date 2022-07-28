@@ -10,19 +10,13 @@
 <div class="top-container">
   <table>
     <tr>
-      <th>proto</th>
       <td>{proto}</td>
-      <th>service</th>
+      <td>{version}</td>
       <td>{service}</td>
+      <td>{call}</td>
       <td class="expanded">
         <input type="text" name="" id="" value="{host}" readonly />
       </td>
-    </tr>
-    <tr>
-      <th>version</th>
-      <td>{version}</td>
-      <th>call</th>
-      <td>{call}</td>
       <td><vscode-button on:click="{onClick}">Send</vscode-button></td>
     </tr>
   </table>
