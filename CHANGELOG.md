@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.0.10]
+
+> July 28, 2022
+
+- Changed views mostly to vscode styled inputs
+- Added waiter spinner for loading of request
+- Added ability to switch host inside webview
+
 ## [0.0.9]
 
 > July 26, 2022
