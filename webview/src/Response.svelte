@@ -9,7 +9,7 @@
 
 <div>
   <center>
-    <p1>Response - {respName}</p1>
+    <vscode-option>Response - {respName}</vscode-option>
   </center>
 
   <textarea
