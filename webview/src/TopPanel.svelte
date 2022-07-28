@@ -1,6 +1,5 @@
 <script>
   export let proto = "petstore";
-  export let version = "v1";
   export let service = "petstore";
   export let call = "call";
   export let host = "http://localhost:12201";
@@ -10,10 +9,9 @@
 <div class="top-container">
   <table>
     <tr>
-      <td><vscode-badge>Proto:{proto}</vscode-badge></td>
-      <td><vscode-badge>Version:{version}</vscode-badge></td>
-      <td><vscode-badge>Service:{service}</vscode-badge></td>
-      <td><vscode-badge>Call:{call}</vscode-badge></td>
+      <td><vscode-badge>{proto}</vscode-badge></td>
+      <td><vscode-badge>{service}</vscode-badge></td>
+      <td><vscode-badge>{call}</vscode-badge></td>
       <td class="expanded">
         <input type="text" name="" id="" value="{host}" readonly />
       </td>

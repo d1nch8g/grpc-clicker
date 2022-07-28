@@ -11,7 +11,6 @@ export class History {
     const req = new Request(
       obj.path,
       obj.proto,
-      obj.version,
       obj.service,
       obj.call,
       obj.methodTag,
