@@ -9,7 +9,7 @@
 
 <div>
   <center>
-    <p1>Response - {respName}</p1>
+    <vscode-option>Response - {respName}</vscode-option>
   </center>
 
   <textarea
@@ -34,6 +34,6 @@
   textarea {
     resize: none;
     height: var(--height);
-    padding: 1.5px;
+    padding: 8px;
   }
 </style>

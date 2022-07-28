@@ -10,7 +10,7 @@
 
 <div>
   <center>
-    <p1>Request - {reqName}</p1>
+    <vscode-option>Request - {reqName}</vscode-option>
   </center>
 
   <textarea
@@ -35,6 +35,6 @@
   textarea {
     resize: none;
     height: var(--height);
-    padding: 1.5px;
+    padding: 8px;
   }
 </style>

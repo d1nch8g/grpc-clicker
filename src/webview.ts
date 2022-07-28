@@ -55,22 +55,18 @@ class GrpcClickerView {
     public request: Request,
     private callback: (request: Request) => Promise<Request>
   ) {
-    const options = {
-      enableScripts: true,
-      localResourceRoots: [vscode.Uri.joinPath(this.uri, "dist")],
-    };
-
     this.panel = vscode.window.createWebviewPanel(
       "callgrpc",
       request.call,
       vscode.ViewColumn.Active,
-      options
+      { enableScripts: true }
     );
 
     this.panel.webview.onDidReceiveMessage(async (out) => {
       switch (out.command) {
         case "req":
-          this.callback(request);
+          const updatedRequest = await this.callback(request);
+          this.request = updatedRequest;
           this.panel.webview.postMessage(JSON.stringify(request));
           return;
         case "input":
@@ -105,16 +101,23 @@ class GrpcClickerView {
     const stylesMainUri = this.panel.webview.asWebviewUri(
       vscode.Uri.joinPath(this.uri, "dist", "styles.css")
     );
+    const toolkitUri = this.panel.webview.asWebviewUri(
+      vscode.Uri.joinPath(
+        this.uri,
+        "node_modules",
+        "@vscode",
+        "webview-ui-toolkit",
+        "dist",
+        "toolkit.js"
+      )
+    );
 
     this.panel.webview.html = `<!DOCTYPE html>
   <html lang="en">
     <head>
       <meta charset="UTF-8" />
-      <meta
-        http-equiv="Content-Security-Policy"
-        content="default-src 'none'; style-src ${this.panel.webview.cspSource}; img-src ${this.panel.webview.cspSource} https:; script-src 'nonce-W3hIwRHaPGdvqvmwfzGey0vuCz2fM6Pn';"
-      />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <script type="module" src="${toolkitUri}"></script>
       <link href="${stylesMainUri}" rel="stylesheet" />
     </head>
     <body>      
