@@ -30,6 +30,7 @@
   });
 
   function send() {
+    response = "waiter";
     vscode.postMessage({
       command: "send",
       text: reqJson,

@@ -11,15 +11,21 @@
   <center>
     <vscode-option>Response - {respName}</vscode-option>
   </center>
-
-  <textarea
-    name=""
-    id=""
-    cols="30"
-    rows="10"
-    style="--height: {height}px"
-    readonly>{response}</textarea
-  >
+  {#if response !== "waiter"}
+    <textarea
+      name=""
+      id=""
+      cols="30"
+      rows="10"
+      style="--height: {height}px"
+      readonly>{response}</textarea
+    >
+  {:else}
+    <div class="top-space" style="--height: {height / 2.2}px"></div>
+    <center>
+      <vscode-progress-ring></vscode-progress-ring>
+    </center>
+  {/if}
 </div>
 
 <style>
@@ -35,5 +41,8 @@
     resize: none;
     height: var(--height);
     padding: 8px;
+  }
+  .top-space {
+    height: var(--height);
   }
 </style>
