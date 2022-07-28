@@ -102,14 +102,7 @@ class GrpcClickerView {
       vscode.Uri.joinPath(this.uri, "dist", "styles.css")
     );
     const toolkitUri = this.panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(
-        this.uri,
-        "node_modules",
-        "@vscode",
-        "webview-ui-toolkit",
-        "dist",
-        "toolkit.js"
-      )
+      vscode.Uri.joinPath(this.uri, "dist", "tk", "toolkit.js")
     );
 
     this.panel.webview.html = `<!DOCTYPE html>
