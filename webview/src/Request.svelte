@@ -1,7 +1,7 @@
 <script>
   export let reqName = "";
   export let reqJson = "";
-  export let onChange;
+  export let edit;
   $: innerHeight = 0;
   $: height = innerHeight - 170;
 </script>
@@ -20,7 +20,7 @@
     rows="10"
     style="--height: {height}px"
     bind:value="{reqJson}"
-    on:input="{onChange}"></textarea>
+    on:input="{edit}"></textarea>
 </div>
 
 <style>

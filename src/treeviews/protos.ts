@@ -107,7 +107,7 @@ class ProtoItem extends vscode.TreeItem {
         title: "Trigger opening of webview for grpc call",
         arguments: [
           new Request(
-            item.proto.filename,
+            item.proto.path,
             item.proto.name,
             item.service,
             item.name,

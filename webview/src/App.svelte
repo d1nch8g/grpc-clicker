@@ -54,7 +54,7 @@
 
 <table>
   <td>
-    <Request reqName="{reqName}" onChange="{edit}" bind:reqJson />
+    <Request reqName="{reqName}" edit="{edit}" bind:reqJson />
   </td>
 
   <td>
