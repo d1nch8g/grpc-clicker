@@ -26,14 +26,6 @@ export class WebViewFactory {
     this.views.push(view);
   }
 
-  update(host: string) {
-    this.removeClosedPanels();
-    for (const view of this.views) {
-      view.request.host = host;
-      view.update();
-    }
-  }
-
   private removeClosedPanels() {
     var i = this.views.length;
     while (i--) {

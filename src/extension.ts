@@ -51,7 +51,6 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand("hosts.switch", async (host: string) => {
     let newHosts = storage.hosts.setCurret(host);
     treeviews.hosts.update(newHosts);
-    webviewFactory.update(host);
   });
 
   vscode.commands.registerCommand("protos.add", async () => {
