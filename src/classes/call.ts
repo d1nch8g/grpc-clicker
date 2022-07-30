@@ -9,6 +9,7 @@ export class Call {
   public name: string;
   public tag: string;
   public service: string;
+
   constructor(line: string, svc: string, public proto: Proto) {
     let splittedspace = line.split(" ");
     this.name = splittedspace[3];

@@ -6,7 +6,7 @@ import { HistoryTreeView } from "./history";
 import { Host } from "../classes/host";
 import { Meta } from "../classes/meta";
 import { Request } from "../classes/request";
-import { Grpcurl } from "../grpcurl";
+import { Grpcurl } from "../grpcurl/grpcurl";
 
 export class TreeViews {
   public readonly hosts: HostsTreeView;

@@ -34,10 +34,8 @@ export class Hosts {
       return [this.listToHosts(hosts), null];
     }
     if (hosts.includes(host)) {
-      return [
-        this.listToHosts(hosts),
-        new Error(`Host you are trying to add already exists!`),
-      ];
+      const msg = `Host you are trying to add already exists!`;
+      return [this.listToHosts(hosts), new Error(msg)];
     }
     hosts.push(host);
     this.memento.update(this.key, hosts);

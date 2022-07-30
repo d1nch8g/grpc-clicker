@@ -1,21 +1,21 @@
-import * as vscode from "vscode";
-import { Field } from "./classes/field";
-import { Message } from "./classes/message";
-import { Proto } from "./classes/proto";
-import { Storage } from "./storage/storage";
+import { Field } from "../classes/field";
+import { Message } from "../classes/message";
+import { Proto } from "../classes/proto";
+import { Storage } from "../storage/storage";
 
 export class Grpcurl {
   constructor(private storage: Storage) {}
 
-  async proto(path: string): Promise<Proto> {
+  async proto(path: string): Promise<[Proto, Error]> {
     try {
       const util = require("util");
       const exec = util.promisify(require("child_process").exec);
       const call = `grpcurl -import-path / -proto ${path} describe`;
       const { stdout, stderr } = await exec(call);
-      if (`${stderr}` !== ``) {
-        vscode.window.showErrorMessage(`${stderr}`);
-        return new Proto("", path);
+      const stdoutString = `${stdout}`;
+      const stderrString = `${stderr}`;
+      if (stderrString !== ``) {
+        return [null];
       }
       let proto = new Proto(`${stdout}`, path);
       for (const svc of proto.services) {
@@ -30,6 +30,7 @@ export class Grpcurl {
       return new Proto("", path);
     }
   }
+
   async protos(pathes: string[]): Promise<Proto[]> {
     let protos: Proto[] = [];
     for (const path of pathes) {
@@ -37,6 +38,7 @@ export class Grpcurl {
     }
     return protos;
   }
+
   async getFields(message: Message): Promise<Field[]> {
     if (message.fields.length > 0) {
       return message.fields;
@@ -57,6 +59,7 @@ export class Grpcurl {
     }
     return message.fields;
   }
+
   async send(
     path: string,
     req: string,
@@ -75,10 +78,10 @@ export class Grpcurl {
       let metadata = ``;
       const metas = this.storage.metas.listActive();
       for (const meta of metas) {
-        metadata = metadata + `-H ${this.inputPreprocess(meta)} `;
+        metadata = metadata + `-H ${this.systemInputPreprocess(meta)} `;
       }
 
-      const requset = this.inputPreprocess(req);
+      const requset = this.systemInputPreprocess(req);
 
       const call = `grpcurl ${metadata} -import-path / -proto ${path} -d ${requset} ${tls} ${host} ${method}`;
       const { stdout, stderr } = await exec(call);
@@ -91,7 +94,7 @@ export class Grpcurl {
     }
   }
 
-  inputPreprocess(input: string): string {
+  private systemInputPreprocess(input: string): string {
     input = input.replaceAll("\n", "");
     if (process.platform === "win32") {
       input = input.replaceAll('"', '\\"');

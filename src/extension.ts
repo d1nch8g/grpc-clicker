@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { Request } from "./classes/request";
-import { Grpcurl } from "./grpcurl";
+import { Grpcurl } from "./grpcurl/grpcurl";
 import { Storage } from "./storage/storage";
 import { TreeViews } from "./treeviews/treeviews";
 import { WebViewFactory } from "./webview";
