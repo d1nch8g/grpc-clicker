@@ -1,6 +1,6 @@
 import { Parser } from "./parser";
 
-const goodInput = `pb.v1.Streams is a service:
+const protoInput = `pb.v1.Streams is a service:
 service Streams {
   rpc BiDirectioalStream ( stream .pb.v1.StringMes ) returns ( stream .pb.v1.StringMes );
   rpc ClientStream ( stream .pb.v1.StringMes ) returns ( .pb.v1.StringMes );
@@ -42,32 +42,10 @@ service Constructions {
   rpc OneofCall ( .pb.v1.OneofMes ) returns ( .pb.v1.OneofMes );
   rpc OptionalCall ( .pb.v1.OptionalMes ) returns ( .pb.v1.OptionalMes );
 }`;
-const rpcUnaryLine = `  rpc Sint32Call ( .pb.v1.Sint32Mes ) returns ( .pb.v1.Sint32Mes );`;
-const rpcStreamLine = `  rpc BiDirectioalStream ( stream .pb.v1.StringMes ) returns ( stream .pb.v1.StringMes );`;
-
-test(`parse unary rpc`, () => {
-  const parser = new Parser();
-  const call = parser.rpc(rpcUnaryLine);
-  expect(call.name).toBe(`Sint32Call`);
-  expect(call.inputStream).toBeFalsy();
-  expect(call.outputStream).toBeFalsy();
-  expect(call.inputMessageTag).toBe(`.pb.v1.Sint32Mes`);
-  expect(call.outputMessageTag).toBe(`.pb.v1.Sint32Mes`);
-});
-
-test(`parse stream rpc`, () => {
-  const parser = new Parser();
-  const call = parser.rpc(rpcStreamLine);
-  expect(call.name).toBe(`BiDirectioalStream`);
-  expect(call.inputStream).toBeTruthy();
-  expect(call.outputStream).toBeTruthy();
-  expect(call.inputMessageTag).toBe(`.pb.v1.StringMes`);
-  expect(call.outputMessageTag).toBe(`.pb.v1.StringMes`);
-});
 
 test(`parse proto`, () => {
   const parser = new Parser();
-  const proto = parser.proto(goodInput);
+  const proto = parser.proto(protoInput);
   expect(proto.name).toBe(`pb.v1`);
   expect(proto.services.length).toBe(3);
   expect(proto.services[0].name).toBe(`Streams`);
@@ -80,8 +58,58 @@ multiline
 comment
 right here`);
   expect(proto.services[1].description).toBe(`example svc description`);
+  expect(proto.services[1].calls[12].description).toBe(null);
 });
+
+const rpcUnaryLine = `  rpc Sint32Call ( .pb.v1.Sint32Mes ) returns ( .pb.v1.Sint32Mes );`;
+test(`parse unary rpc`, () => {
+  const parser = new Parser();
+  const call = parser.rpc(rpcUnaryLine);
+  expect(call.name).toBe(`Sint32Call`);
+  expect(call.inputStream).toBeFalsy();
+  expect(call.outputStream).toBeFalsy();
+  expect(call.inputMessageTag).toBe(`.pb.v1.Sint32Mes`);
+  expect(call.outputMessageTag).toBe(`.pb.v1.Sint32Mes`);
+});
+
+const rpcStreamLine = `  rpc BiDirectioalStream ( stream .pb.v1.StringMes ) returns ( stream .pb.v1.StringMes );`;
+test(`parse stream rpc`, () => {
+  const parser = new Parser();
+  const call = parser.rpc(rpcStreamLine);
+  expect(call.name).toBe(`BiDirectioalStream`);
+  expect(call.inputStream).toBeTruthy();
+  expect(call.outputStream).toBeTruthy();
+  expect(call.inputMessageTag).toBe(`.pb.v1.StringMes`);
+  expect(call.outputMessageTag).toBe(`.pb.v1.StringMes`);
+});
+
+const msgExample = `pb.v1.TestMessage is a message:    
+// some
+// comment
+message TestMessage {
+  // comment
+  string example = 1;
+  optional string example2 = 2;    
+  repeated string example3 = 3;    
+  map<string, string> example4 = 4;
+  .pb.v1.NestedMes example5 = 5;   
+}`;
 
 test(`parse message`, () => {
   const parser = new Parser();
+  const msg = parser.message(msgExample);
+  expect(msg.description).toBe(`some
+comment`);
+  expect(msg.name).toBe(`TestMessage`);
+  expect(msg.tag).toBe(`pb.v1.TestMessage`);
+});
+
+const field1 = `string example = 1;`;
+const field2 = `optional string example2 = 2;`;
+const field3 = `repeated string example3 = 3;`;
+const field4 = `map<string, string> example4 = 4;`;
+const field5 = `.pb.v1.NestedMes example5 = 5;`;
+
+test(`parse field`, () => {
+  
 });

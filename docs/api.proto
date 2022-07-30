@@ -57,7 +57,9 @@ service Streams {
   rpc BiDirectioalStream(stream StringMes) returns (stream StringMes);
 }
 
-// example message description
+// multiline
+// multiline
+// multiline
 message DoubleMes{
   // example field description
   double message = 1;
@@ -150,4 +152,15 @@ message OptionalMes {
 message NestedMes {
   string title = 1;
   optional NestedMes nested = 2;
+}
+
+// some
+// comment
+message TestMessage {
+  // comment
+  string example = 1;
+  optional string example2 = 2;
+  repeated string example3 = 3;
+  map<string, string> example4 = 4;
+  NestedMes example5 = 5;
 }

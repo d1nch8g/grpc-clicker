@@ -2,25 +2,19 @@ export class Parser {
   proto(input: string): Proto {
     const splittedInput = input.split("\n");
 
-    let proto: Proto = {
-      name: ``,
-      services: [],
-    };
-
-    let currComment = ``;
-    let currSvc: Service = {
-      name: ``,
-      tag: ``,
-      description: ``,
-      calls: [],
-    };
+    let currComment = null;
+    let proto: Proto = { name: ``, services: [] };
+    let currSvc: Service = { name: ``, tag: ``, description: null, calls: [] };
 
     for (const line of splittedInput) {
       if (line.includes(`//`)) {
+        if (currComment === null) {
+          currComment = ``;
+        }
         currComment += line.replace(`//`, ``).trim() + `\n`;
         continue;
       }
-      if (line.includes(`is a service:`)) {
+      if (line.trim().includes(`is a service:`)) {
         if (proto.name !== ``) {
           continue;
         }
@@ -32,18 +26,23 @@ export class Parser {
         continue;
       }
       if (line.startsWith(`service `)) {
-        currSvc.description = currComment.slice(0, -1);
+        if (currComment !== null) {
+          currSvc.description = currComment.slice(0, -1);
+          currComment = null;
+        }
         currSvc.name = line.split(` `)[1];
       }
       if (line === `}`) {
         proto.services.push(currSvc);
-        currSvc = { name: ``, tag: ``, description: ``, calls: [] };
+        currSvc = { name: ``, tag: ``, description: null, calls: [] };
         continue;
       }
       if (line.includes(`  rpc `)) {
         const call = this.rpc(line);
-        call.description = currComment.slice(0, -1);
-        currComment = ``;
+        if (currComment !== null) {
+          call.description = currComment.slice(0, -1);
+          currComment = null;
+        }
         currSvc.calls.push(call);
         continue;
       }
@@ -54,7 +53,7 @@ export class Parser {
   rpc(line: string): Call {
     let call: Call = {
       name: "",
-      description: "",
+      description: null,
       inputStream: false,
       outputStream: false,
       inputMessageTag: "",
@@ -79,6 +78,65 @@ export class Parser {
     call.outputMessageTag = spaceSplittedLine[7];
     return call;
   }
+
+  message(input: string): Message {
+    const splittedInput = input.split("\n");
+
+    let currComment = null;
+    let msg: Message = { name: "", tag: "", description: null, fields: [] };
+    let currField: Field = {
+      name: "",
+      type: "",
+      typeTag: "",
+      description: null,
+      optional: false,
+      repeated: false,
+      map: false,
+      keyType: "",
+      valueType: "",
+    };
+
+    for (const line of splittedInput) {
+      if (line.startsWith(`message `)) {
+        msg.description = currComment.slice(0, -1);
+        msg.name = line.split(` `)[1];
+        continue;
+      }
+      if (line.trim().endsWith(` is a message:`)) {
+        msg.tag = line.split(` `)[0];
+        continue;
+      }
+      if (line.includes(`//`)) {
+        if (currComment === null) {
+          currComment = ``;
+        }
+        currComment += line.replace(`//`, ``).trim() + `\n`;
+        continue;
+      }
+      if (line.endsWith(`;`)) {
+        let field = this.field(line);
+        field.description = currComment;
+      }
+    }
+    return msg;
+  }
+
+  field(line: string): Field {
+    line = line.trim();
+    const spaceSplitted = line.split(` `);
+    let field: Field = {
+      name: spaceSplitted[spaceSplitted.length - 3],
+      type: "",
+      typeTag: "",
+      description: null,
+      optional: line.startsWith(`optional`),
+      repeated: line.startsWith(`repeated`),
+      map: line.startsWith(`map`),
+      keyType: "",
+      valueType: "",
+    };
+    return field;
+  }
 }
 
 interface Proto {
@@ -100,4 +158,23 @@ interface Call {
   outputStream: boolean;
   inputMessageTag: string;
   outputMessageTag: string;
+}
+
+interface Message {
+  name: string;
+  tag: string;
+  description: string;
+  fields: Field[];
+}
+
+interface Field {
+  name: string;
+  type: string;
+  typeTag: string;
+  description: string;
+  optional: boolean;
+  repeated: boolean;
+  map: boolean;
+  keyType: string;
+  valueType: string;
 }
