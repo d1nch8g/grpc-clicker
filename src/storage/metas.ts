@@ -1,4 +1,3 @@
-import * as vscode from "vscode";
 import { Memento } from "vscode";
 import { Meta } from "../classes/meta";
 
@@ -45,22 +44,21 @@ export class Metadata {
     return response;
   }
 
-  public add(meta: string): Meta[] {
+  public add(meta: string): [Meta[], Error] {
     let metas = this.memento.get<string[]>(this.key, []);
     if (meta === "") {
-      return this.listToMetas(metas);
+      return [this.listToMetas(metas), null];
     }
     if (!meta.includes(": ")) {
-      return this.listToMetas(metas);
+      return [this.listToMetas(metas), null];
     }
     if (metas.includes(meta)) {
       let msg = `Meta data you are trying to add already exists!`;
-      vscode.window.showErrorMessage(msg);
-      return this.listToMetas(metas);
+      return [this.listToMetas(metas), new Error(msg)];
     }
     metas.push(meta);
     this.memento.update(this.key, metas);
-    return this.listToMetas(metas);
+    return [this.listToMetas(metas), null];
   }
 
   public remove(meta: string): Meta[] {

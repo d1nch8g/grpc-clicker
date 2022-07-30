@@ -1,4 +1,3 @@
-import * as vscode from "vscode";
 import { Memento } from "vscode";
 import { Request } from "../classes/request";
 

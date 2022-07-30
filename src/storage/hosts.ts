@@ -1,4 +1,3 @@
-import * as vscode from "vscode";
 import { Memento } from "vscode";
 import { Host } from "../classes/host";
 
@@ -29,19 +28,20 @@ export class Hosts {
     return hosts;
   }
 
-  public add(host: string): Host[] {
+  public add(host: string): [Host[], Error] {
     let hosts = this.memento.get<string[]>(this.key, []);
     if (host === "") {
-      return this.listToHosts(hosts);
+      return [this.listToHosts(hosts), null];
     }
     if (hosts.includes(host)) {
-      let msg = `Host you are trying to add already exists!`;
-      vscode.window.showErrorMessage(msg);
-      return this.listToHosts(hosts);
+      return [
+        this.listToHosts(hosts),
+        new Error(`Host you are trying to add already exists!`),
+      ];
     }
     hosts.push(host);
     this.memento.update(this.key, hosts);
-    return this.listToHosts(hosts);
+    return [this.listToHosts(hosts), null];
   }
 
   public remove(host: string): Host[] {

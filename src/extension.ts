@@ -37,7 +37,10 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("hosts.add", async () => {
     let host = (await vscode.window.showInputBox()) ?? "";
-    let hosts = storage.hosts.add(host);
+    let [hosts, err] = storage.hosts.add(host);
+    if (err !== null) {
+      vscode.window.showErrorMessage(err.message);
+    }
     treeviews.hosts.update(hosts);
   });
 
@@ -63,7 +66,10 @@ export function activate(context: vscode.ExtensionContext) {
     };
     let pick = await vscode.window.showOpenDialog(options);
     let path = pick[0].fsPath;
-    let pathes = storage.protos.add(path);
+    let [pathes, err] = storage.protos.add(path);
+    if (err !== null) {
+      vscode.window.showErrorMessage(err.message);
+    }
     treeviews.protos.update(pathes);
   });
 
@@ -81,7 +87,10 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("metas.add", async () => {
     let meta = (await vscode.window.showInputBox()) ?? "";
-    let metadata = storage.metas.add(meta);
+    let [metadata, err] = storage.metas.add(meta);
+    if (err !== null) {
+      vscode.window.showErrorMessage(err.message);
+    }
     treeviews.metadata.refresh(metadata);
   });
 

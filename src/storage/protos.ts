@@ -1,4 +1,3 @@
-import * as vscode from "vscode";
 import { Memento } from "vscode";
 
 export class Protos {
@@ -10,19 +9,18 @@ export class Protos {
     return pathes;
   }
 
-  public add(path: string): string[] {
+  public add(path: string): [string[], Error] {
     let pathes = this.memento.get<string[]>(this.key, []);
     if (path === "") {
-      return pathes;
+      return [pathes, null];
     }
     if (pathes.includes(path)) {
       let msg = `Proto you are trying to add already exists!`;
-      vscode.window.showErrorMessage(msg);
-      return pathes;
+      return [pathes, new Error(msg)];
     }
     pathes.push(path);
     this.memento.update(this.key, pathes);
-    return pathes;
+    return [pathes, null];
   }
 
   public remove(host: string): string[] {
