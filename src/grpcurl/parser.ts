@@ -83,7 +83,13 @@ export class Parser {
     const splittedInput = input.split("\n");
 
     let currComment = null;
-    let msg: Message = { name: "", tag: "", description: null, fields: [] };
+    let msg: Message = {
+      name: "",
+      tag: "",
+      description: null,
+      fields: [],
+      template: input.split(`Message template:`)[1],
+    };
 
     for (const line of splittedInput) {
       if (line.startsWith(`message `)) {
@@ -109,6 +115,10 @@ export class Parser {
           currComment = null;
         }
         msg.fields.push(field);
+        continue;
+      }
+      if (line.startsWith(`Message template:`)) {
+        break;
       }
     }
     return msg;
@@ -173,6 +183,7 @@ export interface Message {
   name: string;
   tag: string;
   description: string;
+  template: string;
   fields: Field[];
 }
 

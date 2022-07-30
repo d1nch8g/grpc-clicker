@@ -14,43 +14,47 @@ export class Grpcurl {
     return [proto, null];
   }
 
-  async message(path: string, msgTag: string): Promise<Message> {
+  async message(path: string, tag: string): Promise<[Message, Error]> {
     const call = `grpcurl -import-path / -proto %s describe %s`;
-    this.caller.execute(call, [path, msgTag]);
+    const [resp, err] = await this.caller.execute(call, [path, tag]);
+    if (err !== null) {
+      return [null, err];
+    }
+    const msg = this.parser.message(resp);
+    return [msg, null];
   }
 
-  async send(
-    path: string,
-    req: string,
-    host: string,
-    method: string,
-    tlsOn: boolean
-  ): Promise<[string, string]> {
-    try {
-      const util = require("util");
-      const exec = util.promisify(require("child_process").exec);
-      let tls = ``;
-      if (!tlsOn) {
-        tls = `-plaintext `;
-      }
-
-      let metadata = ``;
-      const metas = this.storage.metas.listActive();
-      for (const meta of metas) {
-        metadata = metadata + `-H ${this.systemInputPreprocess(meta)} `;
-      }
-
-      const requset = this.systemInputPreprocess(req);
-
-      const call = `grpcurl ${metadata} -import-path / -proto ${path} -d ${requset} ${tls} ${host} ${method}`;
-      const { stdout, stderr } = await exec(call);
-      if (`${stderr}` !== "") {
-        return [``, `${stderr}`];
-      }
-      return [`${stdout}`, ``];
-    } catch (exception) {
-      return [``, `${exception}`];
+  async send(input: {
+    path: string;
+    reqJson: string;
+    host: string;
+    method: string;
+    tlsOn: boolean;
+    metadata: string[];
+    maxMsgSize: number;
+  }): Promise<[string, Error]> {
+    const call = `grpcurl %s -import-path / -proto %s -d %s %s %s %s`;
+    let meta = ``;
+    for (const metafield of input.metadata) {
+      meta = meta + `-H ${this.systemInputPreprocess(metafield)} `;
     }
+    const inputRequest = this.systemInputPreprocess(`'${input.reqJson}'`);
+    let tls = ``;
+    if (input.tlsOn) {
+      tls = `-plaintext `;
+    }
+    const [resp, err] = await this.caller.execute(call, [
+      meta,
+      input.path,
+      inputRequest,
+      tls,
+      input.host,
+      input.method,
+    ]);
+    if (err !== null) {
+      return [null, err];
+    }
+    return [resp, null];
   }
 
   private systemInputPreprocess(input: string): string {

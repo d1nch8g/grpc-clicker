@@ -157,6 +157,23 @@ message TestMessage {
   repeated string example3 = 3;    
   map<string, string> example4 = 4;
   .pb.v1.NestedMes example5 = 5;   
+}
+
+Message template:
+{
+  "example": "",
+  "example3": [
+    ""
+  ],
+  "example4": {
+    "": ""
+  },
+  "example5": {
+    "title": "",
+    "nested": {
+      "title": ""
+    }
+  }
 }`;
 
 test(`parse message`, () => {
@@ -166,4 +183,20 @@ test(`parse message`, () => {
 comment`);
   expect(msg.name).toBe(`TestMessage`);
   expect(msg.tag).toBe(`pb.v1.TestMessage`);
+  expect(msg.template).toBe(`
+{
+  "example": "",
+  "example3": [
+    ""
+  ],
+  "example4": {
+    "": ""
+  },
+  "example5": {
+    "title": "",
+    "nested": {
+      "title": ""
+    }
+  }
+}`);
 });
