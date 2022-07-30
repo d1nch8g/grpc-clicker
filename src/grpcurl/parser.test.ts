@@ -43,7 +43,7 @@ service Constructions {
   rpc OptionalCall ( .pb.v1.OptionalMes ) returns ( .pb.v1.OptionalMes );
 }`;
 
-test(`parse proto`, () => {
+test(`proto`, () => {
   const parser = new Parser();
   const proto = parser.proto(protoInput);
   expect(proto.name).toBe(`pb.v1`);
@@ -62,7 +62,7 @@ right here`);
 });
 
 const rpcUnaryLine = `  rpc Sint32Call ( .pb.v1.Sint32Mes ) returns ( .pb.v1.Sint32Mes );`;
-test(`parse unary rpc`, () => {
+test(`unary rpc`, () => {
   const parser = new Parser();
   const call = parser.rpc(rpcUnaryLine);
   expect(call.name).toBe(`Sint32Call`);
@@ -73,7 +73,7 @@ test(`parse unary rpc`, () => {
 });
 
 const rpcStreamLine = `  rpc BiDirectioalStream ( stream .pb.v1.StringMes ) returns ( stream .pb.v1.StringMes );`;
-test(`parse stream rpc`, () => {
+test(`stream rpc`, () => {
   const parser = new Parser();
   const call = parser.rpc(rpcStreamLine);
   expect(call.name).toBe(`BiDirectioalStream`);
@@ -83,7 +83,7 @@ test(`parse stream rpc`, () => {
   expect(call.outputMessageTag).toBe(`.pb.v1.StringMes`);
 });
 
-test(`parse field`, () => {
+test(`fields`, () => {
   const parser = new Parser();
 
   const field1 = `string example = 1;`;
@@ -176,7 +176,7 @@ Message template:
   }
 }`;
 
-test(`parse message`, () => {
+test(`message`, () => {
   const parser = new Parser();
   const msg = parser.message(msgExample);
   expect(msg.description).toBe(`some

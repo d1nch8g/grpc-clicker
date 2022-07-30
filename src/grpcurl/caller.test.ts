@@ -1,13 +1,13 @@
 import { Caller } from "./caller";
 
-test("caller ok", async () => {
+test("success", async () => {
   const caller = new Caller();
   const [rez, err] = await caller.execute(`cd`, [`.`]);
   expect(err).toBeNull();
   expect(rez).toBe(``);
 });
 
-test("caller ok", async () => {
+test("error", async () => {
   const caller = new Caller();
   const [rez, err] = await caller.execute(`wasdas`, [`.`, `asd`]);
   expect(rez).toBeNull();
