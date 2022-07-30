@@ -1,10 +1,9 @@
 import { Field } from "../classes/field";
 import { Message } from "../classes/message";
 import { Proto } from "../classes/proto";
-import { Storage } from "../storage/storage";
 
 export class Grpcurl {
-  constructor(private storage: Storage) {}
+  constructor() {}
 
   async proto(path: string): Promise<[Proto, Error]> {
     try {

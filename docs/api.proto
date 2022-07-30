@@ -13,8 +13,24 @@ service Basics {
   rpc Int64Call(Int64Mes) returns (Int64Mes);
   rpc Uint32Call(Uint32Mes) returns (Uint32Mes);
   rpc Uint64Call(Uint64Mes) returns (Uint64Mes);
+  /* another comment example
+  another comment example
+  another comment example
+  another comment example
+  another comment example
+  another comment example
+  another comment example
+  another comment example
+  another comment example
+  another comment example
+  another comment example
+  another comment example
+  another comment example
+  another comment example
+  */
   rpc Sint32Call(Sint32Mes) returns (Sint32Mes);
   rpc Sint64Call(Sint64Mes) returns (Sint64Mes);
+  /* another comment example */
   rpc Fixed32Call(Fixed32Mes) returns (Fixed32Mes);
   rpc Fixed64Call(Fixed64Mes) returns (Fixed64Mes);
   rpc Sfixed32Call(Sfixed32Mes) returns (Sfixed32Mes);
@@ -37,7 +53,7 @@ service Constructions {
 
 service Streams {
   rpc ServerStream(StringMes) returns (stream StringMes);
-  rpc ClientStream(stream StringMes) returns (StringMes);
+  rpc ClientStream(stream StringMes) returns (StringMes) {}
   rpc BiDirectioalStream(stream StringMes) returns (stream StringMes);
 }
 
