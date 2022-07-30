@@ -148,19 +148,19 @@ export class Parser {
   }
 }
 
-interface Proto {
+export interface Proto {
   name: string;
   services: Service[];
 }
 
-interface Service {
+export interface Service {
   name: string;
   tag: string;
   description: string;
   calls: Call[];
 }
 
-interface Call {
+export interface Call {
   name: string;
   description: string;
   inputStream: boolean;
@@ -169,14 +169,14 @@ interface Call {
   outputMessageTag: string;
 }
 
-interface Message {
+export interface Message {
   name: string;
   tag: string;
   description: string;
   fields: Field[];
 }
 
-interface Field {
+export interface Field {
   name: string;
   type: string;
   description: string;

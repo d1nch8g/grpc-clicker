@@ -1,62 +1,22 @@
-import { Field } from "../classes/field";
-import { Message } from "../classes/message";
-import { Proto } from "../classes/proto";
+import { Caller } from "./caller";
+import { Message, Parser, Proto } from "./parser";
 
 export class Grpcurl {
-  constructor() {}
+  constructor(private parser: Parser, private caller: Caller) {}
 
   async proto(path: string): Promise<[Proto, Error]> {
-    try {
-      const util = require("util");
-      const exec = util.promisify(require("child_process").exec);
-      const call = `grpcurl -import-path / -proto ${path} describe`;
-      const { stdout, stderr } = await exec(call);
-      const stdoutString = `${stdout}`;
-      const stderrString = `${stderr}`;
-      if (stderrString !== ``) {
-        return [null];
-      }
-      let proto = new Proto(`${stdout}`, path);
-      for (const svc of proto.services) {
-        for (const call of svc.calls) {
-          call.input.fields = await this.getFields(call.input);
-          call.output.fields = await this.getFields(call.output);
-        }
-      }
-      return proto;
-    } catch (e) {
-      vscode.window.showErrorMessage(`${e}`);
-      return new Proto("", path);
+    const call = `grpcurl -import-path / -proto %s describe`;
+    const [resp, err] = await this.caller.execute(call, [path]);
+    if (err !== null) {
+      return [null, err];
     }
+    const proto = this.parser.proto(resp);
+    return [proto, null];
   }
 
-  async protos(pathes: string[]): Promise<Proto[]> {
-    let protos: Proto[] = [];
-    for (const path of pathes) {
-      protos.push(await this.proto(path));
-    }
-    return protos;
-  }
-
-  async getFields(message: Message): Promise<Field[]> {
-    if (message.fields.length > 0) {
-      return message.fields;
-    }
-    const util = require("util");
-    const exec = util.promisify(require("child_process").exec);
-    const call = `grpcurl -import-path / -proto ${message.path} describe ${message.tag}`;
-    const { stdout, stderr } = await exec(call);
-    if (`${stderr}` !== ``) {
-      vscode.window.showErrorMessage(`${stderr}`);
-      return [];
-    }
-    let lines = `${stdout}`.split("\n");
-    for (const line of lines) {
-      if (line.includes(" = ") && line.includes(";")) {
-        message.fields.push(new Field(line));
-      }
-    }
-    return message.fields;
+  async message(path: string, msgTag: string): Promise<Message> {
+    const call = `grpcurl -import-path / -proto %s describe %s`;
+    this.caller.execute(call, [path, msgTag]);
   }
 
   async send(

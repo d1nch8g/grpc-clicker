@@ -1,7 +1,7 @@
 import * as util from "util";
 
 export class Caller {
-  async executeCommand(form: string, args: string[]): Promise<[string, Error]> {
+  async execute(form: string, args: string[]): Promise<[string, Error]> {
     try {
       const call = util.format(form, ...args);
 
