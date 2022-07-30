@@ -83,6 +83,70 @@ test(`parse stream rpc`, () => {
   expect(call.outputMessageTag).toBe(`.pb.v1.StringMes`);
 });
 
+test(`parse field`, () => {
+  const parser = new Parser();
+
+  const field1 = `string example = 1;`;
+  expect(parser.field(field1)).toStrictEqual({
+    name: `example`,
+    type: `string`,
+    description: null,
+    optional: false,
+    repeated: false,
+    map: false,
+    keyType: null,
+    valueType: null,
+  });
+
+  const field2 = `optional string example2 = 2;`;
+  expect(parser.field(field2)).toStrictEqual({
+    name: `example2`,
+    type: `string`,
+    description: null,
+    optional: true,
+    repeated: false,
+    map: false,
+    keyType: null,
+    valueType: null,
+  });
+
+  const field3 = `repeated string example3 = 3;`;
+  expect(parser.field(field3)).toStrictEqual({
+    name: `example3`,
+    type: `string`,
+    description: null,
+    optional: false,
+    repeated: true,
+    map: false,
+    keyType: null,
+    valueType: null,
+  });
+
+  const field4 = `map<string, string> example4 = 4;`;
+  expect(parser.field(field4)).toStrictEqual({
+    name: `example4`,
+    type: `map`,
+    description: null,
+    optional: false,
+    repeated: false,
+    map: true,
+    keyType: `string`,
+    valueType: `string`,
+  });
+
+  const field5 = `.pb.v1.NestedMes example5 = 5;`;
+  expect(parser.field(field5)).toStrictEqual({
+    name: `example5`,
+    type: `.pb.v1.NestedMes`,
+    description: null,
+    optional: false,
+    repeated: false,
+    map: false,
+    keyType: null,
+    valueType: null,
+  });
+});
+
 const msgExample = `pb.v1.TestMessage is a message:    
 // some
 // comment
@@ -102,14 +166,4 @@ test(`parse message`, () => {
 comment`);
   expect(msg.name).toBe(`TestMessage`);
   expect(msg.tag).toBe(`pb.v1.TestMessage`);
-});
-
-const field1 = `string example = 1;`;
-const field2 = `optional string example2 = 2;`;
-const field3 = `repeated string example3 = 3;`;
-const field4 = `map<string, string> example4 = 4;`;
-const field5 = `.pb.v1.NestedMes example5 = 5;`;
-
-test(`parse field`, () => {
-  
 });

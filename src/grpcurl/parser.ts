@@ -116,18 +116,34 @@ export class Parser {
 
   field(line: string): Field {
     line = line.trim();
-    const spaceSplitted = line.split(` `);
+    const isMap = line.startsWith(`map<`);
     let field: Field = {
-      name: spaceSplitted[spaceSplitted.length - 3],
+      name: "",
       type: "",
-      typeTag: "",
       description: null,
       optional: line.startsWith(`optional`),
       repeated: line.startsWith(`repeated`),
-      map: line.startsWith(`map`),
-      keyType: "",
-      valueType: "",
+      map: isMap,
+      keyType: null,
+      valueType: null,
     };
+    if (isMap) {
+      const mapValues = line
+        .replace(`<`, ` `)
+        .replace(`,`, ``)
+        .replace(`>`, ``)
+        .split(` `);
+      field.type = `map`;
+      field.keyType = mapValues[1];
+      field.valueType = mapValues[2];
+      field.name = mapValues[3];
+      return field;
+    }
+    line = line.replace(`optional `, ``);
+    line = line.replace(`repeated `, ``);
+    const splitted = line.split(` `);
+    field.type = splitted[0];
+    field.name = splitted[1];
     return field;
   }
 }
@@ -163,7 +179,6 @@ interface Message {
 interface Field {
   name: string;
   type: string;
-  typeTag: string;
   description: string;
   optional: boolean;
   repeated: boolean;
