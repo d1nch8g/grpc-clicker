@@ -84,17 +84,6 @@ export class Parser {
 
     let currComment = null;
     let msg: Message = { name: "", tag: "", description: null, fields: [] };
-    let currField: Field = {
-      name: "",
-      type: "",
-      typeTag: "",
-      description: null,
-      optional: false,
-      repeated: false,
-      map: false,
-      keyType: "",
-      valueType: "",
-    };
 
     for (const line of splittedInput) {
       if (line.startsWith(`message `)) {
@@ -115,7 +104,11 @@ export class Parser {
       }
       if (line.endsWith(`;`)) {
         let field = this.field(line);
-        field.description = currComment;
+        if (currComment !== null) {
+          field.description = currComment;
+          currComment = null;
+        }
+        msg.fields.push(field);
       }
     }
     return msg;
