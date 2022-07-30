@@ -18,26 +18,39 @@ export class Parser {
     for (const line of splittedInput) {
       if (line.includes(`//`)) {
         currComment += line.replace(`//`, ``).trim() + `\n`;
+        continue;
       }
       if (line.includes(`is a service:`)) {
-        currComment = ``;
-        currSvc.tag = line.replace(` is a service:`, ``);
-        currSvc.name = currSvc.tag.split(`.`).splice(-1).join(`.`);
-        currSvc.description = currComment.slice(0, -2);
+        if (proto.name !== ``) {
+          continue;
+        }
+        proto.name = line
+          .replace(` is a service:`, ``)
+          .split(`.`)
+          .slice(0, -1)
+          .join(`.`);
+        continue;
+      }
+      if (line.startsWith(`service `)) {
+        currSvc.description = currComment.slice(0, -1);
+        currSvc.name = line.split(` `)[1];
       }
       if (line === `}`) {
         proto.services.push(currSvc);
         currSvc = { name: ``, tag: ``, description: ``, calls: [] };
+        continue;
       }
       if (line.includes(`  rpc `)) {
         const call = this.rpc(line);
-        call.description = currComment.slice(0, -2);
+        call.description = currComment.slice(0, -1);
         currComment = ``;
         currSvc.calls.push(call);
+        continue;
       }
     }
     return proto;
   }
+
   rpc(line: string): Call {
     let call: Call = {
       name: "",

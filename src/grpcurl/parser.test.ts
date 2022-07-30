@@ -21,21 +21,10 @@ service Basics {
   rpc Int64Call ( .pb.v1.Int64Mes ) returns ( .pb.v1.Int64Mes );
   rpc Sfixed32Call ( .pb.v1.Sfixed32Mes ) returns ( .pb.v1.Sfixed32Mes );
   rpc Sfixed64Call ( .pb.v1.Sfixed64Mes ) returns ( .pb.v1.Sfixed64Mes );
-  //
-  // another comment example
-  // another comment example
-  // another comment example
-  // another comment example
-  // another comment example
-  // another comment example
-  // another comment example
-  // another comment example
-  // another comment example
-  // another comment example
-  // another comment example
-  // another comment example
-  // another comment example
-  // another comment example
+  // some
+  // multiline
+  // comment
+  // right here
   rpc Sint32Call ( .pb.v1.Sint32Mes ) returns ( .pb.v1.Sint32Mes );
   rpc Sint64Call ( .pb.v1.Sint64Mes ) returns ( .pb.v1.Sint64Mes );
   rpc StringCall ( .pb.v1.StringMes ) returns ( .pb.v1.StringMes );
@@ -55,7 +44,6 @@ service Constructions {
 }`;
 const rpcUnaryLine = `  rpc Sint32Call ( .pb.v1.Sint32Mes ) returns ( .pb.v1.Sint32Mes );`;
 const rpcStreamLine = `  rpc BiDirectioalStream ( stream .pb.v1.StringMes ) returns ( stream .pb.v1.StringMes );`;
-const badInpt = `wasd123sad`;
 
 test(`parse unary rpc`, () => {
   const parser = new Parser();
@@ -77,10 +65,23 @@ test(`parse stream rpc`, () => {
   expect(call.outputMessageTag).toBe(`.pb.v1.StringMes`);
 });
 
-test(`parse message described`, () => {
+test(`parse proto`, () => {
   const parser = new Parser();
+  const proto = parser.proto(goodInput);
+  expect(proto.name).toBe(`pb.v1`);
+  expect(proto.services.length).toBe(3);
+  expect(proto.services[0].name).toBe(`Streams`);
+  expect(proto.services[0].calls.length).toBe(3);
+  expect(proto.services[1].calls[3].description).toBe(
+    `another comment example`
+  );
+  expect(proto.services[1].calls[10].description).toBe(`some
+multiline
+comment
+right here`);
+  expect(proto.services[1].description).toBe(`example svc description`);
 });
 
-test(`parse proto`, () => {
+test(`parse message`, () => {
   const parser = new Parser();
 });
