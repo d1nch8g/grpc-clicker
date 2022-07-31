@@ -5,8 +5,14 @@ export class Parser {
     const splittedInput = input.split("\n");
 
     let currComment = null;
-    let proto: Proto = { name: ``, services: [] };
-    let currSvc: Service = { name: ``, tag: ``, description: null, calls: [] };
+    let proto: Proto = { name: ``, services: [], type: ProtoType.proto };
+    let currSvc: Service = {
+      name: ``,
+      tag: ``,
+      description: null,
+      calls: [],
+      type: ProtoType.service,
+    };
 
     for (const line of splittedInput) {
       if (line.includes(`//`)) {
@@ -36,7 +42,13 @@ export class Parser {
       }
       if (line === `}`) {
         proto.services.push(currSvc);
-        currSvc = { name: ``, tag: ``, description: null, calls: [] };
+        currSvc = {
+          name: ``,
+          tag: ``,
+          description: null,
+          calls: [],
+          type: ProtoType.service,
+        };
         continue;
       }
       if (line.includes(`  rpc `)) {
@@ -54,6 +66,7 @@ export class Parser {
 
   rpc(line: string): Call {
     let call: Call = {
+      type: ProtoType.call,
       name: "",
       description: null,
       inputStream: false,
@@ -86,6 +99,7 @@ export class Parser {
 
     let currComment = null;
     let msg: Message = {
+      type: ProtoType.message,
       name: "",
       tag: "",
       description: null,
@@ -130,8 +144,9 @@ export class Parser {
     line = line.trim();
     const isMap = line.startsWith(`map<`);
     let field: Field = {
+      type: ProtoType.field,
       name: "",
-      type: "",
+      dataType: "",
       description: null,
       optional: line.startsWith(`optional`),
       repeated: line.startsWith(`repeated`),
@@ -145,7 +160,7 @@ export class Parser {
         .replace(`,`, ``)
         .replace(`>`, ``)
         .split(` `);
-      field.type = `map`;
+      field.dataType = `map`;
       field.keyType = mapValues[1];
       field.valueType = mapValues[2];
       field.name = mapValues[3];
@@ -154,7 +169,7 @@ export class Parser {
     line = line.replace(`optional `, ``);
     line = line.replace(`repeated `, ``);
     const splitted = line.split(` `);
-    field.type = splitted[0];
+    field.dataType = splitted[0];
     field.name = splitted[1];
     return field;
   }
@@ -185,12 +200,22 @@ export class Parser {
   }
 }
 
+export enum ProtoType {
+  proto,
+  service,
+  call,
+  message,
+  field,
+}
+
 export interface Proto {
+  type: ProtoType;
   name: string;
   services: Service[];
 }
 
 export interface Service {
+  type: ProtoType;
   name: string;
   tag: string;
   description: string;
@@ -198,6 +223,7 @@ export interface Service {
 }
 
 export interface Call {
+  type: ProtoType;
   name: string;
   description: string;
   inputStream: boolean;
@@ -207,6 +233,7 @@ export interface Call {
 }
 
 export interface Message {
+  type: ProtoType;
   name: string;
   tag: string;
   description: string;
@@ -215,8 +242,9 @@ export interface Message {
 }
 
 export interface Field {
+  type: ProtoType;
   name: string;
-  type: string;
+  dataType: string;
   description: string;
   optional: boolean;
   repeated: boolean;

@@ -1,4 +1,4 @@
-import { Parser } from "./parser";
+import { Parser, ProtoType } from "./parser";
 
 const protoInput = `pb.v1.Streams is a service:
 service Streams {
@@ -88,8 +88,9 @@ test(`fields`, () => {
 
   const field1 = `string example = 1;`;
   expect(parser.field(field1)).toStrictEqual({
+    type: ProtoType.field,
     name: `example`,
-    type: `string`,
+    dataType: `string`,
     description: null,
     optional: false,
     repeated: false,
@@ -100,8 +101,9 @@ test(`fields`, () => {
 
   const field2 = `optional string example2 = 2;`;
   expect(parser.field(field2)).toStrictEqual({
+    type: ProtoType.field,
     name: `example2`,
-    type: `string`,
+    dataType: `string`,
     description: null,
     optional: true,
     repeated: false,
@@ -112,8 +114,9 @@ test(`fields`, () => {
 
   const field3 = `repeated string example3 = 3;`;
   expect(parser.field(field3)).toStrictEqual({
+    type: ProtoType.field,
     name: `example3`,
-    type: `string`,
+    dataType: `string`,
     description: null,
     optional: false,
     repeated: true,
@@ -124,8 +127,9 @@ test(`fields`, () => {
 
   const field4 = `map<string, string> example4 = 4;`;
   expect(parser.field(field4)).toStrictEqual({
+    type: ProtoType.field,
     name: `example4`,
-    type: `map`,
+    dataType: `map`,
     description: null,
     optional: false,
     repeated: false,
@@ -136,8 +140,9 @@ test(`fields`, () => {
 
   const field5 = `.pb.v1.NestedMes example5 = 5;`;
   expect(parser.field(field5)).toStrictEqual({
+    type: ProtoType.field,
     name: `example5`,
-    type: `.pb.v1.NestedMes`,
+    dataType: `.pb.v1.NestedMes`,
     description: null,
     optional: false,
     repeated: false,

@@ -1,6 +1,6 @@
 import { Caller } from "./caller";
 import { Grpcurl, Response } from "./grpcurl";
-import { Call, Field, Message, Parser, Proto } from "./parser";
+import { Call, Field, Message, Parser, Proto, ProtoType } from "./parser";
 import * as util from "util";
 
 class MockParser implements Parser {
@@ -14,13 +14,14 @@ class MockParser implements Parser {
     };
   }
   proto(input: string): Proto {
-    return { name: input, services: [] };
+    return { name: input, services: [], type: ProtoType.proto };
   }
   rpc(line: string): Call {
     throw new Error("Method not implemented.");
   }
   message(input: string): Message {
     return {
+      type: ProtoType.message,
       name: input,
       tag: `tag`,
       description: `dscr`,
@@ -49,6 +50,7 @@ test(`proto`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller());
   expect(await grpcurl.proto(`docs/api.proto`)).toStrictEqual([
     {
+      type: ProtoType.proto,
       name: `grpcurl -import-path / -proto docs/api.proto describe`,
       services: [],
     },
@@ -62,6 +64,7 @@ test(`message`, async () => {
     await grpcurl.message(`docs/api.proto`, `.pb.v1.StringMes`)
   ).toStrictEqual([
     {
+      type: ProtoType.message,
       name: `grpcurl -import-path / -proto docs/api.proto describe .pb.v1.StringMes`,
       tag: `tag`,
       description: `dscr`,

@@ -1,8 +1,9 @@
 import * as vscode from "vscode";
 import * as path from "path";
+import { Proto, Service, Call } from "../grpcurl/parser";
 
 export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
-  constructor(private grpcurl: Grpcurl, private protos: string[]) {
+  constructor(private protos: Proto[]) {
     this.protos = protos;
     this.onChange = new vscode.EventEmitter<ProtoItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
@@ -11,7 +12,7 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
   private onChange: vscode.EventEmitter<ProtoItem | undefined | void>;
   readonly onDidChangeTreeData: vscode.Event<void | ProtoItem | ProtoItem[]>;
 
-  async update(protos: string[]) {
+  async update(protos: Proto[]) {
     this.protos = protos;
     this.onChange.fire();
   }
@@ -23,8 +24,7 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
   async getChildren(element?: ProtoItem): Promise<ProtoItem[]> {
     let items: ProtoItem[] = [];
     if (element === undefined) {
-      const protos = await this.grpcurl.protos(this.protos);
-      for (const proto of protos) {
+      for (const proto of this.protos) {
         items.push(new ProtoItem(proto));
       }
       return items;
@@ -44,16 +44,6 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
       }
     }
     if (elem instanceof Call) {
-      elem.input.fields = await this.grpcurl.getFields(elem.input);
-      elem.output.fields = await this.grpcurl.getFields(elem.output);
-      items.push(new ProtoItem(elem.input));
-      items.push(new ProtoItem(elem.output));
-    }
-    if (elem instanceof Message) {
-      let fields = await this.grpcurl.getFields(elem);
-      for (const field of fields) {
-        items.push(new ProtoItem(field));
-      }
     }
     return items;
   }
@@ -72,7 +62,7 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
 }
 
 class ProtoItem extends vscode.TreeItem {
-  constructor(public item: Proto | Service | Call | Message | Field) {
+  constructor(public item: Proto | Service | Call) {
     super(item.name);
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     let svg = "";
