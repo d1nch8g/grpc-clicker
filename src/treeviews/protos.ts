@@ -1,12 +1,5 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Call } from "../classes/call";
-import { Message } from "../classes/message";
-import { Proto } from "../classes/proto";
-import { Service } from "../classes/service";
-import { Grpcurl } from "../grpcurl/grpcurl";
-import { Field } from "../classes/field";
-import { Request } from "../classes/request";
 
 export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
   constructor(private grpcurl: Grpcurl, private protos: string[]) {

@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { HostsTreeView } from "./hosts";
-import { HeadersTreeView } from "./metadata";
+import { HeadersTreeView } from "./headers";
 import { ProtosTreeView } from "./protos";
 import { HistoryTreeView } from "./history";
 import { Host } from "../classes/host";

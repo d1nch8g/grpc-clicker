@@ -1,9 +1,10 @@
 import * as vscode from "vscode";
 import * as path from "path";
+import { Header } from "../storage/headers";
 
 export class HeadersTreeView implements vscode.TreeDataProvider<HeaderItem> {
-  constructor(private metas: Header[]) {
-    this.metas = metas;
+  constructor(private headers: Header[]) {
+    this.headers = headers;
     this.onChange = new vscode.EventEmitter<HeaderItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
   }
@@ -11,8 +12,8 @@ export class HeadersTreeView implements vscode.TreeDataProvider<HeaderItem> {
   private onChange: vscode.EventEmitter<HeaderItem | undefined | void>;
   readonly onDidChangeTreeData: vscode.Event<void | HeaderItem | HeaderItem[]>;
 
-  refresh(metas: Meta[]): void {
-    this.metas = metas;
+  refresh(headres: Header[]): void {
+    this.headers = headres;
     this.onChange.fire();
   }
 
@@ -22,8 +23,8 @@ export class HeadersTreeView implements vscode.TreeDataProvider<HeaderItem> {
 
   getChildren(element?: HeaderItem): vscode.ProviderResult<HeaderItem[]> {
     let hostItems: HeaderItem[] = [];
-    for (var meta of this.metas) {
-      hostItems.push(new HeaderItem(meta.name, meta.isOn));
+    for (var header of this.headers) {
+      hostItems.push(new HeaderItem(header));
     }
     return hostItems;
   }
@@ -43,16 +44,16 @@ export class HeadersTreeView implements vscode.TreeDataProvider<HeaderItem> {
 
 class HeaderItem extends vscode.TreeItem {
   private iconName = "meta-off.svg";
-  constructor(meta: string, isOn: boolean) {
-    super(meta);
+  constructor(header: Header) {
+    super(header.value);
     super.tooltip = `Meta data that will be sent with request in context`;
     super.contextValue = "meta";
     super.command = {
-      command: "metas.switch",
+      command: "headres.switch",
       title: "Switch grpc host",
-      arguments: [meta],
+      arguments: [header],
     };
-    if (isOn) {
+    if (header.active) {
       this.iconName = "meta-on.svg";
     }
     this.iconPath = {
