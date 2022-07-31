@@ -69,14 +69,8 @@ test(`send`, async () => {
       metadata: [`username: user`, `passsword: password`],
       maxMsgSize: 2000000,
     })
-  ).toBe([
-    {
-      name: `grpcurl -H \"username: user\" -H \"passsword: password\"  -max-msg-sz 2000000 -import-path / -proto docs/api.proto -d \"'{}'\" -plaintext  localhost:12201 .pb.v1.Constructions.EmptyCall`,
-      tag: `tag`,
-      description: `dscr`,
-      template: `tmplt`,
-      fields: [],
-    },
+  ).toStrictEqual([
+    `grpcurl -H 'username: user' -H 'passsword: password'  -max-msg-sz 2000000 -import-path / -proto docs/api.proto -d \"'{}'\" -plaintext  localhost:12201 .pb.v1.Constructions.EmptyCall`,
     null,
   ]);
 });

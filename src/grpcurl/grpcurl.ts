@@ -36,7 +36,7 @@ export class Grpcurl {
     const call = `grpcurl %s %s -import-path / -proto %s -d %s %s %s %s`;
     let meta = ``;
     for (const metafield of input.metadata) {
-      meta = meta + `-H '${this.systemInputPreprocess(metafield)}' `;
+      meta = meta + `-H '${metafield}' `;
     }
     const inputRequest = this.systemInputPreprocess(`'${input.reqJson}'`);
     let tls = ``;
