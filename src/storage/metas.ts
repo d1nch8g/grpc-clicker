@@ -1,30 +1,49 @@
 import { Memento } from "vscode";
 
-export class Metadata {
-  private readonly key: string = "grpc-clicker-metadata";
+export class Headers {
+  private readonly key: string = "grpc-clicker-headers";
   constructor(private memento: Memento) {}
 
-  private saveMetadataValues(metadataValues: Metadata[]) {
-    let metadataStrings: string[] = [];
-    for (const metdata of metadataValues) {
-      metadataStrings.push(JSON.stringify(metdata));
+  private saveHeaders(headers: Headers[]) {
+    let headerStrings: string[] = [];
+    for (const header of headers) {
+      headerStrings.push(JSON.stringify(header));
     }
-    this.memento.update(this.key, metadataStrings);
+    this.memento.update(this.key, headerStrings);
   }
 
-  list(): Metadata[] {
-    let metadataStrings = this.memento.get<string[]>(this.key, []);
-    let metadataValues: Metadata[] = [];
-    for (const metadataString of metadataStrings) {
-      metadataValues.push(JSON.parse(metadataString));
+  list(): Headers[] {
+    let headerStrings = this.memento.get<string[]>(this.key, []);
+    let headerValues: Headers[] = [];
+    for (const headerString of headerStrings) {
+      headerValues.push(JSON.parse(headerString));
     }
-    return metadataValues;
+    return headerValues;
   }
 
-  
+  add(header: Headers) {
+    let headers = this.list();
+    for (const savedValue of headers) {
+      if (savedValue.value === header.value) {
+        return new Error(`metdata value you are trying to add already exists`);
+      }
+    }
+    headers.push(header);
+    this.saveHeaders(headers);
+  }
+
+  remove(value: string) {
+    let headers = this.list();
+    for (let i = 0; i < headers.length; i++) {
+      if (headers[i].value === value) {
+        headers.splice(i, 1);
+      }
+    }
+    return headers;
+  }
 }
 
-export interface Metadata {
+export interface Headers {
   value: string;
   active: boolean;
 }
