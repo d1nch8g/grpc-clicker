@@ -9,18 +9,15 @@ export class Protos {
     return pathes;
   }
 
-  public add(path: string): [string[], Error] {
+  public add(path: string): Error {
     let pathes = this.memento.get<string[]>(this.key, []);
-    if (path === "") {
-      return [pathes, null];
-    }
     if (pathes.includes(path)) {
-      let msg = `Proto you are trying to add already exists!`;
-      return [pathes, new Error(msg)];
+      let msg = `proto you are trying to add already exists`;
+      return new Error(msg);
     }
     pathes.push(path);
     this.memento.update(this.key, pathes);
-    return [pathes, null];
+    return null;
   }
 
   public remove(host: string): string[] {

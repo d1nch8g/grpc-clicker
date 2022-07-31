@@ -7,7 +7,7 @@ import { Protos as Protos } from "./protos";
 export class Storage {
   public hosts: Hosts;
   public protos: Protos;
-  public headers: Header;
+  public headers: Headers;
   public history: History;
   constructor(memento: Memento) {
     this.hosts = new Hosts(memento);

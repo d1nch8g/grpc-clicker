@@ -30,6 +30,7 @@ export class Hosts {
     }
     hosts.push(host);
     this.saveHosts(hosts);
+    return null;
   }
 
   remove(hostAdress: string) {

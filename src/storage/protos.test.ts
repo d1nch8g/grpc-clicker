@@ -1,6 +1,7 @@
-import { Host, Hosts } from "./hosts";
 import { Memento } from "vscode";
 import { T } from "../../dist/tk/utilities/design-tokens/create";
+import { Proto } from "../grpcurl/parser";
+import { Protos } from "./protos";
 
 class MockMemento implements Memento {
   values: string[] = [];
@@ -21,35 +22,24 @@ class MockMemento implements Memento {
 
 test(`add`, () => {
   const memento = new MockMemento();
-  const hosts = new Hosts(memento);
-  const host: Host = {
-    adress: "host",
-    description: "",
-    current: false,
-  };
-  expect(hosts.add(host)).toBeNull();
-  expect(hosts.add(host)).toStrictEqual(
-    new Error(`host you are trying to add already exists`)
+  const protos = new Protos(memento);
+  expect(protos.add(`proto`)).toBeNull();
+  expect(protos.add(`proto`)).toStrictEqual(
+    new Error(`proto you are trying to add already exists`)
   );
 });
 
 test(`list`, () => {
   const memento = new MockMemento();
-  const hosts = new Hosts(memento);
-  memento.values = [`{"adress": "host","description": "","current": false}`];
-  expect(hosts.list()).toStrictEqual([
-    {
-      adress: "host",
-      description: "",
-      current: false,
-    },
-  ]);
+  const headers = new Protos(memento);
+  memento.values = [`proto`];
+  expect(headers.list()).toStrictEqual([`proto`]);
 });
 
 test(`remove`, () => {
   const memento = new MockMemento();
-  const hosts = new Hosts(memento);
-  memento.values = [`{"adress": "host","description": "","current": false}`];
-  hosts.remove(`host`);
+  const headers = new Protos(memento);
+  memento.values = [`proto`];
+  headers.remove(`proto`);
   expect(memento.values).toStrictEqual([]);
 });
