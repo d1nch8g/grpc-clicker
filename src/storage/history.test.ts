@@ -41,5 +41,35 @@ test(`add`, () => {
 });
 
 test(`list`, () => {
-  
+  const storage = new MockMemento();
+  const history = new History(storage);
+  history.add({
+    path: "example",
+    reqJson: "",
+    host: "",
+    method: "",
+    tlsOn: false,
+    metadata: [],
+    maxMsgSize: 420,
+    code: "",
+    json: "",
+    time: "",
+    message: "",
+  });
+  let resp = history.list();
+  expect(resp).toStrictEqual([
+    {
+      path: "example",
+      reqJson: "",
+      host: "",
+      method: "",
+      tlsOn: false,
+      metadata: [],
+      maxMsgSize: 420,
+      code: "",
+      json: "",
+      time: "",
+      message: "",
+    },
+  ]);
 });
