@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for storage/history.ts</title>
+    <title>Code coverage report for storage/protos.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">storage</a> history.ts</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">storage</a> protos.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/14</span>
+                <span class='fraction'>18/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>14/14</span>
+                <span class='fraction'>18/18</span>
             </div>
         
             
@@ -94,67 +94,70 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">202x</span>
-<span class="cline-any cline-yes">202x</span>
-<span class="cline-any cline-yes">202x</span>
-<span class="cline-any cline-yes">15052x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">202x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">201x</span>
-<span class="cline-any cline-yes">201x</span>
-<span class="cline-any cline-yes">100x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">201x</span>
-<span class="cline-any cline-yes">201x</span>
-<span class="cline-any cline-yes">201x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Memento } from "vscode";
-import { Request, Response } from "../grpcurl/grpcurl";
 &nbsp;
-export class History {
-  private readonly key: string = "grpc-clicker-history";
+export class Protos {
+  private readonly key: string = "grpc-clicker-structures";
   constructor(private memento: Memento) {}
 &nbsp;
-  public list(): RequestHistoryData[] {
-    const requestStrings = this.memento.get&lt;string[]&gt;(this.key, []);
-    const requests = [];
-    for (const reqString of requestStrings) {
-      requests.push(JSON.parse(reqString));
-    }
-    return requests;
+  public list(): string[] {
+    let pathes = this.memento.get&lt;string[]&gt;(this.key, []);
+    return pathes;
   }
 &nbsp;
-  public add(request: RequestHistoryData): RequestHistoryData[] {
-    let requestStrings = this.memento.get&lt;string[]&gt;(this.key, []);
-    if (requestStrings.length &gt;= 100) {
-      requestStrings.pop();
+  public add(path: string): Error {
+    let pathes = this.memento.get&lt;string[]&gt;(this.key, []);
+    if (pathes.includes(path)) {
+      let msg = `proto you are trying to add already exists`;
+      return new Error(msg);
     }
-    requestStrings = [JSON.stringify(request)].concat(requestStrings);
-    this.memento.update(this.key, requestStrings);
-    return this.list();
+    pathes.push(path);
+    this.memento.update(this.key, pathes);
+    return null;
   }
-}
 &nbsp;
-export interface RequestHistoryData extends Request, Response {
-  fileName: string;
-  protoName: string;
+  public remove(host: string): string[] {
+    let hosts = this.memento.get&lt;string[]&gt;(this.key, []);
+    let idx = hosts.indexOf(host);
+    if (idx !== -1) {
+      hosts.splice(idx, 1);
+    }
+    this.memento.update(this.key, hosts);
+    return hosts;
+  }
 }
 &nbsp;</pre></td></tr></table></pre>
 
