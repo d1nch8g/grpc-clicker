@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Request } from "../classes/request";
+import { Request, Response } from "../grpcurl/grpcurl";
 
 export class HistoryTreeView implements vscode.TreeDataProvider<HistoryItem> {
-  constructor(private requests: Request[]) {
+  constructor(private requests: RequestHistoryData[]) {
     this.requests = requests;
     this.onChange = new vscode.EventEmitter<HistoryItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
@@ -14,7 +14,7 @@ export class HistoryTreeView implements vscode.TreeDataProvider<HistoryItem> {
     void | HistoryItem | HistoryItem[]
   >;
 
-  update(requests: Request[]): void {
+  update(requests: RequestHistoryData[]): void {
     this.requests = requests;
     this.onChange.fire();
   }
@@ -45,7 +45,7 @@ export class HistoryTreeView implements vscode.TreeDataProvider<HistoryItem> {
 }
 
 class HistoryItem extends vscode.TreeItem {
-  constructor(request: Request) {
+  constructor(request: RequestHistoryData) {
     super(`${request.proto} - ${request.call}`);
 
     super.description = request.date;
@@ -78,3 +78,5 @@ Output format: ${request.respName}\n`;
     };
   }
 }
+
+export interface RequestHistoryData extends Request, Response {}

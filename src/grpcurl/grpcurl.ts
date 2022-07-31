@@ -1,3 +1,4 @@
+import { performance } from "perf_hooks";
 import { Caller } from "./caller";
 import { Message, Parser, Proto } from "./parser";
 
@@ -39,6 +40,7 @@ export class Grpcurl {
     if (maxMsgSize !== null) {
       maxMsgSize = `-max-msg-sz ${input.maxMsgSize}`;
     }
+    var startTime = performance.now();
     const [resp, err] = await this.caller.execute(call, [
       meta,
       maxMsgSize,
@@ -48,10 +50,15 @@ export class Grpcurl {
       input.host,
       input.method,
     ]);
+    var endTime = performance.now();
+    let response: Response;
     if (err !== null) {
-      return this.parser.resp(err.message);
+      response = this.parser.resp(err.message);
+    } else {
+      response = this.parser.resp(resp);
     }
-    return this.parser.resp(resp);
+    response.time = `${endTime - startTime}`;
+    return response;
   }
 
   private systemInputPreprocess(input: string): string {
