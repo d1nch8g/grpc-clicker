@@ -25,11 +25,12 @@ export class Headers {
     let headers = this.list();
     for (const savedValue of headers) {
       if (savedValue.value === header.value) {
-        return new Error(`metdata value you are trying to add already exists`);
+        return new Error(`header you are trying to add already exists`);
       }
     }
     headers.push(header);
     this.saveHeaders(headers);
+    return null;
   }
 
   remove(value: string) {
@@ -39,6 +40,7 @@ export class Headers {
         headers.splice(i, 1);
       }
     }
+    this.saveHeaders(headers);
     return headers;
   }
 }
