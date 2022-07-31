@@ -56,6 +56,7 @@ test(`list`, () => {
     time: "",
     message: "",
   });
+
   let resp = history.list();
   expect(resp).toStrictEqual([
     {
