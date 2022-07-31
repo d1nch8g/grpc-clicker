@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { HostsTreeView } from "./hosts";
-import { MetadataTreeView } from "./metadata";
+import { HeadersTreeView } from "./metadata";
 import { ProtosTreeView } from "./protos";
 import { HistoryTreeView } from "./history";
 import { Host } from "../classes/host";
@@ -10,7 +10,7 @@ import { Grpcurl } from "../grpcurl/grpcurl";
 
 export class TreeViews {
   public readonly hosts: HostsTreeView;
-  public readonly metadata: MetadataTreeView;
+  public readonly metadata: HeadersTreeView;
   public readonly protos: ProtosTreeView;
   public readonly history: HistoryTreeView;
   constructor(
@@ -21,7 +21,7 @@ export class TreeViews {
     grpcurl: Grpcurl
   ) {
     this.hosts = new HostsTreeView(hosts);
-    this.metadata = new MetadataTreeView(meta);
+    this.metadata = new HeadersTreeView(meta);
     this.history = new HistoryTreeView(requests);
     this.protos = new ProtosTreeView(grpcurl, protos);
 

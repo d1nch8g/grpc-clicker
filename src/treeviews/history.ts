@@ -51,14 +51,15 @@ class HistoryItem extends vscode.TreeItem {
     super.description = request.date;
     super.contextValue = "host";
 
-    super.tooltip = `File: ${request.path}\n
-Proto: ${request.proto}\n
-Service: ${request.service}\n
-Rpc: ${request.call}\n
-Tag: ${request.methodTag}\n
-Host: ${request.host}\n
-Input format: ${request.reqName}\n
-Output format: ${request.respName}\n`;
+    super.tooltip = new vscode.MarkdownString(`## Request information:
+- proto file name ${request.fileName}
+- proto name ${request.protoName}
+- host for execution ${request.host}
+- method used in request ${request.method}
+- response code ${request.code}
+- time of execution ${request.time}
+- date ${request.date}
+- error message ${request.message}`);
 
     super.contextValue = "call";
     super.command = {
@@ -68,7 +69,7 @@ Output format: ${request.respName}\n`;
     };
 
     let icon = `success.svg`;
-    if (request.error !== ``) {
+    if (request.code !== `OK`) {
       icon = `error.svg`;
     }
 

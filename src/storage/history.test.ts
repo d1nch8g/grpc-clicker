@@ -32,11 +32,12 @@ test(`add`, () => {
       metadata: [],
       maxMsgSize: i,
       code: "",
-      json: "",
+      respJson: "",
       time: "",
       message: "",
       fileName: "",
       protoName: "",
+      date: "",
     });
   }
   expect(storage.values.length).toBe(100);
@@ -54,11 +55,12 @@ test(`list`, () => {
     metadata: [],
     maxMsgSize: 420,
     code: "",
-    json: "",
+    respJson: "",
     time: "",
     message: "",
     fileName: "",
     protoName: "",
+    date: "",
   });
 
   let resp = history.list();
@@ -72,11 +74,12 @@ test(`list`, () => {
       metadata: [],
       maxMsgSize: 420,
       code: "",
-      json: "",
+      respJson: "",
       time: "",
       message: "",
       fileName: "",
       protoName: "",
+      date: "",
     },
   ]);
 });

@@ -161,7 +161,7 @@ export class Parser {
 
   resp(input: string): Response {
     let resp: Response = {
-      json: "",
+      respJson: "",
       code: null,
       time: null,
       message: null,
@@ -179,7 +179,7 @@ export class Parser {
       return resp;
     }
     // TODO add checks for unknown forms of errors
-    resp.json = input;
+    resp.respJson = input;
     resp.code = `OK`;
     return resp;
   }

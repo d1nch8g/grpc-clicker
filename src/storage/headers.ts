@@ -4,7 +4,7 @@ export class Headers {
   private readonly key: string = "grpc-clicker-headers";
   constructor(private memento: Memento) {}
 
-  private saveHeaders(headers: Headers[]) {
+  private saveHeaders(headers: Header[]) {
     let headerStrings: string[] = [];
     for (const header of headers) {
       headerStrings.push(JSON.stringify(header));
@@ -12,16 +12,16 @@ export class Headers {
     this.memento.update(this.key, headerStrings);
   }
 
-  list(): Headers[] {
+  list(): Header[] {
     let headerStrings = this.memento.get<string[]>(this.key, []);
-    let headerValues: Headers[] = [];
+    let headerValues: Header[] = [];
     for (const headerString of headerStrings) {
       headerValues.push(JSON.parse(headerString));
     }
     return headerValues;
   }
 
-  add(header: Headers) {
+  add(header: Header) {
     let headers = this.list();
     for (const savedValue of headers) {
       if (savedValue.value === header.value) {
@@ -43,7 +43,7 @@ export class Headers {
   }
 }
 
-export interface Headers {
+export interface Header {
   value: string;
   active: boolean;
 }

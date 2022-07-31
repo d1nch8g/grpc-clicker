@@ -213,21 +213,21 @@ test(`response`, () => {
   const parser = new Parser();
   expect(parser.resp(codeErr)).toStrictEqual({
     code: `AlreadyExists`,
-    json: ``,
+    respJson: ``,
     time: null,
     message: `some err msg`,
     date: null,
   });
   expect(parser.resp(connErr)).toStrictEqual({
     code: `ConnectionError`,
-    json: ``,
+    respJson: ``,
     time: null,
     date: null,
     message: `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`,
   });
   expect(parser.resp(goodResp)).toStrictEqual({
     code: `OK`,
-    json: `{
+    respJson: `{
   "message": "msg"
 }`,
     time: null,

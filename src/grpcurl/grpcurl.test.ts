@@ -7,7 +7,7 @@ class MockParser implements Parser {
   resp(input: string): Response {
     return {
       code: `ok`,
-      json: `ok`,
+      respJson: `ok`,
       time: `ok`,
       message: `ok`,
       date: null,
@@ -84,6 +84,6 @@ test(`send`, async () => {
     maxMsgSize: 2000000,
   });
   expect(resp.code).toBe(`ok`);
-  expect(resp.json).toBe(`ok`);
+  expect(resp.respJson).toBe(`ok`);
   expect(resp.message).toBe(`ok`);
 });

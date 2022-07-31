@@ -9,7 +9,7 @@ export function activate(context: vscode.ExtensionContext) {
   const grpcurl = new Grpcurl(storage);
   const treeviews = new TreeViews(
     storage.hosts.hosts(),
-    storage.metas.listMetas(),
+    storage.headres.listMetas(),
     storage.history.list(),
     storage.protos.list(),
     grpcurl
@@ -84,25 +84,25 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.protos.update(protoPathes);
   });
 
-  vscode.commands.registerCommand("metas.add", async () => {
+  vscode.commands.registerCommand("headres.add", async () => {
     let meta = (await vscode.window.showInputBox()) ?? "";
-    let [metadata, err] = storage.metas.add(meta);
+    let [metadata, err] = storage.headres.add(meta);
     if (err !== null) {
       vscode.window.showErrorMessage(err.message);
     }
     treeviews.metadata.refresh(metadata);
   });
 
-  vscode.commands.registerCommand("metas.remove", async () => {
-    let oldMetadata = storage.metas.list();
+  vscode.commands.registerCommand("headres.remove", async () => {
+    let oldMetadata = storage.headres.list();
     let meta = await vscode.window.showQuickPick(oldMetadata);
-    let metadata = storage.metas.remove(meta);
+    let metadata = storage.headres.remove(meta);
     treeviews.metadata.refresh(metadata);
   });
 
-  vscode.commands.registerCommand("metas.switch", async (meta: string) => {
-    storage.metas.switchOnOff(meta);
-    let metadata = storage.metas.listMetas();
+  vscode.commands.registerCommand("headres.switch", async (meta: string) => {
+    storage.headres.switchOnOff(meta);
+    let metadata = storage.headres.listMetas();
     treeviews.metadata.refresh(metadata);
   });
 

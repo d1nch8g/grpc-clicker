@@ -28,14 +28,14 @@
   "activationEvents": [
     "onView:hosts",
     "onView:schema",
-    "onView:metas",
+    "onView:headres",
     "onView:history",
     "onCommand:hosts.add",
     "onCommand:hosts.remove",
     "onCommand:protos.add",
     "onCommand:protos.remove",
-    "onCommand:metas.add",
-    "onCommand:metas.remove",
+    "onCommand:headres.add",
+    "onCommand:headres.remove",
     "onCommand:protos.refresh",
     "onWebviewPanel:callgrpc"
   ],
@@ -61,7 +61,7 @@
           "name": "Proto schema explorer"
         },
         {
-          "id": "metas",
+          "id": "headres",
           "name": "Request metadata"
         },
         {
@@ -96,7 +96,7 @@
       },
       {
         "category": "gRPC Clicker",
-        "command": "metas.switch",
+        "command": "headres.switch",
         "title": "Turn on/off value of context metadata"
       },
       {
@@ -119,7 +119,7 @@
       },
       {
         "category": "gRPC Clicker",
-        "command": "metas.add",
+        "command": "headres.add",
         "title": "Add new metadata to request",
         "icon": {
           "dark": "images/dark/plus.svg",
@@ -128,7 +128,7 @@
       },
       {
         "category": "gRPC Clicker",
-        "command": "metas.remove",
+        "command": "headres.remove",
         "title": "Remove existing metadata",
         "icon": {
           "dark": "images/dark/minus.svg",
@@ -173,13 +173,13 @@
           "group": "navigation"
         },
         {
-          "command": "metas.add",
-          "when": "view == metas",
+          "command": "headres.add",
+          "when": "view == headres",
           "group": "navigation"
         },
         {
-          "command": "metas.remove",
-          "when": "view == metas",
+          "command": "headres.remove",
+          "when": "view == headres",
           "group": "navigation"
         },
         {
@@ -198,7 +198,7 @@
           "when": "viewItem == call"
         },
         {
-          "command": "metas.switch",
+          "command": "headres.switch",
           "when": "viewItem == meta"
         }
       ]
