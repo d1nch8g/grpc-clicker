@@ -1,9 +1,17 @@
 import { Caller } from "./caller";
-import { Grpcurl } from "./grpcurl";
+import { Grpcurl, Response } from "./grpcurl";
 import { Call, Field, Message, Parser, Proto } from "./parser";
 import * as util from "util";
 
 class MockParser implements Parser {
+  resp(input: string): Response {
+    return {
+      code: `ok`,
+      json: `ok`,
+      time: `ok`,
+      message: `ok`,
+    };
+  }
   proto(input: string): Proto {
     return { name: input, services: [] };
   }
@@ -26,6 +34,12 @@ class MockParser implements Parser {
 
 class MockCaller implements Caller {
   async execute(form: string, args: string[]): Promise<[string, Error]> {
+    if (args[0] === `err_conn`) {
+      return [
+        `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`,
+        null,
+      ];
+    }
     return [util.format(form, ...args), null];
   }
 }
@@ -69,8 +83,10 @@ test(`send`, async () => {
       metadata: [`username: user`, `passsword: password`],
       maxMsgSize: 2000000,
     })
-  ).toStrictEqual([
-    `grpcurl -H 'username: user' -H 'passsword: password'  -max-msg-sz 2000000 -import-path / -proto docs/api.proto -d \"'{}'\" -plaintext  localhost:12201 .pb.v1.Constructions.EmptyCall`,
-    null,
-  ]);
+  ).toStrictEqual({
+    code: `ok`,
+    json: `ok`,
+    time: `ok`,
+    message: `ok`,
+  });
 });

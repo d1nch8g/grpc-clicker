@@ -24,15 +24,7 @@ export class Grpcurl {
     return [msg, null];
   }
 
-  async send(input: {
-    path: string;
-    reqJson: string;
-    host: string;
-    method: string;
-    tlsOn: boolean;
-    metadata: string[];
-    maxMsgSize: number;
-  }): Promise<[string, Error]> {
+  async send(input: Request): Promise<Response> {
     const call = `grpcurl %s %s -import-path / -proto %s -d %s %s %s %s`;
     let meta = ``;
     for (const metafield of input.metadata) {
@@ -57,9 +49,9 @@ export class Grpcurl {
       input.method,
     ]);
     if (err !== null) {
-      return [null, err];
+      return this.parser.resp(err.message);
     }
-    return [resp, null];
+    return this.parser.resp(resp);
   }
 
   private systemInputPreprocess(input: string): string {
@@ -72,4 +64,21 @@ export class Grpcurl {
     }
     return input;
   }
+}
+
+export interface Request {
+  path: string;
+  reqJson: string;
+  host: string;
+  method: string;
+  tlsOn: boolean;
+  metadata: string[];
+  maxMsgSize: number;
+}
+
+export interface Response {
+  code: string;
+  json: string;
+  time: string;
+  message: string;
 }

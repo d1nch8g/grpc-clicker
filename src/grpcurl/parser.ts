@@ -1,3 +1,5 @@
+import { Response } from "./grpcurl";
+
 export class Parser {
   proto(input: string): Proto {
     const splittedInput = input.split("\n");
@@ -155,6 +157,30 @@ export class Parser {
     field.type = splitted[0];
     field.name = splitted[1];
     return field;
+  }
+
+  resp(input: string): Response {
+    let resp: Response = {
+      json: "",
+      code: null,
+      time: null,
+      message: null,
+    };
+    if (input.includes(`Failed to dial target host `)) {
+      resp.code = `ConnectionError`;
+      resp.message = input;
+      return resp;
+    }
+    if (input.includes(`ERROR:`)) {
+      const splitted = input.split(`\n`);
+      resp.code = splitted[2].replace(`  Code: `, ``);
+      resp.message = splitted[3].replace(`  Message: `, ``);
+      return resp;
+    }
+    // TODO add checks for unknown forms of errors
+    resp.json = input;
+    resp.code = `OK`;
+    return resp;
   }
 }
 

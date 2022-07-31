@@ -200,3 +200,35 @@ comment`);
   }
 }`);
 });
+
+const codeErr = `EmptyCall
+ERROR:
+  Code: AlreadyExists
+  Message: some err msg`;
+const connErr = `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`;
+const goodResp = `{
+  "message": "msg"
+}`;
+test(`response`, () => {
+  const parser = new Parser();
+  expect(parser.resp(codeErr)).toStrictEqual({
+    code: `AlreadyExists`,
+    json: ``,
+    time: null,
+    message: `some err msg`,
+  });
+  expect(parser.resp(connErr)).toStrictEqual({
+    code: `ConnectionError`,
+    json: ``,
+    time: null,
+    message: `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`,
+  });
+  expect(parser.resp(goodResp)).toStrictEqual({
+    code: `OK`,
+    json: `{
+  "message": "msg"
+}`,
+    time: null,
+    message: null,
+  });
+});
