@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Proto, Service, Call } from "../grpcurl/parser";
+import { Proto, Service, Call, ProtoType, Message } from "../grpcurl/parser";
 
 export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
   constructor(private protos: Proto[]) {
@@ -30,20 +30,15 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
       return items;
     }
     let elem = element.item;
-    if (elem instanceof Proto) {
-      for (const svc of elem.services) {
+    if (elem.type === ProtoType.proto) {
+      for (const svc of (elem as Proto).services) {
         items.push(new ProtoItem(svc));
       }
-      for (const msg of elem.messages) {
-        items.push(new ProtoItem(msg));
-      }
     }
-    if (elem instanceof Service) {
-      for (const call of elem.calls) {
+    if (elem.type === ProtoType.service) {
+      for (const call of (elem as Service).calls) {
         items.push(new ProtoItem(call));
       }
-    }
-    if (elem instanceof Call) {
     }
     return items;
   }
@@ -66,57 +61,32 @@ class ProtoItem extends vscode.TreeItem {
     super(item.name);
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     let svg = "";
-    if (item instanceof Proto) {
-      super.tooltip = "Parsed proto schema definition";
+    if (item.type === ProtoType.proto) {
+      item = item as Proto;
+      super.tooltip = `Proto schema definition`;
       svg = "proto.svg";
     }
-    if (item instanceof Service) {
-      super.tooltip = "gRPC service";
+    if (item.type === ProtoType.service) {
+      item = item as Service;
+      super.tooltip = item.description;
       svg = "svc.svg";
     }
-    if (item instanceof Call) {
+    if (item.type === ProtoType.call) {
       super.collapsibleState = vscode.TreeItemCollapsibleState.None;
-      if (item.inputIsStream || item.outputIsStream) {
-        super.tooltip = "gRPC stream (NOT SUPPORTED YET)";
+      item = item as Call;
+      super.tooltip = item.description;
+      svg = "unary.svg";
+      if (item.inputStream || item.outputStream) {
         svg = "stream.svg";
-      } else {
-        super.tooltip = "gRPC unary call";
-        svg = "unary.svg";
       }
-      let isStream = item.inputIsStream || item.outputIsStream;
       super.contextValue = "call";
       super.command = {
         command: "webview.open",
         title: "Trigger opening of webview for grpc call",
         arguments: [
-          new Request(
-            item.proto.path,
-            item.proto.name,
-            item.service,
-            item.name,
-            item.tag,
-            `to fill`,
-            [],
-            item.input.name,
-            item.output.name,
-            item.input.representation(),
-            isStream,
-            "",
-            "",
-            ""
-          ),
+          // TODO add grpc call trigger
         ],
       };
-    }
-    if (item instanceof Message) {
-      super.tooltip = "User defined gRPC message from schema";
-      super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
-      svg = "msg.svg";
-    }
-    if (item instanceof Field) {
-      super.tooltip = "Field in gRPC message";
-      super.collapsibleState = vscode.TreeItemCollapsibleState.None;
-      svg = "field.svg";
     }
     super.iconPath = {
       light: path.join(__filename, "..", "..", "images", svg),
