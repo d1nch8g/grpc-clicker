@@ -1,17 +1,18 @@
 import { Caller } from "./caller";
 import { Grpcurl } from "./grpcurl";
 import { Call, Field, Message, Parser, Proto } from "./parser";
+import * as util from "util";
 
 class MockParser implements Parser {
   proto(input: string): Proto {
-    return { name: `prot`, services: [] };
+    return { name: input, services: [] };
   }
   rpc(line: string): Call {
     throw new Error("Method not implemented.");
   }
   message(input: string): Message {
     return {
-      name: `msg`,
+      name: input,
       tag: `tag`,
       description: `dscr`,
       template: `tmplt`,
@@ -25,36 +26,28 @@ class MockParser implements Parser {
 
 class MockCaller implements Caller {
   async execute(form: string, args: string[]): Promise<[string, Error]> {
-    if (args[0] === `path` && args.length === 1) {
-      return [`prot`, null];
-    }
-    if (args[1] === `msg`) {
-      return [`msg`, null];
-    }
-    return [null, new Error(`error`)];
+    return [util.format(form, ...args), null];
   }
 }
 
 test(`proto`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller());
-  expect(await grpcurl.proto(`path`)).toStrictEqual([
+  expect(await grpcurl.proto(`docs/api.proto`)).toStrictEqual([
     {
-      name: `prot`,
+      name: `grpcurl -import-path / -proto docs/api.proto describe`,
       services: [],
     },
     null,
-  ]);
-  expect(await grpcurl.proto(`bad_path`)).toStrictEqual([
-    null,
-    new Error(`error`),
   ]);
 });
 
 test(`message`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller());
-  expect(await grpcurl.message(`path`, `msg`)).toStrictEqual([
+  expect(
+    await grpcurl.message(`docs/api.proto`, `.pb.v1.StringMes`)
+  ).toStrictEqual([
     {
-      name: `msg`,
+      name: `grpcurl -import-path / -proto docs/api.proto describe .pb.v1.StringMes`,
       tag: `tag`,
       description: `dscr`,
       template: `tmplt`,
@@ -62,8 +55,28 @@ test(`message`, async () => {
     },
     null,
   ]);
-  expect(await grpcurl.message(`path`, `msgs`)).toStrictEqual([
+});
+
+test(`send`, async () => {
+  const grpcurl = new Grpcurl(new MockParser(), new MockCaller());
+  expect(
+    await grpcurl.send({
+      path: "docs/api.proto",
+      reqJson: "{}",
+      host: "localhost:12201",
+      method: ".pb.v1.Constructions.EmptyCall",
+      tlsOn: true,
+      metadata: [`username: user`, `passsword: password`],
+      maxMsgSize: 2000000,
+    })
+  ).toBe([
+    {
+      name: `grpcurl -H \"username: user\" -H \"passsword: password\"  -max-msg-sz 2000000 -import-path / -proto docs/api.proto -d \"'{}'\" -plaintext  localhost:12201 .pb.v1.Constructions.EmptyCall`,
+      tag: `tag`,
+      description: `dscr`,
+      template: `tmplt`,
+      fields: [],
+    },
     null,
-    new Error(`error`),
   ]);
 });

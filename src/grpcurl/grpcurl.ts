@@ -33,18 +33,23 @@ export class Grpcurl {
     metadata: string[];
     maxMsgSize: number;
   }): Promise<[string, Error]> {
-    const call = `grpcurl %s -import-path / -proto %s -d %s %s %s %s`;
+    const call = `grpcurl %s %s -import-path / -proto %s -d %s %s %s %s`;
     let meta = ``;
     for (const metafield of input.metadata) {
-      meta = meta + `-H ${this.systemInputPreprocess(metafield)} `;
+      meta = meta + `-H '${this.systemInputPreprocess(metafield)}' `;
     }
     const inputRequest = this.systemInputPreprocess(`'${input.reqJson}'`);
     let tls = ``;
     if (input.tlsOn) {
       tls = `-plaintext `;
     }
+    let maxMsgSize = ``;
+    if (maxMsgSize !== null) {
+      maxMsgSize = `-max-msg-sz ${input.maxMsgSize}`;
+    }
     const [resp, err] = await this.caller.execute(call, [
       meta,
+      maxMsgSize,
       input.path,
       inputRequest,
       tls,
