@@ -31,4 +31,7 @@ export class History {
   }
 }
 
-export interface RequestHistoryData extends Request, Response {}
+export interface RequestHistoryData extends Request, Response {
+  fileName: string;
+  protoName: string;
+}

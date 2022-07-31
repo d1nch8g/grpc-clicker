@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Request, Response } from "../grpcurl/grpcurl";
+import { RequestHistoryData } from "../storage/history";
 
 export class HistoryTreeView implements vscode.TreeDataProvider<HistoryItem> {
   constructor(private requests: RequestHistoryData[]) {
@@ -46,7 +46,7 @@ export class HistoryTreeView implements vscode.TreeDataProvider<HistoryItem> {
 
 class HistoryItem extends vscode.TreeItem {
   constructor(request: RequestHistoryData) {
-    super(`${request.proto} - ${request.call}`);
+    super(`${request.protoName} - ${request.method}`);
 
     super.description = request.date;
     super.contextValue = "host";
@@ -78,5 +78,3 @@ Output format: ${request.respName}\n`;
     };
   }
 }
-
-export interface RequestHistoryData extends Request, Response {}

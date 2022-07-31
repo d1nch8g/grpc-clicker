@@ -35,6 +35,8 @@ test(`add`, () => {
       json: "",
       time: "",
       message: "",
+      fileName: "",
+      protoName: "",
     });
   }
   expect(storage.values.length).toBe(100);
@@ -55,6 +57,8 @@ test(`list`, () => {
     json: "",
     time: "",
     message: "",
+    fileName: "",
+    protoName: "",
   });
 
   let resp = history.list();
@@ -71,6 +75,8 @@ test(`list`, () => {
       json: "",
       time: "",
       message: "",
+      fileName: "",
+      protoName: "",
     },
   ]);
 });

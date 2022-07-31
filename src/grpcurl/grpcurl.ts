@@ -87,5 +87,6 @@ export interface Response {
   code: string;
   json: string;
   time: string;
+  date: string;
   message: string;
 }

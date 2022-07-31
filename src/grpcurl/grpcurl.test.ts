@@ -10,6 +10,7 @@ class MockParser implements Parser {
       json: `ok`,
       time: `ok`,
       message: `ok`,
+      date: null,
     };
   }
   proto(input: string): Proto {
@@ -73,20 +74,16 @@ test(`message`, async () => {
 
 test(`send`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller());
-  expect(
-    await grpcurl.send({
-      path: "docs/api.proto",
-      reqJson: "{}",
-      host: "localhost:12201",
-      method: ".pb.v1.Constructions.EmptyCall",
-      tlsOn: true,
-      metadata: [`username: user`, `passsword: password`],
-      maxMsgSize: 2000000,
-    })
-  ).toStrictEqual({
-    code: `ok`,
-    json: `ok`,
-    time: `ok`,
-    message: `ok`,
+  let resp = await grpcurl.send({
+    path: "docs/api.proto",
+    reqJson: "{}",
+    host: "localhost:12201",
+    method: ".pb.v1.Constructions.EmptyCall",
+    tlsOn: true,
+    metadata: [`username: user`, `passsword: password`],
+    maxMsgSize: 2000000,
   });
+  expect(resp.code).toBe(`ok`);
+  expect(resp.json).toBe(`ok`);
+  expect(resp.message).toBe(`ok`);
 });

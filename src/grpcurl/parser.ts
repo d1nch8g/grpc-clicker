@@ -165,6 +165,7 @@ export class Parser {
       code: null,
       time: null,
       message: null,
+      date: null,
     };
     if (input.includes(`Failed to dial target host `)) {
       resp.code = `ConnectionError`;
