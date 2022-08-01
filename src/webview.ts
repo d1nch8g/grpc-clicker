@@ -15,8 +15,8 @@ export class WebViewFactory {
     for (const view of this.views) {
       const panelIsActive =
         data.path === view.request.path &&
-        data.protoName === view.request.protoName &&
-        data.fileName === view.request.fileName &&
+        data.inputMessageName === view.request.inputMessageName &&
+        data.outoutMessageName === view.request.outoutMessageName &&
         data.call === view.request.call;
       if (panelIsActive) {
         view.panel.reveal();

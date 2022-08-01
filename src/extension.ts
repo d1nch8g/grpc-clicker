@@ -5,6 +5,7 @@ import { Parser, Proto } from "./grpcurl/parser";
 import { RequestHistoryData } from "./storage/history";
 import { Storage } from "./storage/storage";
 import { TreeViews } from "./treeviews/treeviews";
+import { WebViewFactory } from "./webview";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
@@ -152,30 +153,35 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.headers.refresh(storage.headers.list());
   });
 
+  const webviewFactory = new WebViewFactory(
+    context.extensionUri,
+    async (request) => {
+      return request;
+    }
+  );
+
   vscode.commands.registerCommand(
     "webview.open",
-    async (input: RequestHistoryData) => {
+    async (data: RequestHistoryData) => {
       // TODO process later on
-      input.tlsOn = false;
-      input.maxMsgSize = null;
+      data.tlsOn = false;
+      data.maxMsgSize = null;
 
       for (const host of storage.hosts.list()) {
-        input.host = host.adress;
+        data.host = host.adress;
       }
       for (const header of storage.headers.list()) {
         if (header.active) {
-          input.metadata.push(header.value);
+          data.metadata.push(header.value);
         }
       }
-      const [msg, err] = await grpcurl.message(
-        input.inputMessageTag,
-        input.path
-      );
+      const [msg, err] = await grpcurl.message(data.inputMessageTag, data.path);
       if (err !== null) {
         vscode.window.showErrorMessage(err.message);
         return;
       }
-      input.reqJson = msg.template;
+      data.reqJson = msg.template;
+      webviewFactory.create(data);
     }
   );
 }
