@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { Caller } from "./grpcurl/caller";
 import { Grpcurl } from "./grpcurl/grpcurl";
-import { Parser } from "./grpcurl/parser";
+import { Parser, Proto } from "./grpcurl/parser";
 import { RequestHistoryData } from "./storage/history";
 import { Storage } from "./storage/storage";
 import { TreeViews } from "./treeviews/treeviews";
@@ -96,25 +96,42 @@ export function activate(context: vscode.ExtensionContext) {
         protoFiles: ["proto"],
       },
     };
-    let pick = await vscode.window.showOpenDialog(options);
-    let path = pick[0].fsPath;
-    let [pathes, err] = storage.protos.add(path);
+    const path = (await vscode.window.showOpenDialog(options))[0].fsPath;
+    let [proto, err] = await grpcurl.proto(path);
     if (err !== null) {
       vscode.window.showErrorMessage(err.message);
     }
-    treeviews.protos.update(pathes);
+    err = storage.protos.add(proto);
+    if (err !== null) {
+      vscode.window.showErrorMessage(err.message);
+    }
+    treeviews.protos.update(storage.protos.list());
   });
 
   vscode.commands.registerCommand("protos.remove", async () => {
-    let pathes = storage.protos.list();
+    let protos = storage.protos.list();
+    let pathes: string[] = [];
+    for (const proto of protos) {
+      pathes.push(proto.path);
+    }
     let path = await vscode.window.showQuickPick(pathes);
-    pathes = storage.protos.remove(path);
-    treeviews.protos.update(pathes);
+    storage.protos.remove(path);
+    treeviews.protos.update(storage.protos.list());
   });
 
   vscode.commands.registerCommand("protos.refresh", async () => {
-    let protoPathes = storage.protos.list();
-    treeviews.protos.update(protoPathes);
+    const oldProtos = storage.protos.list();
+    let newProtos: Proto[] = [];
+    for (const oldProto of oldProtos) {
+      const [newProto, err] = await grpcurl.proto(oldProto.path);
+      if (err !== null) {
+        vscode.window.showErrorMessage(err.message);
+      } else {
+        newProtos.push(newProto);
+      }
+    }
+    storage.protos.save(newProtos);
+    treeviews.protos.update(newProtos);
   });
 
   vscode.commands.registerCommand("headres.add", async () => {

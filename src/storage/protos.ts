@@ -5,7 +5,7 @@ export class Protos {
   private readonly key: string = "grpc-clicker-structures";
   constructor(private memento: Memento) {}
 
-  private saveProtos(protos: Proto[]) {
+  save(protos: Proto[]) {
     let protosStrings: string[] = [];
     for (const proto of protos) {
       protosStrings.push(JSON.stringify(proto));
@@ -30,7 +30,7 @@ export class Protos {
       }
     }
     protos.push(proto);
-    this.saveProtos(protos);
+    this.save(protos);
     return null;
   }
 
@@ -41,6 +41,6 @@ export class Protos {
         protos.splice(i, 1);
       }
     }
-    this.saveProtos(protos);
+    this.save(protos);
   }
 }
