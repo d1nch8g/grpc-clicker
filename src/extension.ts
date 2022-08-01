@@ -135,19 +135,31 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   vscode.commands.registerCommand("headres.add", async () => {
-    let meta = (await vscode.window.showInputBox()) ?? "";
-    let [metadata, err] = storage.headres.add(meta);
+    const header = await vscode.window.showInputBox();
+    if (header === "" || header === undefined || header === null) {
+      return;
+    }
+    const err = storage.headers.add({
+      value: header,
+      active: false,
+    });
     if (err !== null) {
       vscode.window.showErrorMessage(err.message);
     }
-    treeviews.metadata.refresh(metadata);
+    treeviews.metadata.refresh(storage.headers.list());
   });
 
   vscode.commands.registerCommand("headres.remove", async () => {
-    let oldMetadata = storage.headres.list();
-    let meta = await vscode.window.showQuickPick(oldMetadata);
-    let metadata = storage.headres.remove(meta);
-    treeviews.metadata.refresh(metadata);
+    let headerValues: string[] = [];
+    for (const header of storage.headers.list()) {
+      headerValues.push(header.value);
+    }
+    const header = await vscode.window.showQuickPick(headerValues);
+    if (header === "" || header === undefined || header === null) {
+      return;
+    }
+    storage.headers.remove(header);
+    treeviews.metadata.refresh(storage.headers.list());
   });
 
   vscode.commands.registerCommand("headres.switch", async (meta: string) => {
@@ -156,17 +168,16 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.metadata.refresh(metadata);
   });
 
-  vscode.commands.registerCommand("webview.open", async (input: Request) => {
-    if (input.isStream) {
-      vscode.window.showWarningMessage("Stream calls are not available yet!");
-      return;
+  vscode.commands.registerCommand(
+    "webview.open",
+    async (input: RequestHistoryData) => {
+      // const host = storage.hosts.getCurret();
+      // input.host = host;
+      // const hosts = storage.hosts.list();
+      // input.hosts = hosts;
+      // webviewFactory.create(input);
     }
-    const host = storage.hosts.getCurret();
-    input.host = host;
-    const hosts = storage.hosts.list();
-    input.hosts = hosts;
-    webviewFactory.create(input);
-  });
+  );
 }
 
 export function deactivate() {}
