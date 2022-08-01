@@ -20,13 +20,13 @@
     service = obj.service;
     call = obj.call;
     hosts = obj.hosts;
-    hosts.splice(hosts.indexOf(obj.host), 1);
-    hosts = [obj.host].concat(hosts);
     reqName = obj.reqName;
     reqJson = obj.reqJson;
     respName = obj.respName;
     response = obj.response;
     response = response + obj.error;
+    hosts.splice(hosts.indexOf(obj.host), 1);
+    hosts = [obj.host].concat(hosts);
   });
 
   function send() {

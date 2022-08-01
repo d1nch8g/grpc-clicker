@@ -16,7 +16,7 @@ export class Grpcurl {
   }
 
   async message(path: string, tag: string): Promise<[Message, Error]> {
-    const call = `grpcurl -import-path / -proto %s describe %s`;
+    const call = `grpcurl -msg-template -import-path / -proto %s describe %s`;
     const [resp, err] = await this.caller.execute(call, [path, tag]);
     if (err !== null) {
       return [null, err];

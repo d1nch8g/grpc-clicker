@@ -66,7 +66,7 @@ test(`message`, async () => {
   ).toStrictEqual([
     {
       type: ProtoType.message,
-      name: `grpcurl -import-path / -proto docs/api.proto describe .pb.v1.StringMes`,
+      name: `grpcurl -msg-template -import-path / -proto docs/api.proto describe .pb.v1.StringMes`,
       tag: `tag`,
       description: `dscr`,
       template: `tmplt`,

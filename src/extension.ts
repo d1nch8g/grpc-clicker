@@ -156,7 +156,7 @@ export function activate(context: vscode.ExtensionContext) {
   const webviewFactory = new WebViewFactory(
     context.extensionUri,
     async (request) => {
-      return request;
+      return null;
     }
   );
 
@@ -175,7 +175,7 @@ export function activate(context: vscode.ExtensionContext) {
           data.metadata.push(header.value);
         }
       }
-      const [msg, err] = await grpcurl.message(data.inputMessageTag, data.path);
+      const [msg, err] = await grpcurl.message(data.path, data.inputMessageTag);
       if (err !== null) {
         vscode.window.showErrorMessage(err.message);
         return;

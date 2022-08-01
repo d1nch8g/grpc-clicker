@@ -114,7 +114,10 @@ export class Parser {
 
     for (const line of splittedInput) {
       if (line.startsWith(`message `)) {
-        msg.description = currComment.slice(0, -1);
+        if (currComment !== null) {
+          msg.description = currComment.slice(0, -1);
+          currComment = null;
+        }
         msg.name = line.split(` `)[1];
         continue;
       }
