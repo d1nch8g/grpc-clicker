@@ -57,6 +57,7 @@ export class Grpcurl {
     } else {
       response = this.parser.resp(resp);
     }
+    response.date = new Date().toUTCString();
     response.time = `${endTime - startTime}`;
     return response;
   }

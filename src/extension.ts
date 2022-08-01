@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { Caller } from "./grpcurl/caller";
 import { Grpcurl } from "./grpcurl/grpcurl";
 import { Parser } from "./grpcurl/parser";
+import { RequestHistoryData } from "./storage/history";
 import { Storage } from "./storage/storage";
 import { TreeViews } from "./treeviews/treeviews";
 import { WebViewFactory } from "./webview";
@@ -18,38 +19,61 @@ export function activate(context: vscode.ExtensionContext) {
 
   const webviewFactory = new WebViewFactory(
     context.extensionUri,
-    async (request: Request): Promise<Request> => {
-      const dateTime = new Date();
-      let [resp, error] = await grpcurl.send(
-        request.path,
-        request.reqJson,
-        request.host,
-        request.methodTag,
-        false
-      );
-      request.response = resp;
-      request.error = error;
-      request.date = dateTime.toUTCString();
-      const requests = storage.history.add(request);
+    async (data: RequestHistoryData): Promise<RequestHistoryData> => {
+      let resp = await grpcurl.send({
+        path: data.path,
+        reqJson: data.reqJson,
+        host: data.host,
+        method: data.method,
+        tlsOn: data.tlsOn,
+        metadata: data.metadata,
+        maxMsgSize: data.maxMsgSize,
+      });
+      data.code = resp.code;
+      data.respJson = resp.respJson;
+      data.time = resp.time;
+      data.date = resp.date;
+      data.message = resp.message;
+      const requests = storage.history.add(data);
       treeviews.history.update(requests);
-      return request;
+      return data;
     }
   );
 
   vscode.commands.registerCommand("hosts.add", async () => {
-    let host = (await vscode.window.showInputBox()) ?? "";
-    let [hosts, err] = storage.hosts.add(host);
+    const host = await vscode.window.showInputBox({
+      title: `adress to make a call`,
+    });
+    if (host === "" || host === undefined || host === null) {
+      return;
+    }
+    const description = await vscode.window.showInputBox({
+      title: `description for spectiifed host`,
+    });
+    let err = storage.hosts.add({
+      adress: host,
+      description: description,
+      current: false,
+    });
     if (err !== null) {
       vscode.window.showErrorMessage(err.message);
     }
-    treeviews.hosts.update(hosts);
+    treeviews.hosts.update(storage.hosts.list());
   });
 
   vscode.commands.registerCommand("hosts.remove", async () => {
-    let oldHosts = storage.hosts.list();
-    let host = await vscode.window.showQuickPick(oldHosts);
-    let hosts = storage.hosts.remove(host);
-    treeviews.hosts.update(hosts);
+    const hosts = storage.hosts.list();
+    let adresses: string[] = [];
+    for (const host of hosts) {
+      adresses.push(host.adress);
+    }
+    const removeHost = await vscode.window.showQuickPick(adresses, {
+      title: `choose a host to remove`,
+    });
+    if (removeHost === "" || removeHost === undefined || removeHost === null) {
+      return;
+    }
+    storage.hosts.remove(removeHost);
   });
 
   vscode.commands.registerCommand("hosts.switch", async (host: string) => {
