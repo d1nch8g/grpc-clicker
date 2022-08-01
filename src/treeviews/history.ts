@@ -46,7 +46,7 @@ export class HistoryTreeView implements vscode.TreeDataProvider<HistoryItem> {
 
 class HistoryItem extends vscode.TreeItem {
   constructor(request: RequestHistoryData) {
-    super(`${request.protoName} - ${request.method}`);
+    super(`${request.protoName} - ${request.call}`);
 
     super.description = request.date;
     super.contextValue = "host";
@@ -55,7 +55,7 @@ class HistoryItem extends vscode.TreeItem {
 - proto file name ${request.fileName}
 - proto name ${request.protoName}
 - host for execution ${request.host}
-- method used in request ${request.method}
+- method used in request ${request.call}
 - response code ${request.code}
 - time of execution ${request.time}
 - date ${request.date}

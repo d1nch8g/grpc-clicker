@@ -48,7 +48,7 @@ export class Grpcurl {
       inputRequest,
       tls,
       input.host,
-      input.method,
+      input.call,
     ]);
     var endTime = performance.now();
     let response: Response;
@@ -78,7 +78,7 @@ export interface Request {
   path: string;
   reqJson: string;
   host: string;
-  method: string;
+  call: string;
   tlsOn: boolean;
   metadata: string[];
   maxMsgSize: number;

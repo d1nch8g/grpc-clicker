@@ -155,11 +155,7 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand(
     "webview.open",
     async (input: RequestHistoryData) => {
-      // const host = storage.hosts.getCurret();
-      // input.host = host;
-      // const hosts = storage.hosts.list();
-      // input.hosts = hosts;
-      // webviewFactory.create(input);
+      webviewFactory.create(input);
     }
   );
 }

@@ -82,7 +82,7 @@ test(`send`, async () => {
     path: "docs/api.proto",
     reqJson: "{}",
     host: "localhost:12201",
-    method: ".pb.v1.Constructions.EmptyCall",
+    call: ".pb.v1.Constructions.EmptyCall",
     tlsOn: true,
     metadata: [`username: user`, `passsword: password`],
     maxMsgSize: 2000000,
