@@ -1,6 +1,6 @@
 import { Memento } from "vscode";
 import { T } from "../../dist/tk/utilities/design-tokens/create";
-import { Proto } from "../grpcurl/parser";
+import { Proto, ProtoType } from "../grpcurl/parser";
 import { Protos } from "./protos";
 
 class MockMemento implements Memento {
@@ -23,23 +23,40 @@ class MockMemento implements Memento {
 test(`add`, () => {
   const memento = new MockMemento();
   const protos = new Protos(memento);
-  expect(protos.add(`proto`)).toBeNull();
-  expect(protos.add(`proto`)).toStrictEqual(
-    new Error(`proto you are trying to add already exists`)
+  var proto: Proto = {
+    type: ProtoType.proto,
+    name: "test",
+    path: "",
+    services: [],
+  };
+  expect(protos.add(proto)).toBeNull();
+  expect(protos.add(proto)).toStrictEqual(
+    new Error(`proto file you are trying to add already exists`)
   );
 });
 
 test(`list`, () => {
   const memento = new MockMemento();
   const headers = new Protos(memento);
-  memento.values = [`proto`];
-  expect(headers.list()).toStrictEqual([`proto`]);
+  memento.values = [
+    `{"type": 0,"name": "test","path": "","services": []}`,
+  ];
+  expect(headers.list()).toStrictEqual([
+    {
+      type: ProtoType.proto,
+      name: "test",
+      path: "",
+      services: [],
+    },
+  ]);
 });
 
 test(`remove`, () => {
   const memento = new MockMemento();
   const headers = new Protos(memento);
-  memento.values = [`proto`];
-  headers.remove(`proto`);
+  memento.values = [
+    `{"type": 0,"name": "test","path": "path","services": []}`,
+  ];
+  headers.remove(`path`);
   expect(memento.values).toStrictEqual([]);
 });

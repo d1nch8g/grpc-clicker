@@ -3,10 +3,10 @@ import { HostsTreeView } from "./hosts";
 import { HeadersTreeView } from "./headers";
 import { ProtosTreeView } from "./protos";
 import { HistoryTreeView } from "./history";
-import { Host } from "../classes/host";
-import { Meta } from "../classes/meta";
-import { Request } from "../classes/request";
-import { Grpcurl } from "../grpcurl/grpcurl";
+import { Proto } from "../grpcurl/parser";
+import { Host } from "../storage/hosts";
+import { Header } from "../storage/headers";
+import { RequestHistoryData } from "../storage/history";
 
 export class TreeViews {
   public readonly hosts: HostsTreeView;
@@ -15,15 +15,14 @@ export class TreeViews {
   public readonly history: HistoryTreeView;
   constructor(
     hosts: Host[],
-    meta: Meta[],
-    requests: Request[],
-    protos: string[],
-    grpcurl: Grpcurl
+    meta: Header[],
+    requests: RequestHistoryData[],
+    protos: Proto[]
   ) {
     this.hosts = new HostsTreeView(hosts);
     this.metadata = new HeadersTreeView(meta);
     this.history = new HistoryTreeView(requests);
-    this.protos = new ProtosTreeView(grpcurl, protos);
+    this.protos = new ProtosTreeView(protos);
 
     vscode.window.registerTreeDataProvider("hosts", this.hosts);
     vscode.window.registerTreeDataProvider("metas", this.metadata);

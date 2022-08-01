@@ -1,19 +1,21 @@
 import * as vscode from "vscode";
+import { Caller } from "./grpcurl/caller";
 import { Grpcurl } from "./grpcurl/grpcurl";
+import { Parser } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
 import { TreeViews } from "./treeviews/treeviews";
 import { WebViewFactory } from "./webview";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
-  const grpcurl = new Grpcurl(storage);
+  const grpcurl = new Grpcurl(new Parser(), new Caller());
   const treeviews = new TreeViews(
-    storage.hosts.hosts(),
-    storage.headres.listMetas(),
+    storage.hosts.list(),
+    storage.headers.list(),
     storage.history.list(),
-    storage.protos.list(),
-    grpcurl
+    storage.protos.list()
   );
+
   const webviewFactory = new WebViewFactory(
     context.extensionUri,
     async (request: Request): Promise<Request> => {

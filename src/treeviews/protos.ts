@@ -25,19 +25,19 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
     let items: ProtoItem[] = [];
     if (element === undefined) {
       for (const proto of this.protos) {
-        items.push(new ProtoItem(proto));
+        items.push(new ProtoItem(proto, proto.path, null));
       }
       return items;
     }
     let elem = element.item;
     if (elem.type === ProtoType.proto) {
       for (const svc of (elem as Proto).services) {
-        items.push(new ProtoItem(svc));
+        items.push(new ProtoItem(svc, element.protoPath, svc.tag));
       }
     }
     if (elem.type === ProtoType.service) {
       for (const call of (elem as Service).calls) {
-        items.push(new ProtoItem(call));
+        items.push(new ProtoItem(call, element.protoPath, element.serviceTag));
       }
     }
     return items;
@@ -57,7 +57,11 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
 }
 
 class ProtoItem extends vscode.TreeItem {
-  constructor(public item: Proto | Service | Call) {
+  constructor(
+    public item: Proto | Service | Call,
+    public protoPath: string,
+    public serviceTag: string
+  ) {
     super(item.name);
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     let svg = "";
@@ -83,9 +87,7 @@ class ProtoItem extends vscode.TreeItem {
       super.command = {
         command: "webview.open",
         title: "Trigger opening of webview for grpc call",
-        arguments: [
-          // TODO add grpc call trigger
-        ],
+        arguments: [`alloha`],
       };
     }
     super.iconPath = {
