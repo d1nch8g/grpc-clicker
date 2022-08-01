@@ -11,7 +11,7 @@ export class Grpcurl {
     if (err !== null) {
       return [null, err];
     }
-    const proto = this.parser.proto(resp);
+    const proto = this.parser.proto(resp, path);
     return [proto, null];
   }
 

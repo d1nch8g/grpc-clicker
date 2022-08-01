@@ -45,7 +45,7 @@ service Constructions {
 
 test(`proto`, () => {
   const parser = new Parser();
-  const proto = parser.proto(protoInput);
+  const proto = parser.proto(protoInput, `path`);
   expect(proto.name).toBe(`pb.v1`);
   expect(proto.services.length).toBe(3);
   expect(proto.services[0].name).toBe(`Streams`);

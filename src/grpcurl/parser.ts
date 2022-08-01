@@ -1,11 +1,16 @@
 import { Response } from "./grpcurl";
 
 export class Parser {
-  proto(input: string): Proto {
+  proto(input: string, path: string): Proto {
     const splittedInput = input.split("\n");
 
     let currComment = null;
-    let proto: Proto = { name: ``, services: [], type: ProtoType.proto };
+    let proto: Proto = {
+      name: ``,
+      services: [],
+      path: path,
+      type: ProtoType.proto,
+    };
     let currSvc: Service = {
       name: ``,
       tag: ``,
@@ -211,6 +216,7 @@ export enum ProtoType {
 export interface Proto {
   type: ProtoType;
   name: string;
+  path: string;
   services: Service[];
 }
 

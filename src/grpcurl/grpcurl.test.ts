@@ -14,7 +14,7 @@ class MockParser implements Parser {
     };
   }
   proto(input: string): Proto {
-    return { name: input, services: [], type: ProtoType.proto };
+    return { name: input, services: [], type: ProtoType.proto, path: `path` };
   }
   rpc(line: string): Call {
     throw new Error("Method not implemented.");
@@ -52,6 +52,7 @@ test(`proto`, async () => {
     {
       type: ProtoType.proto,
       name: `grpcurl -import-path / -proto docs/api.proto describe`,
+      path: `path`,
       services: [],
     },
     null,
