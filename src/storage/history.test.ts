@@ -34,10 +34,9 @@ test(`add`, () => {
       code: "",
       respJson: "",
       time: "",
-      message: "",
-      fileName: "",
-      protoName: "",
+      errmes: "",
       date: "",
+      service: "",
     });
   }
   expect(storage.values.length).toBe(100);
@@ -57,10 +56,9 @@ test(`list`, () => {
     code: "",
     respJson: "",
     time: "",
-    message: "",
-    fileName: "",
-    protoName: "",
+    errmes: "",
     date: "",
+    service: "",
   });
 
   let resp = history.list();
@@ -76,10 +74,9 @@ test(`list`, () => {
       code: "",
       respJson: "",
       time: "",
-      message: "",
-      fileName: "",
-      protoName: "",
+      errmes: "",
       date: "",
+      service: "",
     },
   ]);
 });

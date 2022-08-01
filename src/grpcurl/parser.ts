@@ -184,18 +184,18 @@ export class Parser {
       respJson: "",
       code: null,
       time: null,
-      message: null,
+      errmes: null,
       date: null,
     };
     if (input.includes(`Failed to dial target host `)) {
       resp.code = `ConnectionError`;
-      resp.message = input;
+      resp.errmes = input;
       return resp;
     }
     if (input.includes(`ERROR:`)) {
       const splitted = input.split(`\n`);
       resp.code = splitted[2].replace(`  Code: `, ``);
-      resp.message = splitted[3].replace(`  Message: `, ``);
+      resp.errmes = splitted[3].replace(`  Message: `, ``);
       return resp;
     }
     // TODO add checks for unknown forms of errors

@@ -46,22 +46,21 @@ export class HistoryTreeView implements vscode.TreeDataProvider<HistoryItem> {
 
 class HistoryItem extends vscode.TreeItem {
   constructor(request: RequestHistoryData) {
-    super(`${request.protoName} - ${request.call}`);
+    super(request.call);
 
     super.description = request.date;
     super.contextValue = "host";
 
     super.tooltip = new vscode.MarkdownString(`## Request information:
-- proto file name ${request.fileName}
-- proto name ${request.protoName}
 - host for execution ${request.host}
 - method used in request ${request.call}
 - response code ${request.code}
 - time of execution ${request.time}
 - date ${request.date}
-- error message ${request.message}`);
+- error message ${request.errmes}`);
 
     super.contextValue = "call";
+
     super.command = {
       command: "webview.open",
       title: "Trigger opening of webview for grpc call",

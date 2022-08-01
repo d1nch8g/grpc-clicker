@@ -9,7 +9,7 @@ class MockParser implements Parser {
       code: `ok`,
       respJson: `ok`,
       time: `ok`,
-      message: `ok`,
+      errmes: `ok`,
       date: null,
     };
   }
@@ -89,5 +89,5 @@ test(`send`, async () => {
   });
   expect(resp.code).toBe(`ok`);
   expect(resp.respJson).toBe(`ok`);
-  expect(resp.message).toBe(`ok`);
+  expect(resp.errmes).toBe(`ok`);
 });

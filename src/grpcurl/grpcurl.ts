@@ -89,5 +89,5 @@ export interface Response {
   respJson: string;
   time: string;
   date: string;
-  message: string;
+  errmes: string;
 }

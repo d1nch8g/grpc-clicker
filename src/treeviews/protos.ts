@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { Proto, Service, Call, ProtoType } from "../grpcurl/parser";
+import { RequestHistoryData } from "../storage/history";
 
 export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
   constructor(private protos: Proto[]) {
@@ -84,10 +85,27 @@ class ProtoItem extends vscode.TreeItem {
         svg = "stream.svg";
       }
       super.contextValue = "call";
+
+      let request: RequestHistoryData = {
+        path: protoPath,
+        service: serviceTag,
+        call: item.name,
+        tlsOn: null,
+        host: "",
+        reqJson: "",
+        metadata: [],
+        maxMsgSize: 0,
+        code: "",
+        respJson: "",
+        time: "",
+        date: "",
+        errmes: "",
+      };
+
       super.command = {
         command: "webview.open",
         title: "Trigger opening of webview for grpc call",
-        arguments: [`alloha`],
+        arguments: [request],
       };
     }
     super.iconPath = {
