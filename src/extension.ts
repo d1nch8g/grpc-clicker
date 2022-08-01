@@ -155,7 +155,27 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand(
     "webview.open",
     async (input: RequestHistoryData) => {
-      webviewFactory.create(input);
+      // TODO process later on
+      input.tlsOn = false;
+      input.maxMsgSize = null;
+
+      for (const host of storage.hosts.list()) {
+        input.host = host.adress;
+      }
+      for (const header of storage.headers.list()) {
+        if (header.active) {
+          input.metadata.push(header.value);
+        }
+      }
+      const [msg, err] = await grpcurl.message(
+        input.inputMessageTag,
+        input.path
+      );
+      if (err !== null) {
+        vscode.window.showErrorMessage(err.message);
+        return;
+      }
+      input.reqJson = msg.template;
     }
   );
 }

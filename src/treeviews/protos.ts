@@ -100,6 +100,9 @@ class ProtoItem extends vscode.TreeItem {
         time: "",
         date: "",
         errmes: "",
+        inputMessageTag: item.inputMessageTag,
+        inputMessageName: item.inputMessageTag.split(`.`).pop(),
+        outoutMessageName: item.outputMessageTag.split(`.`).pop(),
       };
 
       super.command = {

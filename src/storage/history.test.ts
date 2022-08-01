@@ -37,6 +37,9 @@ test(`add`, () => {
       errmes: "",
       date: "",
       service: "",
+      inputMessageTag: "",
+      inputMessageName: "",
+      outoutMessageName: "",
     });
   }
   expect(storage.values.length).toBe(100);
@@ -59,6 +62,9 @@ test(`list`, () => {
     errmes: "",
     date: "",
     service: "",
+    inputMessageTag: "",
+    inputMessageName: "",
+    outoutMessageName: "",
   });
 
   let resp = history.list();
@@ -77,6 +83,9 @@ test(`list`, () => {
       errmes: "",
       date: "",
       service: "",
+      inputMessageTag: "",
+      inputMessageName: "",
+      outoutMessageName: "",
     },
   ]);
 });
