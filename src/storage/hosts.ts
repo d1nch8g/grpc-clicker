@@ -4,7 +4,7 @@ export class Hosts {
   private readonly key: string = "grpc-clicker-hosts";
   constructor(private memento: Memento) {}
 
-  private saveHosts(hosts: Host[]) {
+  save(hosts: Host[]) {
     let hostsStrings: string[] = [];
     for (const host of hosts) {
       hostsStrings.push(JSON.stringify(host));
@@ -29,7 +29,7 @@ export class Hosts {
       }
     }
     hosts.push(host);
-    this.saveHosts(hosts);
+    this.save(hosts);
     return null;
   }
 
@@ -40,7 +40,7 @@ export class Hosts {
         hosts.splice(i, 1);
       }
     }
-    this.saveHosts(hosts);
+    this.save(hosts);
   }
 }
 

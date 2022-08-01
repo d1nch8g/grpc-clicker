@@ -76,9 +76,16 @@ export function activate(context: vscode.ExtensionContext) {
     storage.hosts.remove(removeHost);
   });
 
-  vscode.commands.registerCommand("hosts.switch", async (host: string) => {
-    let newHosts = storage.hosts.setCurret(host);
-    treeviews.hosts.update(newHosts);
+  vscode.commands.registerCommand("hosts.switch", async (adress: string) => {
+    let hosts = storage.hosts.list();
+    for (var i = 0; i < hosts.length; i++) {
+      hosts[i].current = false;
+      if (hosts[i].adress === adress) {
+        hosts[i].current = true;
+      }
+    }
+    storage.hosts.save(hosts);
+    treeviews.hosts.update(hosts);
   });
 
   vscode.commands.registerCommand("protos.add", async () => {
