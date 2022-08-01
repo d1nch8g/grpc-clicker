@@ -34,9 +34,9 @@
     "onCommand:hosts.remove",
     "onCommand:protos.add",
     "onCommand:protos.remove",
+    "onCommand:protos.refresh",
     "onCommand:headres.add",
     "onCommand:headres.remove",
-    "onCommand:protos.refresh",
     "onWebviewPanel:callgrpc"
   ],
   "main": "./dist/extension.js",
@@ -62,7 +62,7 @@
         },
         {
           "id": "headres",
-          "name": "Request metadata"
+          "name": "Request headers"
         },
         {
           "id": "history",

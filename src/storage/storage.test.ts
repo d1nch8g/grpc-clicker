@@ -4,7 +4,7 @@ import { Storage } from "./storage";
 
 class MockMemento implements Memento {
   keys(): readonly string[] {
-    throw new Error("Method not implemented.");
+    return [];
   }
   get<T>(key: string): T;
   get<T>(key: string, defaultValue: T): T;

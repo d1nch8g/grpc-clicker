@@ -10,22 +10,22 @@ import { RequestHistoryData } from "../storage/history";
 
 export class TreeViews {
   public readonly hosts: HostsTreeView;
-  public readonly metadata: HeadersTreeView;
+  public readonly headers: HeadersTreeView;
   public readonly protos: ProtosTreeView;
   public readonly history: HistoryTreeView;
-  constructor(
-    hosts: Host[],
-    meta: Header[],
-    requests: RequestHistoryData[],
-    protos: Proto[]
-  ) {
-    this.hosts = new HostsTreeView(hosts);
-    this.metadata = new HeadersTreeView(meta);
-    this.history = new HistoryTreeView(requests);
-    this.protos = new ProtosTreeView(protos);
+  constructor(input: {
+    hosts: Host[];
+    headers: Header[];
+    requests: RequestHistoryData[];
+    protos: Proto[];
+  }) {
+    this.hosts = new HostsTreeView(input.hosts);
+    this.headers = new HeadersTreeView(input.headers);
+    this.history = new HistoryTreeView(input.requests);
+    this.protos = new ProtosTreeView(input.protos);
 
     vscode.window.registerTreeDataProvider("hosts", this.hosts);
-    vscode.window.registerTreeDataProvider("metas", this.metadata);
+    vscode.window.registerTreeDataProvider("headers", this.headers);
     vscode.window.registerTreeDataProvider("history", this.history);
     vscode.window.registerTreeDataProvider("protos", this.protos);
   }

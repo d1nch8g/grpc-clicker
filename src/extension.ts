@@ -10,12 +10,12 @@ import { WebViewFactory } from "./webview";
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
   const grpcurl = new Grpcurl(new Parser(), new Caller());
-  const treeviews = new TreeViews(
-    storage.hosts.list(),
-    storage.headers.list(),
-    storage.history.list(),
-    storage.protos.list()
-  );
+  const treeviews = new TreeViews({
+    hosts: storage.hosts.list(),
+    headers: storage.headers.list(),
+    requests: storage.history.list(),
+    protos: storage.protos.list(),
+  });
 
   const webviewFactory = new WebViewFactory(
     context.extensionUri,
@@ -146,7 +146,7 @@ export function activate(context: vscode.ExtensionContext) {
     if (err !== null) {
       vscode.window.showErrorMessage(err.message);
     }
-    treeviews.metadata.refresh(storage.headers.list());
+    treeviews.headers.refresh(storage.headers.list());
   });
 
   vscode.commands.registerCommand("headres.remove", async () => {
@@ -159,13 +159,18 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
     storage.headers.remove(header);
-    treeviews.metadata.refresh(storage.headers.list());
+    treeviews.headers.refresh(storage.headers.list());
   });
 
-  vscode.commands.registerCommand("headres.switch", async (meta: string) => {
-    storage.headres.switchOnOff(meta);
-    let metadata = storage.headres.listMetas();
-    treeviews.metadata.refresh(metadata);
+  vscode.commands.registerCommand("headres.switch", async (header: string) => {
+    let headers = storage.headers.list();
+    for (var i = 0; i < headers.length; i++) {
+      if (headers[i].value === header) {
+        headers[i].active = !headers[i].active;
+      }
+    }
+    storage.headers.save(headers);
+    treeviews.headers.refresh(storage.headers.list());
   });
 
   vscode.commands.registerCommand(
