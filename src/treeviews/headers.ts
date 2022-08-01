@@ -12,8 +12,8 @@ export class HeadersTreeView implements vscode.TreeDataProvider<HeaderItem> {
   private onChange: vscode.EventEmitter<HeaderItem | undefined | void>;
   readonly onDidChangeTreeData: vscode.Event<void | HeaderItem | HeaderItem[]>;
 
-  refresh(headres: Header[]): void {
-    this.headers = headres;
+  refresh(headers: Header[]): void {
+    this.headers = headers;
     this.onChange.fire();
   }
 
@@ -49,9 +49,9 @@ class HeaderItem extends vscode.TreeItem {
     super.tooltip = `Meta data that will be sent with request in context`;
     super.contextValue = "meta";
     super.command = {
-      command: "headres.switch",
+      command: "headers.switch",
       title: "Switch grpc host",
-      arguments: [header],
+      arguments: [header.value],
     };
     if (header.active) {
       this.iconName = "meta-on.svg";

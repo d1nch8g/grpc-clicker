@@ -5,7 +5,6 @@ import { Parser, Proto } from "./grpcurl/parser";
 import { RequestHistoryData } from "./storage/history";
 import { Storage } from "./storage/storage";
 import { TreeViews } from "./treeviews/treeviews";
-import { WebViewFactory } from "./webview";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
@@ -16,29 +15,6 @@ export function activate(context: vscode.ExtensionContext) {
     requests: storage.history.list(),
     protos: storage.protos.list(),
   });
-
-  const webviewFactory = new WebViewFactory(
-    context.extensionUri,
-    async (data: RequestHistoryData): Promise<RequestHistoryData> => {
-      let resp = await grpcurl.send({
-        path: data.path,
-        reqJson: data.reqJson,
-        host: data.host,
-        method: data.method,
-        tlsOn: data.tlsOn,
-        metadata: data.metadata,
-        maxMsgSize: data.maxMsgSize,
-      });
-      data.code = resp.code;
-      data.respJson = resp.respJson;
-      data.time = resp.time;
-      data.date = resp.date;
-      data.message = resp.message;
-      const requests = storage.history.add(data);
-      treeviews.history.update(requests);
-      return data;
-    }
-  );
 
   vscode.commands.registerCommand("hosts.add", async () => {
     const host = await vscode.window.showInputBox({
@@ -74,6 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
     storage.hosts.remove(removeHost);
+    treeviews.hosts.update(storage.hosts.list());
   });
 
   vscode.commands.registerCommand("hosts.switch", async (adress: string) => {
@@ -134,8 +111,10 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.protos.update(newProtos);
   });
 
-  vscode.commands.registerCommand("headres.add", async () => {
-    const header = await vscode.window.showInputBox();
+  vscode.commands.registerCommand("headers.add", async () => {
+    const header = await vscode.window.showInputBox({
+      title: `header that you can add to gRPC call, in format: "key: value", enable/disable by clicking`,
+    });
     if (header === "" || header === undefined || header === null) {
       return;
     }
@@ -149,7 +128,7 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.headers.refresh(storage.headers.list());
   });
 
-  vscode.commands.registerCommand("headres.remove", async () => {
+  vscode.commands.registerCommand("headers.remove", async () => {
     let headerValues: string[] = [];
     for (const header of storage.headers.list()) {
       headerValues.push(header.value);
@@ -162,7 +141,7 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.headers.refresh(storage.headers.list());
   });
 
-  vscode.commands.registerCommand("headres.switch", async (header: string) => {
+  vscode.commands.registerCommand("headers.switch", async (header: string) => {
     let headers = storage.headers.list();
     for (var i = 0; i < headers.length; i++) {
       if (headers[i].value === header) {

@@ -28,15 +28,15 @@
   "activationEvents": [
     "onView:hosts",
     "onView:schema",
-    "onView:headres",
+    "onView:headers",
     "onView:history",
     "onCommand:hosts.add",
     "onCommand:hosts.remove",
     "onCommand:protos.add",
     "onCommand:protos.remove",
     "onCommand:protos.refresh",
-    "onCommand:headres.add",
-    "onCommand:headres.remove",
+    "onCommand:headers.add",
+    "onCommand:headers.remove",
     "onWebviewPanel:callgrpc"
   ],
   "main": "./dist/extension.js",
@@ -61,7 +61,7 @@
           "name": "Proto schema explorer"
         },
         {
-          "id": "headres",
+          "id": "headers",
           "name": "Request headers"
         },
         {
@@ -96,7 +96,7 @@
       },
       {
         "category": "gRPC Clicker",
-        "command": "headres.switch",
+        "command": "headers.switch",
         "title": "Turn on/off value of context metadata"
       },
       {
@@ -119,7 +119,7 @@
       },
       {
         "category": "gRPC Clicker",
-        "command": "headres.add",
+        "command": "headers.add",
         "title": "Add new metadata to request",
         "icon": {
           "dark": "images/dark/plus.svg",
@@ -128,7 +128,7 @@
       },
       {
         "category": "gRPC Clicker",
-        "command": "headres.remove",
+        "command": "headers.remove",
         "title": "Remove existing metadata",
         "icon": {
           "dark": "images/dark/minus.svg",
@@ -173,13 +173,13 @@
           "group": "navigation"
         },
         {
-          "command": "headres.add",
-          "when": "view == headres",
+          "command": "headers.add",
+          "when": "view == headers",
           "group": "navigation"
         },
         {
-          "command": "headres.remove",
-          "when": "view == headres",
+          "command": "headers.remove",
+          "when": "view == headers",
           "group": "navigation"
         },
         {
@@ -198,7 +198,7 @@
           "when": "viewItem == call"
         },
         {
-          "command": "headres.switch",
+          "command": "headers.switch",
           "when": "viewItem == meta"
         }
       ]

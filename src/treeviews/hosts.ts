@@ -44,12 +44,12 @@ export class HostsTreeView implements vscode.TreeDataProvider<HostItem> {
 class HostItem extends vscode.TreeItem {
   constructor(host: Host) {
     super(host.adress);
-    super.tooltip = host.description;
+    super.description = host.description;
     super.contextValue = "host";
     super.command = {
       command: "hosts.switch",
       title: "Switch grpc host",
-      arguments: [host],
+      arguments: [host.adress],
     };
     let img = "host-off.svg";
     if (host.current) {

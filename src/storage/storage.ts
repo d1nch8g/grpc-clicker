@@ -10,9 +10,9 @@ export class Storage {
   public headers: Headers;
   public history: History;
   constructor(memento: Memento) {
-    for (const key of memento.keys()) {
-      memento.update(key, undefined);
-    }
+    // for (const key of memento.keys()) {
+    //   memento.update(key, undefined);
+    // }
     this.hosts = new Hosts(memento);
     this.protos = new Protos(memento);
     this.headers = new Headers(memento);
