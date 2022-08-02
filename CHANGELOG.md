@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.0.12]
+
+> August 2, 2022
+
+- Added jest for testing
+- Removed go and makefile for ease of contribution
+- Added script to build and move js sources from webview to extension
+- Added time of execution to requests
+- Added tags to adresses
+- Increased speed of extension activation reducing amount of calls
+- Changed parsing mechanism to increase readability of protos
+
 ## [0.0.11]
 
 > July 28, 2022
