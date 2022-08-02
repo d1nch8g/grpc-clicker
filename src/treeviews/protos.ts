@@ -86,10 +86,13 @@ class ProtoItem extends vscode.TreeItem {
       }
       super.contextValue = "call";
 
-      let request: RequestHistoryData = {
+      let request: RequestData = {
         path: protoPath,
         service: serviceTag,
         call: item.name,
+        inputMessageTag: item.inputMessageTag,
+        inputMessageName: item.inputMessageTag.split(`.`).pop(),
+        outputMessageName: item.outputMessageTag.split(`.`).pop(),
         tlsOn: null,
         host: "",
         reqJson: "",
@@ -100,9 +103,7 @@ class ProtoItem extends vscode.TreeItem {
         time: "",
         date: "",
         errmes: "",
-        inputMessageTag: item.inputMessageTag,
-        inputMessageName: item.inputMessageTag.split(`.`).pop(),
-        outoutMessageName: item.outputMessageTag.split(`.`).pop(),
+        hosts: [],
       };
 
       super.command = {
@@ -116,4 +117,8 @@ class ProtoItem extends vscode.TreeItem {
       dark: path.join(__filename, "..", "..", "images", svg),
     };
   }
+}
+
+export interface RequestData extends RequestHistoryData {
+  hosts: string[];
 }

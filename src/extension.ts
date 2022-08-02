@@ -4,6 +4,7 @@ import { Grpcurl, Response } from "./grpcurl/grpcurl";
 import { Parser, Proto } from "./grpcurl/parser";
 import { RequestHistoryData } from "./storage/history";
 import { Storage } from "./storage/storage";
+import { RequestData } from "./treeviews/protos";
 import { TreeViews } from "./treeviews/treeviews";
 import { WebViewFactory } from "./webview";
 
@@ -174,30 +175,27 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
-  vscode.commands.registerCommand(
-    "webview.open",
-    async (data: RequestHistoryData) => {
-      // TODO process later on
-      data.tlsOn = false;
-      data.maxMsgSize = null;
+  vscode.commands.registerCommand("webview.open", async (data: RequestData) => {
+    // TODO process later on
+    data.tlsOn = false;
+    data.maxMsgSize = null;
 
-      for (const host of storage.hosts.list()) {
-        data.host = host.adress;
-      }
-      for (const header of storage.headers.list()) {
-        if (header.active) {
-          data.metadata.push(header.value);
-        }
-      }
-      const [msg, err] = await grpcurl.message(data.path, data.inputMessageTag);
-      if (err !== null) {
-        vscode.window.showErrorMessage(err.message);
-        return;
-      }
-      data.reqJson = msg.template;
-      webviewFactory.create(data);
+    for (const host of storage.hosts.list()) {
+      data.host = host.adress;
     }
-  );
+    for (const header of storage.headers.list()) {
+      if (header.active) {
+        data.metadata.push(header.value);
+      }
+    }
+    const [msg, err] = await grpcurl.message(data.path, data.inputMessageTag);
+    if (err !== null) {
+      vscode.window.showErrorMessage(err.message);
+      return;
+    }
+    data.reqJson = msg.template;
+    webviewFactory.create(data);
+  });
 }
 
 export function deactivate() {}

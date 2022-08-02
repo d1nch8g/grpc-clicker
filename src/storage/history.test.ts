@@ -39,7 +39,7 @@ test(`add`, () => {
       service: "",
       inputMessageTag: "",
       inputMessageName: "",
-      outoutMessageName: "",
+      outputMessageName: "",
     });
   }
   expect(storage.values.length).toBe(100);
@@ -64,7 +64,7 @@ test(`list`, () => {
     service: "",
     inputMessageTag: "",
     inputMessageName: "",
-    outoutMessageName: "",
+    outputMessageName: "",
   });
 
   let resp = history.list();
@@ -85,7 +85,7 @@ test(`list`, () => {
       service: "",
       inputMessageTag: "",
       inputMessageName: "",
-      outoutMessageName: "",
+      outputMessageName: "",
     },
   ]);
 });

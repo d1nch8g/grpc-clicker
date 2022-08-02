@@ -29,5 +29,5 @@ export interface RequestHistoryData extends Request, Response {
   service: string;
   inputMessageTag: string;
   inputMessageName: string;
-  outoutMessageName: string;
+  outputMessageName: string;
 }
