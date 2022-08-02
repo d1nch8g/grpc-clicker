@@ -33,7 +33,7 @@ export class Grpcurl {
     }
     const inputRequest = this.systemInputPreprocess(`'${input.reqJson}'`);
     let tls = ``;
-    if (input.tlsOn) {
+    if (!input.tlsOn) {
       tls = `-plaintext `;
     }
     let maxMsgSize = ``;
@@ -63,12 +63,10 @@ export class Grpcurl {
   }
 
   private systemInputPreprocess(input: string): string {
-    input = input.replaceAll("\n", "");
+    input = input.replaceAll("\\n", "");
     if (process.platform === "win32") {
       input = input.replaceAll('"', '\\"');
-      input = `"${input}"`;
-    } else {
-      input = `'${input}'`;
+      input = `${input}`;
     }
     return input;
   }

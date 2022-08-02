@@ -9,10 +9,10 @@ class MockMemento implements Memento {
   get<T>(key: string): T;
   get<T>(key: string, defaultValue: T): T;
   get(key: unknown, defaultValue?: unknown): T | T {
-    throw new Error("Method not implemented.");
+    return [];
   }
   update(key: string, value: any): Thenable<void> {
-    throw new Error("Method not implemented.");
+    return;
   }
 }
 

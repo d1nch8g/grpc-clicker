@@ -161,7 +161,7 @@ export function activate(context: vscode.ExtensionContext) {
         path: data.path,
         reqJson: data.reqJson,
         host: data.host,
-        call: data.call,
+        call: `${data.protoName}.${data.service}.${data.call}`,
         tlsOn: data.tlsOn,
         metadata: data.metadata,
         maxMsgSize: data.maxMsgSize,
@@ -171,6 +171,7 @@ export function activate(context: vscode.ExtensionContext) {
       data.time = resp.time;
       data.date = resp.date;
       data.errmes = resp.errmes;
+      storage.history.add(data);
       return data;
     }
   );

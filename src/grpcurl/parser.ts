@@ -193,6 +193,11 @@ export class Parser {
       resp.errmes = input;
       return resp;
     }
+    if (input.includes(`Command failed`)) {
+      resp.code = `UnknownError`;
+      resp.errmes = input;
+      return resp;
+    }
     if (input.includes(`ERROR:`)) {
       const splitted = input.split(`\n`);
       resp.code = splitted[2].replace(`  Code: `, ``);
