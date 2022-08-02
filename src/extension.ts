@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { Caller } from "./grpcurl/caller";
-import { Grpcurl } from "./grpcurl/grpcurl";
+import { Grpcurl, Response } from "./grpcurl/grpcurl";
 import { Parser, Proto } from "./grpcurl/parser";
 import { RequestHistoryData } from "./storage/history";
 import { Storage } from "./storage/storage";
@@ -155,8 +155,22 @@ export function activate(context: vscode.ExtensionContext) {
 
   const webviewFactory = new WebViewFactory(
     context.extensionUri,
-    async (request) => {
-      return null;
+    async (data) => {
+      const resp = await grpcurl.send({
+        path: data.path,
+        reqJson: data.reqJson,
+        host: data.host,
+        call: data.call,
+        tlsOn: data.tlsOn,
+        metadata: data.metadata,
+        maxMsgSize: data.maxMsgSize,
+      });
+      data.code = resp.code;
+      data.respJson = resp.respJson;
+      data.time = resp.time;
+      data.date = resp.date;
+      data.errmes = resp.errmes;
+      return data;
     }
   );
 
