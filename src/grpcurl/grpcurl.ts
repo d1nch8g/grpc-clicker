@@ -58,7 +58,7 @@ export class Grpcurl {
       response = this.parser.resp(resp);
     }
     response.date = new Date().toUTCString();
-    response.time = `${endTime - startTime}`;
+    response.time = `${(endTime - startTime) / 1000}s`;
     return response;
   }
 

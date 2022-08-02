@@ -37,12 +37,17 @@
     reqJson = obj.reqJson;
     metadata = obj.metadata;
     maxMsgSize = obj.maxMsgSize;
+    hosts = obj.hosts;
+
     code = obj.code;
     respJson = obj.respJson;
     time = obj.time;
     date = obj.date;
     errmes = obj.errmes;
-    hosts = obj.hosts;
+
+    if (errmes !== ``) {
+      respJson = errmes;
+    }
 
     hosts.splice(hosts.indexOf(obj.host), 1);
     hosts = [obj.host].concat(hosts);
@@ -78,7 +83,13 @@
   </td>
 
   <td>
-    <Response respName="{outputMessageName}" bind:respJson />
+    <Response
+      respName="{outputMessageName}"
+      code="{code}"
+      time="{time}"
+      date="{date}"
+      bind:respJson
+    />
   </td>
 </table>
 
