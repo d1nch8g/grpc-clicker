@@ -10,9 +10,12 @@ export class Storage {
   public headers: Headers;
   public history: History;
   constructor(memento: Memento) {
-    // for (const key of memento.keys()) {
-    //   memento.update(key, undefined);
-    // }
+    if (memento.get<string>(`grpc-clicker-version`) !== "0.0.12") {
+      for (const key of memento.keys()) {
+        memento.update(key, undefined);
+      }
+    }
+    memento.update(`grpc-clicker-version`, "0.0.12");
     this.hosts = new Hosts(memento);
     this.protos = new Protos(memento);
     this.headers = new Headers(memento);
