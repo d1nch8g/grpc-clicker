@@ -12,7 +12,7 @@
 
 <div>
   <center>
-    <vscode-option>Response - {respName}</vscode-option>
+    <vscode-option>Response: {respName}</vscode-option>
   </center>
   {#if respJson === "waiter"}
     <div class="top-space" style="--height: {height / 2.2}px"></div>

@@ -10,7 +10,7 @@
 
 <div>
   <center>
-    <vscode-option>Request - {reqName}</vscode-option>
+    <vscode-option>Request: {reqName}</vscode-option>
   </center>
 
   <textarea

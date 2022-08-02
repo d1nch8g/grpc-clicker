@@ -1,5 +1,11 @@
 const fs = require("fs");
+const execSync = require("child_process").execSync;
 const path = require("path");
+
+const output = execSync("npm run build --prefix webview", {
+  encoding: "utf-8",
+});
+
 
 if (!fs.existsSync(`dist`)) {
   fs.mkdirSync(`dist`);

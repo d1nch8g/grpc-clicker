@@ -297,7 +297,6 @@
     "test": "node ./out/test/runTest.js",
     "cov": "jest --collectCoverage",
     "build": "vsce package",
-    "webview": "npm run build --prefix webview",
     "move": "node mover.js"
   },
   "devDependencies": {
