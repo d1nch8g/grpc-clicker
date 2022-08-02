@@ -1,15 +1,10 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Call } from "../classes/call";
-import { Message } from "../classes/message";
-import { Proto } from "../classes/proto";
-import { Service } from "../classes/service";
-import { Grpcurl } from "../grpcurl";
-import { Field } from "../classes/field";
-import { Request } from "../classes/request";
+import { Proto, Service, Call, ProtoType } from "../grpcurl/parser";
+import { RequestHistoryData } from "../storage/history";
 
 export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
-  constructor(private grpcurl: Grpcurl, private protos: string[]) {
+  constructor(private protos: Proto[]) {
     this.protos = protos;
     this.onChange = new vscode.EventEmitter<ProtoItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
@@ -18,7 +13,7 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
   private onChange: vscode.EventEmitter<ProtoItem | undefined | void>;
   readonly onDidChangeTreeData: vscode.Event<void | ProtoItem | ProtoItem[]>;
 
-  async update(protos: string[]) {
+  async update(protos: Proto[]) {
     this.protos = protos;
     this.onChange.fire();
   }
@@ -30,36 +25,40 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
   async getChildren(element?: ProtoItem): Promise<ProtoItem[]> {
     let items: ProtoItem[] = [];
     if (element === undefined) {
-      const protos = await this.grpcurl.protos(this.protos);
-      for (const proto of protos) {
-        items.push(new ProtoItem(proto));
+      for (const proto of this.protos) {
+        items.push(
+          new ProtoItem({
+            base: proto,
+            protoPath: proto.path,
+            protoName: proto.name,
+            serviceName: null,
+          })
+        );
       }
       return items;
     }
-    let elem = element.item;
-    if (elem instanceof Proto) {
-      for (const svc of elem.services) {
-        items.push(new ProtoItem(svc));
-      }
-      for (const msg of elem.messages) {
-        items.push(new ProtoItem(msg));
-      }
-    }
-    if (elem instanceof Service) {
-      for (const call of elem.calls) {
-        items.push(new ProtoItem(call));
+    if (element.base.type === ProtoType.proto) {
+      for (const svc of (element.base as Proto).services) {
+        items.push(
+          new ProtoItem({
+            base: svc,
+            protoPath: element.protoPath,
+            protoName: element.protoName,
+            serviceName: svc.name,
+          })
+        );
       }
     }
-    if (elem instanceof Call) {
-      elem.input.fields = await this.grpcurl.getFields(elem.input);
-      elem.output.fields = await this.grpcurl.getFields(elem.output);
-      items.push(new ProtoItem(elem.input));
-      items.push(new ProtoItem(elem.output));
-    }
-    if (elem instanceof Message) {
-      let fields = await this.grpcurl.getFields(elem);
-      for (const field of fields) {
-        items.push(new ProtoItem(field));
+    if (element.base.type === ProtoType.service) {
+      for (const call of (element.base as Service).calls) {
+        items.push(
+          new ProtoItem({
+            base: call,
+            protoPath: element.protoPath,
+            protoName: element.protoName,
+            serviceName: element.serviceName,
+          })
+        );
       }
     }
     return items;
@@ -79,65 +78,82 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
 }
 
 class ProtoItem extends vscode.TreeItem {
-  constructor(public item: Proto | Service | Call | Message | Field) {
-    super(item.name);
+  public base: Proto | Service | Call;
+  public protoPath: string;
+  public protoName: string;
+  public serviceName: string;
+  constructor(
+    public input: {
+      base: Proto | Service | Call;
+      protoPath: string;
+      protoName: string;
+      serviceName: string;
+    }
+  ) {
+    super(input.base.name);
+
+    this.base = input.base;
+    this.protoPath = input.protoPath;
+    this.protoName = input.protoName;
+    this.serviceName = input.serviceName;
+
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     let svg = "";
-    if (item instanceof Proto) {
-      super.tooltip = "Parsed proto schema definition";
+    if (input.base.type === ProtoType.proto) {
+      input.base = input.base as Proto;
+      super.tooltip = `Proto schema definition`;
       svg = "proto.svg";
     }
-    if (item instanceof Service) {
-      super.tooltip = "gRPC service";
+    if (input.base.type === ProtoType.service) {
+      input.base = input.base as Service;
+      super.tooltip = input.base.description;
       svg = "svc.svg";
     }
-    if (item instanceof Call) {
+    if (input.base.type === ProtoType.call) {
       super.collapsibleState = vscode.TreeItemCollapsibleState.None;
-      if (item.inputIsStream || item.outputIsStream) {
-        super.tooltip = "gRPC stream (NOT SUPPORTED YET)";
+      input.base = input.base as Call;
+      super.tooltip = input.base.description;
+      svg = "unary.svg";
+      if (input.base.inputStream || input.base.outputStream) {
         svg = "stream.svg";
-      } else {
-        super.tooltip = "gRPC unary call";
-        svg = "unary.svg";
       }
-      let isStream = item.inputIsStream || item.outputIsStream;
       super.contextValue = "call";
+
+      let request: RequestData = {
+        path: input.protoPath,
+        protoName: input.protoName,
+        service: input.serviceName,
+        call: input.base.name,
+        inputMessageTag: input.base.inputMessageTag,
+        inputMessageName: input.base.inputMessageTag.split(`.`).pop(),
+        outputMessageName: input.base.outputMessageTag.split(`.`).pop(),
+        tlsOn: false,
+        host: "",
+        reqJson: "",
+        maxMsgSize: 0,
+        code: "",
+        respJson: "",
+        time: "",
+        date: "",
+        errmes: "",
+        metadata: [],
+        hosts: [],
+      };
+
       super.command = {
         command: "webview.open",
         title: "Trigger opening of webview for grpc call",
-        arguments: [
-          new Request(
-            item.proto.path,
-            item.proto.name,
-            item.service,
-            item.name,
-            item.tag,
-            `to fill`,
-            [],
-            item.input.name,
-            item.output.name,
-            item.input.representation(),
-            isStream,
-            "",
-            "",
-            ""
-          ),
-        ],
+        arguments: [request],
       };
-    }
-    if (item instanceof Message) {
-      super.tooltip = "User defined gRPC message from schema";
-      super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
-      svg = "msg.svg";
-    }
-    if (item instanceof Field) {
-      super.tooltip = "Field in gRPC message";
-      super.collapsibleState = vscode.TreeItemCollapsibleState.None;
-      svg = "field.svg";
     }
     super.iconPath = {
       light: path.join(__filename, "..", "..", "images", svg),
       dark: path.join(__filename, "..", "..", "images", svg),
     };
   }
+}
+
+export interface RequestData extends RequestHistoryData {
+  protoName: string;
+  hosts: string[];
 }

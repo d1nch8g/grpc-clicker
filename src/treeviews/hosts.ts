@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Host } from "../classes/host";
+import { Host } from "../storage/hosts";
 
 export class HostsTreeView implements vscode.TreeDataProvider<HostItem> {
   constructor(private hosts: Host[]) {
@@ -23,7 +23,7 @@ export class HostsTreeView implements vscode.TreeDataProvider<HostItem> {
   getChildren(element?: HostItem): vscode.ProviderResult<HostItem[]> {
     let hostItems: HostItem[] = [];
     for (var host of this.hosts) {
-      hostItems.push(new HostItem(host.name, host.current));
+      hostItems.push(new HostItem(host));
     }
     return hostItems;
   }
@@ -42,17 +42,17 @@ export class HostsTreeView implements vscode.TreeDataProvider<HostItem> {
 }
 
 class HostItem extends vscode.TreeItem {
-  constructor(host: string, current: boolean) {
-    super(host);
-    super.tooltip = `Host for making gRPC calls.`;
+  constructor(host: Host) {
+    super(host.adress);
+    super.description = host.description;
     super.contextValue = "host";
     super.command = {
       command: "hosts.switch",
       title: "Switch grpc host",
-      arguments: [host],
+      arguments: [host.adress],
     };
     let img = "host-off.svg";
-    if (current) {
+    if (host.current) {
       img = "host-on.svg";
     }
     super.iconPath = {

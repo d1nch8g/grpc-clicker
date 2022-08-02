@@ -1,28 +1,29 @@
 import * as vscode from "vscode";
-import { Request } from "./classes/request";
+import { RequestData } from "./treeviews/protos";
 
 export class WebViewFactory {
   private views: GrpcClickerView[] = [];
   constructor(
     private uri: vscode.Uri,
-    private callback: (request: Request) => Promise<Request>
+    private callback: (
+      request: RequestData
+    ) => Promise<RequestData>
   ) {}
 
-  create(request: Request) {
+  create(data: RequestData) {
     this.removeClosedPanels();
     for (const view of this.views) {
       const panelIsActive =
-        request.path === view.request.path &&
-        request.proto === view.request.proto &&
-        request.service === view.request.service &&
-        request.call === view.request.call &&
-        request.methodTag === view.request.methodTag;
+        data.path === view.request.path &&
+        data.inputMessageName === view.request.inputMessageName &&
+        data.outputMessageName === view.request.outputMessageName &&
+        data.call === view.request.call;
       if (panelIsActive) {
         view.panel.reveal();
         return;
       }
     }
-    const view = new GrpcClickerView(this.uri, request, this.callback);
+    const view = new GrpcClickerView(this.uri, data, this.callback);
     this.views.push(view);
   }
 
@@ -42,8 +43,10 @@ class GrpcClickerView {
   public closed: boolean = false;
   constructor(
     private uri: vscode.Uri,
-    public request: Request,
-    private callback: (request: Request) => Promise<Request>
+    public request: RequestData,
+    private callback: (
+      request: RequestData
+    ) => Promise<RequestData>
   ) {
     this.panel = vscode.window.createWebviewPanel(
       "callgrpc",

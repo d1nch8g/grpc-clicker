@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Request } from "../classes/request";
+import { RequestHistoryData } from "../storage/history";
 
 export class HistoryTreeView implements vscode.TreeDataProvider<HistoryItem> {
-  constructor(private requests: Request[]) {
+  constructor(private requests: RequestHistoryData[]) {
     this.requests = requests;
     this.onChange = new vscode.EventEmitter<HistoryItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
@@ -14,7 +14,7 @@ export class HistoryTreeView implements vscode.TreeDataProvider<HistoryItem> {
     void | HistoryItem | HistoryItem[]
   >;
 
-  update(requests: Request[]): void {
+  update(requests: RequestHistoryData[]): void {
     this.requests = requests;
     this.onChange.fire();
   }
@@ -45,22 +45,22 @@ export class HistoryTreeView implements vscode.TreeDataProvider<HistoryItem> {
 }
 
 class HistoryItem extends vscode.TreeItem {
-  constructor(request: Request) {
-    super(`${request.proto} - ${request.call}`);
+  constructor(request: RequestHistoryData) {
+    super(request.call);
 
     super.description = request.date;
     super.contextValue = "host";
 
-    super.tooltip = `File: ${request.path}\n
-Proto: ${request.proto}\n
-Service: ${request.service}\n
-Rpc: ${request.call}\n
-Tag: ${request.methodTag}\n
-Host: ${request.host}\n
-Input format: ${request.reqName}\n
-Output format: ${request.respName}\n`;
+    super.tooltip = new vscode.MarkdownString(`## Request information:
+- host for execution ${request.host}
+- method used in request ${request.call}
+- response code ${request.code}
+- time of execution ${request.time}
+- date ${request.date}
+- error message ${request.errmes}`);
 
     super.contextValue = "call";
+
     super.command = {
       command: "webview.open",
       title: "Trigger opening of webview for grpc call",
@@ -68,7 +68,7 @@ Output format: ${request.respName}\n`;
     };
 
     let icon = `success.svg`;
-    if (request.error !== ``) {
+    if (request.code !== `OK`) {
       icon = `error.svg`;
     }
 

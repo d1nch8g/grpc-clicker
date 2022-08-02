@@ -3,34 +3,58 @@
   import Request from "./Request.svelte";
   import Response from "./Response.svelte";
 
-  $: proto = "";
-  $: service = "";
-  $: call = "";
+  $: path = ``;
+  $: protoName = ``;
+  $: service = ``;
+  $: call = ``;
+  $: inputMessageTag = ``;
+  $: inputMessageName = ``;
+  $: outputMessageName = ``;
+  $: tlsOn = ``;
+  $: host = ``;
+  $: reqJson = ``;
+  $: metadata = [];
+  $: maxMsgSize = ``;
+  $: code = ``;
+  $: respJson = ``;
+  $: time = ``;
+  $: date = ``;
+  $: errmes = ``;
   $: hosts = [];
 
-  $: reqName = "";
-  $: reqJson = "";
-
-  $: respName = "";
-  $: response = "";
-
   window.addEventListener("message", (event) => {
+    console.log(`${event.data}`);
     const obj = JSON.parse(`${event.data}`);
-    proto = obj.proto;
+    path = obj.path;
+    protoName = obj.protoName;
     service = obj.service;
     call = obj.call;
+    inputMessageTag = obj.inputMessageTag;
+    inputMessageName = obj.inputMessageName;
+    outputMessageName = obj.outputMessageName;
+    tlsOn = obj.tlsOn;
+    host = obj.host;
+    reqJson = obj.reqJson;
+    metadata = obj.metadata;
+    maxMsgSize = obj.maxMsgSize;
     hosts = obj.hosts;
+
+    code = obj.code;
+    respJson = obj.respJson;
+    time = obj.time;
+    date = obj.date;
+    errmes = obj.errmes;
+
+    if (errmes !== ``) {
+      respJson = errmes;
+    }
+
     hosts.splice(hosts.indexOf(obj.host), 1);
     hosts = [obj.host].concat(hosts);
-    reqName = obj.reqName;
-    reqJson = obj.reqJson;
-    respName = obj.respName;
-    response = obj.response;
-    response = response + obj.error;
   });
 
   function send() {
-    response = "waiter";
+    respJson = "waiter";
     vscode.postMessage({
       command: "send",
       text: reqJson,
@@ -46,8 +70,8 @@
 </script>
 
 <TopPanel
-  proto="{proto}"
   service="{service}"
+  protoName="{protoName}"
   call="{call}"
   hosts="{hosts}"
   onSend="{send}"
@@ -55,11 +79,17 @@
 
 <table>
   <td>
-    <Request reqName="{reqName}" edit="{edit}" bind:reqJson />
+    <Request reqName="{inputMessageName}" edit="{edit}" bind:reqJson />
   </td>
 
   <td>
-    <Response respName="{respName}" bind:response />
+    <Response
+      respName="{outputMessageName}"
+      code="{code}"
+      time="{time}"
+      date="{date}"
+      bind:respJson
+    />
   </td>
 </table>
 
