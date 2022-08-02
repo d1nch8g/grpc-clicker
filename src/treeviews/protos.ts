@@ -127,7 +127,7 @@ class ProtoItem extends vscode.TreeItem {
         inputMessageTag: input.base.inputMessageTag,
         inputMessageName: input.base.inputMessageTag.split(`.`).pop(),
         outputMessageName: input.base.outputMessageTag.split(`.`).pop(),
-        tlsOn: null,
+        tlsOn: false,
         host: "",
         reqJson: "",
         maxMsgSize: 0,
