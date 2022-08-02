@@ -26,7 +26,14 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
     let items: ProtoItem[] = [];
     if (element === undefined) {
       for (const proto of this.protos) {
-        items.push(new ProtoItem(proto, proto.path, null));
+        items.push(
+          new ProtoItem({
+            base: proto,
+            protoPath: proto.path,
+            protoName: proto.name,
+            serviceTag: null,
+          })
+        );
       }
       return items;
     }
@@ -58,41 +65,43 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
 }
 
 class ProtoItem extends vscode.TreeItem {
-  constructor(
-    public item: Proto | Service | Call,
-    public protoPath: string,
-    public serviceTag: string
-  ) {
-    super(item.name);
+  constructor(inp: {
+    base: Proto | Service | Call;
+    protoPath: string;
+    protoName: string;
+    serviceTag: string;
+  }) {
+    super(inp.base.name);
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     let svg = "";
-    if (item.type === ProtoType.proto) {
-      item = item as Proto;
+    if (inp.base.type === ProtoType.proto) {
+      inp.base = inp.base as Proto;
       super.tooltip = `Proto schema definition`;
       svg = "proto.svg";
     }
-    if (item.type === ProtoType.service) {
-      item = item as Service;
-      super.tooltip = item.description;
+    if (inp.base.type === ProtoType.service) {
+      inp.base = inp.base as Service;
+      super.tooltip = inp.base.description;
       svg = "svc.svg";
     }
-    if (item.type === ProtoType.call) {
+    if (inp.base.type === ProtoType.call) {
       super.collapsibleState = vscode.TreeItemCollapsibleState.None;
-      item = item as Call;
-      super.tooltip = item.description;
+      inp.base = inp.base as Call;
+      super.tooltip = inp.base.description;
       svg = "unary.svg";
-      if (item.inputStream || item.outputStream) {
+      if (inp.base.inputStream || inp.base.outputStream) {
         svg = "stream.svg";
       }
       super.contextValue = "call";
 
       let request: RequestData = {
-        path: protoPath,
-        service: serviceTag,
-        call: item.name,
-        inputMessageTag: item.inputMessageTag,
-        inputMessageName: item.inputMessageTag.split(`.`).pop(),
-        outputMessageName: item.outputMessageTag.split(`.`).pop(),
+        protoName: inp.protoName,
+        path: inp.protoPath,
+        service: inp.serviceTag,
+        call: inp.base.name,
+        inputMessageTag: inp.base.inputMessageTag,
+        inputMessageName: inp.base.inputMessageTag.split(`.`).pop(),
+        outputMessageName: inp.base.outputMessageTag.split(`.`).pop(),
         tlsOn: null,
         host: "",
         reqJson: "",
@@ -120,5 +129,6 @@ class ProtoItem extends vscode.TreeItem {
 }
 
 export interface RequestData extends RequestHistoryData {
+  protoName: string;
   hosts: string[];
 }

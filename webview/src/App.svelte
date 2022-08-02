@@ -3,34 +3,51 @@
   import Request from "./Request.svelte";
   import Response from "./Response.svelte";
 
-  $: proto = "";
+  $: path = "";
   $: service = "";
   $: call = "";
+  $: inputMessageTag = "";
+  $: inputMessageName = "";
+  $: outputMessageName = "";
+  $: tlsOn = "";
+  $: host = "";
+  $: reqJson = "";
+  $: metadata = [];
+  $: maxMsgSize = "";
+  $: code = "";
+  $: respJson = "";
+  $: time = "";
+  $: date = "";
+  $: errmes = "";
   $: hosts = [];
 
-  $: reqName = "";
-  $: reqJson = "";
-
-  $: respName = "";
-  $: response = "";
-
   window.addEventListener("message", (event) => {
+    console.log(`${event.data}`);
     const obj = JSON.parse(`${event.data}`);
-    proto = obj.proto;
-    service = obj.service;
-    call = obj.call;
-    hosts = obj.hosts;
-    reqName = obj.reqName;
-    reqJson = obj.reqJson;
-    respName = obj.respName;
-    response = obj.response;
-    response = response + obj.error;
+    path = path;
+    service = service;
+    call = call;
+    inputMessageTag = inputMessageTag;
+    inputMessageName = inputMessageName;
+    outputMessageName = outputMessageName;
+    tlsOn = tlsOn;
+    host = host;
+    reqJson = reqJson;
+    metadata = metadata;
+    maxMsgSize = maxMsgSize;
+    code = code;
+    respJson = respJson;
+    time = time;
+    date = date;
+    errmes = errmes;
+    hosts = hosts;
+
     hosts.splice(hosts.indexOf(obj.host), 1);
     hosts = [obj.host].concat(hosts);
   });
 
   function send() {
-    response = "waiter";
+    respJson = "waiter";
     vscode.postMessage({
       command: "send",
       text: reqJson,
@@ -45,21 +62,15 @@
   }
 </script>
 
-<TopPanel
-  proto="{proto}"
-  service="{service}"
-  call="{call}"
-  hosts="{hosts}"
-  onSend="{send}"
-/>
+<TopPanel service="{service}" call="{call}" hosts="{hosts}" onSend="{send}" />
 
 <table>
   <td>
-    <Request reqName="{reqName}" edit="{edit}" bind:reqJson />
+    <Request reqName="{inputMessageName}" edit="{edit}" bind:reqJson />
   </td>
 
   <td>
-    <Response respName="{respName}" bind:response />
+    <Response respName="{outputMessageName}" bind:respJson />
   </td>
 </table>
 

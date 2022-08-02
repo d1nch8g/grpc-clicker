@@ -13,7 +13,6 @@ export class Parser {
     };
     let currSvc: Service = {
       name: ``,
-      tag: ``,
       description: null,
       calls: [],
       type: ProtoType.service,
@@ -49,7 +48,6 @@ export class Parser {
         proto.services.push(currSvc);
         currSvc = {
           name: ``,
-          tag: ``,
           description: null,
           calls: [],
           type: ProtoType.service,
@@ -226,7 +224,6 @@ export interface Proto {
 export interface Service {
   type: ProtoType;
   name: string;
-  tag: string;
   description: string;
   calls: Call[];
 }
