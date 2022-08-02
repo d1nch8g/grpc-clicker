@@ -130,13 +130,13 @@ class ProtoItem extends vscode.TreeItem {
         tlsOn: null,
         host: "",
         reqJson: "",
-        metadata: [],
         maxMsgSize: 0,
         code: "",
         respJson: "",
         time: "",
         date: "",
         errmes: "",
+        metadata: [],
         hosts: [],
       };
 

@@ -181,7 +181,10 @@ export function activate(context: vscode.ExtensionContext) {
     data.maxMsgSize = null;
 
     for (const host of storage.hosts.list()) {
-      data.host = host.adress;
+      data.hosts.push(host.adress);
+      if (host.current) {
+        data.host = host.adress;
+      }
     }
     for (const header of storage.headers.list()) {
       if (header.active) {

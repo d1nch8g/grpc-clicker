@@ -1,6 +1,6 @@
 <script>
   export let respName = "";
-  export let response = "";
+  export let respJson = "";
   $: innerHeight = 0;
   $: height = innerHeight - 170;
 </script>
@@ -11,14 +11,14 @@
   <center>
     <vscode-option>Response - {respName}</vscode-option>
   </center>
-  {#if response !== "waiter"}
+  {#if respJson !== "waiter"}
     <textarea
       name=""
       id=""
       cols="30"
       rows="10"
       style="--height: {height}px"
-      readonly>{response}</textarea
+      readonly>{respJson}</textarea
     >
   {:else}
     <div class="top-space" style="--height: {height / 2.2}px"></div>

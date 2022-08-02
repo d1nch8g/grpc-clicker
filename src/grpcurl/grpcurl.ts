@@ -37,7 +37,7 @@ export class Grpcurl {
       tls = `-plaintext `;
     }
     let maxMsgSize = ``;
-    if (maxMsgSize !== null) {
+    if (input.maxMsgSize !== null) {
       maxMsgSize = `-max-msg-sz ${input.maxMsgSize}`;
     }
     var startTime = performance.now();

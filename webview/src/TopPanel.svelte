@@ -1,6 +1,7 @@
 <script>
   export let service = "";
   export let call = "";
+  export let protoName = "";
   export let hosts = ["http://localhost:12201"];
   export let onSend;
 </script>
@@ -8,6 +9,7 @@
 <div class="top-container">
   <table>
     <tr>
+      <td><vscode-badge>{protoName}</vscode-badge></td>
       <td><vscode-badge>{service}</vscode-badge></td>
       <td><vscode-badge>{call}</vscode-badge></td>
       <td class="expanded">

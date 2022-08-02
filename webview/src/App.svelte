@@ -64,7 +64,13 @@
   }
 </script>
 
-<TopPanel service="{service}" call="{call}" hosts="{hosts}" onSend="{send}" />
+<TopPanel
+  service="{service}"
+  protoName="{protoName}"
+  call="{call}"
+  hosts="{hosts}"
+  onSend="{send}"
+/>
 
 <table>
   <td>
