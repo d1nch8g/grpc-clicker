@@ -31,21 +31,34 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
             base: proto,
             protoPath: proto.path,
             protoName: proto.name,
-            serviceTag: null,
+            serviceName: null,
           })
         );
       }
       return items;
     }
-    let elem = element.item;
-    if (elem.type === ProtoType.proto) {
-      for (const svc of (elem as Proto).services) {
-        items.push(new ProtoItem(svc, element.protoPath, svc.tag));
+    if (element.base.type === ProtoType.proto) {
+      for (const svc of (element.base as Proto).services) {
+        items.push(
+          new ProtoItem({
+            base: svc,
+            protoPath: element.protoPath,
+            protoName: element.protoName,
+            serviceName: svc.name,
+          })
+        );
       }
     }
-    if (elem.type === ProtoType.service) {
-      for (const call of (elem as Service).calls) {
-        items.push(new ProtoItem(call, element.protoPath, element.serviceTag));
+    if (element.base.type === ProtoType.service) {
+      for (const call of (element.base as Service).calls) {
+        items.push(
+          new ProtoItem({
+            base: call,
+            protoPath: element.protoPath,
+            protoName: element.protoName,
+            serviceName: element.serviceName,
+          })
+        );
       }
     }
     return items;
@@ -65,43 +78,55 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
 }
 
 class ProtoItem extends vscode.TreeItem {
-  constructor(inp: {
-    base: Proto | Service | Call;
-    protoPath: string;
-    protoName: string;
-    serviceTag: string;
-  }) {
-    super(inp.base.name);
+  public base: Proto | Service | Call;
+  public protoPath: string;
+  public protoName: string;
+  public serviceName: string;
+  constructor(
+    public input: {
+      base: Proto | Service | Call;
+      protoPath: string;
+      protoName: string;
+      serviceName: string;
+    }
+  ) {
+    super(input.base.name);
+
+    this.base = input.base;
+    this.protoPath = input.protoPath;
+    this.protoName = input.protoName;
+    this.serviceName = input.serviceName;
+
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     let svg = "";
-    if (inp.base.type === ProtoType.proto) {
-      inp.base = inp.base as Proto;
+    if (input.base.type === ProtoType.proto) {
+      input.base = input.base as Proto;
       super.tooltip = `Proto schema definition`;
       svg = "proto.svg";
     }
-    if (inp.base.type === ProtoType.service) {
-      inp.base = inp.base as Service;
-      super.tooltip = inp.base.description;
+    if (input.base.type === ProtoType.service) {
+      input.base = input.base as Service;
+      super.tooltip = input.base.description;
       svg = "svc.svg";
     }
-    if (inp.base.type === ProtoType.call) {
+    if (input.base.type === ProtoType.call) {
       super.collapsibleState = vscode.TreeItemCollapsibleState.None;
-      inp.base = inp.base as Call;
-      super.tooltip = inp.base.description;
+      input.base = input.base as Call;
+      super.tooltip = input.base.description;
       svg = "unary.svg";
-      if (inp.base.inputStream || inp.base.outputStream) {
+      if (input.base.inputStream || input.base.outputStream) {
         svg = "stream.svg";
       }
       super.contextValue = "call";
 
       let request: RequestData = {
-        protoName: inp.protoName,
-        path: inp.protoPath,
-        service: inp.serviceTag,
-        call: inp.base.name,
-        inputMessageTag: inp.base.inputMessageTag,
-        inputMessageName: inp.base.inputMessageTag.split(`.`).pop(),
-        outputMessageName: inp.base.outputMessageTag.split(`.`).pop(),
+        path: input.protoPath,
+        protoName: input.protoName,
+        service: input.serviceName,
+        call: input.base.name,
+        inputMessageTag: input.base.inputMessageTag,
+        inputMessageName: input.base.inputMessageTag.split(`.`).pop(),
+        outputMessageName: input.base.outputMessageTag.split(`.`).pop(),
         tlsOn: null,
         host: "",
         reqJson: "",
