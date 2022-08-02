@@ -107,7 +107,7 @@ export class Parser {
       tag: "",
       description: null,
       fields: [],
-      template: input.split(`Message template:`)[1],
+      template: input.split(`Message template:\n`)[1],
     };
 
     for (const line of splittedInput) {
@@ -139,7 +139,7 @@ export class Parser {
         msg.fields.push(field);
         continue;
       }
-      if (line.startsWith(`Message template:`)) {
+      if (line.startsWith(`Message template:\n`)) {
         break;
       }
     }

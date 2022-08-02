@@ -188,8 +188,7 @@ test(`message`, () => {
 comment`);
   expect(msg.name).toBe(`TestMessage`);
   expect(msg.tag).toBe(`pb.v1.TestMessage`);
-  expect(msg.template).toBe(`
-{
+  expect(msg.template).toBe(`{
   "example": "",
   "example3": [
     ""
