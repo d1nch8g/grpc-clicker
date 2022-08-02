@@ -4,13 +4,23 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "compile",
+      "label": "build: webview",
       "type": "shell",
-      "command": "go run webview_watcher.go",
+      "command": "npm run build --prefix webview",
       "group": {
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "label": "compile",
+      "type": "shell",
+      "command": "node mover.js",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "dependsOn": ["build: webview"]
     },
     {
       "type": "npm",
