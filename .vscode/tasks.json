@@ -1,21 +1,15 @@
-// See https://go.microsoft.com/fwlink/?LinkId=733558
-// for the documentation about the tasks.json format
 {
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "build: webview",
+      "label": "rebuild: webview",
       "detail": "compile and move webview to destination",
       "type": "shell",
       "command": "npm run move",
       "group": {
         "kind": "build",
         "isDefault": true
-      },
-      "runOptions": {
-        "runOn": "folderOpen"
-      },
-      "dependsOn": ["install: webview"]
+      }
     },
     {
       "type": "npm",
@@ -32,7 +26,7 @@
       },
       "label": "npm: watch",
       "detail": "webpack --watch",
-      "dependsOn": ["build: webview"]
+      "dependsOn": ["rebuild: webview"]
     },
     {
       "type": "npm",
@@ -51,29 +45,36 @@
       "problemMatcher": []
     },
     {
-      "label": "install: main",
+      "label": "build: webview",
       "type": "shell",
-      "command": "npm i",
+      "command": "npm run move",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
       "runOptions": {
         "runOn": "folderOpen"
       },
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
+      "dependsOn": ["install: webview"]
     },
     {
       "label": "install: webview",
       "type": "shell",
       "command": "npm i --prefix webview",
-      "runOptions": {
-        "runOn": "folderOpen"
-      },
       "presentation": {
         "reveal": "always",
         "panel": "new"
       },
       "dependsOn": ["install: main"]
+    },
+    {
+      "label": "install: main",
+      "type": "shell",
+      "command": "npm i",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
     }
   ]
 }
