@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.0.14]
+
+> August 3, 2022
+
+- Fixes in parsing mechanism for requests
+- Fixes in caches updates on removal
+
 ## [0.0.13]
 
 > August 3, 2022
