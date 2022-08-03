@@ -45,7 +45,7 @@
     date = obj.date;
     errmes = obj.errmes;
 
-    if (errmes !== ``) {
+    if (errmes !== null) {
       respJson = errmes;
     }
 
