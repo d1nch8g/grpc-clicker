@@ -1,4 +1,3 @@
-import { T } from "../../dist/tk/utilities/design-tokens/create";
 import { Memento } from "vscode";
 import { Storage } from "./storage";
 
@@ -8,7 +7,7 @@ class MockMemento implements Memento {
   }
   get<T>(key: string): T;
   get<T>(key: string, defaultValue: T): T;
-  get(key: unknown, defaultValue?: unknown): T | T {
+  get(key: unknown, defaultValue?: unknown): any {
     return [];
   }
   update(key: string, value: any): Thenable<void> {

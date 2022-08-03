@@ -1,5 +1,4 @@
 import { Memento } from "vscode";
-import { T } from "../../dist/tk/utilities/design-tokens/create";
 import { Header, Headers } from "./headers";
 
 class MockMemento implements Memento {
@@ -9,7 +8,7 @@ class MockMemento implements Memento {
   }
   get<T>(key: string): T;
   get<T>(key: string, defaultValue: T): T;
-  get(key: unknown, defaultValue?: unknown): T | T {
+  get(key: unknown, defaultValue?: unknown): any {
     return this.values;
   }
   update(key: string, value: any): Thenable<void> {

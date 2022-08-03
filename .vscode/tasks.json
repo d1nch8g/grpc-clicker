@@ -1,27 +1,6 @@
-// See https://go.microsoft.com/fwlink/?LinkId=733558
-// for the documentation about the tasks.json format
 {
   "version": "2.0.0",
   "tasks": [
-    {
-      "label": "build: webview",
-      "type": "shell",
-      "command": "npm run build --prefix webview",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
-    },
-    {
-      "label": "compile",
-      "type": "shell",
-      "command": "node mover.js",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "dependsOn": ["build: webview"]
-    },
     {
       "type": "npm",
       "script": "watch",
