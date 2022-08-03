@@ -287,7 +287,7 @@
   },
   "scripts": {
     "watch:webview": "node watcher.js",
-    "serve": "go run server/main.go",
+    "serve:grpc": "go run server/main.go",
     "protogen": "protoc --go_out=server/ --go-grpc_out=server/ server/api.proto",
     "vscode:prepublish": "npm run package",
     "compile": "webpack",
