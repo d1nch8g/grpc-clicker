@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.0.13]
+
+> August 3, 2022
+
+- Fixes related to message displayed in response
+- Storage migration / (as removing old caches) mechanics added
+
 ## [0.0.12]
 
 > August 2, 2022
