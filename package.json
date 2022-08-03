@@ -286,6 +286,7 @@
     ]
   },
   "scripts": {
+    "watch:webview": "node watcher.js",
     "vscode:prepublish": "npm run package",
     "compile": "webpack",
     "watch": "webpack --watch",
@@ -296,8 +297,7 @@
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
     "cov": "jest --collectCoverage",
-    "build": "vsce package",
-    "move": "node mover.js"
+    "build": "vsce package"
   },
   "devDependencies": {
     "@types/glob": "^7.2.0",
