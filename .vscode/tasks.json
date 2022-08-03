@@ -5,22 +5,17 @@
   "tasks": [
     {
       "label": "build: webview",
+      "detail": "compile and move webview to destination",
       "type": "shell",
-      "command": "npm run build --prefix webview",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
-    },
-    {
-      "label": "compile",
-      "type": "shell",
-      "command": "node mover.js",
+      "command": "npm run move",
       "group": {
         "kind": "build",
         "isDefault": true
       },
-      "dependsOn": ["build: webview"]
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "dependsOn": ["install: webview"]
     },
     {
       "type": "npm",
@@ -36,7 +31,8 @@
         "isDefault": true
       },
       "label": "npm: watch",
-      "detail": "webpack --watch"
+      "detail": "webpack --watch",
+      "dependsOn": ["build: webview"]
     },
     {
       "type": "npm",
@@ -51,8 +47,33 @@
     },
     {
       "label": "tasks: watch-tests",
-      "dependsOn": ["npm: watch", "npm: watch-tests"],
+      "dependsOn": ["npm: watch", "npm: watch-tests", "install: main"],
       "problemMatcher": []
+    },
+    {
+      "label": "install: main",
+      "type": "shell",
+      "command": "npm i",
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "install: webview",
+      "type": "shell",
+      "command": "npm i --prefix webview",
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "dependsOn": ["install: main"]
     }
   ]
 }
