@@ -6,7 +6,6 @@ const output = execSync("npm run build --prefix webview", {
   encoding: "utf-8",
 });
 
-
 if (!fs.existsSync(`dist`)) {
   fs.mkdirSync(`dist`);
 }
@@ -57,10 +56,12 @@ var copyRecursiveSync = function (src, dest) {
   if (isDirectory) {
     fs.mkdirSync(dest);
     fs.readdirSync(src).forEach(function (childItemName) {
-      copyRecursiveSync(
-        path.join(src, childItemName),
-        path.join(dest, childItemName)
-      );
+      if (!childItemName.endsWith(".ts")) {
+        copyRecursiveSync(
+          path.join(src, childItemName),
+          path.join(dest, childItemName)
+        );
+      }
     });
   } else {
     fs.copyFileSync(src, dest);
