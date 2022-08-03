@@ -288,6 +288,7 @@
   "scripts": {
     "watch:webview": "node watcher.js",
     "serve:grpc": "go run server/main.go",
+    "build": "vsce package",
     "protogen": "protoc --go_out=server/ --go-grpc_out=server/ server/api.proto",
     "vscode:prepublish": "npm run package",
     "compile": "webpack",
@@ -298,8 +299,7 @@
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
-    "cov": "jest --collectCoverage",
-    "build": "vsce package"
+    "cov": "jest --collectCoverage"
   },
   "devDependencies": {
     "@types/glob": "^7.2.0",
