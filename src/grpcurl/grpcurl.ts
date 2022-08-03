@@ -62,7 +62,8 @@ export class Grpcurl {
     return response;
   }
 
-  inputPreprocess(input: string): string { //TODO rework
+  inputPreprocess(input: string): string {
+    //TODO rework
     input = input.replaceAll("\n", "");
     if (process.platform === "win32") {
       input = input.replaceAll('"', '\\"');
@@ -71,11 +72,6 @@ export class Grpcurl {
       input = `'${input}'`;
     }
     return input;
-  }
-
-  private jsonPreprocess(input: string): string {
-    input = JSON.stringify(JSON.parse(input));
-    return `'${input}'`;
   }
 }
 
