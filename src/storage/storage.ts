@@ -10,7 +10,7 @@ export class Storage {
   public headers: Headers;
   public history: History;
   constructor(memento: Memento) {
-    if (memento.get<string>(`grpc-clicker-version`) !== "0.0.13") {
+    if (memento.get(`grpc-clicker-version`) !== "0.0.13") {
       for (const key of memento.keys()) {
         memento.update(key, undefined);
       }
