@@ -31,7 +31,7 @@ export class Grpcurl {
     for (const metafield of input.metadata) {
       meta = meta + `-H '${metafield}' `;
     }
-    const inputRequest = this.systemInputPreprocess(`'${input.reqJson}'`);
+    const inputRequest = this.jsonPreprocess(input.reqJson);
     let tls = ``;
     if (!input.tlsOn) {
       tls = `-plaintext `;
@@ -62,13 +62,9 @@ export class Grpcurl {
     return response;
   }
 
-  private systemInputPreprocess(input: string): string {
-    input = input.replaceAll("\\n", "");
-    if (process.platform === "win32") {
-      input = input.replaceAll('"', '\\"');
-      input = `${input}`;
-    }
-    return input;
+  private jsonPreprocess(input: string): string {
+    input = JSON.stringify(JSON.parse(input));
+    return `'${input}'`;
   }
 }
 
