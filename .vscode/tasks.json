@@ -2,16 +2,6 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "rebuild: webview",
-      "detail": "compile and move webview to destination",
-      "type": "shell",
-      "command": "npm run move",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
-    },
-    {
       "type": "npm",
       "script": "watch",
       "problemMatcher": ["$ts-webpack-watch", "$tslint-webpack-watch"],
@@ -25,8 +15,7 @@
         "isDefault": true
       },
       "label": "npm: watch",
-      "detail": "webpack --watch",
-      "dependsOn": ["rebuild: webview"]
+      "detail": "webpack --watch"
     },
     {
       "type": "npm",
@@ -43,38 +32,6 @@
       "label": "tasks: watch-tests",
       "dependsOn": ["npm: watch", "npm: watch-tests", "install: main"],
       "problemMatcher": []
-    },
-    {
-      "label": "build: webview",
-      "type": "shell",
-      "command": "npm run move",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "runOptions": {
-        "runOn": "folderOpen"
-      },
-      "dependsOn": ["install: webview"]
-    },
-    {
-      "label": "install: webview",
-      "type": "shell",
-      "command": "npm i --prefix webview",
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      },
-      "dependsOn": ["install: main"]
-    },
-    {
-      "label": "install: main",
-      "type": "shell",
-      "command": "npm i",
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
     }
   ]
 }
