@@ -154,10 +154,16 @@ export class Parser {
       name: spaceSplit[spaceSplit.length - 3],
       datatype: spaceSplit[spaceSplit.length - 4],
       description: null,
+      innerMessageTag: null,
       fields: null,
     };
     if (line.includes(`.`)) {
       field.fields = [];
+      for (const value of spaceSplit) {
+        if (value.includes(`.`)) {
+          field.innerMessageTag = value.replace(`>`, ``);
+        }
+      }
     }
     if (line.startsWith(`map<`)) {
       field.datatype = `${spaceSplit[0]} ${spaceSplit[1]}`;
@@ -242,5 +248,6 @@ export interface Field {
   name: string;
   datatype: string;
   description: string;
+  innerMessageTag: string;
   fields: Field[];
 }

@@ -92,6 +92,7 @@ test(`fields`, () => {
     name: `example`,
     datatype: `string`,
     description: null,
+    innerMessageTag: null,
     fields: null,
   };
   expect(parser.field(field1)).toStrictEqual(expected1);
@@ -102,6 +103,7 @@ test(`fields`, () => {
     name: `example2`,
     datatype: `string`,
     description: null,
+    innerMessageTag: null,
     fields: null,
   };
   expect(parser.field(field2)).toStrictEqual(expected2);
@@ -112,6 +114,7 @@ test(`fields`, () => {
     name: `example3`,
     datatype: `string`,
     description: null,
+    innerMessageTag: null,
     fields: null,
   };
   expect(parser.field(field3)).toStrictEqual(expected3);
@@ -122,6 +125,7 @@ test(`fields`, () => {
     name: `example4`,
     datatype: `map<string, string>`,
     description: null,
+    innerMessageTag: null,
     fields: null,
   };
   expect(parser.field(field4)).toStrictEqual(expected4);
@@ -132,6 +136,7 @@ test(`fields`, () => {
     name: `example5`,
     datatype: `.pb.v1.NestedMes`,
     description: null,
+    innerMessageTag: `.pb.v1.NestedMes`,
     fields: [],
   };
   expect(parser.field(field5)).toStrictEqual(expected5);
@@ -142,6 +147,7 @@ test(`fields`, () => {
     name: "example4",
     datatype: "map<string, .pb.v1.OptionalMes>",
     description: null,
+    innerMessageTag: `.pb.v1.OptionalMes`,
     fields: [],
   };
   expect(parser.field(field6)).toStrictEqual(expected6);

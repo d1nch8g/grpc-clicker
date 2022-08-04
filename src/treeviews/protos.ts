@@ -44,7 +44,7 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
       }
       return items;
     }
-    if (element.base.datatype === ProtoType.proto) {
+    if (element.base.type === ProtoType.proto) {
       for (const svc of (element.base as Proto).services) {
         items.push(
           new ProtoItem({
@@ -56,7 +56,7 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
         );
       }
     }
-    if (element.base.datatype === ProtoType.service) {
+    if (element.base.type === ProtoType.service) {
       for (const call of (element.base as Service).calls) {
         items.push(
           new ProtoItem({
@@ -106,17 +106,17 @@ class ProtoItem extends vscode.TreeItem {
 
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     let svg = "";
-    if (input.base.datatype === ProtoType.proto) {
+    if (input.base.type === ProtoType.proto) {
       input.base = input.base as Proto;
       super.tooltip = `Proto schema definition`;
       svg = "proto.svg";
     }
-    if (input.base.datatype === ProtoType.service) {
+    if (input.base.type === ProtoType.service) {
       input.base = input.base as Service;
       super.tooltip = input.base.description;
       svg = "svc.svg";
     }
-    if (input.base.datatype === ProtoType.call) {
+    if (input.base.type === ProtoType.call) {
       super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
       input.base = input.base as Call;
       super.tooltip = input.base.description;
@@ -151,7 +151,7 @@ class ProtoItem extends vscode.TreeItem {
         arguments: [request],
       };
     }
-    if (input.base.datatype === ProtoType.message) {
+    if (input.base.type === ProtoType.message) {
       input.base = input.base as Message;
     }
     super.iconPath = {
