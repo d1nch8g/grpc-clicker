@@ -164,3 +164,7 @@ message TestMessage {
   map<string, string> example4 = 4;
   NestedMes example5 = 5;
 }
+
+message MapWithStuff {
+  map<string, OptionalMes> example4 = 4;
+}

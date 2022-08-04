@@ -1,6 +1,13 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Proto, Service, Call, ProtoType } from "../grpcurl/parser";
+import {
+  Proto,
+  Service,
+  Call,
+  ProtoType,
+  Message,
+  Field,
+} from "../grpcurl/parser";
 import { RequestHistoryData } from "../storage/history";
 
 export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
@@ -37,7 +44,7 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
       }
       return items;
     }
-    if (element.base.type === ProtoType.proto) {
+    if (element.base.datatype === ProtoType.proto) {
       for (const svc of (element.base as Proto).services) {
         items.push(
           new ProtoItem({
@@ -49,7 +56,7 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
         );
       }
     }
-    if (element.base.type === ProtoType.service) {
+    if (element.base.datatype === ProtoType.service) {
       for (const call of (element.base as Service).calls) {
         items.push(
           new ProtoItem({
@@ -78,13 +85,13 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
 }
 
 class ProtoItem extends vscode.TreeItem {
-  public base: Proto | Service | Call;
+  public base: Proto | Service | Call | Message | Field;
   public protoPath: string;
   public protoName: string;
   public serviceName: string;
   constructor(
     public input: {
-      base: Proto | Service | Call;
+      base: Proto | Service | Call | Message | Field;
       protoPath: string;
       protoName: string;
       serviceName: string;
@@ -99,18 +106,18 @@ class ProtoItem extends vscode.TreeItem {
 
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     let svg = "";
-    if (input.base.type === ProtoType.proto) {
+    if (input.base.datatype === ProtoType.proto) {
       input.base = input.base as Proto;
       super.tooltip = `Proto schema definition`;
       svg = "proto.svg";
     }
-    if (input.base.type === ProtoType.service) {
+    if (input.base.datatype === ProtoType.service) {
       input.base = input.base as Service;
       super.tooltip = input.base.description;
       svg = "svc.svg";
     }
-    if (input.base.type === ProtoType.call) {
-      super.collapsibleState = vscode.TreeItemCollapsibleState.None;
+    if (input.base.datatype === ProtoType.call) {
+      super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
       input.base = input.base as Call;
       super.tooltip = input.base.description;
       svg = "unary.svg";
@@ -118,7 +125,6 @@ class ProtoItem extends vscode.TreeItem {
         svg = "stream.svg";
       }
       super.contextValue = "call";
-
       let request: RequestData = {
         path: input.protoPath,
         protoName: input.protoName,
@@ -139,12 +145,14 @@ class ProtoItem extends vscode.TreeItem {
         metadata: [],
         hosts: [],
       };
-
       super.command = {
         command: "webview.open",
         title: "Trigger opening of webview for grpc call",
         arguments: [request],
       };
+    }
+    if (input.base.datatype === ProtoType.message) {
+      input.base = input.base as Message;
     }
     super.iconPath = {
       light: path.join(__filename, "..", "..", "images", svg),

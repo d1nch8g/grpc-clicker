@@ -148,36 +148,20 @@ export class Parser {
 
   field(line: string): Field {
     line = line.trim();
-    const isMap = line.startsWith(`map<`);
+    const spaceSplit = line.split(" ");
     let field: Field = {
       type: ProtoType.field,
-      name: "",
-      dataType: "",
+      name: spaceSplit[spaceSplit.length - 3],
+      datatype: spaceSplit[spaceSplit.length - 4],
       description: null,
-      optional: line.startsWith(`optional`),
-      repeated: line.startsWith(`repeated`),
-      map: isMap,
-      keyType: null,
-      valueType: null,
-      primitive: !line.includes(`.`),
+      fields: null,
     };
-    if (isMap) {
-      const mapValues = line
-        .replace(`<`, ` `)
-        .replace(`,`, ``)
-        .replace(`>`, ``)
-        .split(` `);
-      field.dataType = `map`;
-      field.keyType = mapValues[1];
-      field.valueType = mapValues[2];
-      field.name = mapValues[3];
-      return field;
+    if (line.includes(`.`)) {
+      field.fields = [];
     }
-    line = line.replace(`optional `, ``);
-    line = line.replace(`repeated `, ``);
-    const splitted = line.split(` `);
-    field.dataType = splitted[0];
-    field.name = splitted[1];
+    if (line.startsWith(`map<`)) {
+      field.datatype = `${spaceSplit[0]} ${spaceSplit[1]}`;
+    }
     return field;
   }
 
@@ -256,12 +240,7 @@ export interface Message {
 export interface Field {
   type: ProtoType;
   name: string;
-  dataType: string;
+  datatype: string;
   description: string;
-  optional: boolean;
-  repeated: boolean;
-  map: boolean;
-  keyType: string;
-  valueType: string;
-  primitive: boolean;
+  fields: Field[];
 }
