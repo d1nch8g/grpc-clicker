@@ -1,4 +1,4 @@
-import { Parser, ProtoType } from "./parser";
+import { Field, Parser, ProtoType } from "./parser";
 
 const protoInput = `pb.v1.Streams is a service:
 service Streams {
@@ -87,7 +87,7 @@ test(`fields`, () => {
   const parser = new Parser();
 
   const field1 = `string example = 1;`;
-  expect(parser.field(field1)).toStrictEqual({
+  const expected1: Field = {
     type: ProtoType.field,
     name: `example`,
     dataType: `string`,
@@ -97,10 +97,12 @@ test(`fields`, () => {
     map: false,
     keyType: null,
     valueType: null,
-  });
+    primitive: true,
+  };
+  expect(parser.field(field1)).toStrictEqual(expected1);
 
   const field2 = `optional string example2 = 2;`;
-  expect(parser.field(field2)).toStrictEqual({
+  const expected2: Field = {
     type: ProtoType.field,
     name: `example2`,
     dataType: `string`,
@@ -110,10 +112,12 @@ test(`fields`, () => {
     map: false,
     keyType: null,
     valueType: null,
-  });
+    primitive: true,
+  };
+  expect(parser.field(field2)).toStrictEqual(expected2);
 
   const field3 = `repeated string example3 = 3;`;
-  expect(parser.field(field3)).toStrictEqual({
+  const expected3 = {
     type: ProtoType.field,
     name: `example3`,
     dataType: `string`,
@@ -123,10 +127,12 @@ test(`fields`, () => {
     map: false,
     keyType: null,
     valueType: null,
-  });
+    primitive: true,
+  };
+  expect(parser.field(field3)).toStrictEqual(expected3);
 
   const field4 = `map<string, string> example4 = 4;`;
-  expect(parser.field(field4)).toStrictEqual({
+  const expected4 = {
     type: ProtoType.field,
     name: `example4`,
     dataType: `map`,
@@ -136,10 +142,12 @@ test(`fields`, () => {
     map: true,
     keyType: `string`,
     valueType: `string`,
-  });
+    primitive: true,
+  };
+  expect(parser.field(field4)).toStrictEqual(expected4);
 
   const field5 = `.pb.v1.NestedMes example5 = 5;`;
-  expect(parser.field(field5)).toStrictEqual({
+  const expected5: Field = {
     type: ProtoType.field,
     name: `example5`,
     dataType: `.pb.v1.NestedMes`,
@@ -149,7 +157,9 @@ test(`fields`, () => {
     map: false,
     keyType: null,
     valueType: null,
-  });
+    primitive: false,
+  };
+  expect(parser.field(field5)).toStrictEqual(expected5);
 });
 
 const msgExample = `pb.v1.TestMessage is a message:    

@@ -159,6 +159,7 @@ export class Parser {
       map: isMap,
       keyType: null,
       valueType: null,
+      primitive: !line.includes(`.`),
     };
     if (isMap) {
       const mapValues = line
@@ -262,4 +263,5 @@ export interface Field {
   map: boolean;
   keyType: string;
   valueType: string;
+  primitive: boolean;
 }
