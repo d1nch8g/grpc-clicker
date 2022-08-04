@@ -2,7 +2,6 @@ import * as vscode from "vscode";
 import { Caller } from "./grpcurl/caller";
 import { Grpcurl, Response } from "./grpcurl/grpcurl";
 import { Parser, Proto } from "./grpcurl/parser";
-import { RequestHistoryData } from "./storage/history";
 import { Storage } from "./storage/storage";
 import { RequestData } from "./treeviews/protos";
 import { TreeViews } from "./treeviews/treeviews";
