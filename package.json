@@ -30,6 +30,7 @@
     "onView:schema",
     "onView:headers",
     "onView:history",
+    "onCommand:cache.clean",
     "onCommand:hosts.add",
     "onCommand:hosts.remove",
     "onCommand:protos.add",
@@ -78,6 +79,15 @@
         "icon": {
           "dark": "images/dark/plus.svg",
           "light": "images/light/plus.svg"
+        }
+      },
+      {
+        "category": "gRPC Clicker",
+        "command": "cache.clean",
+        "title": "Clean all extension cache",
+        "icon": {
+          "dark": "images/dark/trash.svg",
+          "light": "images/light/trash.svg"
         }
       },
       {
@@ -152,6 +162,11 @@
     ],
     "menus": {
       "view/title": [
+        {
+          "command": "cache.clean",
+          "when": "view == grpc-clicker",
+          "group": "navigation"
+        },
         {
           "command": "hosts.add",
           "when": "view == hosts",
