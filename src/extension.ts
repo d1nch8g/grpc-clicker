@@ -24,6 +24,10 @@ export function activate(context: vscode.ExtensionContext) {
     },
   });
 
+  vscode.commands.registerCommand("cache.clean", async () => {
+    storage.cleanCache();
+  });
+
   vscode.commands.registerCommand("hosts.add", async () => {
     const host = await vscode.window.showInputBox({
       title: `adress to make a call`,

@@ -100,7 +100,7 @@ export class Parser {
   message(input: string): Message {
     const splittedInput = input.split("\n");
 
-    let currComment = null;
+    let currComment: string = null;
     let msg: Message = {
       type: ProtoType.message,
       name: "",
@@ -109,6 +109,34 @@ export class Parser {
       fields: [],
       template: input.split(`Message template:\n`)[1],
     };
+
+    if (splittedInput[0].endsWith(`an enum:`)) {
+      const tag = splittedInput[0].split(` `)[0];
+      const splittedTag = tag.split(`.`);
+      msg.tag = tag;
+      msg.name = splittedTag[splittedTag.length - 1];
+      msg.template = null;
+      for (const line of splittedInput) {
+        if (line.includes(`//`)) {
+          if (currComment === null) {
+            currComment = ``;
+          }
+          currComment += line.replace(`//`, ``).trim() + `\n`;
+          continue;
+        }
+        if (line.startsWith(`enum `)) {
+          msg.description = currComment.slice(0, -1);
+          currComment = null;
+        }
+        if (line.endsWith(`;`)) {
+          const field = this.field(line);
+          field.description = currComment.slice(0, -1);
+          currComment = null;
+          msg.fields.push(field);
+        }
+      }
+      return msg;
+    }
 
     for (const line of splittedInput) {
       if (line.startsWith(`message `)) {

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.0.15]
+
+> August 5, 2022
+
+- Added parser for nested proto messages
+- Added command to clean extension cache
+
 ## [0.0.14]
 
 > August 3, 2022

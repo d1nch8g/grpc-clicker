@@ -1,4 +1,4 @@
-import { Field, Parser, ProtoType } from "./parser";
+import { Field, Message, Parser, ProtoType } from "./parser";
 
 const protoInput = `pb.v1.Streams is a service:
 service Streams {
@@ -182,6 +182,16 @@ Message template:
   }
 }`;
 
+const enumExample = `pb.v1.Enum is an enum:
+// wirdo boo
+enum Enum {
+  // coca cola        
+  FIRST = 0;
+  // keka
+  // peka
+  SECOND = 1;
+}`;
+
 test(`message`, () => {
   const parser = new Parser();
   const msg = parser.message(msgExample);
@@ -204,6 +214,33 @@ comment`);
     }
   }
 }`);
+  const enumParsed = parser.message(enumExample);
+  const expectedEnum: Message = {
+    type: ProtoType.message,
+    name: "Enum",
+    tag: "pb.v1.Enum",
+    description: "wirdo boo",
+    template: null,
+    fields: [
+      {
+        type: ProtoType.field,
+        name: "FIRST",
+        datatype: undefined,
+        description: "coca cola",
+        innerMessageTag: null,
+        fields: null,
+      },
+      {
+        type: ProtoType.field,
+        name: "SECOND",
+        datatype: undefined,
+        description: `keka\npeka`,
+        innerMessageTag: null,
+        fields: null,
+      },
+    ],
+  };
+  expect(enumParsed).toStrictEqual(expectedEnum);
 });
 
 const codeErr = `EmptyCall
