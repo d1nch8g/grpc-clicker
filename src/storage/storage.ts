@@ -9,7 +9,8 @@ export class Storage {
   public protos: Protos;
   public headers: Headers;
   public history: History;
-  constructor(memento: Memento) {
+
+  constructor(private memento: Memento) {
     if (memento.get(`grpc-clicker-version`) !== "0.0.14") {
       for (const key of memento.keys()) {
         memento.update(key, undefined);
@@ -20,5 +21,11 @@ export class Storage {
     this.protos = new Protos(memento);
     this.headers = new Headers(memento);
     this.history = new History(memento);
+  }
+
+  cleanCache() {
+    for (const key of this.memento.keys()) {
+      this.memento.update(key, undefined);
+    }
   }
 }

@@ -163,11 +163,6 @@
     "menus": {
       "view/title": [
         {
-          "command": "cache.clean",
-          "when": "view == grpc-clicker",
-          "group": "navigation"
-        },
-        {
           "command": "hosts.add",
           "when": "view == hosts",
           "group": "navigation"

@@ -17,4 +17,5 @@ class MockMemento implements Memento {
 
 test(`create`, () => {
   let storage = new Storage(new MockMemento());
+  storage.cleanCache();
 });

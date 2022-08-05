@@ -121,8 +121,12 @@ message BytesMes{
   bytes message = 1;
 }
 
+// wirdo boo
 enum Enum {
+  // coca cola
   FIRST = 0;
+  // keka
+  // peka
   SECOND = 1;
 }
 
