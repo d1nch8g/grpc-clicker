@@ -11,7 +11,10 @@ import {
 import { RequestHistoryData } from "../storage/history";
 
 export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
-  constructor(private protos: Proto[]) {
+  constructor(
+    private protos: Proto[],
+    private describeMsg: (path: string, tag: string) => Promise<Message>
+  ) {
     this.protos = protos;
     this.onChange = new vscode.EventEmitter<ProtoItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
@@ -66,6 +69,66 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
             serviceName: element.serviceName,
           })
         );
+      }
+    }
+    if (element.base.type === ProtoType.call) {
+      element.base = element.base as Call;
+      items.push(
+        new ProtoItem({
+          base: await this.describeMsg(
+            element.protoPath,
+            element.base.inputMessageTag
+          ),
+          protoPath: element.protoPath,
+          protoName: element.protoName,
+          serviceName: element.serviceName,
+        })
+      );
+      items.push(
+        new ProtoItem({
+          base: await this.describeMsg(
+            element.protoPath,
+            element.base.outputMessageTag
+          ),
+          protoPath: element.protoPath,
+          protoName: element.protoName,
+          serviceName: element.serviceName,
+        })
+      );
+    }
+    if (element.base.type === ProtoType.message) {
+      element.base = element.base as Message;
+      for (const field of element.base.fields) {
+        items.push(
+          new ProtoItem({
+            base: field,
+            protoPath: element.protoPath,
+            protoName: element.protoName,
+            serviceName: element.serviceName,
+          })
+        );
+      }
+    }
+    if (element.base.type === ProtoType.field) {
+      element.base = element.base as Field;
+      if (
+        element.base.innerMessageTag !== null &&
+        element.base.innerMessageTag !== element.base.datatype
+      ) {
+        let innerMessage = await this.describeMsg(
+          element.protoPath,
+          element.base.innerMessageTag
+        );
+        for (const field of innerMessage.fields) {
+          items.push(
+            new ProtoItem({
+              base: field,
+              protoPath: element.protoPath,
+              protoName: element.protoName,
+              serviceName: element.serviceName,
+            })
+          );
+        }
       }
     }
     return items;
@@ -153,6 +216,21 @@ class ProtoItem extends vscode.TreeItem {
     }
     if (input.base.type === ProtoType.message) {
       input.base = input.base as Message;
+      super.tooltip = input.base.description;
+      super.description = input.base.tag;
+      if (input.base.fields.length === 0) {
+        super.collapsibleState = vscode.TreeItemCollapsibleState.None;
+      }
+      svg = "msg.svg";
+    }
+    if (input.base.type === ProtoType.field) {
+      input.base = input.base as Field;
+      super.tooltip = input.base.description;
+      super.description = input.base.datatype;
+      if (input.base.innerMessageTag === null) {
+        super.collapsibleState = vscode.TreeItemCollapsibleState.None;
+      }
+      svg = "field.svg";
     }
     super.iconPath = {
       light: path.join(__filename, "..", "..", "images", svg),

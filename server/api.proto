@@ -54,7 +54,7 @@ service Constructions {
 service Streams {
   rpc ServerStream(StringMes) returns (stream StringMes);
   rpc ClientStream(stream StringMes) returns (StringMes) {}
-  rpc BiDirectioalStream(stream StringMes) returns (stream StringMes);
+  rpc BiDirectioalStream(stream StringMes) returns (stream TestMessage);
 }
 
 // multiline
