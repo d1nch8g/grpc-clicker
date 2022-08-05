@@ -1,4 +1,4 @@
-import { Parser, ProtoType } from "./parser";
+import { Field, Parser, ProtoType } from "./parser";
 
 const protoInput = `pb.v1.Streams is a service:
 service Streams {
@@ -87,69 +87,70 @@ test(`fields`, () => {
   const parser = new Parser();
 
   const field1 = `string example = 1;`;
-  expect(parser.field(field1)).toStrictEqual({
+  const expected1: Field = {
     type: ProtoType.field,
     name: `example`,
-    dataType: `string`,
+    datatype: `string`,
     description: null,
-    optional: false,
-    repeated: false,
-    map: false,
-    keyType: null,
-    valueType: null,
-  });
+    innerMessageTag: null,
+    fields: null,
+  };
+  expect(parser.field(field1)).toStrictEqual(expected1);
 
   const field2 = `optional string example2 = 2;`;
-  expect(parser.field(field2)).toStrictEqual({
+  const expected2: Field = {
     type: ProtoType.field,
     name: `example2`,
-    dataType: `string`,
+    datatype: `string`,
     description: null,
-    optional: true,
-    repeated: false,
-    map: false,
-    keyType: null,
-    valueType: null,
-  });
+    innerMessageTag: null,
+    fields: null,
+  };
+  expect(parser.field(field2)).toStrictEqual(expected2);
 
   const field3 = `repeated string example3 = 3;`;
-  expect(parser.field(field3)).toStrictEqual({
+  const expected3: Field = {
     type: ProtoType.field,
     name: `example3`,
-    dataType: `string`,
+    datatype: `string`,
     description: null,
-    optional: false,
-    repeated: true,
-    map: false,
-    keyType: null,
-    valueType: null,
-  });
+    innerMessageTag: null,
+    fields: null,
+  };
+  expect(parser.field(field3)).toStrictEqual(expected3);
 
   const field4 = `map<string, string> example4 = 4;`;
-  expect(parser.field(field4)).toStrictEqual({
+  const expected4: Field = {
     type: ProtoType.field,
     name: `example4`,
-    dataType: `map`,
+    datatype: `map<string, string>`,
     description: null,
-    optional: false,
-    repeated: false,
-    map: true,
-    keyType: `string`,
-    valueType: `string`,
-  });
+    innerMessageTag: null,
+    fields: null,
+  };
+  expect(parser.field(field4)).toStrictEqual(expected4);
 
   const field5 = `.pb.v1.NestedMes example5 = 5;`;
-  expect(parser.field(field5)).toStrictEqual({
+  const expected5: Field = {
     type: ProtoType.field,
     name: `example5`,
-    dataType: `.pb.v1.NestedMes`,
+    datatype: `.pb.v1.NestedMes`,
     description: null,
-    optional: false,
-    repeated: false,
-    map: false,
-    keyType: null,
-    valueType: null,
-  });
+    innerMessageTag: `.pb.v1.NestedMes`,
+    fields: [],
+  };
+  expect(parser.field(field5)).toStrictEqual(expected5);
+
+  const field6 = `map<string, .pb.v1.OptionalMes> example4 = 4;`;
+  const expected6: Field = {
+    type: ProtoType.field,
+    name: "example4",
+    datatype: "map<string, .pb.v1.OptionalMes>",
+    description: null,
+    innerMessageTag: `.pb.v1.OptionalMes`,
+    fields: [],
+  };
+  expect(parser.field(field6)).toStrictEqual(expected6);
 });
 
 const msgExample = `pb.v1.TestMessage is a message:    

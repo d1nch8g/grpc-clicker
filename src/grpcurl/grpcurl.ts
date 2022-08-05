@@ -72,11 +72,6 @@ export class Grpcurl {
     }
     return input;
   }
-
-  private jsonPreprocess(input: string): string {
-    input = JSON.stringify(JSON.parse(input));
-    return `'${input}'`;
-  }
 }
 
 export interface Request {

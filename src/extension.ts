@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { Caller } from "./grpcurl/caller";
-import { Grpcurl, Response } from "./grpcurl/grpcurl";
-import { Parser, Proto } from "./grpcurl/parser";
+import { Grpcurl } from "./grpcurl/grpcurl";
+import { Message, Parser, Proto } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
 import { RequestData } from "./treeviews/protos";
 import { TreeViews } from "./treeviews/treeviews";
@@ -15,6 +15,13 @@ export function activate(context: vscode.ExtensionContext) {
     headers: storage.headers.list(),
     requests: storage.history.list(),
     protos: storage.protos.list(),
+    describeMsg: async (path: string, tag: string): Promise<Message> => {
+      const [msg, err] = await grpcurl.message(path, tag);
+      if (err !== null) {
+        vscode.window.showErrorMessage(err.message);
+      }
+      return msg;
+    },
   });
 
   vscode.commands.registerCommand("hosts.add", async () => {
