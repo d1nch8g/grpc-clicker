@@ -234,7 +234,10 @@ export function activate(context: vscode.ExtensionContext) {
     }
   });
 
-  // TODO add command to switch back from docker version
+  vscode.commands.registerCommand("history.clean", () => {
+    storage.history.clean();
+    treeviews.history.refresh(storage.history.list());
+  });
 
   if (storage.showInstallError()) {
     grpcurl.checkInstalled().then((installed) => {

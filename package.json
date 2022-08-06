@@ -221,6 +221,11 @@
           "command": "protos.docker",
           "when": "view == protos",
           "group": "navigation"
+        },
+        {
+          "command": "history.clean",
+          "when": "view == history",
+          "group": "navigation"
         }
       ],
       "view/item/context": [
