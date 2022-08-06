@@ -62,7 +62,7 @@ export class Grpcurl {
     return response;
   }
 
-  jsonPreprocess(input: string): string {
+  private jsonPreprocess(input: string): string {
     input = JSON.stringify(JSON.parse(input));
     if (process.platform === "win32") {
       input = input.replaceAll('"', '\\"');
@@ -71,12 +71,16 @@ export class Grpcurl {
     return `'${input}'`;
   }
 
-  headerPreprocess(header: string): string {
+  private headerPreprocess(header: string): string {
     if (process.platform === "win32") {
       return `-H "${header}" `;
     }
     return `-H '${header}' `;
   }
+
+  // TODO add switch for commands to use docker
+  // TODO 
+  // TODO convert path to docker format
 }
 
 export interface Request {

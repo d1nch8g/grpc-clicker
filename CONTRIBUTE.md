@@ -33,3 +33,11 @@ npm run serve:grpc
 4. Launch extension - F5
 
 5. Contribute and enjoy!
+
+---
+
+# grpcurl commands examples
+
+```sh
+docker run -v C:\\Users\dangd\OneDrive\Документы\grpclicker_vscode\server\api.proto:\Users\dangd\OneDrive\Документы\grpclicker_vscode\server\api.proto fullstorydev/grpcurl -import-path / -proto \Users\dangd\OneDrive\Документы\grpclicker_vscode\server\api.proto describe
+```
