@@ -78,8 +78,8 @@
         "command": "protos.docker",
         "title": "Turn on/off docker for grpc calls",
         "icon": {
-          "dark": "images/dark/plus.svg",
-          "light": "images/light/plus.svg"
+          "dark": "images/dark/docker.svg",
+          "light": "images/light/docker.svg"
         }
       },
       {
@@ -204,6 +204,11 @@
         },
         {
           "command": "protos.refresh",
+          "when": "view == protos",
+          "group": "navigation"
+        },
+        {
+          "command": "protos.docker",
           "when": "view == protos",
           "group": "navigation"
         }

@@ -1,4 +1,5 @@
 import { Memento } from "vscode";
+import { Docker } from "./docker";
 import { Headers } from "./headers";
 import { History } from "./history";
 import { Hosts } from "./hosts";
@@ -9,6 +10,7 @@ export class Storage {
   public protos: Protos;
   public headers: Headers;
   public history: History;
+  public docker: Docker;
 
   constructor(private memento: Memento) {
     if (memento.get(`grpc-clicker-version`) !== "0.0.15") {
@@ -21,6 +23,7 @@ export class Storage {
     this.protos = new Protos(memento);
     this.headers = new Headers(memento);
     this.history = new History(memento);
+    this.docker = new Docker(memento);
   }
 
   clean() {

@@ -218,6 +218,16 @@ export function activate(context: vscode.ExtensionContext) {
     webviewFactory.create(data);
   });
 
+  vscode.commands.registerCommand("protos.docker", async () => {
+    if (storage.docker.isOn()) {
+      vscode.window.showInformationMessage(`turning off docker mode`);
+      storage.docker.turnOff();
+    } else {
+      vscode.window.showInformationMessage(`turning on docker mode`);
+      storage.docker.turnOn();
+    }
+  });
+
   // TODO add command to switch back from docker version
 
   if (storage.showInstallError()) {
