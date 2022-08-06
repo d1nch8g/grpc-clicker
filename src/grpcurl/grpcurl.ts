@@ -3,6 +3,7 @@ import { Caller } from "./caller";
 import { Message, Parser, Proto } from "./parser";
 
 export class Grpcurl {
+  private runInDocker: boolean = false;
   constructor(private parser: Parser, private caller: Caller) {}
 
   async proto(path: string): Promise<[Proto, Error]> {
@@ -76,6 +77,18 @@ export class Grpcurl {
       return `-H "${header}" `;
     }
     return `-H '${header}' `;
+  }
+
+  async checkInstalled(): Promise<boolean> {
+    const [resp, err] = await this.caller.execute(`grpcurls -help`, []);
+    if (err !== null) {
+      return false;
+    }
+    return true;
+  }
+
+  switchToDocker() {
+    this.runInDocker = true;
   }
 
   // TODO Add switch between regular and dockerized versions of grpcurl

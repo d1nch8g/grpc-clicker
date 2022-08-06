@@ -28,4 +28,12 @@ export class Storage {
       this.memento.update(key, undefined);
     }
   }
+
+  showInstallError(): boolean {
+    if (this.memento.get(`grpcurlIsInstalled`) !== true) {
+      this.memento.update(`grpcurlIsInstalled`, true);
+      return true;
+    }
+    return false;
+  }
 }

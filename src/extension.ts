@@ -9,7 +9,9 @@ import { WebViewFactory } from "./webview";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
+
   const grpcurl = new Grpcurl(new Parser(), new Caller());
+
   const treeviews = new TreeViews({
     hosts: storage.hosts.list(),
     headers: storage.headers.list(),
@@ -215,6 +217,17 @@ export function activate(context: vscode.ExtensionContext) {
     data.reqJson = msg.template;
     webviewFactory.create(data);
   });
+
+  // TODO add command to switch back from docker version
+  if (storage.showInstallError()) {
+    grpcurl.checkInstalled().then((installed) => {
+      if (!installed) {
+        vscode.window.showErrorMessage(
+          `gRPCurl is not installed. You can switch to docker version in extension panel.`
+        );
+      }
+    });
+  }
 }
 
 export function deactivate() {}
