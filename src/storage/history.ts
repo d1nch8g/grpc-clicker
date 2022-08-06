@@ -23,6 +23,10 @@ export class History {
     this.memento.update(this.key, requestStrings);
     return this.list();
   }
+
+  public clean() {
+    this.memento.update(this.key, undefined);
+  }
 }
 
 export interface RequestHistoryData extends Request, Response {
