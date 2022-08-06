@@ -35,7 +35,14 @@ class MockParser implements Parser {
 }
 
 class MockCaller implements Caller {
-  async execute(form: string, args: string[]): Promise<[string, Error]> {
+  dockerize(input: string): string {
+    throw new Error("Method not implemented.");
+  }
+  async execute(
+    form: string,
+    args: string[],
+    inDocker: boolean
+  ): Promise<[string, Error]> {
     if (args.length === 0) {
       return [null, null];
     }
