@@ -219,6 +219,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   // TODO add command to switch back from docker version
+
   if (storage.showInstallError()) {
     grpcurl.checkInstalled().then((installed) => {
       if (!installed) {
