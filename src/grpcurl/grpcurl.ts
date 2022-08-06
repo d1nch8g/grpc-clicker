@@ -78,9 +78,8 @@ export class Grpcurl {
     return `-H '${header}' `;
   }
 
-  // TODO add switch for commands to use docker
-  // TODO 
-  // TODO convert path to docker format
+  // TODO Add switch between regular and dockerized versions of grpcurl
+  // TODO add ability to dockerize any command containing path for both windows and linux platforms
 }
 
 export interface Request {
