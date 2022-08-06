@@ -36,6 +36,7 @@
     "onCommand:protos.add",
     "onCommand:protos.remove",
     "onCommand:protos.refresh",
+    "onCommand:protos.docker",
     "onCommand:headers.add",
     "onCommand:headers.remove",
     "onWebviewPanel:callgrpc"
@@ -59,7 +60,7 @@
         },
         {
           "id": "protos",
-          "name": "Proto schema explorer"
+          "name": "Proto schemas"
         },
         {
           "id": "headers",
@@ -72,6 +73,15 @@
       ]
     },
     "commands": [
+      {
+        "category": "gRPC Clicker",
+        "command": "protos.docker",
+        "title": "Turn on/off docker for grpc calls",
+        "icon": {
+          "dark": "images/dark/plus.svg",
+          "light": "images/light/plus.svg"
+        }
+      },
       {
         "category": "gRPC Clicker",
         "command": "hosts.add",
