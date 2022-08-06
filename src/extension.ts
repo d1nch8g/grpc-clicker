@@ -186,6 +186,7 @@ export function activate(context: vscode.ExtensionContext) {
       data.date = resp.date;
       data.errmes = resp.errmes;
       storage.history.add(data);
+      treeviews.history.refresh(storage.history.list());
       return data;
     }
   );
