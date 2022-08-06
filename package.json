@@ -30,6 +30,7 @@
     "onView:schema",
     "onView:headers",
     "onView:history",
+    "onCommand:history.clean",
     "onCommand:cache.clean",
     "onCommand:hosts.add",
     "onCommand:hosts.remove",
@@ -73,6 +74,15 @@
       ]
     },
     "commands": [
+      {
+        "category": "gRPC Clicker",
+        "command": "history.clean",
+        "title": "Clean history of requests",
+        "icon": {
+          "dark": "images/dark/trash.svg",
+          "light": "images/light/trash.svg"
+        }
+      },
       {
         "category": "gRPC Clicker",
         "command": "protos.docker",
