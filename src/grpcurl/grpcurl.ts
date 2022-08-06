@@ -3,8 +3,11 @@ import { Caller } from "./caller";
 import { Message, Parser, Proto } from "./parser";
 
 export class Grpcurl {
-  private runInDocker: boolean = false;
-  constructor(private parser: Parser, private caller: Caller) {}
+  constructor(
+    private parser: Parser,
+    private caller: Caller,
+    public useDocker: boolean
+  ) {}
 
   async proto(path: string): Promise<[Proto, Error]> {
     const call = `grpcurl -import-path / -proto %s describe`;
@@ -85,10 +88,6 @@ export class Grpcurl {
       return false;
     }
     return true;
-  }
-
-  switchToDocker() {
-    this.runInDocker = true;
   }
 
   // TODO Add switch between regular and dockerized versions of grpcurl

@@ -10,7 +10,11 @@ import { WebViewFactory } from "./webview";
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
 
-  const grpcurl = new Grpcurl(new Parser(), new Caller());
+  const grpcurl = new Grpcurl(
+    new Parser(),
+    new Caller(),
+    storage.docker.isOn()
+  );
 
   const treeviews = new TreeViews({
     hosts: storage.hosts.list(),
@@ -222,9 +226,11 @@ export function activate(context: vscode.ExtensionContext) {
     if (storage.docker.isOn()) {
       vscode.window.showInformationMessage(`turning off docker mode`);
       storage.docker.turnOff();
+      grpcurl.useDocker = true;
     } else {
       vscode.window.showInformationMessage(`turning on docker mode`);
       storage.docker.turnOn();
+      grpcurl.useDocker = true;
     }
   });
 

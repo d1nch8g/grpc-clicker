@@ -50,7 +50,7 @@ class MockCaller implements Caller {
 }
 
 test(`proto`, async () => {
-  const grpcurl = new Grpcurl(new MockParser(), new MockCaller());
+  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
   expect(await grpcurl.proto(`docs/api.proto`)).toStrictEqual([
     {
       type: ProtoType.proto,
@@ -63,7 +63,7 @@ test(`proto`, async () => {
 });
 
 test(`message`, async () => {
-  const grpcurl = new Grpcurl(new MockParser(), new MockCaller());
+  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
   expect(
     await grpcurl.message(`docs/api.proto`, `.pb.v1.StringMes`)
   ).toStrictEqual([
@@ -80,7 +80,7 @@ test(`message`, async () => {
 });
 
 test(`send`, async () => {
-  const grpcurl = new Grpcurl(new MockParser(), new MockCaller());
+  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
   let resp = await grpcurl.send({
     path: "docs/api.proto",
     reqJson: "{}",
@@ -96,7 +96,7 @@ test(`send`, async () => {
 });
 
 test(`checkInstalled`, async () => {
-  const grpcurl = new Grpcurl(new MockParser(), new MockCaller());
+  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
   const resp = await grpcurl.checkInstalled();
   expect(resp).toBeTruthy();
 });
