@@ -111,15 +111,15 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
     }
     if (element.base.type === ProtoType.field) {
       element.base = element.base as Field;
-      if (
-        element.base.innerMessageTag !== null &&
-        element.base.innerMessageTag !== element.base.datatype
-      ) {
+      if (element.base.innerMessageTag !== null) {
         let innerMessage = await this.describeMsg(
           element.protoPath,
           element.base.innerMessageTag
         );
         for (const field of innerMessage.fields) {
+          if (field.innerMessageTag === element.base.innerMessageTag) {
+            field.innerMessageTag = null;
+          }
           items.push(
             new ProtoItem({
               base: field,
