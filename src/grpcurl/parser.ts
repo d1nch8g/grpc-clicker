@@ -180,7 +180,7 @@ export class Parser {
     let field: Field = {
       type: ProtoType.field,
       name: spaceSplit[spaceSplit.length - 3],
-      datatype: spaceSplit[spaceSplit.length - 4],
+      datatype: spaceSplit.slice(0, spaceSplit.length - 3).join(` `),
       description: null,
       innerMessageTag: null,
       fields: null,
@@ -223,7 +223,6 @@ export class Parser {
       resp.errmes = splitted[3].replace(`  Message: `, ``);
       return resp;
     }
-    // TODO add checks for unknown forms of errors
     resp.respJson = input;
     resp.code = `OK`;
     return resp;

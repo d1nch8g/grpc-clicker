@@ -101,7 +101,7 @@ test(`fields`, () => {
   const expected2: Field = {
     type: ProtoType.field,
     name: `example2`,
-    datatype: `string`,
+    datatype: `optional string`,
     description: null,
     innerMessageTag: null,
     fields: null,
@@ -112,7 +112,7 @@ test(`fields`, () => {
   const expected3: Field = {
     type: ProtoType.field,
     name: `example3`,
-    datatype: `string`,
+    datatype: `repeated string`,
     description: null,
     innerMessageTag: null,
     fields: null,
@@ -225,7 +225,7 @@ comment`);
       {
         type: ProtoType.field,
         name: "FIRST",
-        datatype: undefined,
+        datatype: "",
         description: "coca cola",
         innerMessageTag: null,
         fields: null,
@@ -233,7 +233,7 @@ comment`);
       {
         type: ProtoType.field,
         name: "SECOND",
-        datatype: undefined,
+        datatype: "",
         description: `keka\npeka`,
         innerMessageTag: null,
         fields: null,

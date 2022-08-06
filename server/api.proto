@@ -26,8 +26,7 @@ service Basics {
   another comment example
   another comment example
   another comment example
-  another comment example
-  */
+  another comment example */
   rpc Sint32Call(Sint32Mes) returns (Sint32Mes);
   rpc Sint64Call(Sint64Mes) returns (Sint64Mes);
   /* another comment example */
@@ -165,7 +164,7 @@ message TestMessage {
   string example = 1;
   optional string example2 = 2;
   repeated string example3 = 3;
-  map<string, string> example4 = 4;
+  map<string, MapWithStuff> example4 = 4;
   NestedMes example5 = 5;
 }
 
