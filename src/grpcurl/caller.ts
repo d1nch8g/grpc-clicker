@@ -7,7 +7,11 @@ export class Caller {
     inDocker: boolean
   ): Promise<[string, Error]> {
     try {
-      const call = util.format(form, ...args);
+      let call = util.format(form, ...args);
+
+      if (inDocker) {
+        call = this.dockerize(call);
+      }
 
       const exec = util.promisify(require("child_process").exec);
       const { stdout, stderr } = await exec(call);
@@ -32,7 +36,7 @@ export class Caller {
     if (process.platform === "win32") {
       const protoSplitted = input.split(`-proto `)[1];
       const windowsPath = protoSplitted.split(` `)[0];
-      const linuxPath = windowsPath.split(`:\\\\`)[1];
+      const linuxPath = windowsPath.split(`:`)[1];
       input = input.replace(windowsPath, linuxPath);
       return input.replace(
         `grpcurl `,

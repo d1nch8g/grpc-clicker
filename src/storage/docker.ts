@@ -5,7 +5,8 @@ export class Docker {
   constructor(private memento: Memento) {}
 
   isOn(): boolean {
-    return this.memento.get(this.key, false);
+    let useDocker = this.memento.get(this.key, false);
+    return useDocker;
   }
 
   turnOn() {

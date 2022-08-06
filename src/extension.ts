@@ -224,11 +224,11 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("protos.docker", async () => {
     if (storage.docker.isOn()) {
-      vscode.window.showInformationMessage(`turning off docker mode`);
+      vscode.window.showInformationMessage(`docker mode turned off`);
       storage.docker.turnOff();
-      grpcurl.useDocker = true;
+      grpcurl.useDocker = false;
     } else {
-      vscode.window.showInformationMessage(`turning on docker mode`);
+      vscode.window.showInformationMessage(`docker mode turned on`);
       storage.docker.turnOn();
       grpcurl.useDocker = true;
     }
