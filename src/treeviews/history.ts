@@ -52,12 +52,12 @@ class HistoryItem extends vscode.TreeItem {
     super.contextValue = "host";
 
     super.tooltip = new vscode.MarkdownString(`## Request information:
-- host for execution ${request.host}
-- method used in request ${request.call}
-- response code ${request.code}
-- time of execution ${request.time}
-- date ${request.date}
-- error message ${request.errmes}`);
+- host for execution: \`${request.host}\`
+- method used in request: \`${request.call}\`
+- response code: \`${request.code}\`
+- time of execution: \`${request.time}\`
+- date: \`${request.date}\`
+- error message: \`${request.errmes}\``);
 
     super.contextValue = "call";
 

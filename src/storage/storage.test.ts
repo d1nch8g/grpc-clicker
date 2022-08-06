@@ -2,20 +2,38 @@ import { Memento } from "vscode";
 import { Storage } from "./storage";
 
 class MockMemento implements Memento {
+  version: string = `version`;
+  triggered: boolean = false;
+  cleaned: boolean = false;
   keys(): readonly string[] {
-    return [];
+    this.triggered = true;
+    return [`key`];
   }
   get<T>(key: string): T;
   get<T>(key: string, defaultValue: T): T;
   get(key: unknown, defaultValue?: unknown): any {
-    return [];
+    if (key === `grpc-clicker-version`) {
+      return undefined;
+    }
+    return undefined;
   }
   update(key: string, value: any): Thenable<void> {
+    if (key === `key`) {
+      this.cleaned = true;
+    }
     return;
   }
 }
 
 test(`create`, () => {
-  let storage = new Storage(new MockMemento());
-  storage.cleanCache();
+  const memento = new MockMemento();
+  new Storage(memento);
+  expect(memento.triggered).toBeTruthy();
+});
+
+test(`clean`, async () => {
+  const memento = new MockMemento();
+  const storage = new Storage(memento);
+  storage.clean();
+  expect(memento.cleaned).toBeTruthy();
 });

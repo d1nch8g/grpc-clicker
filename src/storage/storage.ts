@@ -23,7 +23,7 @@ export class Storage {
     this.history = new History(memento);
   }
 
-  cleanCache() {
+  clean() {
     for (const key of this.memento.keys()) {
       this.memento.update(key, undefined);
     }

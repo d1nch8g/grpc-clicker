@@ -25,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   vscode.commands.registerCommand("cache.clean", async () => {
-    storage.cleanCache();
+    storage.clean();
     treeviews.headers.refresh([]);
     treeviews.protos.refresh([]);
     treeviews.headers.refresh([]);

@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file. Dates are d
 - Added command to clean extension cache
 - Fixed header preprocess for windows platform
 - Made better icons for extension
+- Fixed error parsing mechanism to get proper codes from gRPC responses
+- Stabilized `watcher.js` for ease of contribution
 
 ## [0.0.14]
 
