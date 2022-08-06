@@ -177,13 +177,20 @@ export function activate(context: vscode.ExtensionContext) {
   const webviewFactory = new WebViewFactory(
     context.extensionUri,
     async (data) => {
+      let metadata: string[] = [];
+      const headers = storage.headers.list();
+      for (const header of headers) {
+        if (header.active) {
+          metadata.push(header.value);
+        }
+      }
       const resp = await grpcurl.send({
         path: data.path,
         reqJson: data.reqJson,
         host: data.host,
         call: `${data.protoName}.${data.service}.${data.call}`,
         tlsOn: data.tlsOn,
-        metadata: data.metadata,
+        metadata: metadata,
         maxMsgSize: data.maxMsgSize,
       });
       data.code = resp.code;
