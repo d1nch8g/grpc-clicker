@@ -57,7 +57,13 @@ class HistoryItem extends vscode.TreeItem {
 - response code: \`${request.code}\`
 - time of execution: \`${request.time}\`
 - date: \`${request.date}\`
-- error message: \`${request.errmes}\``);
+
+Error message:
+
+\`\`\`
+${request.errmes}
+\`\`\`
+`);
 
     super.contextValue = "call";
 

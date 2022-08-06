@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file. Dates are d
 > August 7, 2022
 
 - Added ability to call grpcurl dockerized version
+- Added cleanup button for request history
+- Fixed bug with badly appended metadata to request
 
 ## [0.0.15]
 
