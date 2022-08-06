@@ -14,7 +14,7 @@ export class HistoryTreeView implements vscode.TreeDataProvider<HistoryItem> {
     void | HistoryItem | HistoryItem[]
   >;
 
-  update(requests: RequestHistoryData[]): void {
+  refresh(requests: RequestHistoryData[]): void {
     this.requests = requests;
     this.onChange.fire();
   }

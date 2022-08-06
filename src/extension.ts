@@ -26,6 +26,10 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("cache.clean", async () => {
     storage.cleanCache();
+    treeviews.headers.refresh([]);
+    treeviews.protos.refresh([]);
+    treeviews.headers.refresh([]);
+    treeviews.history.refresh([]);
   });
 
   vscode.commands.registerCommand("hosts.add", async () => {
@@ -94,7 +98,7 @@ export function activate(context: vscode.ExtensionContext) {
     if (err !== null) {
       vscode.window.showErrorMessage(err.message);
     }
-    treeviews.protos.update(storage.protos.list());
+    treeviews.protos.refresh(storage.protos.list());
   });
 
   vscode.commands.registerCommand("protos.remove", async () => {
@@ -105,7 +109,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
     let path = await vscode.window.showQuickPick(pathes);
     storage.protos.remove(path);
-    treeviews.protos.update(storage.protos.list());
+    treeviews.protos.refresh(storage.protos.list());
   });
 
   vscode.commands.registerCommand("protos.refresh", async () => {
@@ -120,7 +124,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
     storage.protos.save(newProtos);
-    treeviews.protos.update(newProtos);
+    treeviews.protos.refresh(newProtos);
   });
 
   vscode.commands.registerCommand("headers.add", async () => {

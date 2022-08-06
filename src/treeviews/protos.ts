@@ -23,7 +23,7 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
   private onChange: vscode.EventEmitter<ProtoItem | undefined | void>;
   readonly onDidChangeTreeData: vscode.Event<void | ProtoItem | ProtoItem[]>;
 
-  async update(protos: Proto[]) {
+  async refresh(protos: Proto[]) {
     this.protos = protos;
     this.onChange.fire();
   }
