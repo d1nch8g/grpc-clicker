@@ -88,3 +88,29 @@ test(`list`, () => {
     },
   ]);
 });
+
+test(`clean`, () => {
+  const storage = new MockMemento();
+  const history = new History(storage);
+  history.add({
+    path: "example",
+    reqJson: "",
+    host: "",
+    call: "",
+    tlsOn: false,
+    metadata: [],
+    maxMsgSize: 420,
+    code: "",
+    respJson: "",
+    time: "",
+    errmes: "",
+    date: "",
+    service: "",
+    inputMessageTag: "",
+    inputMessageName: "",
+    outputMessageName: "",
+  });
+
+  history.clean();
+  expect(storage.values).toBeUndefined();
+});
