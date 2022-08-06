@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file. Dates are d
 
 - Added parser for nested proto messages
 - Added command to clean extension cache
+- Fixed header preprocess for windows platform
 
 ## [0.0.14]
 
