@@ -1,79 +1,36 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
-<polygon style="fill:#88888F;" points="462.175,136.964 255.999,17.928 49.824,136.964 49.824,375.035 255.999,494.071 
-	462.175,375.035 "/>
-<polygon style="fill:#797781;" points="255.999,17.928 255.999,494.071 462.175,375.035 462.175,136.964 "/>
-<g>
-	
-		<rect x="282.453" y="266.121" transform="matrix(0.5 -0.866 0.866 0.5 -93.7016 398.1698)" style="fill:#D1E5F5;" width="31.052" height="28.226"/>
-	
-		<rect x="406.074" y="335.271" transform="matrix(-0.866 -0.5 0.5 -0.866 608.6758 864.6925)" style="fill:#D1E5F5;" width="28.226" height="31.052"/>
-	
-		<rect x="324.587" y="288.221" transform="matrix(-0.866 -0.5 0.5 -0.866 480.1432 736.1516)" style="fill:#D1E5F5;" width="28.226" height="31.052"/>
-	
-		<rect x="365.332" y="311.739" transform="matrix(-0.866 -0.5 0.5 -0.866 544.4166 800.4098)" style="fill:#D1E5F5;" width="28.226" height="31.052"/>
-	<path style="fill:#D1E5F5;" d="M255.999,0L34.297,128v255.999l221.703,128l221.703-128V128L255.999,0z M446.649,366.071
-		L271.525,467.179V264.963l175.122-101.108v202.216H446.649z M65.35,163.856l175.123,101.108v202.215L65.35,366.071V163.856z
-		 M431.122,136.964L255.999,238.072L80.877,136.964L255.999,35.856L431.122,136.964z"/>
-	
-		<rect x="117.008" y="313.169" transform="matrix(0.5 0.866 -0.866 0.5 349.6985 48.8605)" style="fill:#D1E5F5;" width="31.052" height="28.226"/>
-	
-		<rect x="76.257" y="336.702" transform="matrix(0.5 0.866 -0.866 0.5 349.7028 95.9176)" style="fill:#D1E5F5;" width="31.052" height="28.226"/>
-	
-		<rect x="157.755" y="289.651" transform="matrix(0.5 0.866 -0.866 0.5 349.7046 1.8137)" style="fill:#D1E5F5;" width="31.052" height="28.226"/>
-	
-		<rect x="199.915" y="264.689" transform="matrix(-0.866 0.5 -0.5 -0.866 539.4911 415.8704)" style="fill:#D1E5F5;" width="28.226" height="31.052"/>
-	<rect x="240.473" y="193.428" style="fill:#D1E5F5;" width="31.053" height="28.227"/>
-	<rect x="240.473" y="146.373" style="fill:#D1E5F5;" width="31.053" height="28.227"/>
-	<rect x="240.473" y="52.272" style="fill:#D1E5F5;" width="31.053" height="28.227"/>
-	<rect x="240.473" y="99.328" style="fill:#D1E5F5;" width="31.053" height="28.227"/>
-</g>
-<g>
-	
-		<rect x="283.844" y="264.699" transform="matrix(-0.866 -0.5 0.5 -0.866 415.8788 671.8882)" style="fill:#B4D8F1;" width="28.226" height="31.052"/>
-	
-		<rect x="406.074" y="335.271" transform="matrix(-0.866 -0.5 0.5 -0.866 608.6758 864.6925)" style="fill:#B4D8F1;" width="28.226" height="31.052"/>
-	
-		<rect x="324.587" y="288.221" transform="matrix(-0.866 -0.5 0.5 -0.866 480.1432 736.1516)" style="fill:#B4D8F1;" width="28.226" height="31.052"/>
-	
-		<rect x="365.332" y="311.739" transform="matrix(-0.866 -0.5 0.5 -0.866 544.4166 800.4098)" style="fill:#B4D8F1;" width="28.226" height="31.052"/>
-	<path style="fill:#B4D8F1;" d="M255.999,0v35.857l175.123,101.108L255.999,238.072V512l221.703-128V128L255.999,0z
-		 M446.649,366.071L271.525,467.179V264.963l175.122-101.108v202.216H446.649z"/>
-	<rect x="255.999" y="193.428" style="fill:#B4D8F1;" width="15.526" height="28.227"/>
-	<rect x="255.999" y="146.373" style="fill:#B4D8F1;" width="15.526" height="28.227"/>
-	<rect x="255.999" y="52.272" style="fill:#B4D8F1;" width="15.526" height="28.227"/>
-	<rect x="255.999" y="99.328" style="fill:#B4D8F1;" width="15.526" height="28.227"/>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+	y="0px" viewBox="0 0 48 48" style="enable-background:new 0 0 48 48;" xml:space="preserve">
+	<style type="text/css">
+		.st0 {
+			fill: #828282;
+			stroke: #056B5C;
+			stroke-width: 3;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+			stroke-miterlimit: 10;
+		}
+
+		.st1 {
+			fill: #494949;
+			stroke: #056B5C;
+			stroke-width: 3;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+			stroke-miterlimit: 10;
+		}
+
+		.st2 {
+			fill: #C1C1C1;
+			stroke: #056B5C;
+			stroke-width: 3;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+			stroke-miterlimit: 10;
+		}
+	</style>
+	<polygon class="st0" points="43,35.25 43,12.75 23.52,1.5 4.03,12.75 4.03,35.25 23.52,46.5 " />
+	<polygon class="st1" points="43,35.25 43,12.75 23.52,24.94 23.52,46.5 " />
+	<polygon class="st2" points="43,12.75 23.52,1.5 4.03,12.75 23.52,24.94 " />
 </svg>

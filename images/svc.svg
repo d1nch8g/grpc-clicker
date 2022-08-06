@@ -1,57 +1,26 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 503.6 503.6" style="enable-background:new 0 0 503.6 503.6;" xml:space="preserve">
-<polygon style="fill:#4BF9F4;" points="459.4,373.2 251.4,495.6 43.4,373.2 43.4,130 251.4,7.6 459.4,130 "/>
-<polygon style="fill:#4DBFF7;" points="251.4,495.6 460.2,374.8 251.4,254.8 42.6,374.8 "/>
-<polyline style="fill:#CCFFFF;" points="43.4,371.6 43.4,130 254.6,6.8 "/>
-<polyline style="fill:#2FD1DD;" points="249.8,7.6 459.4,130 459.4,373.2 249,495.6 "/>
-<polygon style="fill:#0090E0;" points="251.4,254.8 251.4,495.6 460.2,374.8 "/>
-<polyline style="fill:#20B6CE;" points="459.4,131.6 459.4,373.2 248.2,496.4 "/>
-<polygon style="fill:#0074DD;" points="354.6,312.4 249,495.6 460.2,374.8 "/>
-<g>
-	<path style="fill:#2F5068;" d="M251.4,503.6c-1.6,0-2.4,0-4-0.8L37.8,380.4c-2.4-1.6-2.4-4-2.4-7.2V130c0-3.2,0-5.6,2.4-7.2
-		L248.2,1.2c2.4-1.6,4.8-1.6,8,0l209.6,121.6c2.4,1.6,2.4,4,2.4,7.2v244c0,3.2,0,5.6-2.4,7.2L254.6,502
-		C253.8,502.8,253,503.6,251.4,503.6z M51.4,369.2l200,117.6l200-117.6V134l-200-116.8L51.4,134V369.2z"/>
-	<path style="fill:#2F5068;" d="M460.2,377.2c-1.6,0-4.8,0-5.6-0.8L251.4,259.6L46.6,378c-4,2.4-4,0-6.4-4s-0.8-10.4,2.4-12.8
-		l204.8-117.6c2.4-1.6,5.6-1.6,8,0L460.2,362c4,2.4,6.4,6.4,4,10.4C462.6,374,462.6,377.2,460.2,377.2z"/>
-</g>
-<g>
-	<path style="fill:#2F5068;" d="M251.4,259.6c-4.8,0-8-3.2-8-8V12.4c0-4.8,3.2-8,8-8c4.8,0,8,3.2,8,8v239.2
-		C259.4,256.4,256.2,259.6,251.4,259.6z"/>
-	<path style="fill:#2F5068;" d="M251.4,258.8c-1.6,0-2.4,0-4-0.8l-204-117.6c-4-2.4-6.4-8.8-4-12.8c2.4-4,6.4-4,10.4-2.4L251.4,242
-		l203.2-117.6c4-2.4,8,0,9.6,3.2c2.4,4-0.8,9.6-4.8,12L255.4,258C253.8,258.8,253,258.8,251.4,258.8z"/>
-</g>
-<path style="fill:#2F5068;" d="M251.4,497.2c-4.8,0-8-3.2-8-8V250c0-4.8,3.2-8,8-8c4.8,0,8,3.2,8,8v239.2
-	C259.4,493.2,256.2,497.2,251.4,497.2z"/>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
+	 viewBox="0 0 48 48" style="enable-background:new 0 0 48 48;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#BABABA;}
+	.st1{fill:#056B5C;}
+	.st2{fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#969696;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<path class="st0" d="M46,13H2c-1.1,0-2-0.9-2-2V2c0-1.1,0.9-2,2-2h44c1.1,0,2,0.9,2,2v9C48,12.1,47.1,13,46,13z"/>
+<path class="st0" d="M46,30.5H2c-1.1,0-2-0.9-2-2v-9c0-1.1,0.9-2,2-2h44c1.1,0,2,0.9,2,2v9C48,29.6,47.1,30.5,46,30.5z"/>
+<path class="st0" d="M46,48H2c-1.1,0-2-0.9-2-2v-9c0-1.1,0.9-2,2-2h44c1.1,0,2,0.9,2,2v9C48,47.1,47.1,48,46,48z"/>
+<path class="st1" d="M2,13h11V0H2C0.9,0,0,0.9,0,2v9C0,12.1,0.9,13,2,13z"/>
+<path class="st1" d="M2,48h11V35H2c-1.1,0-2,0.9-2,2v9C0,47.1,0.9,48,2,48z"/>
+<path class="st1" d="M2,30.5h11v-13H2c-1.1,0-2,0.9-2,2v9C0,29.6,0.9,30.5,2,30.5z"/>
+<polyline class="st2" points="3.7,23.93 6.84,26.6 10,21.29 "/>
+<polyline class="st2" points="3.7,6.43 6.84,9.1 10,3.79 "/>
+<polyline class="st2" points="3.7,41.43 6.84,44.1 10,38.79 "/>
+<line class="st3" x1="18" y1="4" x2="43" y2="4"/>
+<line class="st3" x1="18" y1="8" x2="43" y2="8"/>
+<line class="st3" x1="18" y1="22" x2="43" y2="22"/>
+<line class="st3" x1="18" y1="26" x2="43" y2="26"/>
+<line class="st3" x1="18" y1="40" x2="43" y2="40"/>
+<line class="st3" x1="18" y1="44" x2="43" y2="44"/>
 </svg>
