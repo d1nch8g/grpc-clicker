@@ -27,6 +27,46 @@ Extension provides following functionality:
 
 ---
 
+## Install gRPCurl
+
+You can have full installation guide here [grpcurl](https://github.com/fullstorydev/grpcurl).
+CLI commands to install it via:
+
+- ### go:
+
+```sh
+go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
+```
+
+- ### homebrew:
+
+```brew
+brew install grpcurl
+```
+
+- ### ubuntu
+
+```bash
+curl -sSL "https://github.com/fullstorydev/grpcurl/releases/download/v1.8.6/grpcurl_1.8.6_linux_x86_64.tar.gz" | tar -xz -C /usr/local/bin
+```
+
+- ### binaries
+
+Also you can find compiled binaries. Download the binary from the [releases page](https://github.com/fullstorydev/grpcurl/releases).
+
+---
+
+## launch from docker
+
+```sh
+# Download image
+docker pull fullstorydev/grpcurl:latest
+# Run the tool
+docker run fullstorydev/grpcurl api.grpc.me:443 list
+```
+
+---
+
 ## Get started
 
 1. Open extension on side panel activity bar
