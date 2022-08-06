@@ -43,7 +43,7 @@ export class Caller {
         `docker run -v ${windowsPath}:${linuxPath} fullstorydev/grpcurl `
       );
     }
-    const path = input.split(`-proto `)[1];
+    const path = input.split(`-proto `)[1].split(` `)[0];
     return input.replace(
       `grpcurl `,
       `docker run -v ${path}:${path} fullstorydev/grpcurl `
