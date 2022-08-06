@@ -42,6 +42,7 @@ service Basics {
 service Constructions {
   rpc EnumCall(EnumMes) returns (EnumMes);
   rpc AnyCall(google.protobuf.Any) returns (google.protobuf.Any);
+  // this call causes error
   rpc EmptyCall(google.protobuf.Empty) returns (google.protobuf.Empty);
   rpc ListCall(ListMes) returns (ListMes);
   rpc MapCall(MapMes) returns (MapMes);

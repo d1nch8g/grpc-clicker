@@ -83,5 +83,9 @@ var rebuild = function () {
 
 fs.watch("webview/src", function (event, filename) {
   console.log("rebuild webview triggered" + event + filename);
-  rebuild();
+  try {
+    rebuild();
+  } catch (e) {
+    console.log(e);
+  }
 });
