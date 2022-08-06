@@ -5,9 +5,7 @@ export class WebViewFactory {
   private views: GrpcClickerView[] = [];
   constructor(
     private uri: vscode.Uri,
-    private callback: (
-      request: RequestData
-    ) => Promise<RequestData>
+    private callback: (request: RequestData) => Promise<RequestData>
   ) {}
 
   create(data: RequestData) {
@@ -44,9 +42,7 @@ class GrpcClickerView {
   constructor(
     private uri: vscode.Uri,
     public request: RequestData,
-    private callback: (
-      request: RequestData
-    ) => Promise<RequestData>
+    private callback: (request: RequestData) => Promise<RequestData>
   ) {
     this.panel = vscode.window.createWebviewPanel(
       "callgrpc",
@@ -86,8 +82,8 @@ class GrpcClickerView {
 
   update() {
     this.panel.iconPath = {
-      light: vscode.Uri.joinPath(this.uri, `images`, `view.svg`),
-      dark: vscode.Uri.joinPath(this.uri, `images`, `view.svg`),
+      light: vscode.Uri.joinPath(this.uri, `images`, `rocket.svg`),
+      dark: vscode.Uri.joinPath(this.uri, `images`, `rocket.svg`),
     };
 
     const scriptUri = this.panel.webview.asWebviewUri(
