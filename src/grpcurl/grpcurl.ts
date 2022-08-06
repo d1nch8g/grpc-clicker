@@ -3,11 +3,15 @@ import { Caller } from "./caller";
 import { Message, Parser, Proto } from "./parser";
 
 export class Grpcurl {
-  constructor(private parser: Parser, private caller: Caller) {}
+  constructor(
+    private parser: Parser,
+    private caller: Caller,
+    public useDocker: boolean
+  ) {}
 
   async proto(path: string): Promise<[Proto, Error]> {
     const call = `grpcurl -import-path / -proto %s describe`;
-    const [resp, err] = await this.caller.execute(call, [path]);
+    const [resp, err] = await this.caller.execute(call, [path], this.useDocker);
     if (err !== null) {
       return [null, err];
     }
@@ -17,7 +21,11 @@ export class Grpcurl {
 
   async message(path: string, tag: string): Promise<[Message, Error]> {
     const call = `grpcurl -msg-template -import-path / -proto %s describe %s`;
-    const [resp, err] = await this.caller.execute(call, [path, tag]);
+    const [resp, err] = await this.caller.execute(
+      call,
+      [path, tag],
+      this.useDocker
+    );
     if (err !== null) {
       return [null, err];
     }
@@ -41,15 +49,11 @@ export class Grpcurl {
       maxMsgSize = `-max-msg-sz ${input.maxMsgSize}`;
     }
     var startTime = performance.now();
-    const [resp, err] = await this.caller.execute(call, [
-      meta,
-      maxMsgSize,
-      input.path,
-      inputRequest,
-      tls,
-      input.host,
-      input.call,
-    ]);
+    const [resp, err] = await this.caller.execute(
+      call,
+      [meta, maxMsgSize, input.path, inputRequest, tls, input.host, input.call],
+      this.useDocker
+    );
     var endTime = performance.now();
     let response: Response;
     if (err !== null) {
@@ -62,7 +66,7 @@ export class Grpcurl {
     return response;
   }
 
-  jsonPreprocess(input: string): string {
+  private jsonPreprocess(input: string): string {
     input = JSON.stringify(JSON.parse(input));
     if (process.platform === "win32") {
       input = input.replaceAll('"', '\\"');
@@ -71,12 +75,23 @@ export class Grpcurl {
     return `'${input}'`;
   }
 
-  headerPreprocess(header: string): string {
+  private headerPreprocess(header: string): string {
     if (process.platform === "win32") {
       return `-H "${header}" `;
     }
     return `-H '${header}' `;
   }
+
+  async checkInstalled(): Promise<boolean> {
+    const [resp, err] = await this.caller.execute(`grpcurls -help`, [], false);
+    if (err !== null) {
+      return false;
+    }
+    return true;
+  }
+
+  // TODO Add switch between regular and dockerized versions of grpcurl
+  // TODO add ability to dockerize any command containing path for both windows and linux platforms
 }
 
 export interface Request {

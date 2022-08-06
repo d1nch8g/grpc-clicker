@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.0.16]
+
+> August 7, 2022
+
+- Added ability to call grpcurl dockerized version
+
 ## [0.0.15]
 
 > August 5, 2022

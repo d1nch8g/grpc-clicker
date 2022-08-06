@@ -35,7 +35,17 @@ class MockParser implements Parser {
 }
 
 class MockCaller implements Caller {
-  async execute(form: string, args: string[]): Promise<[string, Error]> {
+  dockerize(input: string): string {
+    throw new Error("Method not implemented.");
+  }
+  async execute(
+    form: string,
+    args: string[],
+    inDocker: boolean
+  ): Promise<[string, Error]> {
+    if (args.length === 0) {
+      return [null, null];
+    }
     if (args[0] === `err_conn`) {
       return [
         `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`,
@@ -47,7 +57,7 @@ class MockCaller implements Caller {
 }
 
 test(`proto`, async () => {
-  const grpcurl = new Grpcurl(new MockParser(), new MockCaller());
+  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
   expect(await grpcurl.proto(`docs/api.proto`)).toStrictEqual([
     {
       type: ProtoType.proto,
@@ -60,7 +70,7 @@ test(`proto`, async () => {
 });
 
 test(`message`, async () => {
-  const grpcurl = new Grpcurl(new MockParser(), new MockCaller());
+  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
   expect(
     await grpcurl.message(`docs/api.proto`, `.pb.v1.StringMes`)
   ).toStrictEqual([
@@ -77,7 +87,7 @@ test(`message`, async () => {
 });
 
 test(`send`, async () => {
-  const grpcurl = new Grpcurl(new MockParser(), new MockCaller());
+  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
   let resp = await grpcurl.send({
     path: "docs/api.proto",
     reqJson: "{}",
@@ -90,4 +100,10 @@ test(`send`, async () => {
   expect(resp.code).toBe(`ok`);
   expect(resp.respJson).toBe(`ok`);
   expect(resp.errmes).toBe(`ok`);
+});
+
+test(`checkInstalled`, async () => {
+  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
+  const resp = await grpcurl.checkInstalled();
+  expect(resp).toBeTruthy();
 });

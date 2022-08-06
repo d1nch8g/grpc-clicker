@@ -33,3 +33,5 @@ npm run serve:grpc
 4. Launch extension - F5
 
 5. Contribute and enjoy!
+
+---
