@@ -118,9 +118,14 @@ test(`send`, async () => {
   expect(resp.code).toBe(`ok`);
   expect(resp.errmes).toBe(`ok`);
 
-  const expectedCommand = `grpcurl -H \"username: user\" -H \"passsword: password\"  -max-msg-sz 4194304 -d \"{}\" -plaintext localhost:12201 pb.v1.Constructions.EmptyCall`;
+  const winExpect = `grpcurl -H \"username: user\" -H \"passsword: password\"  -max-msg-sz 4194304 -d \"{}\" -plaintext localhost:12201 pb.v1.Constructions.EmptyCall`;
+  const linuxExpect = `grpcurl -H 'username: user' -H 'passsword: password'  -max-msg-sz 4194304 -d '{}' -plaintext localhost:12201 pb.v1.Constructions.EmptyCall`;
 
-  expect(resp.response).toBe(expectedCommand);
+  if (process.platform === "win32") {
+    expect(resp.response).toBe(winExpect);
+  } else {
+    expect(resp.response).toBe(linuxExpect);
+  }
 });
 
 test(`checkInstalled`, async () => {
