@@ -18,12 +18,12 @@ export class TreeViews {
     headers: Header[];
     requests: RequestHistoryData[];
     protos: Proto[];
-    describeMsg: (path: string, tag: string) => Promise<Message>;
+    describeFileMsg: (path: string, tag: string) => Promise<Message>;
   }) {
     this.hosts = new HostsTreeView(input.hosts);
     this.headers = new HeadersTreeView(input.headers);
     this.history = new HistoryTreeView(input.requests);
-    this.protos = new ProtosTreeView(input.protos, input.describeMsg);
+    this.protos = new ProtosTreeView(input.protos, input.describeFileMsg);
 
     vscode.window.registerTreeDataProvider("hosts", this.hosts);
     vscode.window.registerTreeDataProvider("headers", this.headers);

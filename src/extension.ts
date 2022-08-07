@@ -21,8 +21,13 @@ export function activate(context: vscode.ExtensionContext) {
     headers: storage.headers.list(),
     requests: storage.history.list(),
     protos: storage.protos.list(),
-    describeMsg: async (path: string, tag: string): Promise<Message> => {
-      const msg = await grpcurl.message(path, tag);
+    describeFileMsg: async (path: string, tag: string): Promise<Message> => {
+      const msg = await grpcurl.message({
+        source: path,
+        server: false,
+        plaintext: false,
+        tag: tag,
+      });
       if (msg.error !== undefined) {
         vscode.window.showErrorMessage(msg.error);
       }
@@ -104,7 +109,11 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
     const path = choice[0].fsPath;
-    let proto = await grpcurl.proto(path);
+    let proto = await grpcurl.proto({
+      source: path,
+      server: false,
+      plaintext: false,
+    });
     if (proto.error !== undefined) {
       vscode.window.showErrorMessage(proto.error);
       return;
@@ -135,7 +144,11 @@ export function activate(context: vscode.ExtensionContext) {
     const oldProtos = storage.protos.list();
     let newProtos: Proto[] = [];
     for (const oldProto of oldProtos) {
-      const newProto = await grpcurl.proto(oldProto.source);
+      const newProto = await grpcurl.proto({
+        source: oldProto.source,
+        server: false,
+        plaintext: false,
+      });
       if (newProto.error !== undefined) {
         vscode.window.showErrorMessage(newProto.error);
       } else {
@@ -225,7 +238,6 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   vscode.commands.registerCommand("webview.open", async (data: RequestData) => {
-    // TODO process later on
     data.plaintext = vscode.workspace
       .getConfiguration(`grpc-clicker`)
       .get(`plaintext`, true);
@@ -244,7 +256,14 @@ export function activate(context: vscode.ExtensionContext) {
         data.metadata.push(header.value);
       }
     }
-    const msg = await grpcurl.message(data.path, data.inputMessageTag);
+
+    const msg = await grpcurl.message({
+      source: data.path,
+      server: false,
+      plaintext: false,
+      tag: data.inputMessageTag,
+    });
+
     if (msg.error !== undefined) {
       vscode.window.showErrorMessage(msg.error);
       return;

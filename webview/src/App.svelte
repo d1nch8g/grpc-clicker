@@ -10,16 +10,16 @@
   $: inputMessageTag = ``;
   $: inputMessageName = ``;
   $: outputMessageName = ``;
-  $: plaintext = ``;
+  $: plaintext = false;
   $: host = ``;
-  $: reqJson = ``;
-  $: metadata = [];
-  $: maxMsgSize = ``;
+  $: json = ``;
+  $: maxMsgSize = 0;
   $: code = ``;
-  $: respJson = ``;
+  $: response = ``;
   $: time = ``;
   $: date = ``;
   $: errmes = ``;
+  $: metadata = [];
   $: hosts = [];
 
   window.addEventListener("message", (event) => {
@@ -34,37 +34,34 @@
     outputMessageName = obj.outputMessageName;
     plaintext = obj.plaintext;
     host = obj.host;
-    reqJson = obj.reqJson;
-    metadata = obj.metadata;
+    json = obj.json;
     maxMsgSize = obj.maxMsgSize;
-    hosts = obj.hosts;
-
     code = obj.code;
-    respJson = obj.respJson;
+    response = obj.response;
     time = obj.time;
     date = obj.date;
     errmes = obj.errmes;
-
+    metadata = obj.metadata;
+    hosts = obj.hosts;
     if (errmes !== null) {
       respJson = errmes;
     }
-
     hosts.splice(hosts.indexOf(obj.host), 1);
     hosts = [obj.host].concat(hosts);
   });
 
-  function send() {
-    respJson = "waiter";
+  function onSend() {
+    json = "waiter";
     vscode.postMessage({
       command: "send",
-      text: reqJson,
+      text: json,
     });
   }
 
-  function edit() {
+  function onEdit() {
     vscode.postMessage({
       command: "edit",
-      text: reqJson,
+      text: json,
     });
   }
 
@@ -80,10 +77,10 @@
       outputMessageName: outputMessageName,
       plaintext: plaintext,
       host: host,
-      reqJson: reqJson,
+      json: json,
       maxMsgSize: maxMsgSize,
       code: code,
-      respJson: respJson,
+      response: response,
       time: time,
       date: date,
       errmes: errmes,
@@ -102,13 +99,13 @@
   protoName="{protoName}"
   call="{call}"
   hosts="{hosts}"
-  onSend="{send}"
+  onSend="{onSend}"
   onExport="{onExport}"
 />
 
 <table>
   <td>
-    <Request reqName="{inputMessageName}" edit="{edit}" bind:reqJson />
+    <Request reqName="{inputMessageName}" edit="{onEdit}" bind:json />
   </td>
 
   <td>
@@ -117,7 +114,7 @@
       code="{code}"
       time="{time}"
       date="{date}"
-      bind:respJson
+      bind:response
     />
   </td>
 </table>
