@@ -28,7 +28,7 @@ test(`add`, () => {
     path: "",
     services: [],
   };
-  expect(protos.add(proto)).toBeNull();
+  expect(protos.add(proto)).toBeUndefined();
   expect(protos.add(proto)).toStrictEqual(
     new Error(`proto file you are trying to add already exists`)
   );
@@ -37,9 +37,7 @@ test(`add`, () => {
 test(`list`, () => {
   const memento = new MockMemento();
   const headers = new Protos(memento);
-  memento.values = [
-    `{"type": 0,"name": "test","path": "","services": []}`,
-  ];
+  memento.values = [`{"type": 0,"name": "test","path": "","services": []}`];
   expect(headers.list()).toStrictEqual([
     {
       type: ProtoType.proto,
@@ -53,9 +51,7 @@ test(`list`, () => {
 test(`remove`, () => {
   const memento = new MockMemento();
   const headers = new Protos(memento);
-  memento.values = [
-    `{"type": 0,"name": "test","path": "path","services": []}`,
-  ];
+  memento.values = [`{"type": 0,"name": "test","path": "path","services": []}`];
   headers.remove(`path`);
   expect(memento.values).toStrictEqual([]);
 });

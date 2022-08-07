@@ -26,7 +26,7 @@ test(`add`, () => {
     description: "",
     current: false,
   };
-  expect(hosts.add(host)).toBeNull();
+  expect(hosts.add(host)).toBeUndefined();
   expect(hosts.add(host)).toStrictEqual(
     new Error(`host you are trying to add already exists`)
   );

@@ -73,7 +73,7 @@ test(`list`, () => {
       reqJson: "",
       host: "",
       call: "",
-      tlsOn: false,
+      plaintext: false,
       metadata: [],
       maxMsgSize: 420,
       code: "",

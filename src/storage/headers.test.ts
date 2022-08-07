@@ -24,7 +24,7 @@ test(`add`, () => {
     value: "header",
     active: false,
   };
-  expect(headers.add(header)).toBeNull();
+  expect(headers.add(header)).toBeUndefined();
   expect(headers.add(header)).toStrictEqual(
     new Error(`header you are trying to add already exists`)
   );
