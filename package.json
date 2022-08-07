@@ -2,7 +2,7 @@
   "name": "grpc-clicker",
   "displayName": "gRPC Clicker",
   "description": "Call gRPC services directly from VSCode",
-  "icon": "docs/extension.png",
+  "icon": "docs/logo.png",
   "version": "0.0.15",
   "engines": {
     "vscode": "^1.68.0"
@@ -264,7 +264,7 @@
             "title": "Install grpcurl",
             "description": "First - you need to have [grpcurl](https://github.com/fullstorydev/grpcurl) installed on your pc.",
             "media": {
-              "image": "docs/extension.png",
+              "image": "docs/logo.png",
               "altText": "gRPC-Clicker"
             }
           },
