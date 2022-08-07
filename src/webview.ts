@@ -1,11 +1,13 @@
 import * as vscode from "vscode";
+import { Request } from "./grpcurl/grpcurl";
 import { RequestData } from "./treeviews/protos";
 
 export class WebViewFactory {
   private views: GrpcClickerView[] = [];
   constructor(
     private uri: vscode.Uri,
-    private callback: (request: RequestData) => Promise<RequestData>
+    private requestCallback: (request: RequestData) => Promise<RequestData>,
+    private exportCallback: (request: RequestData) => void
   ) {}
 
   create(data: RequestData) {
@@ -21,7 +23,12 @@ export class WebViewFactory {
         return;
       }
     }
-    const view = new GrpcClickerView(this.uri, data, this.callback);
+    const view = new GrpcClickerView(
+      this.uri,
+      data,
+      this.requestCallback,
+      this.exportCallback
+    );
     this.views.push(view);
   }
 
@@ -42,7 +49,8 @@ class GrpcClickerView {
   constructor(
     private uri: vscode.Uri,
     public request: RequestData,
-    private callback: (request: RequestData) => Promise<RequestData>
+    private requestCallback: (request: RequestData) => Promise<RequestData>,
+    private exportCallback: (request: RequestData) => void
   ) {
     this.panel = vscode.window.createWebviewPanel(
       "callgrpc",
@@ -54,7 +62,7 @@ class GrpcClickerView {
     this.panel.webview.onDidReceiveMessage(async (out) => {
       switch (out.command) {
         case "send":
-          const updatedRequest = await this.callback(request);
+          const updatedRequest = await this.requestCallback(request);
           this.request = updatedRequest;
           this.panel.webview.postMessage(JSON.stringify(request));
           return;
@@ -63,6 +71,8 @@ class GrpcClickerView {
           return;
         case "host":
           request.host = out.text;
+        case "export":
+          exportCallback(JSON.parse(out.text) as RequestData);
       }
     });
 

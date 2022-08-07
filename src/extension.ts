@@ -214,6 +214,9 @@ export function activate(context: vscode.ExtensionContext) {
       storage.history.add(data);
       treeviews.history.refresh(storage.history.list());
       return data;
+    },
+    (request: RequestData) => {
+      // TODO add formimg of grpcurl command
     }
   );
 

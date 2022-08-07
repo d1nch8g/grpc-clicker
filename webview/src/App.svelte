@@ -67,6 +67,32 @@
       text: reqJson,
     });
   }
+
+  function onExport() {
+    vscode.postMessage({
+      command: "export",
+      text: JSON.stringify({
+        path: path,
+        protoName: protoName,
+        service: service,
+        call: call,
+        inputMessageTag: inputMessageTag,
+        inputMessageName: inputMessageName,
+        outputMessageName: outputMessageName,
+        plaintext: plaintext,
+        host: host,
+        reqJson: reqJson,
+        maxMsgSize: maxMsgSize,
+        code: code,
+        respJson: respJson,
+        time: time,
+        date: date,
+        errmes: errmes,
+        metadata: metadata,
+        hosts: hosts,
+      }),
+    });
+  }
 </script>
 
 <TopPanel
@@ -75,6 +101,7 @@
   call="{call}"
   hosts="{hosts}"
   onSend="{send}"
+  onExport="{onExport}"
 />
 
 <table>

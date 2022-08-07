@@ -4,6 +4,7 @@
   export let protoName = "";
   export let hosts = ["http://localhost:12201"];
   export let onSend;
+  export let onExport;
 </script>
 
 <div class="top-container">
@@ -26,6 +27,7 @@
           {/each}
         </vscode-dropdown>
       </td>
+      <td><vscode-button on:click="{onExport}">Export</vscode-button></td>
       <td><vscode-button on:click="{onSend}">Send</vscode-button></td>
     </tr>
   </table>
