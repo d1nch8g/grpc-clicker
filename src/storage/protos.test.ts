@@ -1,6 +1,6 @@
 import { Memento } from "vscode";
 import { Proto, ProtoType } from "../grpcurl/parser";
-import { Protos } from "./protos";
+import { ProtoFiles } from "./protos";
 
 class MockMemento implements Memento {
   values: string[] = [];
@@ -20,13 +20,11 @@ class MockMemento implements Memento {
 
 test(`add`, () => {
   const memento = new MockMemento();
-  const protos = new Protos(memento);
+  const protos = new ProtoFiles(memento);
   var proto: Proto = {
     type: ProtoType.proto,
     name: "test",
-    source: "",
     services: [],
-    error: undefined,
   };
   expect(protos.add(proto)).toBeUndefined();
   expect(protos.add(proto)).toStrictEqual(

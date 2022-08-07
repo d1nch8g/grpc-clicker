@@ -18,31 +18,52 @@ export class Grpcurl {
     return true;
   }
 
-  async proto(input: {
-    source: string;
-    server: boolean;
-    plaintext: boolean;
-  }): Promise<Proto> {
+  async protoFile(input: ProtoFileInput): Promise<ProtoFile | string> {
     const command = `grpcurl |SRC| describe`;
     const call = this.caller.form({
       call: command,
-      source: input.source,
-      server: input.server,
+      source: input.path,
+      server: false,
+      plaintext: false,
+      docker: this.useDocker,
+      args: [],
+    });
+    const [output, err] = await this.caller.execute(call);
+    if (err !== undefined) {
+      return err.message;
+    }
+    const parsedProto = this.parser.proto(output);
+    return {
+      type: ProtoType.proto,
+      path: input.path,
+      hosts: input.hosts,
+      name: parsedProto.name,
+      services: parsedProto.services,
+    };
+  }
+
+  async protoServer(input: ProtoServerInput): Promise<ProtoServer | string> {
+    const command = `grpcurl |SRC| describe`;
+    const call = this.caller.form({
+      call: command,
+      source: input.host,
+      server: true,
       plaintext: input.plaintext,
       docker: this.useDocker,
       args: [],
     });
     const [output, err] = await this.caller.execute(call);
     if (err !== undefined) {
-      return {
-        type: ProtoType.proto,
-        name: ``,
-        source: input.source,
-        services: [],
-        error: err.message,
-      };
+      return err.message;
     }
-    return this.parser.proto(output, input.source);
+    const parsedProto = this.parser.proto(output);
+    return {
+      type: ProtoType.proto,
+      host: input.host,
+      plaintext: input.plaintext,
+      name: parsedProto.name,
+      services: parsedProto.services,
+    };
   }
 
   async message(input: {
@@ -50,7 +71,7 @@ export class Grpcurl {
     server: boolean;
     plaintext: boolean;
     tag: string;
-  }): Promise<Message> {
+  }): Promise<Message| string> {
     let command = `grpcurl -msg-template |SRC| describe %s`;
 
     const call = this.caller.form({
@@ -64,15 +85,7 @@ export class Grpcurl {
 
     const [resp, err] = await this.caller.execute(call);
     if (err !== undefined) {
-      return {
-        type: ProtoType.message,
-        name: "",
-        tag: "",
-        description: undefined,
-        template: undefined,
-        fields: [],
-        error: err.message,
-      };
+      return err.message;
     }
     const msg = this.parser.message(resp);
     return msg;
@@ -131,6 +144,26 @@ export class Grpcurl {
     }
     return `-H '${header}' `;
   }
+}
+
+export interface ProtoFileInput {
+  path: string;
+  hosts: string[];
+}
+
+export interface ProtoFile extends Proto {
+  path: string;
+  hosts: string[];
+}
+
+export interface ProtoServerInput {
+  host: string;
+  plaintext: boolean;
+}
+
+export interface ProtoServer extends Proto {
+  host: string;
+  plaintext: boolean;
 }
 
 export interface Request {

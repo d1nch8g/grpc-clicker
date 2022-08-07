@@ -45,7 +45,7 @@ service Constructions {
 
 test(`proto`, () => {
   const parser = new Parser();
-  const proto = parser.proto(protoInput, `path`);
+  const proto = parser.proto(protoInput);
   expect(proto.name).toBe(`pb.v1`);
   expect(proto.services.length).toBe(3);
   expect(proto.services[0].name).toBe(`Streams`);
@@ -239,7 +239,6 @@ comment`);
         fields: undefined,
       },
     ],
-    error: undefined,
   };
   expect(enumParsed).toStrictEqual(expectedEnum);
 });

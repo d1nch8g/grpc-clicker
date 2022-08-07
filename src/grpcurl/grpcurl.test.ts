@@ -1,5 +1,5 @@
 import { Caller, RequestForm } from "./caller";
-import { Grpcurl, Response } from "./grpcurl";
+import { Grpcurl, ProtoFile, ProtoServer, Response } from "./grpcurl";
 import { Call, Field, Message, Parser, Proto, ProtoType } from "./parser";
 import * as util from "util";
 
@@ -18,8 +18,6 @@ class MockParser implements Parser {
       name: input,
       services: [],
       type: ProtoType.proto,
-      source: `path`,
-      error: undefined,
     };
   }
   rpc(line: string): Call {
@@ -33,7 +31,6 @@ class MockParser implements Parser {
       description: `dscr`,
       template: `tmplt`,
       fields: [],
-      error: undefined,
     };
   }
   field(line: string): Field {
@@ -54,21 +51,38 @@ class MockCaller implements Caller {
   }
 }
 
-test(`proto`, async () => {
+test(`protoFile`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
-  expect(
-    await grpcurl.proto({
-      source: `docs/api.proto`,
-      server: false,
-      plaintext: false,
-    })
-  ).toStrictEqual({
+  const expectedResult: ProtoFile = {
     type: ProtoType.proto,
-    name: `grpcurl -import-path / -proto docs/api.proto describe`,
-    source: `path`,
+    path: "docs/api.proto",
+    name: "grpcurl -import-path / -proto docs/api.proto describe",
+    hosts: ["localhost:12201"],
     services: [],
-    error: undefined,
-  });
+  };
+  expect(
+    await grpcurl.protoFile({
+      path: "docs/api.proto",
+      hosts: [`localhost:12201`],
+    })
+  ).toStrictEqual(expectedResult);
+});
+
+test(`protoServer`, async () => {
+  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
+  const expectedResult: ProtoServer = {
+    type: ProtoType.proto,
+    host: "localhost:12201",
+    plaintext: true,
+    name: "grpcurl -plaintext localhost:12201 describe",
+    services: [],
+  };
+  expect(
+    await grpcurl.protoServer({
+      host: `localhost:12201`,
+      plaintext: true,
+    })
+  ).toStrictEqual(expectedResult);
 });
 
 test(`message`, async () => {
@@ -87,7 +101,6 @@ test(`message`, async () => {
     description: `dscr`,
     template: `tmplt`,
     fields: [],
-    error: undefined,
   });
 });
 

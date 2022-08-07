@@ -1,11 +1,11 @@
 import { Memento } from "vscode";
-import { Proto } from "../grpcurl/parser";
+import { ProtoFile } from "../grpcurl/grpcurl";
 
-export class Protos {
+export class ProtoFiles {
   private readonly key: string = "grpc-clicker-structures";
   constructor(private memento: Memento) {}
 
-  save(protos: Proto[]) {
+  save(protos: ProtoFile[]) {
     let protosStrings: string[] = [];
     for (const proto of protos) {
       protosStrings.push(JSON.stringify(proto));
@@ -13,19 +13,19 @@ export class Protos {
     this.memento.update(this.key, protosStrings);
   }
 
-  list(): Proto[] {
+  list(): ProtoFile[] {
     let protosStrings = this.memento.get<string[]>(this.key, []);
-    let protos: Proto[] = [];
+    let protos: ProtoFile[] = [];
     for (const protoString of protosStrings) {
       protos.push(JSON.parse(protoString));
     }
     return protos;
   }
 
-  public add(proto: Proto): Error | undefined {
+  public add(proto: ProtoFile): Error | undefined {
     const protos = this.list();
-    for (const savedProto of protos) {
-      if (savedProto.source === proto.source) {
+    for (const savedProtoFile of protos) {
+      if (savedProtoFile.path === proto.path) {
         return new Error(`proto file you are trying to add already exists`);
       }
     }
@@ -37,7 +37,7 @@ export class Protos {
   remove(path: string) {
     const protos = this.list();
     for (let i = 0; i < protos.length; i++) {
-      if (protos[i].source === path) {
+      if (protos[i].path === path) {
         protos.splice(i, 1);
       }
     }

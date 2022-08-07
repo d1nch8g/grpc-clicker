@@ -1,16 +1,14 @@
 import { Response } from "./grpcurl";
 
 export class Parser {
-  proto(input: string, source: string): Proto {
+  proto(input: string): Proto {
     const splittedInput = input.split("\n");
 
     let currComment = undefined;
     let proto: Proto = {
       name: ``,
       services: [],
-      source: source,
       type: ProtoType.proto,
-      error: undefined,
     };
     let currSvc: Service = {
       name: ``,
@@ -109,7 +107,6 @@ export class Parser {
       description: undefined,
       fields: [],
       template: input.split(`Message template:\n`)[1],
-      error: undefined,
     };
 
     if (splittedInput[0].endsWith(`an enum:`)) {
@@ -252,9 +249,7 @@ export enum ProtoType {
 export interface Proto {
   type: ProtoType;
   name: string;
-  source: string;
   services: Service[];
-  error: string | undefined;
 }
 
 export interface Service {
@@ -281,7 +276,6 @@ export interface Message {
   description: string | undefined;
   template: string | undefined;
   fields: Field[];
-  error: string | undefined;
 }
 
 export interface Field {
