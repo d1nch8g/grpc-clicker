@@ -10,6 +10,6 @@ test("success", async () => {
 test("error", async () => {
   const caller = new Caller();
   const [rez, err] = await caller.execute(`wasdas . asd`);
-  expect(rez).toBeUndefined();
-  expect(err.message).toContain(`Command failed: wasdas . asd`);
+  expect(rez).toBe(``);
+  expect(err!.message).toContain(`Command failed: wasdas . asd`);
 });

@@ -13,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
   const grpcurl = new Grpcurl(
     new Parser(),
     new Caller(),
-    vscode.workspace.getConfiguration(`grpc-clicker`).get(`usedocker`)
+    vscode.workspace.getConfiguration(`grpc-clicker`).get(`usedocker`, false)
   );
 
   const treeviews = new TreeViews({
@@ -22,9 +22,9 @@ export function activate(context: vscode.ExtensionContext) {
     requests: storage.history.list(),
     protos: storage.protos.list(),
     describeMsg: async (path: string, tag: string): Promise<Message> => {
-      const [msg, err] = await grpcurl.message(path, tag);
-      if (err !== undefined) {
-        vscode.window.showErrorMessage(err.message);
+      const msg = await grpcurl.message(path, tag);
+      if (msg.error !== undefined) {
+        vscode.window.showErrorMessage(msg.error);
       }
       return msg;
     },
@@ -42,7 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
     const host = await vscode.window.showInputBox({
       title: `adress to make a call`,
     });
-    if (host === "" || host === undefined || host === undefined) {
+    if (host === "" || host === undefined) {
       return;
     }
     const description = await vscode.window.showInputBox({
@@ -99,14 +99,20 @@ export function activate(context: vscode.ExtensionContext) {
         protoFiles: ["proto"],
       },
     };
-    const path = (await vscode.window.showOpenDialog(options))[0].fsPath;
-    let [proto, err] = await grpcurl.proto(path);
-    if (err !== undefined) {
-      vscode.window.showErrorMessage(err.message);
+    const choice = await vscode.window.showOpenDialog(options);
+    if (choice === undefined) {
+      return;
     }
-    err = storage.protos.add(proto);
+    const path = choice[0].fsPath;
+    let proto = await grpcurl.proto(path);
+    if (proto.error !== undefined) {
+      vscode.window.showErrorMessage(proto.error);
+      return;
+    }
+    const err = storage.protos.add(proto);
     if (err !== undefined) {
       vscode.window.showErrorMessage(err.message);
+      return;
     }
     treeviews.protos.refresh(storage.protos.list());
   });
@@ -118,6 +124,9 @@ export function activate(context: vscode.ExtensionContext) {
       pathes.push(proto.path);
     }
     let path = await vscode.window.showQuickPick(pathes);
+    if (path === undefined) {
+      return;
+    }
     storage.protos.remove(path);
     treeviews.protos.refresh(storage.protos.list());
   });
@@ -126,9 +135,9 @@ export function activate(context: vscode.ExtensionContext) {
     const oldProtos = storage.protos.list();
     let newProtos: Proto[] = [];
     for (const oldProto of oldProtos) {
-      const [newProto, err] = await grpcurl.proto(oldProto.path);
-      if (err !== undefined) {
-        vscode.window.showErrorMessage(err.message);
+      const newProto = await grpcurl.proto(oldProto.path);
+      if (newProto.error !== undefined) {
+        vscode.window.showErrorMessage(newProto.error);
       } else {
         newProtos.push(newProto);
       }
@@ -141,7 +150,7 @@ export function activate(context: vscode.ExtensionContext) {
     const header = await vscode.window.showInputBox({
       title: `header that you can add to gRPC call, in format: "key: value", enable/disable by clicking`,
     });
-    if (header === "" || header === undefined || header === undefined) {
+    if (header === "" || header === undefined) {
       return;
     }
     const err = storage.headers.add({
@@ -160,7 +169,7 @@ export function activate(context: vscode.ExtensionContext) {
       headerValues.push(header.value);
     }
     const header = await vscode.window.showQuickPick(headerValues);
-    if (header === "" || header === undefined || header === undefined) {
+    if (header === undefined) {
       return;
     }
     storage.headers.remove(header);
@@ -212,10 +221,10 @@ export function activate(context: vscode.ExtensionContext) {
     // TODO process later on
     data.plaintext = vscode.workspace
       .getConfiguration(`grpc-clicker`)
-      .get(`plaintext`);
+      .get(`plaintext`, true);
     data.maxMsgSize = vscode.workspace
       .getConfiguration(`grpc-clicker`)
-      .get(`msgsize`);
+      .get(`msgsize`, 4);
 
     for (const host of storage.hosts.list()) {
       data.hosts.push(host.adress);
@@ -228,12 +237,12 @@ export function activate(context: vscode.ExtensionContext) {
         data.metadata.push(header.value);
       }
     }
-    const [msg, err] = await grpcurl.message(data.path, data.inputMessageTag);
-    if (err !== undefined) {
-      vscode.window.showErrorMessage(err.message);
+    const msg = await grpcurl.message(data.path, data.inputMessageTag);
+    if (msg.error !== undefined) {
+      vscode.window.showErrorMessage(msg.error);
       return;
     }
-    data.reqJson = msg.template;
+    data.reqJson = msg.template!;
     webviewFactory.create(data);
   });
 
@@ -246,7 +255,7 @@ export function activate(context: vscode.ExtensionContext) {
     if (event.affectsConfiguration(`grpc-clicker.usedocker`)) {
       grpcurl.useDocker = vscode.workspace
         .getConfiguration(`grpc-clicker`)
-        .get(`usedocker`);
+        .get(`usedocker`, false);
     }
   });
 

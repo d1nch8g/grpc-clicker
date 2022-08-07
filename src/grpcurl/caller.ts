@@ -1,7 +1,7 @@
 import * as util from "util";
 
 export class Caller {
-  async execute(call: string): Promise<[string, Error]> {
+  async execute(call: string): Promise<[string, Error | undefined]> {
     try {
       const exec = util.promisify(require("child_process").exec);
       const { stdout, stderr } = await exec(call);
@@ -10,12 +10,12 @@ export class Caller {
       const stderrString = `${stderr}`;
 
       if (stderrString !== ``) {
-        return [undefined, new Error(stderrString)];
+        return [``, new Error(stderrString)];
       }
 
       return [stdoutString, undefined];
     } catch (exception) {
-      return [undefined, new Error(exception.message)];
+      return [``, new Error(`${exception}`)];
     }
   }
 }

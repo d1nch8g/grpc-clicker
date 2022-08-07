@@ -14,8 +14,7 @@ class MockMemento implements Memento {
     return this.values;
   }
   update(key: string, value: any): Thenable<void> {
-    this.values = value;
-    return;
+    return (this.values = value);
   }
 }
 
@@ -27,6 +26,7 @@ test(`add`, () => {
     name: "test",
     path: "",
     services: [],
+    error: undefined,
   };
   expect(protos.add(proto)).toBeUndefined();
   expect(protos.add(proto)).toStrictEqual(

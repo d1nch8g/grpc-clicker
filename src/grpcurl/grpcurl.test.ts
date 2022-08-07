@@ -10,11 +10,17 @@ class MockParser implements Parser {
       respJson: `ok`,
       time: `ok`,
       errmes: `ok`,
-      date: undefined,
+      date: ``,
     };
   }
   proto(input: string): Proto {
-    return { name: input, services: [], type: ProtoType.proto, path: `path` };
+    return {
+      name: input,
+      services: [],
+      type: ProtoType.proto,
+      path: `path`,
+      error: undefined,
+    };
   }
   rpc(line: string): Call {
     throw new Error("Method not implemented.");
@@ -27,6 +33,7 @@ class MockParser implements Parser {
       description: `dscr`,
       template: `tmplt`,
       fields: [],
+      error: undefined,
     };
   }
   field(line: string): Field {
@@ -38,7 +45,7 @@ class MockCaller implements Caller {
   dockerize(input: string): string {
     throw new Error("Method not implemented.");
   }
-  async execute(form: string): Promise<[string, Error]> {
+  async execute(form: string): Promise<[string, Error | undefined]> {
     if (form.includes(`err_conn`)) {
       return [
         `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`,
@@ -51,32 +58,28 @@ class MockCaller implements Caller {
 
 test(`proto`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
-  expect(await grpcurl.proto(`docs/api.proto`)).toStrictEqual([
-    {
-      type: ProtoType.proto,
-      name: `grpcurl -import-path / -proto docs/api.proto describe`,
-      path: `path`,
-      services: [],
-    },
-    undefined,
-  ]);
+  expect(await grpcurl.proto(`docs/api.proto`)).toStrictEqual({
+    type: ProtoType.proto,
+    name: `grpcurl -import-path / -proto docs/api.proto describe`,
+    path: `path`,
+    services: [],
+    error: undefined,
+  });
 });
 
 test(`message`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
   expect(
     await grpcurl.message(`docs/api.proto`, `.pb.v1.StringMes`)
-  ).toStrictEqual([
-    {
-      type: ProtoType.message,
-      name: `grpcurl -msg-template -import-path / -proto docs/api.proto describe .pb.v1.StringMes`,
-      tag: `tag`,
-      description: `dscr`,
-      template: `tmplt`,
-      fields: [],
-    },
-    undefined,
-  ]);
+  ).toStrictEqual({
+    type: ProtoType.message,
+    name: `grpcurl -msg-template -import-path / -proto docs/api.proto describe .pb.v1.StringMes`,
+    tag: `tag`,
+    description: `dscr`,
+    template: `tmplt`,
+    fields: [],
+    error: undefined,
+  });
 });
 
 test(`send`, async () => {
