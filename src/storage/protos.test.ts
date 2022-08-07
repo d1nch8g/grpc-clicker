@@ -24,7 +24,7 @@ test(`add`, () => {
   var proto: Proto = {
     type: ProtoType.proto,
     name: "test",
-    path: "",
+    source: "",
     services: [],
     error: undefined,
   };

@@ -67,7 +67,7 @@ class GrpcClickerView {
           this.panel.webview.postMessage(JSON.stringify(request));
           return;
         case "edit":
-          request.reqJson = out.text;
+          request.json = out.text;
           return;
         case "host":
           request.host = out.text;

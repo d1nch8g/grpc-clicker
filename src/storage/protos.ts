@@ -25,7 +25,7 @@ export class Protos {
   public add(proto: Proto): Error | undefined {
     const protos = this.list();
     for (const savedProto of protos) {
-      if (savedProto.path === proto.path) {
+      if (savedProto.source === proto.source) {
         return new Error(`proto file you are trying to add already exists`);
       }
     }
@@ -37,7 +37,7 @@ export class Protos {
   remove(path: string) {
     const protos = this.list();
     for (let i = 0; i < protos.length; i++) {
-      if (protos[i].path === path) {
+      if (protos[i].source === path) {
         protos.splice(i, 1);
       }
     }

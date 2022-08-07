@@ -121,7 +121,7 @@ export function activate(context: vscode.ExtensionContext) {
     let protos = storage.protos.list();
     let pathes: string[] = [];
     for (const proto of protos) {
-      pathes.push(proto.path);
+      pathes.push(proto.source);
     }
     let path = await vscode.window.showQuickPick(pathes);
     if (path === undefined) {
@@ -135,7 +135,7 @@ export function activate(context: vscode.ExtensionContext) {
     const oldProtos = storage.protos.list();
     let newProtos: Proto[] = [];
     for (const oldProto of oldProtos) {
-      const newProto = await grpcurl.proto(oldProto.path);
+      const newProto = await grpcurl.proto(oldProto.source);
       if (newProto.error !== undefined) {
         vscode.window.showErrorMessage(newProto.error);
       } else {
@@ -199,7 +199,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
       const resp = await grpcurl.send({
         path: data.path,
-        reqJson: data.reqJson,
+        json: data.json,
         host: data.host,
         call: `${data.protoName}.${data.service}.${data.call}`,
         plaintext: data.plaintext,
@@ -207,7 +207,7 @@ export function activate(context: vscode.ExtensionContext) {
         maxMsgSize: data.maxMsgSize,
       });
       data.code = resp.code;
-      data.respJson = resp.respJson;
+      data.response = resp.response;
       data.time = resp.time;
       data.date = resp.date;
       data.errmes = resp.errmes;
@@ -216,7 +216,7 @@ export function activate(context: vscode.ExtensionContext) {
       return data;
     },
     (request: RequestData) => {
-      const command = grpcurl.formGrpcurlCommand(request);
+      const command = grpcurl.formCall(request);
       vscode.env.clipboard.writeText(command);
       vscode.window.showInformationMessage(
         `gRPCurl command have been copied to clipboard`
@@ -249,7 +249,7 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.window.showErrorMessage(msg.error);
       return;
     }
-    data.reqJson = msg.template!;
+    data.json = msg.template!;
     webviewFactory.create(data);
   });
 
@@ -267,7 +267,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   if (storage.showInstallError()) {
-    grpcurl.checkInstalled().then((installed) => {
+    grpcurl.installed().then((installed) => {
       if (!installed) {
         vscode.window.showErrorMessage(
           `gRPCurl is not installed. You can switch to docker version in extension settings.`

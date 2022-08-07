@@ -24,10 +24,12 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	reflection.Register(s)
+
 	pb.RegisterBasicsServer(s, &server{})
 	pb.RegisterConstructionsServer(s, &server{})
 	pb.RegisterStreamsServer(s, &server{})
+
+	reflection.Register(s)
 	log.Printf("server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		panic(err)

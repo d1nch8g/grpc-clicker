@@ -39,7 +39,7 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
         items.push(
           new ProtoItem({
             base: proto,
-            protoPath: proto.path,
+            protoPath: proto.source,
             protoName: proto.name,
             serviceName: "",
           })
@@ -198,10 +198,10 @@ class ProtoItem extends vscode.TreeItem {
         outputMessageName: input.base.outputMessageTag.split(`.`).pop()!,
         plaintext: true,
         host: "",
-        reqJson: "",
+        json: "",
         maxMsgSize: 0,
         code: "",
-        respJson: "",
+        response: "",
         time: "",
         date: "",
         errmes: "",
