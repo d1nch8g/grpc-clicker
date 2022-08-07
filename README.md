@@ -10,7 +10,7 @@
 [![Generic badge](https://img.shields.io/badge/Changelog-v0.0.14-cyan.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/CHANGELOG.md)
 [![Generic badge](https://img.shields.io/badge/Contribute-guide-ff69b4.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/CONTRIBUTE.md)
 
-To use this extension, first, you need to install [`grpcurl`](https://github.com/fullstorydev/grpcurl).
+To get extemsion to work, you need to install [`grpcurl`](https://github.com/fullstorydev/grpcurl), or switch to docker version of application.
 
 This extension provides ability to execute gRPC calls from VSCode, using [`grpcurl`](https://github.com/fullstorydev/grpcurl) CLI under the hood.
 
@@ -22,8 +22,10 @@ Extension provides following functionality:
 
 - execute `gRPC` calls from `VSCode`
 - view comlpete proto definition with field, message and service description
+- use extension as builder for grpcurl commands
 - easily save and switch between proto hosts
 - add metadata to request, enable and disable it with one click
+- use docker version to execute grpcurl calls from grpcurl container
 
 ---
 
@@ -32,38 +34,27 @@ Extension provides following functionality:
 You can have full installation guide here [grpcurl](https://github.com/fullstorydev/grpcurl).
 CLI commands to install it via:
 
-- ### go:
+- go:
 
 ```sh
 go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
 ```
 
-- ### homebrew:
+- homebrew:
 
 ```brew
 brew install grpcurl
 ```
 
-- ### ubuntu
+- ubuntu
 
 ```bash
 curl -sSL "https://github.com/fullstorydev/grpcurl/releases/download/v1.8.6/grpcurl_1.8.6_linux_x86_64.tar.gz" | tar -xz -C /usr/local/bin
 ```
 
-- ### binaries
+- binaries
 
 Also you can find compiled binaries. Download the binary from the [releases page](https://github.com/fullstorydev/grpcurl/releases).
-
----
-
-## launch from docker
-
-```sh
-# Download image
-docker pull fullstorydev/grpcurl:latest
-# Run the tool
-docker run fullstorydev/grpcurl api.grpc.me:443 list
-```
 
 ---
 
