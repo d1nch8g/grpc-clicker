@@ -37,7 +37,6 @@
     "onCommand:protos.add",
     "onCommand:protos.remove",
     "onCommand:protos.refresh",
-    "onCommand:protos.docker",
     "onCommand:headers.add",
     "onCommand:headers.remove",
     "onWebviewPanel:callgrpc"
@@ -81,15 +80,6 @@
         "icon": {
           "dark": "images/dark/trash.svg",
           "light": "images/light/trash.svg"
-        }
-      },
-      {
-        "category": "gRPC Clicker",
-        "command": "protos.docker",
-        "title": "Turn on/off docker for grpc calls",
-        "icon": {
-          "dark": "images/dark/docker.svg",
-          "light": "images/light/docker.svg"
         }
       },
       {
@@ -218,11 +208,6 @@
           "group": "navigation"
         },
         {
-          "command": "protos.docker",
-          "when": "view == protos",
-          "group": "navigation"
-        },
-        {
           "command": "history.clean",
           "when": "view == history",
           "group": "navigation"
@@ -243,6 +228,31 @@
         }
       ]
     },
+    "configuration": [
+      {
+        "title": "gRPC Clicker",
+        "properties": {
+          "grpc-clicker.msgsize": {
+            "title": "Maximum message size to recieve",
+            "type": "integer",
+            "default": 4,
+            "markdownDescription": "The maximum encoded size of a *response* message, in bytes, that grpcurl will accept. Default is `4` mb."
+          },
+          "grpc-clicker.plaintext": {
+            "title": "Plain text",
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Use plain-text `HTTP/2` when connecting to server (no TLS)."
+          },
+          "grpc-clicker.usedocker": {
+            "title": "Use docker version of extension",
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "Switch to use docker version of cli - `fullstorydev/grpcurl`"
+          }
+        }
+      }
+    ],
     "walkthroughs": [
       {
         "id": "grpc-clicker-walkthrow",

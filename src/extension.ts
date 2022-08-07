@@ -13,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
   const grpcurl = new Grpcurl(
     new Parser(),
     new Caller(),
-    storage.docker.isOn()
+    vscode.workspace.getConfiguration(`grpc-clicker`).get(`usedocker`)
   );
 
   const treeviews = new TreeViews({
@@ -206,8 +206,12 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("webview.open", async (data: RequestData) => {
     // TODO process later on
-    data.tlsOn = false;
-    data.maxMsgSize = null;
+    data.tlsOn = vscode.workspace
+      .getConfiguration(`grpc-clicker`)
+      .get(`plaintext`);
+    data.maxMsgSize = vscode.workspace
+      .getConfiguration(`grpc-clicker`)
+      .get(`msgsize`);
 
     for (const host of storage.hosts.list()) {
       data.hosts.push(host.adress);
@@ -229,28 +233,20 @@ export function activate(context: vscode.ExtensionContext) {
     webviewFactory.create(data);
   });
 
-  vscode.commands.registerCommand("protos.docker", async () => {
-    if (storage.docker.isOn()) {
-      vscode.window.showInformationMessage(`docker mode turned off`);
-      storage.docker.turnOff();
-      grpcurl.useDocker = false;
-    } else {
-      vscode.window.showInformationMessage(`docker mode turned on`);
-      storage.docker.turnOn();
-      grpcurl.useDocker = true;
-    }
-  });
-
   vscode.commands.registerCommand("history.clean", () => {
     storage.history.clean();
     treeviews.history.refresh(storage.history.list());
+  });
+
+  vscode.workspace.onDidChangeConfiguration((event) => {
+    console.log(event);
   });
 
   if (storage.showInstallError()) {
     grpcurl.checkInstalled().then((installed) => {
       if (!installed) {
         vscode.window.showErrorMessage(
-          `gRPCurl is not installed. You can switch to docker version in extension panel.`
+          `gRPCurl is not installed. You can switch to docker version in extension settings.`
         );
       }
     });
