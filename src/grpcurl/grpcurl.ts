@@ -49,9 +49,9 @@ export class Grpcurl {
       meta = meta + this.headerPreprocess(metafield);
     }
     const inputRequest = this.jsonPreprocess(input.reqJson);
-    let tls = ``;
-    if (!input.tlsOn) {
-      tls = `-plaintext `;
+    let plaintext = ``;
+    if (input.plaintext) {
+      plaintext = `-plaintext `;
     }
     let maxMsgSize = `-max-msg-sz ${input.maxMsgSize * 1048576}`;
     var startTime = performance.now();
@@ -62,7 +62,7 @@ export class Grpcurl {
       maxMsgSize,
       input.path,
       inputRequest,
-      tls,
+      plaintext,
       input.host,
       input.call
     );
@@ -136,7 +136,7 @@ export interface Request {
   reqJson: string;
   host: string;
   call: string;
-  tlsOn: boolean;
+  plaintext: boolean;
   metadata: string[];
   maxMsgSize: number;
 }

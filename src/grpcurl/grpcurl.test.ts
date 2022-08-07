@@ -86,7 +86,7 @@ test(`send`, async () => {
     reqJson: "{}",
     host: "localhost:12201",
     call: ".pb.v1.Constructions.EmptyCall",
-    tlsOn: true,
+    plaintext: true,
     metadata: [`username: user`, `passsword: password`],
     maxMsgSize: 2000000,
   });

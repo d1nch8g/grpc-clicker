@@ -189,7 +189,7 @@ export function activate(context: vscode.ExtensionContext) {
         reqJson: data.reqJson,
         host: data.host,
         call: `${data.protoName}.${data.service}.${data.call}`,
-        tlsOn: data.tlsOn,
+        plaintext: data.plaintext,
         metadata: metadata,
         maxMsgSize: data.maxMsgSize,
       });
@@ -206,7 +206,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("webview.open", async (data: RequestData) => {
     // TODO process later on
-    data.tlsOn = vscode.workspace
+    data.plaintext = vscode.workspace
       .getConfiguration(`grpc-clicker`)
       .get(`plaintext`);
     data.maxMsgSize = vscode.workspace
@@ -239,7 +239,11 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   vscode.workspace.onDidChangeConfiguration((event) => {
-    console.log(event);
+    if (event.affectsConfiguration(`grpc-clicker.usedocker`)) {
+      grpcurl.useDocker = vscode.workspace
+        .getConfiguration(`grpc-clicker`)
+        .get(`usedocker`);
+    }
   });
 
   if (storage.showInstallError()) {
