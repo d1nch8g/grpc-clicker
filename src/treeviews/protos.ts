@@ -36,12 +36,27 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ProtoItem> {
             protoPath: proto.path,
             protoName: proto.name,
             serviceName: "",
+            hosts: undefined,
           })
         );
       }
       return items;
     }
     if (element.base.type === ProtoType.proto) {
+      const hosts: Hosts = {
+        type: ProtoType.hosts,
+        name: "hosts",
+        hosts: (element.base as ProtoFile).hosts,
+      };
+      items.push(
+        new ProtoItem({
+          base: hosts,
+          protoPath: ``,
+          protoName: ``,
+          serviceName: ``,
+          hosts: hosts,
+        })
+      );
       for (const svc of (element.base as ProtoFile).services) {
         items.push(
           new ProtoItem({
@@ -49,6 +64,24 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ProtoItem> {
             protoPath: element.protoPath,
             protoName: element.protoName,
             serviceName: svc.name,
+            hosts: undefined,
+          })
+        );
+      }
+    }
+    if (element.base.type === ProtoType.hosts) {
+      for (const host of (element.base as Hosts).hosts) {
+        const hostElem: Host = {
+          type: ProtoType.host,
+          name: host,
+        };
+        items.push(
+          new ProtoItem({
+            base: hostElem,
+            protoPath: ``,
+            protoName: ``,
+            serviceName: ``,
+            hosts: undefined,
           })
         );
       }
@@ -61,65 +94,67 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ProtoItem> {
             protoPath: element.protoPath,
             protoName: element.protoName,
             serviceName: element.serviceName,
+            hosts: undefined,
           })
         );
       }
     }
     if (element.base.type === ProtoType.call) {
-      element.base = element.base as Call;
+      const call = element.base as Call;
       items.push(
         new ProtoItem({
-          base: await this.describeMsg(
-            element.protoPath,
-            element.base.inputMessageTag
-          ),
+          base: await this.describeMsg(element.protoPath, call.inputMessageTag),
           protoPath: element.protoPath,
           protoName: element.protoName,
           serviceName: element.serviceName,
+          hosts: undefined,
         })
       );
       items.push(
         new ProtoItem({
           base: await this.describeMsg(
             element.protoPath,
-            element.base.outputMessageTag
+            call.outputMessageTag
           ),
           protoPath: element.protoPath,
           protoName: element.protoName,
           serviceName: element.serviceName,
+          hosts: undefined,
         })
       );
     }
     if (element.base.type === ProtoType.message) {
-      element.base = element.base as Message;
-      for (const field of element.base.fields) {
+      const msg = element.base as Message;
+      for (const field of msg.fields) {
         items.push(
           new ProtoItem({
             base: field,
             protoPath: element.protoPath,
             protoName: element.protoName,
             serviceName: element.serviceName,
+            hosts: undefined,
           })
         );
       }
     }
     if (element.base.type === ProtoType.field) {
-      element.base = element.base as Field;
-      if (element.base.innerMessageTag !== undefined) {
+      const field = element.base as Field;
+      if (field.innerMessageTag !== undefined) {
         let innerMessage = await this.describeMsg(
           element.protoPath,
-          element.base.innerMessageTag
+          field.innerMessageTag
         );
-        for (const field of innerMessage.fields) {
-          if (field.innerMessageTag === element.base.innerMessageTag) {
-            field.innerMessageTag = undefined;
+        for (const innnerField of innerMessage.fields) {
+          if (innnerField.innerMessageTag === field.innerMessageTag) {
+            innnerField.innerMessageTag = undefined;
           }
           items.push(
             new ProtoItem({
-              base: field,
+              base: innnerField,
               protoPath: element.protoPath,
               protoName: element.protoName,
               serviceName: element.serviceName,
+              hosts: undefined,
             })
           );
         }
@@ -142,16 +177,17 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ProtoItem> {
 }
 
 class ProtoItem extends vscode.TreeItem {
-  public base: ProtoFile | Hosts | Service | Call | Message | Field;
+  public base: ProtoFile | Hosts | Host | Service | Call | Message | Field;
   public protoPath: string;
   public protoName: string;
   public serviceName: string;
   constructor(
     public input: {
-      base: ProtoFile | Hosts | Service | Call | Message | Field;
+      base: ProtoFile | Hosts | Host | Service | Call | Message | Field;
       protoPath: string;
       protoName: string;
       serviceName: string;
+      hosts: Hosts | undefined;
     }
   ) {
     super(input.base.name);
@@ -163,10 +199,12 @@ class ProtoItem extends vscode.TreeItem {
 
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     let svg = "";
+    if (input.base.type === ProtoType.hosts) {
+      super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+      svg = "svc.svg";
+    }
     if (input.base.type === ProtoType.host) {
       super.collapsibleState = vscode.TreeItemCollapsibleState.None;
-      // input.base = input.base as Hosts;
-      //TODO add hosts description
       svg = "host-off.svg";
     }
     if (input.base.type === ProtoType.proto) {
@@ -244,8 +282,12 @@ export interface RequestData extends RequestHistoryData {
 }
 
 interface Hosts {
-  prototype: ProtoType;
+  type: ProtoType;
   name: string;
-  type: string;
   hosts: string[];
+}
+
+interface Host {
+  type: ProtoType;
+  name: string;
 }
