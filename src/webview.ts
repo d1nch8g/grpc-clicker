@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import { Request } from "./grpcurl/grpcurl";
 import { RequestData } from "./treeviews/protos";
 
 export class WebViewFactory {

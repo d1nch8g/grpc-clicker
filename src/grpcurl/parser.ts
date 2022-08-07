@@ -244,6 +244,7 @@ export enum ProtoType {
   call,
   message,
   field,
+  host,
 }
 
 export interface Proto {

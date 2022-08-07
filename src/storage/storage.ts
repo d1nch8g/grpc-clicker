@@ -5,10 +5,10 @@ import { ProtoServers } from "./hosts";
 import { ProtoFiles } from "./protos";
 
 export class Storage {
-  public files: ProtoFiles;
-  public servers: ProtoServers;
-  public headers: Headers;
-  public history: History;
+  public readonly files: ProtoFiles;
+  public readonly servers: ProtoServers;
+  public readonly headers: Headers;
+  public readonly history: History;
 
   constructor(private memento: Memento) {
     if (memento.get(`grpc-clicker-version`) !== "0.0.15") {

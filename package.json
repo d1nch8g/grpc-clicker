@@ -26,19 +26,16 @@
     "client"
   ],
   "activationEvents": [
-    "onView:hosts",
-    "onView:schema",
+    "onView:files",
+    "onCommand:files.add",
+    "onCommand:files.remove",
+    "onCommand:files.refresh",
     "onView:headers",
+    "onCommand:headers.add",
+    "onCommand:headers.remove",
     "onView:history",
     "onCommand:history.clean",
     "onCommand:cache.clean",
-    "onCommand:hosts.add",
-    "onCommand:hosts.remove",
-    "onCommand:protos.add",
-    "onCommand:protos.remove",
-    "onCommand:protos.refresh",
-    "onCommand:headers.add",
-    "onCommand:headers.remove",
     "onWebviewPanel:callgrpc"
   ],
   "main": "./dist/extension.js",
@@ -55,12 +52,8 @@
     "views": {
       "grpc-clicker": [
         {
-          "id": "hosts",
-          "name": "gRPC Hosts"
-        },
-        {
-          "id": "protos",
-          "name": "Proto schemas"
+          "id": "files",
+          "name": "Proto files"
         },
         {
           "id": "headers",
@@ -84,15 +77,6 @@
       },
       {
         "category": "gRPC Clicker",
-        "command": "hosts.add",
-        "title": "Add new host",
-        "icon": {
-          "dark": "images/dark/plus.svg",
-          "light": "images/light/plus.svg"
-        }
-      },
-      {
-        "category": "gRPC Clicker",
         "command": "cache.clean",
         "title": "Clean all extension cache",
         "icon": {
@@ -102,26 +86,12 @@
       },
       {
         "category": "gRPC Clicker",
-        "command": "hosts.remove",
-        "title": "Remove existing host",
-        "icon": {
-          "dark": "images/dark/minus.svg",
-          "light": "images/light/minus.svg"
-        }
-      },
-      {
-        "category": "gRPC Clicker",
-        "command": "hosts.switch",
-        "title": "Switch grpc host"
-      },
-      {
-        "category": "gRPC Clicker",
         "command": "headers.switch",
         "title": "Turn on/off value of context metadata"
       },
       {
         "category": "gRPC Clicker",
-        "command": "protos.add",
+        "command": "files.add",
         "title": "Add new proto file",
         "icon": {
           "dark": "images/dark/plus.svg",
@@ -130,7 +100,7 @@
       },
       {
         "category": "gRPC Clicker",
-        "command": "protos.remove",
+        "command": "files.remove",
         "title": "Remove existing proto file",
         "icon": {
           "dark": "images/dark/minus.svg",
@@ -157,7 +127,7 @@
       },
       {
         "category": "gRPC Clicker",
-        "command": "protos.refresh",
+        "command": "files.refresh",
         "title": "Resresh existing proro schemas",
         "icon": {
           "dark": "images/dark/refresh.svg",
@@ -173,23 +143,13 @@
     "menus": {
       "view/title": [
         {
-          "command": "hosts.add",
-          "when": "view == hosts",
+          "command": "files.add",
+          "when": "view == files",
           "group": "navigation"
         },
         {
-          "command": "hosts.remove",
-          "when": "view == hosts",
-          "group": "navigation"
-        },
-        {
-          "command": "protos.add",
-          "when": "view == protos",
-          "group": "navigation"
-        },
-        {
-          "command": "protos.remove",
-          "when": "view == protos",
+          "command": "files.remove",
+          "when": "view == files",
           "group": "navigation"
         },
         {
@@ -203,8 +163,8 @@
           "group": "navigation"
         },
         {
-          "command": "protos.refresh",
-          "when": "view == protos",
+          "command": "files.refresh",
+          "when": "view == files",
           "group": "navigation"
         },
         {
@@ -214,10 +174,6 @@
         }
       ],
       "view/item/context": [
-        {
-          "command": "hosts.switch",
-          "when": "viewItem == host"
-        },
         {
           "command": "webview.open",
           "when": "viewItem == call"

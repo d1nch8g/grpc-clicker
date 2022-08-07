@@ -1,18 +1,12 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import {
-  Proto,
-  Service,
-  Call,
-  ProtoType,
-  Message,
-  Field,
-} from "../grpcurl/parser";
+import { Service, Call, ProtoType, Message, Field } from "../grpcurl/parser";
 import { RequestHistoryData } from "../storage/history";
+import { ProtoFile } from "../grpcurl/grpcurl";
 
-export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
+export class ProtoFilesView implements vscode.TreeDataProvider<ProtoItem> {
   constructor(
-    private protos: Proto[],
+    private protos: ProtoFile[],
     private describeMsg: (path: string, tag: string) => Promise<Message>
   ) {
     this.protos = protos;
@@ -23,7 +17,7 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
   private onChange: vscode.EventEmitter<ProtoItem | undefined | void>;
   readonly onDidChangeTreeData: vscode.Event<void | ProtoItem | ProtoItem[]>;
 
-  async refresh(protos: Proto[]) {
+  async refresh(protos: ProtoFile[]) {
     this.protos = protos;
     this.onChange.fire();
   }
@@ -39,7 +33,7 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
         items.push(
           new ProtoItem({
             base: proto,
-            protoPath: proto.source,
+            protoPath: proto.path,
             protoName: proto.name,
             serviceName: "",
           })
@@ -48,7 +42,7 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
       return items;
     }
     if (element.base.type === ProtoType.proto) {
-      for (const svc of (element.base as Proto).services) {
+      for (const svc of (element.base as ProtoFile).services) {
         items.push(
           new ProtoItem({
             base: svc,
@@ -148,13 +142,13 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
 }
 
 class ProtoItem extends vscode.TreeItem {
-  public base: Proto | Service | Call | Message | Field;
+  public base: ProtoFile | Hosts | Service | Call | Message | Field;
   public protoPath: string;
   public protoName: string;
   public serviceName: string;
   constructor(
     public input: {
-      base: Proto | Service | Call | Message | Field;
+      base: ProtoFile | Hosts | Service | Call | Message | Field;
       protoPath: string;
       protoName: string;
       serviceName: string;
@@ -169,22 +163,27 @@ class ProtoItem extends vscode.TreeItem {
 
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     let svg = "";
+    if (input.base.type === ProtoType.host) {
+      super.collapsibleState = vscode.TreeItemCollapsibleState.None;
+      // input.base = input.base as Hosts;
+      //TODO add hosts description
+      svg = "host-off.svg";
+    }
     if (input.base.type === ProtoType.proto) {
-      input.base = input.base as Proto;
       super.tooltip = `Proto schema definition`;
       svg = "proto.svg";
     }
     if (input.base.type === ProtoType.service) {
-      input.base = input.base as Service;
-      super.tooltip = input.base.description;
+      const svc = input.base as Service;
+      super.tooltip = svc.description;
       svg = "svc.svg";
     }
     if (input.base.type === ProtoType.call) {
+      const call = input.base as Call;
       super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
-      input.base = input.base as Call;
-      super.tooltip = input.base.description;
+      super.tooltip = call.description;
       svg = "unary.svg";
-      if (input.base.inputStream || input.base.outputStream) {
+      if (call.inputStream || call.outputStream) {
         svg = "stream.svg";
       }
       super.contextValue = "call";
@@ -192,10 +191,10 @@ class ProtoItem extends vscode.TreeItem {
         path: input.protoPath,
         protoName: input.protoName,
         service: input.serviceName,
-        call: input.base.name,
-        inputMessageTag: input.base.inputMessageTag,
-        inputMessageName: input.base.inputMessageTag.split(`.`).pop()!,
-        outputMessageName: input.base.outputMessageTag.split(`.`).pop()!,
+        call: call.name,
+        inputMessageTag: call.inputMessageTag,
+        inputMessageName: call.inputMessageTag.split(`.`).pop()!,
+        outputMessageName: call.outputMessageTag.split(`.`).pop()!,
         plaintext: true,
         host: "",
         json: "",
@@ -215,19 +214,19 @@ class ProtoItem extends vscode.TreeItem {
       };
     }
     if (input.base.type === ProtoType.message) {
-      input.base = input.base as Message;
-      super.tooltip = input.base.description;
-      super.description = input.base.tag;
-      if (input.base.fields.length === 0) {
+      const msg = input.base as Message;
+      super.tooltip = msg.description;
+      super.description = msg.tag;
+      if (msg.fields.length === 0) {
         super.collapsibleState = vscode.TreeItemCollapsibleState.None;
       }
       svg = "msg.svg";
     }
     if (input.base.type === ProtoType.field) {
-      input.base = input.base as Field;
-      super.tooltip = input.base.description;
-      super.description = input.base.datatype;
-      if (input.base.innerMessageTag === undefined) {
+      const field = input.base as Field;
+      super.tooltip = field.description;
+      super.description = field.datatype;
+      if (field.innerMessageTag === undefined) {
         super.collapsibleState = vscode.TreeItemCollapsibleState.None;
       }
       svg = "field.svg";
@@ -241,5 +240,12 @@ class ProtoItem extends vscode.TreeItem {
 
 export interface RequestData extends RequestHistoryData {
   protoName: string;
+  hosts: string[];
+}
+
+interface Hosts {
+  prototype: ProtoType;
+  name: string;
+  type: string;
   hosts: string[];
 }
