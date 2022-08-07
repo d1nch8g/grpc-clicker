@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. Dates are d
 - Fixed bug with badly appended metadata to request
 - Added settings page for extension with ability to turn on/off some stuff
 - Switched to strict typescript mode for ease of development
+- Added export button for grpcurl requests
 
 ## [0.0.15]
 
