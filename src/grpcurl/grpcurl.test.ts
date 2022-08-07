@@ -38,21 +38,14 @@ class MockCaller implements Caller {
   dockerize(input: string): string {
     throw new Error("Method not implemented.");
   }
-  async execute(
-    form: string,
-    args: string[],
-    inDocker: boolean
-  ): Promise<[string, Error]> {
-    if (args.length === 0) {
-      return [null, null];
-    }
-    if (args[0] === `err_conn`) {
+  async execute(form: string): Promise<[string, Error]> {
+    if (form.includes(`err_conn`)) {
       return [
         `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`,
         null,
       ];
     }
-    return [util.format(form, ...args), null];
+    return [form, null];
   }
 }
 
@@ -93,7 +86,7 @@ test(`send`, async () => {
     reqJson: "{}",
     host: "localhost:12201",
     call: ".pb.v1.Constructions.EmptyCall",
-    tlsOn: true,
+    plaintext: true,
     metadata: [`username: user`, `passsword: password`],
     maxMsgSize: 2000000,
   });
@@ -106,4 +99,28 @@ test(`checkInstalled`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
   const resp = await grpcurl.checkInstalled();
   expect(resp).toBeTruthy();
+});
+
+const winRegularCallNoPath = `grpcurl -import-path / -proto C:\\\\Users\\dangd\\OneDrive\\Документы\\grpclicker_vscode\\server\\api.proto describe`;
+const winDockerizedCallNoPath = `docker run -v C:\\\\Users\\dangd\\OneDrive\\Документы\\grpclicker_vscode\\server\\api.proto:\\\\Users\\dangd\\OneDrive\\Документы\\grpclicker_vscode\\server\\api.proto fullstorydev/grpcurl -import-path / -proto \\\\Users\\dangd\\OneDrive\\Документы\\grpclicker_vscode\\server\\api.proto describe`;
+const winRegularCallWithPath = `grpcurl -import-path / -proto C:\\\\Users\\dangd\\OneDrive\\Документы\\grpclicker_vscode\\server\\api.proto describe`;
+const winDockerizedCallWithPath = `docker run -v C:\\\\Users\\dangd\\OneDrive\\Документы\\grpclicker_vscode\\server\\api.proto:\\\\Users\\dangd\\OneDrive\\Документы\\grpclicker_vscode\\server\\api.proto fullstorydev/grpcurl -import-path / -proto \\\\Users\\dangd\\OneDrive\\Документы\\grpclicker_vscode\\server\\api.proto describe`;
+
+const linuxRegularCallNoPath = `grpcurl -import-path / -proto /Users/danilafominyh/Documents/grpclicker_vscode/server/api.proto describe`;
+const linuxDockerizedCallNoPath = `docker run -v /Users/danilafominyh/Documents/grpclicker_vscode/server/api.proto:/Users/danilafominyh/Documents/grpclicker_vscode/server/api.proto fullstorydev/grpcurl -import-path / -proto /Users/danilafominyh/Documents/grpclicker_vscode/server/api.proto describe`;
+
+test("dockerize", async () => {
+  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
+  if (process.platform === "win32") {
+    expect(grpcurl.dockerize(winRegularCallNoPath)).toBe(
+      winDockerizedCallNoPath
+    );
+    expect(grpcurl.dockerize(winRegularCallWithPath)).toBe(
+      winDockerizedCallWithPath
+    );
+  } else {
+    expect(grpcurl.dockerize(linuxRegularCallNoPath)).toBe(
+      linuxDockerizedCallNoPath
+    );
+  }
 });
