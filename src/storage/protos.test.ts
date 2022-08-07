@@ -51,7 +51,9 @@ test(`list`, () => {
 test(`remove`, () => {
   const memento = new MockMemento();
   const headers = new Protos(memento);
-  memento.values = [`{"type": 0,"name": "test","path": "path","services": []}`];
+  memento.values = [
+    `{"type": 0,"name": "test","source": "path","services": []}`,
+  ];
   headers.remove(`path`);
   expect(memento.values).toStrictEqual([]);
 });

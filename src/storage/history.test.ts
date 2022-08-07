@@ -69,14 +69,14 @@ test(`list`, () => {
   expect(resp).toStrictEqual([
     {
       path: "example",
-      reqJson: "",
+      json: "",
       host: "",
       call: "",
       plaintext: false,
       metadata: [],
       maxMsgSize: 420,
       code: "",
-      respJson: "",
+      response: "",
       time: "",
       errmes: "",
       date: "",
