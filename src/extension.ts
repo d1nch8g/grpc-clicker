@@ -214,6 +214,13 @@ export function activate(context: vscode.ExtensionContext) {
       storage.history.add(data);
       treeviews.history.refresh(storage.history.list());
       return data;
+    },
+    (request: RequestData) => {
+      const command = grpcurl.formGrpcurlCommand(request);
+      vscode.env.clipboard.writeText(command);
+      vscode.window.showInformationMessage(
+        `gRPCurl command have been copied to clipboard`
+      );
     }
   );
 
