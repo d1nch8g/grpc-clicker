@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. Dates are d
 - Added ability to call grpcurl dockerized version
 - Added cleanup button for request history
 - Fixed bug with badly appended metadata to request
+- Added settings page for extension with ability to turn on/off some stuff
 
 ## [0.0.15]
 
