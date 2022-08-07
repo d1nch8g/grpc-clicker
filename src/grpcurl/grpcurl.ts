@@ -56,7 +56,7 @@ export class Grpcurl {
     return msg;
   }
 
-  async send(input: Request): Promise<Response> {
+  formGrpcurlCommand(input: Request): string {
     let call = `grpcurl %s %s -import-path / -proto %s -d %s %s %s %s`;
     let meta = ``;
     for (const metafield of input.metadata) {
@@ -68,7 +68,6 @@ export class Grpcurl {
       plaintext = `-plaintext `;
     }
     let maxMsgSize = `-max-msg-sz ${input.maxMsgSize * 1048576}`;
-    var startTime = performance.now();
 
     call = util.format(
       call,
@@ -84,8 +83,14 @@ export class Grpcurl {
     if (this.useDocker) {
       call = this.dockerize(call);
     }
+    return call;
+  }
 
-    const [resp, err] = await this.caller.execute(call);
+  async send(input: Request): Promise<Response> {
+    var startTime = performance.now();
+    const [resp, err] = await this.caller.execute(
+      this.formGrpcurlCommand(input)
+    );
 
     var endTime = performance.now();
     let response: Response;

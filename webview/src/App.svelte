@@ -10,7 +10,7 @@
   $: inputMessageTag = ``;
   $: inputMessageName = ``;
   $: outputMessageName = ``;
-  $: tlsOn = ``;
+  $: plaintext = ``;
   $: host = ``;
   $: reqJson = ``;
   $: metadata = [];
@@ -32,7 +32,7 @@
     inputMessageTag = obj.inputMessageTag;
     inputMessageName = obj.inputMessageName;
     outputMessageName = obj.outputMessageName;
-    tlsOn = obj.tlsOn;
+    plaintext = obj.plaintext;
     host = obj.host;
     reqJson = obj.reqJson;
     metadata = obj.metadata;
@@ -69,28 +69,30 @@
   }
 
   function onExport() {
+    console.log(`making attemp to export`);
+    const request = JSON.stringify({
+      path: path,
+      protoName: protoName,
+      service: service,
+      call: call,
+      inputMessageTag: inputMessageTag,
+      inputMessageName: inputMessageName,
+      outputMessageName: outputMessageName,
+      plaintext: plaintext,
+      host: host,
+      reqJson: reqJson,
+      maxMsgSize: maxMsgSize,
+      code: code,
+      respJson: respJson,
+      time: time,
+      date: date,
+      errmes: errmes,
+      metadata: metadata,
+      hosts: hosts,
+    });
     vscode.postMessage({
       command: "export",
-      text: JSON.stringify({
-        path: path,
-        protoName: protoName,
-        service: service,
-        call: call,
-        inputMessageTag: inputMessageTag,
-        inputMessageName: inputMessageName,
-        outputMessageName: outputMessageName,
-        plaintext: plaintext,
-        host: host,
-        reqJson: reqJson,
-        maxMsgSize: maxMsgSize,
-        code: code,
-        respJson: respJson,
-        time: time,
-        date: date,
-        errmes: errmes,
-        metadata: metadata,
-        hosts: hosts,
-      }),
+      text: request,
     });
   }
 </script>

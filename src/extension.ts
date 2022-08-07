@@ -216,7 +216,11 @@ export function activate(context: vscode.ExtensionContext) {
       return data;
     },
     (request: RequestData) => {
-      // TODO add formimg of grpcurl command
+      const command = grpcurl.formGrpcurlCommand(request);
+      vscode.env.clipboard.writeText(command);
+      vscode.window.showInformationMessage(
+        `gRPCurl command have been copied to clipboard`
+      );
     }
   );
 

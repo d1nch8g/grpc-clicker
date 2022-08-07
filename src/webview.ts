@@ -72,7 +72,7 @@ class GrpcClickerView {
         case "host":
           request.host = out.text;
         case "export":
-          exportCallback(JSON.parse(out.text) as RequestData);
+          this.exportCallback(JSON.parse(out.text) as RequestData);
       }
     });
 
