@@ -41,7 +41,7 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
             base: proto,
             protoPath: proto.path,
             protoName: proto.name,
-            serviceName: undefined,
+            serviceName: "",
           })
         );
       }
