@@ -1,6 +1,6 @@
 import { performance } from "perf_hooks";
 import { Caller } from "./caller";
-import { Message, Parser, Proto } from "./parser";
+import { Message, Parser, Proto, ProtoType } from "./parser";
 import * as util from "util";
 
 export class Grpcurl {
@@ -10,7 +10,7 @@ export class Grpcurl {
     public useDocker: boolean
   ) {}
 
-  async proto(path: string): Promise<[Proto, Error]> {
+  async proto(path: string): Promise<Proto> {
     let call = `grpcurl -import-path / -proto %s describe`;
     call = util.format(call, path);
 
@@ -20,13 +20,19 @@ export class Grpcurl {
 
     const [resp, err] = await this.caller.execute(call);
     if (err !== undefined) {
-      return [undefined, err];
+      return {
+        type: ProtoType.proto,
+        name: "",
+        path: "",
+        services: [],
+        error: err.message,
+      };
     }
     const proto = this.parser.proto(resp, path);
-    return [proto, undefined];
+    return proto;
   }
 
-  async message(path: string, tag: string): Promise<[Message, Error]> {
+  async message(path: string, tag: string): Promise<Message> {
     let call = `grpcurl -msg-template -import-path / -proto %s describe %s`;
     call = util.format(call, path, tag);
 
@@ -36,10 +42,18 @@ export class Grpcurl {
 
     const [resp, err] = await this.caller.execute(call);
     if (err !== undefined) {
-      return [undefined, err];
+      return {
+        type: ProtoType.message,
+        name: "",
+        tag: "",
+        description: undefined,
+        template: undefined,
+        fields: [],
+        error: err.message,
+      };
     }
     const msg = this.parser.message(resp);
-    return [msg, undefined];
+    return msg;
   }
 
   async send(input: Request): Promise<Response> {
@@ -146,5 +160,5 @@ export interface Response {
   respJson: string;
   time: string;
   date: string;
-  errmes: string;
+  errmes: string | undefined;
 }

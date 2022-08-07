@@ -239,6 +239,7 @@ comment`);
         fields: undefined,
       },
     ],
+    error: undefined,
   };
   expect(enumParsed).toStrictEqual(expectedEnum);
 });
@@ -256,15 +257,15 @@ test(`response`, () => {
   expect(parser.resp(codeErr)).toStrictEqual({
     code: `AlreadyExists`,
     respJson: ``,
-    time: undefined,
+    time: "",
     errmes: `some err msg`,
-    date: undefined,
+    date: "",
   });
   expect(parser.resp(connErr)).toStrictEqual({
     code: `ConnectionError`,
     respJson: ``,
-    time: undefined,
-    date: undefined,
+    time: "",
+    date: "",
     errmes: `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`,
   });
   expect(parser.resp(goodResp)).toStrictEqual({
@@ -272,8 +273,8 @@ test(`response`, () => {
     respJson: `{
   "message": "msg"
 }`,
-    time: undefined,
+    time: "",
     errmes: undefined,
-    date: undefined,
+    date: "",
   });
 });

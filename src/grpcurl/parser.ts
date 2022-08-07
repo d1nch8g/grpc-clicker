@@ -10,6 +10,7 @@ export class Parser {
       services: [],
       path: path,
       type: ProtoType.proto,
+      error: undefined,
     };
     let currSvc: Service = {
       name: ``,
@@ -100,7 +101,7 @@ export class Parser {
   message(input: string): Message {
     const splittedInput = input.split("\n");
 
-    let currComment: string = undefined;
+    let currComment: string | undefined = undefined;
     let msg: Message = {
       type: ProtoType.message,
       name: "",
@@ -108,6 +109,7 @@ export class Parser {
       description: undefined,
       fields: [],
       template: input.split(`Message template:\n`)[1],
+      error: undefined,
     };
 
     if (splittedInput[0].endsWith(`an enum:`)) {
@@ -125,12 +127,16 @@ export class Parser {
           continue;
         }
         if (line.startsWith(`enum `)) {
-          msg.description = currComment.slice(0, -1);
+          if (currComment !== undefined) {
+            msg.description = currComment.slice(0, -1);
+          }
           currComment = undefined;
         }
         if (line.endsWith(`;`)) {
           const field = this.field(line);
-          field.description = currComment.slice(0, -1);
+          if (currComment !== undefined) {
+            field.description = currComment.slice(0, -1);
+          }
           currComment = undefined;
           msg.fields.push(field);
         }
@@ -202,10 +208,10 @@ export class Parser {
   resp(input: string): Response {
     let resp: Response = {
       respJson: "",
-      code: undefined,
-      time: undefined,
+      code: "",
+      time: "",
+      date: "",
       errmes: undefined,
-      date: undefined,
     };
     if (input.includes(`Failed to dial target host `)) {
       resp.code = `ConnectionError`;
@@ -248,19 +254,20 @@ export interface Proto {
   name: string;
   path: string;
   services: Service[];
+  error: string | undefined;
 }
 
 export interface Service {
   type: ProtoType;
   name: string;
-  description: string;
+  description: string | undefined;
   calls: Call[];
 }
 
 export interface Call {
   type: ProtoType;
   name: string;
-  description: string;
+  description: string | undefined;
   inputStream: boolean;
   outputStream: boolean;
   inputMessageTag: string;
@@ -271,16 +278,17 @@ export interface Message {
   type: ProtoType;
   name: string;
   tag: string;
-  description: string;
-  template: string;
+  description: string | undefined;
+  template: string | undefined;
   fields: Field[];
+  error: string | undefined;
 }
 
 export interface Field {
   type: ProtoType;
   name: string;
   datatype: string;
-  description: string;
-  innerMessageTag: string;
-  fields: Field[];
+  description: string | undefined;
+  innerMessageTag: string | undefined;
+  fields: Field[] | undefined;
 }

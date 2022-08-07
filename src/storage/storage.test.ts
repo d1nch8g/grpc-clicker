@@ -17,11 +17,12 @@ class MockMemento implements Memento {
     }
     return undefined;
   }
-  update(key: string, value: any): Thenable<void> {
+  async update(key: string, value: any): Promise<void> {
     if (key === `key`) {
       this.cleaned = true;
+      return undefined;
     }
-    return;
+    return undefined;
   }
 }
 

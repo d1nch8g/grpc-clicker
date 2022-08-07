@@ -22,7 +22,7 @@ export class Protos {
     return protos;
   }
 
-  public add(proto: Proto): Error {
+  public add(proto: Proto): Error | undefined {
     const protos = this.list();
     for (const savedProto of protos) {
       if (savedProto.path === proto.path) {

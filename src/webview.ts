@@ -82,8 +82,8 @@ class GrpcClickerView {
 
   update() {
     this.panel.iconPath = {
-      light: vscode.Uri.joinPath(this.uri, `images`, `rocket.svg`),
-      dark: vscode.Uri.joinPath(this.uri, `images`, `rocket.svg`),
+      light: vscode.Uri.joinPath(this.uri, `images`, `unary.svg`),
+      dark: vscode.Uri.joinPath(this.uri, `images`, `unary.svg`),
     };
 
     const scriptUri = this.panel.webview.asWebviewUri(

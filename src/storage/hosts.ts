@@ -21,7 +21,7 @@ export class Hosts {
     return hosts;
   }
 
-  add(host: Host): Error {
+  add(host: Host): Error | undefined {
     const hosts = this.list();
     for (const savedHost of hosts) {
       if (savedHost.adress === host.adress) {
@@ -46,6 +46,6 @@ export class Hosts {
 
 export interface Host {
   adress: string;
-  description: string;
+  description: string | undefined;
   current: boolean;
 }

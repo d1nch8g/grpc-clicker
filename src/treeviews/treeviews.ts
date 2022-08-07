@@ -18,7 +18,7 @@ export class TreeViews {
     headers: Header[];
     requests: RequestHistoryData[];
     protos: Proto[];
-    describeMsg: (path:string, tag: string) => Promise<Message>;
+    describeMsg: (path: string, tag: string) => Promise<Message>;
   }) {
     this.hosts = new HostsTreeView(input.hosts);
     this.headers = new HeadersTreeView(input.headers);
