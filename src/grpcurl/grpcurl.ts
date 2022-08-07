@@ -19,11 +19,11 @@ export class Grpcurl {
     }
 
     const [resp, err] = await this.caller.execute(call);
-    if (err !== null) {
-      return [null, err];
+    if (err !== undefined) {
+      return [undefined, err];
     }
     const proto = this.parser.proto(resp, path);
-    return [proto, null];
+    return [proto, undefined];
   }
 
   async message(path: string, tag: string): Promise<[Message, Error]> {
@@ -35,11 +35,11 @@ export class Grpcurl {
     }
 
     const [resp, err] = await this.caller.execute(call);
-    if (err !== null) {
-      return [null, err];
+    if (err !== undefined) {
+      return [undefined, err];
     }
     const msg = this.parser.message(resp);
-    return [msg, null];
+    return [msg, undefined];
   }
 
   async send(input: Request): Promise<Response> {
@@ -75,7 +75,7 @@ export class Grpcurl {
 
     var endTime = performance.now();
     let response: Response;
-    if (err !== null) {
+    if (err !== undefined) {
       response = this.parser.resp(err.message);
     } else {
       response = this.parser.resp(resp);
@@ -103,7 +103,7 @@ export class Grpcurl {
 
   async checkInstalled(): Promise<boolean> {
     const [resp, err] = await this.caller.execute(`grpcurls -help`);
-    if (err !== null) {
+    if (err !== undefined) {
       return false;
     }
     return true;

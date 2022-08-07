@@ -10,12 +10,12 @@ export class Caller {
       const stderrString = `${stderr}`;
 
       if (stderrString !== ``) {
-        return [null, new Error(stderrString)];
+        return [undefined, new Error(stderrString)];
       }
 
-      return [stdoutString, null];
+      return [stdoutString, undefined];
     } catch (exception) {
-      return [null, new Error(exception.message)];
+      return [undefined, new Error(exception.message)];
     }
   }
 }

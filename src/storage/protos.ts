@@ -31,7 +31,7 @@ export class Protos {
     }
     protos.push(proto);
     this.save(protos);
-    return null;
+    return undefined;
   }
 
   remove(path: string) {

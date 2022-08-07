@@ -41,7 +41,7 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
             base: proto,
             protoPath: proto.path,
             protoName: proto.name,
-            serviceName: null,
+            serviceName: undefined,
           })
         );
       }
@@ -111,14 +111,14 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
     }
     if (element.base.type === ProtoType.field) {
       element.base = element.base as Field;
-      if (element.base.innerMessageTag !== null) {
+      if (element.base.innerMessageTag !== undefined) {
         let innerMessage = await this.describeMsg(
           element.protoPath,
           element.base.innerMessageTag
         );
         for (const field of innerMessage.fields) {
           if (field.innerMessageTag === element.base.innerMessageTag) {
-            field.innerMessageTag = null;
+            field.innerMessageTag = undefined;
           }
           items.push(
             new ProtoItem({
@@ -227,7 +227,7 @@ class ProtoItem extends vscode.TreeItem {
       input.base = input.base as Field;
       super.tooltip = input.base.description;
       super.description = input.base.datatype;
-      if (input.base.innerMessageTag === null) {
+      if (input.base.innerMessageTag === undefined) {
         super.collapsibleState = vscode.TreeItemCollapsibleState.None;
       }
       svg = "field.svg";

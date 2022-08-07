@@ -4,7 +4,7 @@ export class Parser {
   proto(input: string, path: string): Proto {
     const splittedInput = input.split("\n");
 
-    let currComment = null;
+    let currComment = undefined;
     let proto: Proto = {
       name: ``,
       services: [],
@@ -13,14 +13,14 @@ export class Parser {
     };
     let currSvc: Service = {
       name: ``,
-      description: null,
+      description: undefined,
       calls: [],
       type: ProtoType.service,
     };
 
     for (const line of splittedInput) {
       if (line.includes(`//`)) {
-        if (currComment === null) {
+        if (currComment === undefined) {
           currComment = ``;
         }
         currComment += line.replace(`//`, ``).trim() + `\n`;
@@ -38,9 +38,9 @@ export class Parser {
         continue;
       }
       if (line.startsWith(`service `)) {
-        if (currComment !== null) {
+        if (currComment !== undefined) {
           currSvc.description = currComment.slice(0, -1);
-          currComment = null;
+          currComment = undefined;
         }
         currSvc.name = line.split(` `)[1];
       }
@@ -48,7 +48,7 @@ export class Parser {
         proto.services.push(currSvc);
         currSvc = {
           name: ``,
-          description: null,
+          description: undefined,
           calls: [],
           type: ProtoType.service,
         };
@@ -56,9 +56,9 @@ export class Parser {
       }
       if (line.includes(`  rpc `)) {
         const call = this.rpc(line);
-        if (currComment !== null) {
+        if (currComment !== undefined) {
           call.description = currComment.slice(0, -1);
-          currComment = null;
+          currComment = undefined;
         }
         currSvc.calls.push(call);
         continue;
@@ -71,7 +71,7 @@ export class Parser {
     let call: Call = {
       type: ProtoType.call,
       name: "",
-      description: null,
+      description: undefined,
       inputStream: false,
       outputStream: false,
       inputMessageTag: "",
@@ -100,12 +100,12 @@ export class Parser {
   message(input: string): Message {
     const splittedInput = input.split("\n");
 
-    let currComment: string = null;
+    let currComment: string = undefined;
     let msg: Message = {
       type: ProtoType.message,
       name: "",
       tag: "",
-      description: null,
+      description: undefined,
       fields: [],
       template: input.split(`Message template:\n`)[1],
     };
@@ -115,10 +115,10 @@ export class Parser {
       const splittedTag = tag.split(`.`);
       msg.tag = tag;
       msg.name = splittedTag[splittedTag.length - 1];
-      msg.template = null;
+      msg.template = undefined;
       for (const line of splittedInput) {
         if (line.includes(`//`)) {
-          if (currComment === null) {
+          if (currComment === undefined) {
             currComment = ``;
           }
           currComment += line.replace(`//`, ``).trim() + `\n`;
@@ -126,12 +126,12 @@ export class Parser {
         }
         if (line.startsWith(`enum `)) {
           msg.description = currComment.slice(0, -1);
-          currComment = null;
+          currComment = undefined;
         }
         if (line.endsWith(`;`)) {
           const field = this.field(line);
           field.description = currComment.slice(0, -1);
-          currComment = null;
+          currComment = undefined;
           msg.fields.push(field);
         }
       }
@@ -140,9 +140,9 @@ export class Parser {
 
     for (const line of splittedInput) {
       if (line.startsWith(`message `)) {
-        if (currComment !== null) {
+        if (currComment !== undefined) {
           msg.description = currComment.slice(0, -1);
-          currComment = null;
+          currComment = undefined;
         }
         msg.name = line.split(` `)[1];
         continue;
@@ -152,7 +152,7 @@ export class Parser {
         continue;
       }
       if (line.includes(`//`)) {
-        if (currComment === null) {
+        if (currComment === undefined) {
           currComment = ``;
         }
         currComment += line.replace(`//`, ``).trim() + `\n`;
@@ -160,9 +160,9 @@ export class Parser {
       }
       if (line.endsWith(`;`)) {
         let field = this.field(line);
-        if (currComment !== null) {
+        if (currComment !== undefined) {
           field.description = currComment;
-          currComment = null;
+          currComment = undefined;
         }
         msg.fields.push(field);
         continue;
@@ -181,9 +181,9 @@ export class Parser {
       type: ProtoType.field,
       name: spaceSplit[spaceSplit.length - 3],
       datatype: spaceSplit.slice(0, spaceSplit.length - 3).join(` `),
-      description: null,
-      innerMessageTag: null,
-      fields: null,
+      description: undefined,
+      innerMessageTag: undefined,
+      fields: undefined,
     };
     if (line.includes(`.`)) {
       field.fields = [];
@@ -202,10 +202,10 @@ export class Parser {
   resp(input: string): Response {
     let resp: Response = {
       respJson: "",
-      code: null,
-      time: null,
-      errmes: null,
-      date: null,
+      code: undefined,
+      time: undefined,
+      errmes: undefined,
+      date: undefined,
     };
     if (input.includes(`Failed to dial target host `)) {
       resp.code = `ConnectionError`;

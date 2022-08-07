@@ -58,7 +58,7 @@ multiline
 comment
 right here`);
   expect(proto.services[1].description).toBe(`example svc description`);
-  expect(proto.services[1].calls[12].description).toBe(null);
+  expect(proto.services[1].calls[12].description).toBe(undefined);
 });
 
 const rpcUnaryLine = `  rpc Sint32Call ( .pb.v1.Sint32Mes ) returns ( .pb.v1.Sint32Mes );`;
@@ -91,9 +91,9 @@ test(`fields`, () => {
     type: ProtoType.field,
     name: `example`,
     datatype: `string`,
-    description: null,
-    innerMessageTag: null,
-    fields: null,
+    description: undefined,
+    innerMessageTag: undefined,
+    fields: undefined,
   };
   expect(parser.field(field1)).toStrictEqual(expected1);
 
@@ -102,9 +102,9 @@ test(`fields`, () => {
     type: ProtoType.field,
     name: `example2`,
     datatype: `optional string`,
-    description: null,
-    innerMessageTag: null,
-    fields: null,
+    description: undefined,
+    innerMessageTag: undefined,
+    fields: undefined,
   };
   expect(parser.field(field2)).toStrictEqual(expected2);
 
@@ -113,9 +113,9 @@ test(`fields`, () => {
     type: ProtoType.field,
     name: `example3`,
     datatype: `repeated string`,
-    description: null,
-    innerMessageTag: null,
-    fields: null,
+    description: undefined,
+    innerMessageTag: undefined,
+    fields: undefined,
   };
   expect(parser.field(field3)).toStrictEqual(expected3);
 
@@ -124,9 +124,9 @@ test(`fields`, () => {
     type: ProtoType.field,
     name: `example4`,
     datatype: `map<string, string>`,
-    description: null,
-    innerMessageTag: null,
-    fields: null,
+    description: undefined,
+    innerMessageTag: undefined,
+    fields: undefined,
   };
   expect(parser.field(field4)).toStrictEqual(expected4);
 
@@ -135,7 +135,7 @@ test(`fields`, () => {
     type: ProtoType.field,
     name: `example5`,
     datatype: `.pb.v1.NestedMes`,
-    description: null,
+    description: undefined,
     innerMessageTag: `.pb.v1.NestedMes`,
     fields: [],
   };
@@ -146,7 +146,7 @@ test(`fields`, () => {
     type: ProtoType.field,
     name: "example4",
     datatype: "map<string, .pb.v1.OptionalMes>",
-    description: null,
+    description: undefined,
     innerMessageTag: `.pb.v1.OptionalMes`,
     fields: [],
   };
@@ -220,23 +220,23 @@ comment`);
     name: "Enum",
     tag: "pb.v1.Enum",
     description: "wirdo boo",
-    template: null,
+    template: undefined,
     fields: [
       {
         type: ProtoType.field,
         name: "FIRST",
         datatype: "",
         description: "coca cola",
-        innerMessageTag: null,
-        fields: null,
+        innerMessageTag: undefined,
+        fields: undefined,
       },
       {
         type: ProtoType.field,
         name: "SECOND",
         datatype: "",
         description: `keka\npeka`,
-        innerMessageTag: null,
-        fields: null,
+        innerMessageTag: undefined,
+        fields: undefined,
       },
     ],
   };
@@ -256,15 +256,15 @@ test(`response`, () => {
   expect(parser.resp(codeErr)).toStrictEqual({
     code: `AlreadyExists`,
     respJson: ``,
-    time: null,
+    time: undefined,
     errmes: `some err msg`,
-    date: null,
+    date: undefined,
   });
   expect(parser.resp(connErr)).toStrictEqual({
     code: `ConnectionError`,
     respJson: ``,
-    time: null,
-    date: null,
+    time: undefined,
+    date: undefined,
     errmes: `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`,
   });
   expect(parser.resp(goodResp)).toStrictEqual({
@@ -272,8 +272,8 @@ test(`response`, () => {
     respJson: `{
   "message": "msg"
 }`,
-    time: null,
-    errmes: null,
-    date: null,
+    time: undefined,
+    errmes: undefined,
+    date: undefined,
   });
 });

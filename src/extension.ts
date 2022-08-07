@@ -23,7 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
     protos: storage.protos.list(),
     describeMsg: async (path: string, tag: string): Promise<Message> => {
       const [msg, err] = await grpcurl.message(path, tag);
-      if (err !== null) {
+      if (err !== undefined) {
         vscode.window.showErrorMessage(err.message);
       }
       return msg;
@@ -42,7 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
     const host = await vscode.window.showInputBox({
       title: `adress to make a call`,
     });
-    if (host === "" || host === undefined || host === null) {
+    if (host === "" || host === undefined || host === undefined) {
       return;
     }
     const description = await vscode.window.showInputBox({
@@ -53,7 +53,7 @@ export function activate(context: vscode.ExtensionContext) {
       description: description,
       current: false,
     });
-    if (err !== null) {
+    if (err !== undefined) {
       vscode.window.showErrorMessage(err.message);
     }
     treeviews.hosts.update(storage.hosts.list());
@@ -68,7 +68,11 @@ export function activate(context: vscode.ExtensionContext) {
     const removeHost = await vscode.window.showQuickPick(adresses, {
       title: `choose a host to remove`,
     });
-    if (removeHost === "" || removeHost === undefined || removeHost === null) {
+    if (
+      removeHost === "" ||
+      removeHost === undefined ||
+      removeHost === undefined
+    ) {
       return;
     }
     storage.hosts.remove(removeHost);
@@ -97,11 +101,11 @@ export function activate(context: vscode.ExtensionContext) {
     };
     const path = (await vscode.window.showOpenDialog(options))[0].fsPath;
     let [proto, err] = await grpcurl.proto(path);
-    if (err !== null) {
+    if (err !== undefined) {
       vscode.window.showErrorMessage(err.message);
     }
     err = storage.protos.add(proto);
-    if (err !== null) {
+    if (err !== undefined) {
       vscode.window.showErrorMessage(err.message);
     }
     treeviews.protos.refresh(storage.protos.list());
@@ -123,7 +127,7 @@ export function activate(context: vscode.ExtensionContext) {
     let newProtos: Proto[] = [];
     for (const oldProto of oldProtos) {
       const [newProto, err] = await grpcurl.proto(oldProto.path);
-      if (err !== null) {
+      if (err !== undefined) {
         vscode.window.showErrorMessage(err.message);
       } else {
         newProtos.push(newProto);
@@ -137,14 +141,14 @@ export function activate(context: vscode.ExtensionContext) {
     const header = await vscode.window.showInputBox({
       title: `header that you can add to gRPC call, in format: "key: value", enable/disable by clicking`,
     });
-    if (header === "" || header === undefined || header === null) {
+    if (header === "" || header === undefined || header === undefined) {
       return;
     }
     const err = storage.headers.add({
       value: header,
       active: false,
     });
-    if (err !== null) {
+    if (err !== undefined) {
       vscode.window.showErrorMessage(err.message);
     }
     treeviews.headers.refresh(storage.headers.list());
@@ -156,7 +160,7 @@ export function activate(context: vscode.ExtensionContext) {
       headerValues.push(header.value);
     }
     const header = await vscode.window.showQuickPick(headerValues);
-    if (header === "" || header === undefined || header === null) {
+    if (header === "" || header === undefined || header === undefined) {
       return;
     }
     storage.headers.remove(header);
@@ -225,7 +229,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
     const [msg, err] = await grpcurl.message(data.path, data.inputMessageTag);
-    if (err !== null) {
+    if (err !== undefined) {
       vscode.window.showErrorMessage(err.message);
       return;
     }

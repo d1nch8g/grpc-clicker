@@ -30,7 +30,7 @@ export class Headers {
     }
     headers.push(header);
     this.save(headers);
-    return null;
+    return undefined;
   }
 
   remove(value: string) {

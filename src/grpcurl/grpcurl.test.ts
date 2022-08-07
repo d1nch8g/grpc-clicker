@@ -10,7 +10,7 @@ class MockParser implements Parser {
       respJson: `ok`,
       time: `ok`,
       errmes: `ok`,
-      date: null,
+      date: undefined,
     };
   }
   proto(input: string): Proto {
@@ -42,10 +42,10 @@ class MockCaller implements Caller {
     if (form.includes(`err_conn`)) {
       return [
         `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`,
-        null,
+        undefined,
       ];
     }
-    return [form, null];
+    return [form, undefined];
   }
 }
 
@@ -58,7 +58,7 @@ test(`proto`, async () => {
       path: `path`,
       services: [],
     },
-    null,
+    undefined,
   ]);
 });
 
@@ -75,7 +75,7 @@ test(`message`, async () => {
       template: `tmplt`,
       fields: [],
     },
-    null,
+    undefined,
   ]);
 });
 
