@@ -1,4 +1,5 @@
 import { Memento } from "vscode";
+import { ProtoFile } from "../grpcurl/grpcurl";
 import { Proto, ProtoType } from "../grpcurl/parser";
 import { ProtoFiles } from "./protos";
 
@@ -21,10 +22,12 @@ class MockMemento implements Memento {
 test(`add`, () => {
   const memento = new MockMemento();
   const protos = new ProtoFiles(memento);
-  var proto: Proto = {
+  var proto: ProtoFile = {
     type: ProtoType.proto,
     name: "test",
     services: [],
+    path: "",
+    hosts: [],
   };
   expect(protos.add(proto)).toBeUndefined();
   expect(protos.add(proto)).toStrictEqual(
@@ -34,24 +37,29 @@ test(`add`, () => {
 
 test(`list`, () => {
   const memento = new MockMemento();
-  const headers = new Protos(memento);
-  memento.values = [`{"type": 0,"name": "test","path": "","services": []}`];
-  expect(headers.list()).toStrictEqual([
-    {
-      type: ProtoType.proto,
-      name: "test",
-      path: "",
-      services: [],
-    },
-  ]);
+  const headers = new ProtoFiles(memento);
+  var proto: ProtoFile = {
+    type: ProtoType.proto,
+    name: "test",
+    services: [],
+    path: "",
+    hosts: [],
+  };
+  memento.values = [JSON.stringify(proto)];
+  expect(headers.list()).toStrictEqual([proto]);
 });
 
 test(`remove`, () => {
   const memento = new MockMemento();
-  const headers = new Protos(memento);
-  memento.values = [
-    `{"type": 0,"name": "test","source": "path","services": []}`,
-  ];
+  const headers = new ProtoFiles(memento);
+  var proto: ProtoFile = {
+    type: ProtoType.proto,
+    name: "test",
+    services: [],
+    path: "path",
+    hosts: [],
+  };
+  memento.values = [JSON.stringify(proto)];
   headers.remove(`path`);
   expect(memento.values).toStrictEqual([]);
 });

@@ -1,12 +1,12 @@
 import { Memento } from "vscode";
 import { Headers } from "./headers";
 import { History } from "./history";
-import { Hosts } from "./hosts";
-import { Protos as Protos } from "./protos";
+import { ProtoServers } from "./hosts";
+import { ProtoFiles } from "./protos";
 
 export class Storage {
-  public hosts: Hosts;
-  public protos: Protos;
+  public files: ProtoFiles;
+  public servers: ProtoServers;
   public headers: Headers;
   public history: History;
 
@@ -17,8 +17,8 @@ export class Storage {
       }
     }
     memento.update(`grpc-clicker-version`, "0.0.15");
-    this.hosts = new Hosts(memento);
-    this.protos = new Protos(memento);
+    this.files = new ProtoFiles(memento);
+    this.servers = new ProtoServers(memento);
     this.headers = new Headers(memento);
     this.history = new History(memento);
   }

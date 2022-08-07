@@ -1,10 +1,11 @@
 import { Memento } from "vscode";
+import { ProtoServer } from "../grpcurl/grpcurl";
 
-export class Hosts {
+export class ProtoServers {
   private readonly key: string = "grpc-clicker-hosts";
   constructor(private memento: Memento) {}
 
-  save(hosts: Host[]) {
+  save(hosts: ProtoServer[]) {
     let hostsStrings: string[] = [];
     for (const host of hosts) {
       hostsStrings.push(JSON.stringify(host));
@@ -12,19 +13,19 @@ export class Hosts {
     this.memento.update(this.key, hostsStrings);
   }
 
-  list(): Host[] {
+  list(): ProtoServer[] {
     let hostsStrings = this.memento.get<string[]>(this.key, []);
-    let hosts: Host[] = [];
+    let hosts: ProtoServer[] = [];
     for (const hostString of hostsStrings) {
       hosts.push(JSON.parse(hostString));
     }
     return hosts;
   }
 
-  add(host: Host): Error | undefined {
+  add(host: ProtoServer): Error | undefined {
     const hosts = this.list();
-    for (const savedHost of hosts) {
-      if (savedHost.adress === host.adress) {
+    for (const savedProtoServer of hosts) {
+      if (savedProtoServer.host === host.host) {
         return new Error(`host you are trying to add already exists`);
       }
     }
@@ -36,16 +37,10 @@ export class Hosts {
   remove(hostAdress: string) {
     const hosts = this.list();
     for (let i = 0; i < hosts.length; i++) {
-      if (hosts[i].adress === hostAdress) {
+      if (hosts[i].host === hostAdress) {
         hosts.splice(i, 1);
       }
     }
     this.save(hosts);
   }
-}
-
-export interface Host {
-  adress: string;
-  description: string | undefined;
-  current: boolean;
 }

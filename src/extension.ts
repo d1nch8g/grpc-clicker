@@ -17,10 +17,10 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   const treeviews = new TreeViews({
-    hosts: storage.hosts.list(),
+    hosts: storage.files.list(),
     headers: storage.headers.list(),
     requests: storage.history.list(),
-    protos: storage.protos.list(),
+    protos: storage.servers.list(),
     describeFileMsg: async (path: string, tag: string): Promise<Message> => {
       const msg = await grpcurl.message({
         source: path,
@@ -53,7 +53,7 @@ export function activate(context: vscode.ExtensionContext) {
     const description = await vscode.window.showInputBox({
       title: `description for spectiifed host`,
     });
-    let err = storage.hosts.add({
+    let err = storage.files.add({
       adress: host,
       description: description,
       current: false,
@@ -61,11 +61,11 @@ export function activate(context: vscode.ExtensionContext) {
     if (err !== undefined) {
       vscode.window.showErrorMessage(err.message);
     }
-    treeviews.hosts.update(storage.hosts.list());
+    treeviews.hosts.update(storage.files.list());
   });
 
   vscode.commands.registerCommand("hosts.remove", async () => {
-    const hosts = storage.hosts.list();
+    const hosts = storage.files.list();
     let adresses: string[] = [];
     for (const host of hosts) {
       adresses.push(host.adress);
@@ -80,19 +80,19 @@ export function activate(context: vscode.ExtensionContext) {
     ) {
       return;
     }
-    storage.hosts.remove(removeHost);
-    treeviews.hosts.update(storage.hosts.list());
+    storage.files.remove(removeHost);
+    treeviews.hosts.update(storage.files.list());
   });
 
   vscode.commands.registerCommand("hosts.switch", async (adress: string) => {
-    let hosts = storage.hosts.list();
+    let hosts = storage.files.list();
     for (var i = 0; i < hosts.length; i++) {
       hosts[i].current = false;
       if (hosts[i].adress === adress) {
         hosts[i].current = true;
       }
     }
-    storage.hosts.save(hosts);
+    storage.files.save(hosts);
     treeviews.hosts.update(hosts);
   });
 
@@ -118,16 +118,16 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.window.showErrorMessage(proto.error);
       return;
     }
-    const err = storage.protos.add(proto);
+    const err = storage.servers.add(proto);
     if (err !== undefined) {
       vscode.window.showErrorMessage(err.message);
       return;
     }
-    treeviews.protos.refresh(storage.protos.list());
+    treeviews.protos.refresh(storage.servers.list());
   });
 
   vscode.commands.registerCommand("protos.remove", async () => {
-    let protos = storage.protos.list();
+    let protos = storage.servers.list();
     let pathes: string[] = [];
     for (const proto of protos) {
       pathes.push(proto.source);
@@ -136,12 +136,12 @@ export function activate(context: vscode.ExtensionContext) {
     if (path === undefined) {
       return;
     }
-    storage.protos.remove(path);
-    treeviews.protos.refresh(storage.protos.list());
+    storage.servers.remove(path);
+    treeviews.protos.refresh(storage.servers.list());
   });
 
   vscode.commands.registerCommand("protos.refresh", async () => {
-    const oldProtos = storage.protos.list();
+    const oldProtos = storage.servers.list();
     let newProtos: Proto[] = [];
     for (const oldProto of oldProtos) {
       const newProto = await grpcurl.proto({
@@ -155,7 +155,7 @@ export function activate(context: vscode.ExtensionContext) {
         newProtos.push(newProto);
       }
     }
-    storage.protos.save(newProtos);
+    storage.servers.save(newProtos);
     treeviews.protos.refresh(newProtos);
   });
 
@@ -245,7 +245,7 @@ export function activate(context: vscode.ExtensionContext) {
       .getConfiguration(`grpc-clicker`)
       .get(`msgsize`, 4);
 
-    for (const host of storage.hosts.list()) {
+    for (const host of storage.files.list()) {
       data.hosts.push(host.adress);
       if (host.current) {
         data.host = host.adress;
