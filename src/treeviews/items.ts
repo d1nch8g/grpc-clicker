@@ -44,7 +44,7 @@ export class HostsItem extends ClickerItem {
     super.tooltip = `Hosts for gRPC calls for current file.`;
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     super.contextValue = `hosts`;
-    const icon = `field.svg`;
+    const icon = `hosts.svg`;
     super.contextValue = "hosts";
     super.iconPath = {
       light: path.join(__filename, "..", "..", "images", icon),
