@@ -2,7 +2,7 @@ import { Memento } from "vscode";
 import { Headers } from "./headers";
 import { History } from "./history";
 import { ProtoServers } from "./server";
-import { ProtoFiles } from "./file";
+import { ProtoFiles } from "./protoFiles";
 
 export class Storage {
   public readonly files: ProtoFiles;
