@@ -74,3 +74,7 @@ Also you can find compiled binaries. Download the binary from the [releases page
    <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/6.png" height="200px"></p>
 7. Execute call
    <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/7.png" height="200px"></p>
+
+<!--
+https://marketplace.visualstudio.com/manage/publishers/dancheg97
+-->
