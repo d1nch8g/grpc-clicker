@@ -75,20 +75,24 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
         elem.parent.parent.base.path,
         elem.base.outputMessageTag
       );
-      items.push(new MessageItem(input));
-      items.push(new MessageItem(output));
+      items.push(new MessageItem(input, elem));
+      items.push(new MessageItem(output, elem));
     }
     if (element.type === ItemType.message) {
       const elem = element as MessageItem;
       for (const field of elem.base.fields) {
-        items.push(new FieldItem(field));
+        items.push(new FieldItem(field, elem));
       }
     }
     if (element.type === ItemType.field) {
       const elem = element as FieldItem;
-      if (elem.base.fields !== undefined) {
-        for (const field of elem.base.fields) {
-          items.push(new FieldItem(field));
+      if (elem.base.innerMessageTag !== undefined) {
+        const inner = await this.describeMsg(
+          elem.parent.parent.parent.parent.base.path,
+          elem.base.innerMessageTag
+        );
+        for (const field of inner.fields) {
+          items.push(new FieldItem(field, elem.parent));
         }
       }
     }

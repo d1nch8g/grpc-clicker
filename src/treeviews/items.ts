@@ -122,7 +122,7 @@ export class CallItem extends ClickerItem {
 }
 
 export class MessageItem extends ClickerItem {
-  constructor(public readonly base: Message) {
+  constructor(public readonly base: Message, public readonly parent: CallItem) {
     super(base.name);
     super.type = ItemType.message;
     const icon = `msg.svg`;
@@ -132,16 +132,23 @@ export class MessageItem extends ClickerItem {
     };
     super.tooltip = base.description;
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+    if (base.fields.length === 0) {
+      super.collapsibleState = vscode.TreeItemCollapsibleState.None;
+    }
   }
 }
 
 export class FieldItem extends ClickerItem {
-  constructor(public readonly base: Field) {
+  constructor(
+    public readonly base: Field,
+    public readonly parent: MessageItem
+  ) {
     super(base.name);
     super.type = ItemType.field;
     super.tooltip = base.description;
-    super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
-    if (base.fields === undefined || base.fields.length === 0) {
+    super.description = base.datatype;
+    super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+    if (base.innerMessageTag === undefined) {
       super.collapsibleState = vscode.TreeItemCollapsibleState.None;
     }
     const icon = `field.svg`;
