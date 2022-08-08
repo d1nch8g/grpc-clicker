@@ -45,6 +45,7 @@ export class HostsItem extends ClickerItem {
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     super.contextValue = `hosts`;
     const icon = `field.svg`;
+    super.contextValue = "hosts";
     super.iconPath = {
       light: path.join(__filename, "..", "..", "images", icon),
       dark: path.join(__filename, "..", "..", "images", icon),
