@@ -1,11 +1,14 @@
 import * as vscode from "vscode";
 import { ProtoFile } from "../grpcurl/grpcurl";
 import {
+  CallItem,
   ClickerItem,
+  FieldItem,
   FileItem,
   HostItem,
   HostsItem,
   ItemType,
+  MessageItem,
   ServiceItem,
 } from "./items";
 import { Message, ProtoType } from "../grpcurl/parser";
@@ -54,6 +57,39 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
       const elem = element as HostsItem;
       for (const host of elem.hosts) {
         items.push(new HostItem(host, elem));
+      }
+    }
+    if (element.type === ItemType.service) {
+      const elem = element as ServiceItem;
+      for (const call of elem.base.calls) {
+        items.push(new CallItem(call, elem));
+      }
+    }
+    if (element.type === ItemType.call) {
+      const elem = element as CallItem;
+      const input = await this.describeMsg(
+        elem.parent.parent.base.path,
+        elem.base.inputMessageTag
+      );
+      const output = await this.describeMsg(
+        elem.parent.parent.base.path,
+        elem.base.outputMessageTag
+      );
+      items.push(new MessageItem(input));
+      items.push(new MessageItem(output));
+    }
+    if (element.type === ItemType.message) {
+      const elem = element as MessageItem;
+      for (const field of elem.base.fields) {
+        items.push(new FieldItem(field));
+      }
+    }
+    if (element.type === ItemType.field) {
+      const elem = element as FieldItem;
+      if (elem.base.fields !== undefined) {
+        for (const field of elem.base.fields) {
+          items.push(new FieldItem(field));
+        }
       }
     }
     return items;

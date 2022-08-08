@@ -74,7 +74,7 @@ export class ServiceItem extends ClickerItem {
       dark: path.join(__filename, "..", "..", "images", icon),
     };
     super.tooltip = base.description;
-    super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+    super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
   }
 }
 
@@ -139,16 +139,16 @@ export class FieldItem extends ClickerItem {
   constructor(public readonly base: Field) {
     super(base.name);
     super.type = ItemType.field;
-    const icon = `field.svg`;
-    super.iconPath = {
-      light: path.join(__filename, "..", "..", "images", icon),
-      dark: path.join(__filename, "..", "..", "images", icon),
-    };
     super.tooltip = base.description;
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     if (base.fields === undefined || base.fields.length === 0) {
       super.collapsibleState = vscode.TreeItemCollapsibleState.None;
     }
+    const icon = `field.svg`;
+    super.iconPath = {
+      light: path.join(__filename, "..", "..", "images", icon),
+      dark: path.join(__filename, "..", "..", "images", icon),
+    };
   }
 }
 
