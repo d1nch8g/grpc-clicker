@@ -4,7 +4,7 @@ import { Caller } from "./grpcurl/caller";
 import { Grpcurl, ProtoFile } from "./grpcurl/grpcurl";
 import { Message, Parser, Proto } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
-import { RequestData } from "./treeviews/protos";
+import { RequestData } from "./treeviews/items";
 import { TreeViews } from "./treeviews/treeviews";
 import { WebViewFactory } from "./webview";
 

@@ -71,7 +71,7 @@ export class Grpcurl {
     server: boolean;
     plaintext: boolean;
     tag: string;
-  }): Promise<Message| string> {
+  }): Promise<Message | string> {
     let command = `grpcurl -msg-template |SRC| describe %s`;
 
     const call = this.caller.form({

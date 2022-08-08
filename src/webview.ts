@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { RequestData } from "./treeviews/protos";
+import { RequestData } from "./treeviews/items";
 
 export class WebViewFactory {
   private views: GrpcClickerView[] = [];
