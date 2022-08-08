@@ -135,6 +135,22 @@
         }
       },
       {
+        "command": "hosts.add",
+        "title": "Add host for specified file",
+        "icon": {
+          "dark": "images/dark/plus.svg",
+          "light": "images/light/plus.svg"
+        }
+      },
+      {
+        "command": "hosts.remove",
+        "title": "Remove host from specified file",
+        "icon": {
+          "dark": "images/dark/minus.svg",
+          "light": "images/light/minus.svg"
+        }
+      },
+      {
         "category": "gRPC Clicker",
         "command": "webview.open",
         "title": "Trigger opening of webview for grpc call"
@@ -181,6 +197,14 @@
         {
           "command": "headers.switch",
           "when": "viewItem == meta"
+        },
+        {
+          "command": "hosts.add",
+          "when": "viewItem == hosts"
+        },
+        {
+          "command": "hosts.remove",
+          "when": "viewItem == hosts"
         }
       ]
     },
