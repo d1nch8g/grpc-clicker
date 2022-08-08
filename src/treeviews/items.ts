@@ -102,7 +102,7 @@ export class CallItem extends ClickerItem {
       inputMessageName: base.inputMessageTag.split(`.`).pop()!,
       outputMessageName: base.outputMessageTag.split(`.`).pop()!,
       plaintext: true,
-      host: "",
+      host: parent.parent.base.hosts[0],
       json: "",
       maxMsgSize: 0,
       code: "",
@@ -111,7 +111,7 @@ export class CallItem extends ClickerItem {
       date: "",
       errmes: "",
       metadata: [],
-      hosts: [],
+      hosts: parent.parent.base.hosts,
     };
     super.command = {
       command: "webview.open",
