@@ -1,5 +1,5 @@
-import { Caller } from "./caller";
-import { Grpcurl, Response } from "./grpcurl";
+import { Caller, RequestForm } from "./caller";
+import { Grpcurl, ProtoFile, ProtoServer, Response } from "./grpcurl";
 import { Call, Field, Message, Parser, Proto, ProtoType } from "./parser";
 import * as util from "util";
 
@@ -7,7 +7,7 @@ class MockParser implements Parser {
   resp(input: string): Response {
     return {
       code: `ok`,
-      respJson: `ok`,
+      response: input,
       time: `ok`,
       errmes: `ok`,
       date: ``,
@@ -18,8 +18,6 @@ class MockParser implements Parser {
       name: input,
       services: [],
       type: ProtoType.proto,
-      path: `path`,
-      error: undefined,
     };
   }
   rpc(line: string): Call {
@@ -33,7 +31,6 @@ class MockParser implements Parser {
       description: `dscr`,
       template: `tmplt`,
       fields: [],
-      error: undefined,
     };
   }
   field(line: string): Field {
@@ -42,35 +39,61 @@ class MockParser implements Parser {
 }
 
 class MockCaller implements Caller {
-  dockerize(input: string): string {
-    throw new Error("Method not implemented.");
+  caller: Caller = new Caller();
+  form(input: RequestForm): string {
+    return this.caller.form(input);
   }
-  async execute(form: string): Promise<[string, Error | undefined]> {
-    if (form.includes(`err_conn`)) {
-      return [
-        `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`,
-        undefined,
-      ];
-    }
-    return [form, undefined];
+  async execute(command: string): Promise<[string, Error | undefined]> {
+    return [command, undefined];
+  }
+  dockerize(input: string): string {
+    return this.caller.dockerize(input);
   }
 }
 
-test(`proto`, async () => {
+test(`protoFile`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
-  expect(await grpcurl.proto(`docs/api.proto`)).toStrictEqual({
+  const expectedResult: ProtoFile = {
     type: ProtoType.proto,
-    name: `grpcurl -import-path / -proto docs/api.proto describe`,
-    path: `path`,
+    path: "docs/api.proto",
+    name: "grpcurl -import-path / -proto docs/api.proto describe",
+    hosts: ["localhost:12201"],
     services: [],
-    error: undefined,
-  });
+  };
+  expect(
+    await grpcurl.protoFile({
+      path: "docs/api.proto",
+      hosts: [`localhost:12201`],
+    })
+  ).toStrictEqual(expectedResult);
+});
+
+test(`protoServer`, async () => {
+  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
+  const expectedResult: ProtoServer = {
+    type: ProtoType.proto,
+    host: "localhost:12201",
+    plaintext: true,
+    name: "grpcurl -plaintext localhost:12201 describe",
+    services: [],
+  };
+  expect(
+    await grpcurl.protoServer({
+      host: `localhost:12201`,
+      plaintext: true,
+    })
+  ).toStrictEqual(expectedResult);
 });
 
 test(`message`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
   expect(
-    await grpcurl.message(`docs/api.proto`, `.pb.v1.StringMes`)
+    await grpcurl.message({
+      source: `docs/api.proto`,
+      server: false,
+      plaintext: false,
+      tag: `.pb.v1.StringMes`,
+    })
   ).toStrictEqual({
     type: ProtoType.message,
     name: `grpcurl -msg-template -import-path / -proto docs/api.proto describe .pb.v1.StringMes`,
@@ -78,7 +101,6 @@ test(`message`, async () => {
     description: `dscr`,
     template: `tmplt`,
     fields: [],
-    error: undefined,
   });
 });
 
@@ -86,44 +108,28 @@ test(`send`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
   let resp = await grpcurl.send({
     path: "docs/api.proto",
-    reqJson: "{}",
+    json: "{}",
     host: "localhost:12201",
-    call: ".pb.v1.Constructions.EmptyCall",
+    call: "pb.v1.Constructions.EmptyCall",
     plaintext: true,
     metadata: [`username: user`, `passsword: password`],
-    maxMsgSize: 2000000,
+    maxMsgSize: 4,
   });
   expect(resp.code).toBe(`ok`);
-  expect(resp.respJson).toBe(`ok`);
   expect(resp.errmes).toBe(`ok`);
+
+  const winExpect = `grpcurl -H \"username: user\" -H \"passsword: password\"  -max-msg-sz 4194304 -d \"{}\" -plaintext localhost:12201 pb.v1.Constructions.EmptyCall`;
+  const linuxExpect = `grpcurl -H 'username: user' -H 'passsword: password'  -max-msg-sz 4194304 -d '{}' -plaintext localhost:12201 pb.v1.Constructions.EmptyCall`;
+
+  if (process.platform === "win32") {
+    expect(resp.response).toBe(winExpect);
+  } else {
+    expect(resp.response).toBe(linuxExpect);
+  }
 });
 
 test(`checkInstalled`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
-  const resp = await grpcurl.checkInstalled();
+  const resp = await grpcurl.installed();
   expect(resp).toBeTruthy();
-});
-
-const winRegularCallNoPath = `grpcurl -import-path / -proto C:\\\\Users\\dangd\\OneDrive\\Документы\\grpclicker_vscode\\server\\api.proto describe`;
-const winDockerizedCallNoPath = `docker run -v C:\\\\Users\\dangd\\OneDrive\\Документы\\grpclicker_vscode\\server\\api.proto:\\\\Users\\dangd\\OneDrive\\Документы\\grpclicker_vscode\\server\\api.proto fullstorydev/grpcurl -import-path / -proto \\\\Users\\dangd\\OneDrive\\Документы\\grpclicker_vscode\\server\\api.proto describe`;
-const winRegularCallWithPath = `grpcurl -import-path / -proto C:\\\\Users\\dangd\\OneDrive\\Документы\\grpclicker_vscode\\server\\api.proto describe`;
-const winDockerizedCallWithPath = `docker run -v C:\\\\Users\\dangd\\OneDrive\\Документы\\grpclicker_vscode\\server\\api.proto:\\\\Users\\dangd\\OneDrive\\Документы\\grpclicker_vscode\\server\\api.proto fullstorydev/grpcurl -import-path / -proto \\\\Users\\dangd\\OneDrive\\Документы\\grpclicker_vscode\\server\\api.proto describe`;
-
-const linuxRegularCallNoPath = `grpcurl -import-path / -proto /Users/danilafominyh/Documents/grpclicker_vscode/server/api.proto describe`;
-const linuxDockerizedCallNoPath = `docker run -v /Users/danilafominyh/Documents/grpclicker_vscode/server/api.proto:/Users/danilafominyh/Documents/grpclicker_vscode/server/api.proto fullstorydev/grpcurl -import-path / -proto /Users/danilafominyh/Documents/grpclicker_vscode/server/api.proto describe`;
-
-test("dockerize", async () => {
-  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
-  if (process.platform === "win32") {
-    expect(grpcurl.dockerize(winRegularCallNoPath)).toBe(
-      winDockerizedCallNoPath
-    );
-    expect(grpcurl.dockerize(winRegularCallWithPath)).toBe(
-      winDockerizedCallWithPath
-    );
-  } else {
-    expect(grpcurl.dockerize(linuxRegularCallNoPath)).toBe(
-      linuxDockerizedCallNoPath
-    );
-  }
 });

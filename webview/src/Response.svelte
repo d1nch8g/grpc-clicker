@@ -1,5 +1,5 @@
 <script>
-  export let respJson = ``;
+  export let response = ``;
   export let respName = ``;
   export let code = ``;
   export let time = ``;
@@ -14,7 +14,7 @@
   <center>
     <vscode-option>Response: {respName}</vscode-option>
   </center>
-  {#if respJson === "waiter"}
+  {#if response === "waiter"}
     <div class="top-space" style="--height: {height / 2.2}px"></div>
     <center>
       <vscode-progress-ring></vscode-progress-ring>
@@ -41,7 +41,7 @@ Code: {code}
 Time: {time}
 Date: {date}
 Response:
-{respJson}</textarea>
+{response}</textarea>
   {/if}
 </div>
 

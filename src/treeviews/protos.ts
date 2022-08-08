@@ -1,245 +1,113 @@
 import * as vscode from "vscode";
-import * as path from "path";
+import { ProtoFile } from "../grpcurl/grpcurl";
 import {
-  Proto,
-  Service,
-  Call,
-  ProtoType,
-  Message,
-  Field,
-} from "../grpcurl/parser";
-import { RequestHistoryData } from "../storage/history";
+  CallItem,
+  ClickerItem,
+  FieldItem,
+  FileItem,
+  HostItem,
+  HostsItem,
+  ItemType,
+  MessageItem,
+  ServiceItem,
+} from "./items";
+import { Message } from "../grpcurl/parser";
 
-export class ProtosTreeView implements vscode.TreeDataProvider<ProtoItem> {
+export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
   constructor(
-    private protos: Proto[],
+    private files: ProtoFile[],
     private describeMsg: (path: string, tag: string) => Promise<Message>
   ) {
-    this.protos = protos;
-    this.onChange = new vscode.EventEmitter<ProtoItem | undefined | void>();
+    this.files = files;
+    this.onChange = new vscode.EventEmitter<ClickerItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
   }
 
-  private onChange: vscode.EventEmitter<ProtoItem | undefined | void>;
-  readonly onDidChangeTreeData: vscode.Event<void | ProtoItem | ProtoItem[]>;
+  private onChange: vscode.EventEmitter<ClickerItem | undefined | void>;
+  readonly onDidChangeTreeData: vscode.Event<
+    void | ClickerItem | ClickerItem[]
+  >;
 
-  async refresh(protos: Proto[]) {
-    this.protos = protos;
+  async refresh(protos: ProtoFile[]) {
+    this.files = protos;
     this.onChange.fire();
   }
 
-  getTreeItem(element: ProtoItem): vscode.TreeItem {
+  getTreeItem(element: ClickerItem): ClickerItem {
     return element;
   }
 
-  async getChildren(element?: ProtoItem): Promise<ProtoItem[]> {
-    let items: ProtoItem[] = [];
+  async getChildren(element?: ClickerItem): Promise<ClickerItem[]> {
+    let items: ClickerItem[] = [];
     if (element === undefined) {
-      for (const proto of this.protos) {
-        items.push(
-          new ProtoItem({
-            base: proto,
-            protoPath: proto.path,
-            protoName: proto.name,
-            serviceName: "",
-          })
-        );
+      for (const file of this.files) {
+        items.push(new FileItem(file));
       }
       return items;
     }
-    if (element.base.type === ProtoType.proto) {
-      for (const svc of (element.base as Proto).services) {
-        items.push(
-          new ProtoItem({
-            base: svc,
-            protoPath: element.protoPath,
-            protoName: element.protoName,
-            serviceName: svc.name,
-          })
-        );
+    if (element.type === ItemType.file) {
+      const elem = element as FileItem;
+      items.push(new HostsItem(elem.base.hosts, elem));
+      for (const svc of elem.base.services) {
+        items.push(new ServiceItem(svc, elem));
+      }
+      return items;
+    }
+    if (element.type === ItemType.hosts) {
+      const elem = element as HostsItem;
+      for (const host of elem.hosts) {
+        items.push(new HostItem(host, elem));
       }
     }
-    if (element.base.type === ProtoType.service) {
-      for (const call of (element.base as Service).calls) {
-        items.push(
-          new ProtoItem({
-            base: call,
-            protoPath: element.protoPath,
-            protoName: element.protoName,
-            serviceName: element.serviceName,
-          })
-        );
+    if (element.type === ItemType.service) {
+      const elem = element as ServiceItem;
+      for (const call of elem.base.calls) {
+        items.push(new CallItem(call, elem));
       }
     }
-    if (element.base.type === ProtoType.call) {
-      element.base = element.base as Call;
-      items.push(
-        new ProtoItem({
-          base: await this.describeMsg(
-            element.protoPath,
-            element.base.inputMessageTag
-          ),
-          protoPath: element.protoPath,
-          protoName: element.protoName,
-          serviceName: element.serviceName,
-        })
+    if (element.type === ItemType.call) {
+      const elem = element as CallItem;
+      const input = await this.describeMsg(
+        elem.parent.parent.base.path,
+        elem.base.inputMessageTag
       );
-      items.push(
-        new ProtoItem({
-          base: await this.describeMsg(
-            element.protoPath,
-            element.base.outputMessageTag
-          ),
-          protoPath: element.protoPath,
-          protoName: element.protoName,
-          serviceName: element.serviceName,
-        })
+      const output = await this.describeMsg(
+        elem.parent.parent.base.path,
+        elem.base.outputMessageTag
       );
+      items.push(new MessageItem(input, elem));
+      items.push(new MessageItem(output, elem));
     }
-    if (element.base.type === ProtoType.message) {
-      element.base = element.base as Message;
-      for (const field of element.base.fields) {
-        items.push(
-          new ProtoItem({
-            base: field,
-            protoPath: element.protoPath,
-            protoName: element.protoName,
-            serviceName: element.serviceName,
-          })
-        );
+    if (element.type === ItemType.message) {
+      const elem = element as MessageItem;
+      for (const field of elem.base.fields) {
+        items.push(new FieldItem(field, elem));
       }
     }
-    if (element.base.type === ProtoType.field) {
-      element.base = element.base as Field;
-      if (element.base.innerMessageTag !== undefined) {
-        let innerMessage = await this.describeMsg(
-          element.protoPath,
-          element.base.innerMessageTag
+    if (element.type === ItemType.field) {
+      const elem = element as FieldItem;
+      if (elem.base.innerMessageTag !== undefined) {
+        const inner = await this.describeMsg(
+          elem.parent.parent.parent.parent.base.path,
+          elem.base.innerMessageTag
         );
-        for (const field of innerMessage.fields) {
-          if (field.innerMessageTag === element.base.innerMessageTag) {
-            field.innerMessageTag = undefined;
-          }
-          items.push(
-            new ProtoItem({
-              base: field,
-              protoPath: element.protoPath,
-              protoName: element.protoName,
-              serviceName: element.serviceName,
-            })
-          );
+        for (const field of inner.fields) {
+          items.push(new FieldItem(field, elem.parent));
         }
       }
     }
     return items;
   }
 
-  getParent?(element: ProtoItem): vscode.ProviderResult<ProtoItem> {
+  getParent?(element: ClickerItem): vscode.ProviderResult<ClickerItem> {
     throw new Error("Method not implemented.");
   }
 
   resolveTreeItem?(
-    item: vscode.TreeItem,
-    element: ProtoItem,
+    item: ClickerItem,
+    element: ClickerItem,
     token: vscode.CancellationToken
-  ): vscode.ProviderResult<vscode.TreeItem> {
+  ): vscode.ProviderResult<ClickerItem> {
     return element;
   }
-}
-
-class ProtoItem extends vscode.TreeItem {
-  public base: Proto | Service | Call | Message | Field;
-  public protoPath: string;
-  public protoName: string;
-  public serviceName: string;
-  constructor(
-    public input: {
-      base: Proto | Service | Call | Message | Field;
-      protoPath: string;
-      protoName: string;
-      serviceName: string;
-    }
-  ) {
-    super(input.base.name);
-
-    this.base = input.base;
-    this.protoPath = input.protoPath;
-    this.protoName = input.protoName;
-    this.serviceName = input.serviceName;
-
-    super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
-    let svg = "";
-    if (input.base.type === ProtoType.proto) {
-      input.base = input.base as Proto;
-      super.tooltip = `Proto schema definition`;
-      svg = "proto.svg";
-    }
-    if (input.base.type === ProtoType.service) {
-      input.base = input.base as Service;
-      super.tooltip = input.base.description;
-      svg = "svc.svg";
-    }
-    if (input.base.type === ProtoType.call) {
-      super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
-      input.base = input.base as Call;
-      super.tooltip = input.base.description;
-      svg = "unary.svg";
-      if (input.base.inputStream || input.base.outputStream) {
-        svg = "stream.svg";
-      }
-      super.contextValue = "call";
-      let request: RequestData = {
-        path: input.protoPath,
-        protoName: input.protoName,
-        service: input.serviceName,
-        call: input.base.name,
-        inputMessageTag: input.base.inputMessageTag,
-        inputMessageName: input.base.inputMessageTag.split(`.`).pop()!,
-        outputMessageName: input.base.outputMessageTag.split(`.`).pop()!,
-        plaintext: true,
-        host: "",
-        reqJson: "",
-        maxMsgSize: 0,
-        code: "",
-        respJson: "",
-        time: "",
-        date: "",
-        errmes: "",
-        metadata: [],
-        hosts: [],
-      };
-      super.command = {
-        command: "webview.open",
-        title: "Trigger opening of webview for grpc call",
-        arguments: [request],
-      };
-    }
-    if (input.base.type === ProtoType.message) {
-      input.base = input.base as Message;
-      super.tooltip = input.base.description;
-      super.description = input.base.tag;
-      if (input.base.fields.length === 0) {
-        super.collapsibleState = vscode.TreeItemCollapsibleState.None;
-      }
-      svg = "msg.svg";
-    }
-    if (input.base.type === ProtoType.field) {
-      input.base = input.base as Field;
-      super.tooltip = input.base.description;
-      super.description = input.base.datatype;
-      if (input.base.innerMessageTag === undefined) {
-        super.collapsibleState = vscode.TreeItemCollapsibleState.None;
-      }
-      svg = "field.svg";
-    }
-    super.iconPath = {
-      light: path.join(__filename, "..", "..", "images", svg),
-      dark: path.join(__filename, "..", "..", "images", svg),
-    };
-  }
-}
-
-export interface RequestData extends RequestHistoryData {
-  protoName: string;
-  hosts: string[];
 }

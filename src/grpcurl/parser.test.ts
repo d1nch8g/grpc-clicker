@@ -45,7 +45,7 @@ service Constructions {
 
 test(`proto`, () => {
   const parser = new Parser();
-  const proto = parser.proto(protoInput, `path`);
+  const proto = parser.proto(protoInput);
   expect(proto.name).toBe(`pb.v1`);
   expect(proto.services.length).toBe(3);
   expect(proto.services[0].name).toBe(`Streams`);
@@ -239,7 +239,6 @@ comment`);
         fields: undefined,
       },
     ],
-    error: undefined,
   };
   expect(enumParsed).toStrictEqual(expectedEnum);
 });
@@ -256,21 +255,21 @@ test(`response`, () => {
   const parser = new Parser();
   expect(parser.resp(codeErr)).toStrictEqual({
     code: `AlreadyExists`,
-    respJson: ``,
+    response: ``,
     time: "",
     errmes: `some err msg`,
     date: "",
   });
   expect(parser.resp(connErr)).toStrictEqual({
     code: `ConnectionError`,
-    respJson: ``,
+    response: ``,
     time: "",
     date: "",
     errmes: `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`,
   });
   expect(parser.resp(goodResp)).toStrictEqual({
     code: `OK`,
-    respJson: `{
+    response: `{
   "message": "msg"
 }`,
     time: "",

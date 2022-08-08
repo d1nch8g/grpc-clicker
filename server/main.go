@@ -15,6 +15,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 
 	"github.com/Dancheg97/grpclicker_vscode/server/pb"
+	"google.golang.org/grpc/reflection"
 )
 
 func main() {
@@ -23,9 +24,12 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
+
 	pb.RegisterBasicsServer(s, &server{})
 	pb.RegisterConstructionsServer(s, &server{})
 	pb.RegisterStreamsServer(s, &server{})
+
+	reflection.Register(s)
 	log.Printf("server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		panic(err)

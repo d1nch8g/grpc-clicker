@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
-import { Request } from "./grpcurl/grpcurl";
-import { RequestData } from "./treeviews/protos";
+import { RequestData } from "./treeviews/items";
 
 export class WebViewFactory {
   private views: GrpcClickerView[] = [];
@@ -67,7 +66,7 @@ class GrpcClickerView {
           this.panel.webview.postMessage(JSON.stringify(request));
           return;
         case "edit":
-          request.reqJson = out.text;
+          request.json = out.text;
           return;
         case "host":
           request.host = out.text;
