@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
-## [0.0.16]
+## [0.0.17]
 
 > August 8, 2022
 
