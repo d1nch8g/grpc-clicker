@@ -1,7 +1,7 @@
 import { Memento } from "vscode";
 import { Headers } from "./headers";
 import { History } from "./history";
-import { ProtoServers } from "./server";
+import { ProtoServers } from "./protoServer";
 import { ProtoFiles } from "./protoFiles";
 
 export class Storage {

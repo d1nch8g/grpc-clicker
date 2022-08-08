@@ -11,7 +11,7 @@ import {
   MessageItem,
   ServiceItem,
 } from "./items";
-import { Message, ProtoType } from "../grpcurl/parser";
+import { Message } from "../grpcurl/parser";
 
 export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
   constructor(
