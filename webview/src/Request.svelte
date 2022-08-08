@@ -3,7 +3,7 @@
   export let json = "";
   export let edit;
   $: innerHeight = 0;
-  $: height = innerHeight - 170;
+  $: height = innerHeight - 140;
 </script>
 
 <svelte:window bind:innerHeight />
