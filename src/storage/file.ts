@@ -22,7 +22,7 @@ export class ProtoFiles {
     return protos;
   }
 
-  public add(proto: ProtoFile): Error | undefined {
+  add(proto: ProtoFile): Error | undefined {
     const protos = this.list();
     for (const savedProtoFile of protos) {
       if (savedProtoFile.path === proto.path) {
@@ -39,6 +39,30 @@ export class ProtoFiles {
     for (let i = 0; i < protos.length; i++) {
       if (protos[i].path === path) {
         protos.splice(i, 1);
+      }
+    }
+    this.save(protos);
+  }
+
+  // TODO add test
+  addHost(path: string, host: string) {
+    const protos = this.list();
+    for (const savedProtoFile of protos) {
+      if (savedProtoFile.path === path) {
+        savedProtoFile.hosts.push(host);
+      }
+    }
+    this.save(protos);
+  }
+
+  removeHost(path: string, host: string) {
+    const protos = this.list();
+    for (const savedProtoFile of protos) {
+      if (savedProtoFile.path === path) {
+        const index = savedProtoFile.hosts.indexOf(host, 0);
+        if (index > -1) {
+          savedProtoFile.hosts.splice(index, 1);
+        }
       }
     }
     this.save(protos);

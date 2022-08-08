@@ -4,7 +4,7 @@ import { Caller } from "./grpcurl/caller";
 import { Grpcurl, ProtoFile } from "./grpcurl/grpcurl";
 import { Message, Parser, Proto } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
-import { RequestData } from "./treeviews/items";
+import { HostItem, HostsItem, RequestData } from "./treeviews/items";
 import { TreeViews } from "./treeviews/treeviews";
 import { WebViewFactory } from "./webview";
 
@@ -221,6 +221,22 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand("history.clean", () => {
     storage.history.clean();
     treeviews.history.refresh(storage.history.list());
+  });
+
+  vscode.commands.registerCommand("hosts.add", async (host: HostsItem) => {
+    const newHost = await vscode.window.showInputBox({
+      title: `host for calls`,
+    });
+    if (newHost === undefined || newHost === ``) {
+      return;
+    }
+    storage.files.addHost(host.parent.base.path, newHost);
+    treeviews.files.refresh(storage.files.list());
+  });
+
+  vscode.commands.registerCommand("hosts.remove", (host: HostItem) => {
+    storage.files.removeHost(host.parent.parent.base.path, host.host);
+    treeviews.files.refresh(storage.files.list());
   });
 
   vscode.workspace.onDidChangeConfiguration((event) => {

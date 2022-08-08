@@ -51,7 +51,7 @@
   });
 
   function onSend() {
-    json = "waiter";
+    response = "waiter";
     vscode.postMessage({
       command: "send",
       text: json,
