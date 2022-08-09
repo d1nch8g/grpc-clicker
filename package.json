@@ -31,7 +31,6 @@
     "onCommand:files.refresh",
     "onView:headers",
     "onCommand:headers.add",
-    "onCommand:headers.remove",
     "onView:history",
     "onCommand:history.clean",
     "onCommand:cache.clean",
@@ -98,7 +97,6 @@
         }
       },
       {
-        "category": "gRPC Clicker",
         "command": "files.remove",
         "title": "Remove existing proto file",
         "icon": {
@@ -116,12 +114,11 @@
         }
       },
       {
-        "category": "gRPC Clicker",
         "command": "headers.remove",
-        "title": "Remove existing metadata",
+        "title": "Remove header",
         "icon": {
-          "dark": "images/dark/minus.svg",
-          "light": "images/light/minus.svg"
+          "dark": "images/dark/trash.svg",
+          "light": "images/light/trash.svg"
         }
       },
       {
@@ -163,11 +160,6 @@
           "group": "navigation"
         },
         {
-          "command": "headers.remove",
-          "when": "view == headers",
-          "group": "navigation"
-        },
-        {
           "command": "files.refresh",
           "when": "view == files",
           "group": "navigation"
@@ -181,7 +173,7 @@
       "view/item/context": [
         {
           "command": "headers.switch",
-          "when": "viewItem == meta"
+          "when": "viewItem == header"
         },
         {
           "command": "hosts.add",
@@ -191,6 +183,11 @@
         {
           "command": "hosts.remove",
           "when": "view == files && viewItem == host",
+          "group": "inline"
+        },
+        {
+          "command": "headers.remove",
+          "when": "view == headers && viewItem == header",
           "group": "inline"
         },
         {
