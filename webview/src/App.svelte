@@ -7,6 +7,7 @@
   $: protoName = ``;
   $: service = ``;
   $: call = ``;
+  $: callTag = ``;
   $: inputMessageTag = ``;
   $: inputMessageName = ``;
   $: outputMessageName = ``;
@@ -29,6 +30,7 @@
     protoName = obj.protoName;
     service = obj.service;
     call = obj.call;
+    callTag = obj.callTag;
     inputMessageTag = obj.inputMessageTag;
     inputMessageName = obj.inputMessageName;
     outputMessageName = obj.outputMessageName;
@@ -72,6 +74,7 @@
       protoName: protoName,
       service: service,
       call: call,
+      callTag: callTag,
       inputMessageTag: inputMessageTag,
       inputMessageName: inputMessageName,
       outputMessageName: outputMessageName,

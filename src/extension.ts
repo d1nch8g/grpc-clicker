@@ -1,3 +1,4 @@
+import { request } from "http";
 import * as vscode from "vscode";
 import { Caller } from "./grpcurl/caller";
 import { Grpcurl, ProtoFile } from "./grpcurl/grpcurl";
@@ -145,7 +146,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   const webviewFactory = new WebViewFactory(
     context.extensionUri,
-    async (data) => {
+    async (request) => {
       let metadata: string[] = [];
       const headers = storage.headers.list();
       for (const header of headers) {
@@ -153,23 +154,15 @@ export function activate(context: vscode.ExtensionContext) {
           metadata.push(header.value);
         }
       }
-      const resp = await grpcurl.send({
-        path: data.path,
-        json: data.json,
-        host: data.host,
-        call: `${data.protoName}.${data.service}.${data.call}`,
-        plaintext: data.plaintext,
-        metadata: metadata,
-        maxMsgSize: data.maxMsgSize,
-      });
-      data.code = resp.code;
-      data.response = resp.response;
-      data.time = resp.time;
-      data.date = resp.date;
-      data.errmes = resp.errmes;
-      storage.history.add(data);
+      const resp = await grpcurl.send(request);
+      request.code = resp.code;
+      request.response = resp.response;
+      request.time = resp.time;
+      request.date = resp.date;
+      request.errmes = resp.errmes;
+      storage.history.add(request);
       treeviews.history.refresh(storage.history.list());
-      return data;
+      return request;
     },
     (request: RequestData) => {
       const command = grpcurl.formCall(request);

@@ -104,6 +104,7 @@ export class CallItem extends ClickerItem {
       protoName: parent.parent.base.name,
       service: parent.base.name,
       call: base.name,
+      callTag: `${parent.parent.base.name}.${parent.base.name}/${base.name}`,
       inputMessageTag: base.inputMessageTag,
       inputMessageName: base.inputMessageTag.split(`.`).pop()!,
       outputMessageName: base.outputMessageTag.split(`.`).pop()!,
@@ -189,5 +190,6 @@ export class HeaderItem extends ClickerItem {
 
 export interface RequestData extends RequestHistoryData {
   protoName: string;
+  callTag: string;
   hosts: string[];
 }
