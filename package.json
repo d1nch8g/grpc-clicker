@@ -240,7 +240,7 @@
         },
         {
           "command": "servers.remove",
-          "when": "view == files && viewItem == file",
+          "when": "view == servers && viewItem == server",
           "group": "inline"
         }
       ]
