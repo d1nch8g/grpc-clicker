@@ -19,7 +19,6 @@
   $: response = ``;
   $: time = ``;
   $: date = ``;
-  $: errmes = ``;
   $: metadata = [];
   $: hosts = [];
 
@@ -42,12 +41,8 @@
     response = obj.response;
     time = obj.time;
     date = obj.date;
-    errmes = obj.errmes;
     metadata = obj.metadata;
     hosts = obj.hosts;
-    if (errmes !== null) {
-      respJson = errmes;
-    }
     hosts.splice(hosts.indexOf(obj.host), 1);
     hosts = [obj.host].concat(hosts);
   });
@@ -86,7 +81,6 @@
       response: response,
       time: time,
       date: date,
-      errmes: errmes,
       metadata: metadata,
       hosts: hosts,
     });
