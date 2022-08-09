@@ -1,10 +1,9 @@
-import { type } from "os";
 import * as vscode from "vscode";
 import { Caller } from "./grpcurl/caller";
 import { Grpcurl, ProtoFile } from "./grpcurl/grpcurl";
 import { Message, Parser, Proto } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
-import { HostItem, HostsItem, RequestData } from "./treeviews/items";
+import { FileItem, HostItem, HostsItem, RequestData } from "./treeviews/items";
 import { TreeViews } from "./treeviews/treeviews";
 import { WebViewFactory } from "./webview";
 
@@ -79,17 +78,8 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.files.refresh(storage.files.list());
   });
 
-  vscode.commands.registerCommand("files.remove", async () => {
-    let files = storage.files.list();
-    let pathes: string[] = [];
-    for (const file of files) {
-      pathes.push(file.path);
-    }
-    let path = await vscode.window.showQuickPick(pathes);
-    if (path === undefined) {
-      return;
-    }
-    storage.files.remove(path);
+  vscode.commands.registerCommand("files.remove", (data: FileItem) => {
+    storage.files.remove(data.base.path);
     treeviews.files.refresh(storage.files.list());
   });
 

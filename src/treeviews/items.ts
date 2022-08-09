@@ -27,6 +27,7 @@ export class FileItem extends ClickerItem {
     super.tooltip = base.path;
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     const icon = `file.svg`;
+    super.contextValue = `file`;
     super.iconPath = {
       light: path.join(__filename, "..", "..", "images", icon),
       dark: path.join(__filename, "..", "..", "images", icon),
