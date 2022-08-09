@@ -46,7 +46,11 @@ export class ServerItem extends ClickerItem {
     super.tooltip = `Use plaintext: ${base.plaintext}`;
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     super.contextValue = `server`;
-    const icon = `host-on.svg`;
+    let icon = `host-on.svg`;
+    if (base.services.length === 0) {
+      super.collapsibleState = vscode.TreeItemCollapsibleState.None;
+      icon = `host-off.svg`;
+    }
     super.iconPath = {
       light: path.join(__filename, "..", "..", "images", icon),
       dark: path.join(__filename, "..", "..", "images", icon),

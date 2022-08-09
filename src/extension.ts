@@ -1,8 +1,8 @@
 import { request } from "http";
 import * as vscode from "vscode";
 import { Caller } from "./grpcurl/caller";
-import { Grpcurl, ProtoFile } from "./grpcurl/grpcurl";
-import { Message, Parser, Proto } from "./grpcurl/parser";
+import { Grpcurl, ProtoFile, ProtoServer } from "./grpcurl/grpcurl";
+import { Message, Parser, Proto, ProtoType } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
 import {
   FileItem,
@@ -148,6 +148,31 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.files.refresh(newFiles);
   });
 
+  vscode.commands.registerCommand("servers.refresh", async () => {
+    const oldServers = storage.servers.list();
+    let newServers: ProtoServer[] = [];
+    for (const oldServer of oldServers) {
+      const newProto = await grpcurl.protoServer({
+        host: oldServer.host,
+        plaintext: true,
+      });
+      if (typeof newProto === `string`) {
+        vscode.window.showErrorMessage(newProto);
+        newServers.push({
+          host: oldServer.host,
+          plaintext: true,
+          type: ProtoType.proto,
+          name: oldServer.name,
+          services: [],
+        });
+      } else {
+        newServers.push(newProto);
+      }
+    }
+    storage.servers.save(newServers);
+    treeviews.servers.refresh(newServers);
+  });
+
   vscode.commands.registerCommand("headers.add", async () => {
     const header = await vscode.window.showInputBox({
       title: `header that you can add to gRPC call, in format: "key: value", enable/disable by clicking`,
@@ -225,13 +250,22 @@ export function activate(context: vscode.ExtensionContext) {
         data.metadata.push(header.value);
       }
     }
-
-    const msg = await grpcurl.message({
-      source: data.path,
-      server: false,
-      plaintext: false,
-      tag: data.inputMessageTag,
-    });
+    let msg: Message | string;
+    if (data.path !== ``) {
+      msg = await grpcurl.message({
+        source: data.path,
+        server: false,
+        plaintext: false,
+        tag: data.inputMessageTag,
+      });
+    } else {
+      msg = await grpcurl.message({
+        source: data.host,
+        server: true,
+        plaintext: data.plaintext,
+        tag: data.inputMessageTag,
+      });
+    }
 
     if (typeof msg === `string`) {
       vscode.window.showErrorMessage(msg);
