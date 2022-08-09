@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { ProtoFile } from "../grpcurl/grpcurl";
+import { Message } from "../grpcurl/parser";
 import {
   CallItem,
   ClickerItem,
@@ -11,7 +12,6 @@ import {
   MessageItem,
   ServiceItem,
 } from "./items";
-import { Message } from "../grpcurl/parser";
 
 export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
   constructor(
@@ -67,12 +67,13 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
     }
     if (element.type === ItemType.call) {
       const elem = element as CallItem;
+      const file = elem.parent.parent as FileItem;
       const input = await this.describeMsg(
-        elem.parent.parent.base.path,
+        file.base.path,
         elem.base.inputMessageTag
       );
       const output = await this.describeMsg(
-        elem.parent.parent.base.path,
+        file.base.path,
         elem.base.outputMessageTag
       );
       items.push(new MessageItem(input, elem));
@@ -86,9 +87,10 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
     }
     if (element.type === ItemType.field) {
       const elem = element as FieldItem;
+      const file = elem.parent.parent.parent.parent as FileItem;
       if (elem.base.innerMessageTag !== undefined) {
         const inner = await this.describeMsg(
-          elem.parent.parent.parent.parent.base.path,
+          file.base.path,
           elem.base.innerMessageTag
         );
         for (const field of inner.fields) {
