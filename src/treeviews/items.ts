@@ -187,6 +187,40 @@ export class HeaderItem extends ClickerItem {
   }
 }
 
+export class HistoryItem extends ClickerItem {
+  constructor(request: RequestHistoryData) {
+    super(request.call);
+    super.description = request.date;
+    super.contextValue = "call";
+    super.tooltip = new vscode.MarkdownString(`## Request information:
+- host for execution: \`${request.host}\`
+- method used in request: \`${request.call}\`
+- response code: \`${request.code}\`
+- time of execution: \`${request.time}\`
+- date: \`${request.date}\`
+
+Response:
+
+\`\`\`
+${request.response}
+\`\`\`
+`);
+    super.command = {
+      command: "webview.open",
+      title: "Trigger opening of webview for grpc call",
+      arguments: [request],
+    };
+    let icon = `success.svg`;
+    if (request.code !== `OK`) {
+      icon = `error.svg`;
+    }
+    super.iconPath = {
+      light: path.join(__filename, "..", "..", "images", icon),
+      dark: path.join(__filename, "..", "..", "images", icon),
+    };
+  }
+}
+
 export interface RequestData extends RequestHistoryData {
   protoName: string;
   callTag: string;

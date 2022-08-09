@@ -1,17 +1,18 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { RequestHistoryData } from "../storage/history";
+import { ClickerItem, HistoryItem } from "./items";
 
-export class HistoryTreeView implements vscode.TreeDataProvider<HistoryItem> {
+export class HistoryTreeView implements vscode.TreeDataProvider<ClickerItem> {
   constructor(private requests: RequestHistoryData[]) {
     this.requests = requests;
-    this.onChange = new vscode.EventEmitter<HistoryItem | undefined | void>();
+    this.onChange = new vscode.EventEmitter<ClickerItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
   }
 
-  private onChange: vscode.EventEmitter<HistoryItem | undefined | void>;
+  private onChange: vscode.EventEmitter<ClickerItem | undefined | void>;
   readonly onDidChangeTreeData: vscode.Event<
-    void | HistoryItem | HistoryItem[]
+    void | ClickerItem | ClickerItem[]
   >;
 
   refresh(requests: RequestHistoryData[]): void {
@@ -19,68 +20,27 @@ export class HistoryTreeView implements vscode.TreeDataProvider<HistoryItem> {
     this.onChange.fire();
   }
 
-  getTreeItem(element: HistoryItem): vscode.TreeItem {
+  getTreeItem(element: ClickerItem): vscode.TreeItem {
     return element;
   }
 
-  getChildren(element?: HistoryItem): vscode.ProviderResult<HistoryItem[]> {
-    let hitoryItems: HistoryItem[] = [];
+  getChildren(element?: ClickerItem): vscode.ProviderResult<ClickerItem[]> {
+    let hitoryItems: ClickerItem[] = [];
     for (const request of this.requests) {
       hitoryItems.push(new HistoryItem(request));
     }
     return hitoryItems;
   }
 
-  getParent?(element: HistoryItem): vscode.ProviderResult<HistoryItem> {
+  getParent?(element: ClickerItem): vscode.ProviderResult<ClickerItem> {
     throw new Error("Method not implemented.");
   }
 
   resolveTreeItem?(
     item: vscode.TreeItem,
-    element: HistoryItem,
+    element: ClickerItem,
     token: vscode.CancellationToken
   ): vscode.ProviderResult<vscode.TreeItem> {
     return element;
-  }
-}
-
-class HistoryItem extends vscode.TreeItem {
-  constructor(request: RequestHistoryData) {
-    super(request.call);
-
-    super.description = request.date;
-    super.contextValue = "host";
-
-    super.tooltip = new vscode.MarkdownString(`## Request information:
-- host for execution: \`${request.host}\`
-- method used in request: \`${request.call}\`
-- response code: \`${request.code}\`
-- time of execution: \`${request.time}\`
-- date: \`${request.date}\`
-
-Response:
-
-\`\`\`
-${request.response}
-\`\`\`
-`);
-
-    super.contextValue = "call";
-
-    super.command = {
-      command: "webview.open",
-      title: "Trigger opening of webview for grpc call",
-      arguments: [request],
-    };
-
-    let icon = `success.svg`;
-    if (request.code !== `OK`) {
-      icon = `error.svg`;
-    }
-
-    super.iconPath = {
-      light: path.join(__filename, "..", "..", "images", icon),
-      dark: path.join(__filename, "..", "..", "images", icon),
-    };
   }
 }

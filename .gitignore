@@ -6,3 +6,4 @@ node_modules
 .vscode
 .DS_store
 coverage
+.DS_store
