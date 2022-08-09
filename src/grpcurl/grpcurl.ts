@@ -181,5 +181,4 @@ export interface Response {
   response: string;
   time: string;
   date: string;
-  errmes: string | undefined;
 }

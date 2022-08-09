@@ -208,11 +208,10 @@ export class Parser {
       code: "",
       time: "",
       date: "",
-      errmes: undefined,
     };
     if (input.includes(`Failed to dial target host `)) {
       resp.code = `ConnectionError`;
-      resp.errmes = input;
+      resp.response = input;
       return resp;
     }
     if (input.includes(`ERROR:`)) {
@@ -222,14 +221,14 @@ export class Parser {
           resp.code = line.replace(`  Code: `, ``);
         }
         if (line.includes(`  Message: `)) {
-          resp.errmes = line.replace(`  Message: `, ``);
+          resp.response = line.replace(`  Message: `, ``);
         }
       }
       return resp;
     }
     if (input.includes(`Command failed`)) {
       resp.code = `UnknownError`;
-      resp.errmes = input;
+      resp.response = input;
       return resp;
     }
     resp.response = input;

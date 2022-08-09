@@ -7,6 +7,7 @@
   $: protoName = ``;
   $: service = ``;
   $: call = ``;
+  $: callTag = ``;
   $: inputMessageTag = ``;
   $: inputMessageName = ``;
   $: outputMessageName = ``;
@@ -18,7 +19,6 @@
   $: response = ``;
   $: time = ``;
   $: date = ``;
-  $: errmes = ``;
   $: metadata = [];
   $: hosts = [];
 
@@ -29,6 +29,7 @@
     protoName = obj.protoName;
     service = obj.service;
     call = obj.call;
+    callTag = obj.callTag;
     inputMessageTag = obj.inputMessageTag;
     inputMessageName = obj.inputMessageName;
     outputMessageName = obj.outputMessageName;
@@ -40,12 +41,8 @@
     response = obj.response;
     time = obj.time;
     date = obj.date;
-    errmes = obj.errmes;
     metadata = obj.metadata;
     hosts = obj.hosts;
-    if (errmes !== null) {
-      respJson = errmes;
-    }
     hosts.splice(hosts.indexOf(obj.host), 1);
     hosts = [obj.host].concat(hosts);
   });
@@ -72,6 +69,7 @@
       protoName: protoName,
       service: service,
       call: call,
+      callTag: callTag,
       inputMessageTag: inputMessageTag,
       inputMessageName: inputMessageName,
       outputMessageName: outputMessageName,
@@ -83,7 +81,6 @@
       response: response,
       time: time,
       date: date,
-      errmes: errmes,
       metadata: metadata,
       hosts: hosts,
     });
