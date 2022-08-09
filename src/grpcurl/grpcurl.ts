@@ -10,14 +10,6 @@ export class Grpcurl {
     public useDocker: boolean
   ) {}
 
-  async installed(): Promise<boolean> {
-    const [resp, err] = await this.caller.execute(`grpcurls -help`);
-    if (err !== undefined) {
-      return false;
-    }
-    return true;
-  }
-
   async protoFile(input: ProtoFileInput): Promise<ProtoFile | string> {
     const command = `grpcurl |SRC| describe`;
     const call = this.caller.form({
@@ -106,7 +98,7 @@ export class Grpcurl {
       server: true,
       plaintext: input.plaintext,
       docker: this.useDocker,
-      args: [meta, maxMsgSize, formedJson, input.call],
+      args: [meta, maxMsgSize, formedJson, input.callTag],
     });
 
     return call;
@@ -170,7 +162,7 @@ export interface Request {
   path: string;
   json: string;
   host: string;
-  call: string;
+  callTag: string;
   plaintext: boolean;
   metadata: string[];
   maxMsgSize: number;

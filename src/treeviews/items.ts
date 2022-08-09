@@ -1,13 +1,14 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { Service, Call, ProtoType, Message, Field } from "../grpcurl/parser";
-import { ProtoFile } from "../grpcurl/grpcurl";
+import { ProtoFile, ProtoServer } from "../grpcurl/grpcurl";
 import { RequestHistoryData } from "../storage/history";
 import { Header } from "../storage/headers";
 
 export enum ItemType {
   unknown,
   file,
+  server,
   hosts,
   host,
   service,
@@ -28,8 +29,28 @@ export class FileItem extends ClickerItem {
     super.description = base.path.replace(/^.*[\\\/]/, "");
     super.tooltip = base.path;
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
-    const icon = `file.svg`;
     super.contextValue = `file`;
+    const icon = `file.svg`;
+    super.iconPath = {
+      light: path.join(__filename, "..", "..", "images", icon),
+      dark: path.join(__filename, "..", "..", "images", icon),
+    };
+  }
+}
+
+export class ServerItem extends ClickerItem {
+  constructor(public readonly base: ProtoServer) {
+    super(base.host);
+    super.type = ItemType.server;
+    super.description = base.name;
+    super.tooltip = `Use plaintext: ${base.plaintext}`;
+    super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+    super.contextValue = `server`;
+    let icon = `host-on.svg`;
+    if (base.services.length === 0) {
+      super.collapsibleState = vscode.TreeItemCollapsibleState.None;
+      icon = `host-down.svg`;
+    }
     super.iconPath = {
       light: path.join(__filename, "..", "..", "images", icon),
       dark: path.join(__filename, "..", "..", "images", icon),
@@ -71,7 +92,10 @@ export class HostItem extends ClickerItem {
 }
 
 export class ServiceItem extends ClickerItem {
-  constructor(public readonly base: Service, public readonly parent: FileItem) {
+  constructor(
+    public readonly base: Service,
+    public readonly parent: FileItem | ServerItem
+  ) {
     super(base.name);
     super.type = ItemType.service;
     const icon = `svc.svg`;
@@ -100,7 +124,7 @@ export class CallItem extends ClickerItem {
     super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
     super.contextValue = "call";
     let request: RequestData = {
-      path: parent.parent.base.path,
+      path: ``,
       protoName: parent.parent.base.name,
       service: parent.base.name,
       call: base.name,
@@ -109,7 +133,7 @@ export class CallItem extends ClickerItem {
       inputMessageName: base.inputMessageTag.split(`.`).pop()!,
       outputMessageName: base.outputMessageTag.split(`.`).pop()!,
       plaintext: true,
-      host: parent.parent.base.hosts[0],
+      host: ``,
       json: "",
       maxMsgSize: 0,
       code: "",
@@ -117,8 +141,19 @@ export class CallItem extends ClickerItem {
       time: "",
       date: "",
       metadata: [],
-      hosts: parent.parent.base.hosts,
+      hosts: [],
     };
+    if (parent.parent.type === ItemType.file) {
+      const file = parent.parent as FileItem;
+      request.path = file.base.path;
+      request.host = file.base.hosts[0];
+      request.hosts = file.base.hosts;
+    }
+    if (parent.parent.type === ItemType.server) {
+      const server = parent.parent as ServerItem;
+      request.host = server.base.host;
+      request.hosts = [server.base.host];
+    }
     super.command = {
       command: "webview.open",
       title: "Trigger opening of webview for grpc call",
@@ -187,8 +222,41 @@ export class HeaderItem extends ClickerItem {
   }
 }
 
+export class HistoryItem extends ClickerItem {
+  constructor(request: RequestHistoryData) {
+    super(request.call);
+    super.description = request.date;
+    super.contextValue = "call";
+    super.tooltip = new vscode.MarkdownString(`## Request information:
+- host for execution: \`${request.host}\`
+- method used in request: \`${request.call}\`
+- response code: \`${request.code}\`
+- time of execution: \`${request.time}\`
+- date: \`${request.date}\`
+
+Response:
+
+\`\`\`
+${request.response}
+\`\`\`
+`);
+    super.command = {
+      command: "webview.open",
+      title: "Trigger opening of webview for grpc call",
+      arguments: [request],
+    };
+    let icon = `success.svg`;
+    if (request.code !== `OK`) {
+      icon = `error.svg`;
+    }
+    super.iconPath = {
+      light: path.join(__filename, "..", "..", "images", icon),
+      dark: path.join(__filename, "..", "..", "images", icon),
+    };
+  }
+}
+
 export interface RequestData extends RequestHistoryData {
   protoName: string;
-  callTag: string;
   hosts: string[];
 }

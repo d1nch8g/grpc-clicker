@@ -109,7 +109,7 @@ test(`send`, async () => {
     path: "docs/api.proto",
     json: "{}",
     host: "localhost:12201",
-    call: "pb.v1.Constructions.EmptyCall",
+    callTag: "pb.v1.Constructions.EmptyCall",
     plaintext: true,
     metadata: [`username: user`, `passsword: password`],
     maxMsgSize: 4,
@@ -124,10 +124,4 @@ test(`send`, async () => {
   } else {
     expect(resp.response).toBe(linuxExpect);
   }
-});
-
-test(`checkInstalled`, async () => {
-  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
-  const resp = await grpcurl.installed();
-  expect(resp).toBeTruthy();
 });

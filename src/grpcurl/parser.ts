@@ -25,7 +25,10 @@ export class Parser {
         currComment += line.replace(`//`, ``).trim() + `\n`;
         continue;
       }
-      if (line.trim().includes(`is a service:`)) {
+      if (
+        line.trim().includes(`is a service:`) &&
+        !line.startsWith(`grpc.reflection.v1alpha`)
+      ) {
         if (proto.name !== ``) {
           continue;
         }

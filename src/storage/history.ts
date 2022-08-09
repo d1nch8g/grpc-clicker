@@ -31,6 +31,7 @@ export class History {
 
 export interface RequestHistoryData extends Request, Response {
   service: string;
+  call: string;
   inputMessageTag: string;
   inputMessageName: string;
   outputMessageName: string;

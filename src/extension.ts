@@ -1,8 +1,8 @@
 import { request } from "http";
 import * as vscode from "vscode";
 import { Caller } from "./grpcurl/caller";
-import { Grpcurl, ProtoFile } from "./grpcurl/grpcurl";
-import { Message, Parser, Proto } from "./grpcurl/parser";
+import { Grpcurl, ProtoFile, ProtoServer } from "./grpcurl/grpcurl";
+import { Message, Parser, Proto, ProtoType } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
 import {
   FileItem,
@@ -10,6 +10,7 @@ import {
   HostItem,
   HostsItem,
   RequestData,
+  ServerItem,
 } from "./treeviews/items";
 import { TreeViews } from "./treeviews/treeviews";
 import { WebViewFactory } from "./webview";
@@ -27,12 +28,27 @@ export function activate(context: vscode.ExtensionContext) {
     files: storage.files.list(),
     headers: storage.headers.list(),
     requests: storage.history.list(),
+    servers: storage.servers.list(),
     describeFileMsg: async (path: string, tag: string): Promise<Message> => {
       const msg = await grpcurl.message({
         source: path,
         server: false,
         plaintext: false,
         tag: tag,
+      });
+      if (typeof msg === `string`) {
+        vscode.window.showErrorMessage(msg);
+      }
+      return msg as Message;
+    },
+    describeServerMsg: async (host: string, tag: string): Promise<Message> => {
+      const msg = await grpcurl.message({
+        source: host,
+        server: true,
+        tag: tag,
+        plaintext: vscode.workspace
+          .getConfiguration(`grpc-clicker`)
+          .get(`plaintext`, true),
       });
       if (typeof msg === `string`) {
         vscode.window.showErrorMessage(msg);
@@ -85,9 +101,39 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.files.refresh(storage.files.list());
   });
 
-  vscode.commands.registerCommand("files.remove", (data: FileItem) => {
-    storage.files.remove(data.base.path);
+  vscode.commands.registerCommand(`servers.add`, async () => {
+    const host = await vscode.window.showInputBox({
+      title: `proto reflect server for calls`,
+    });
+    if (host === undefined || host === ``) {
+      return;
+    }
+    // TODO
+    // vscode.window.showQuickPick([`plaintext - ON`, `plaintext - OFF`]);
+    let proto = await grpcurl.protoServer({
+      host: host,
+      plaintext: true,
+    });
+    if (typeof proto === `string`) {
+      vscode.window.showErrorMessage(proto);
+      return;
+    }
+    const err = storage.servers.add(proto);
+    if (err !== undefined) {
+      vscode.window.showErrorMessage(err.message);
+      return;
+    }
+    treeviews.servers.refresh(storage.servers.list());
+  });
+
+  vscode.commands.registerCommand("files.remove", (item: FileItem) => {
+    storage.files.remove(item.base.path);
     treeviews.files.refresh(storage.files.list());
+  });
+
+  vscode.commands.registerCommand("servers.remove", (item: ServerItem) => {
+    storage.servers.remove(item.base.host);
+    treeviews.servers.refresh(storage.servers.list());
   });
 
   vscode.commands.registerCommand("files.refresh", async () => {
@@ -106,6 +152,31 @@ export function activate(context: vscode.ExtensionContext) {
     }
     storage.files.save(newFiles);
     treeviews.files.refresh(newFiles);
+  });
+
+  vscode.commands.registerCommand("servers.refresh", async () => {
+    const oldServers = storage.servers.list();
+    let newServers: ProtoServer[] = [];
+    for (const oldServer of oldServers) {
+      const newProto = await grpcurl.protoServer({
+        host: oldServer.host,
+        plaintext: true,
+      });
+      if (typeof newProto === `string`) {
+        vscode.window.showErrorMessage(newProto);
+        newServers.push({
+          host: oldServer.host,
+          plaintext: true,
+          type: ProtoType.proto,
+          name: oldServer.name,
+          services: [],
+        });
+      } else {
+        newServers.push(newProto);
+      }
+    }
+    storage.servers.save(newServers);
+    treeviews.servers.refresh(newServers);
   });
 
   vscode.commands.registerCommand("headers.add", async () => {
@@ -185,13 +256,22 @@ export function activate(context: vscode.ExtensionContext) {
         data.metadata.push(header.value);
       }
     }
-
-    const msg = await grpcurl.message({
-      source: data.path,
-      server: false,
-      plaintext: false,
-      tag: data.inputMessageTag,
-    });
+    let msg: Message | string;
+    if (data.path !== ``) {
+      msg = await grpcurl.message({
+        source: data.path,
+        server: false,
+        plaintext: false,
+        tag: data.inputMessageTag,
+      });
+    } else {
+      msg = await grpcurl.message({
+        source: data.host,
+        server: true,
+        plaintext: data.plaintext,
+        tag: data.inputMessageTag,
+      });
+    }
 
     if (typeof msg === `string`) {
       vscode.window.showErrorMessage(msg);
@@ -229,16 +309,6 @@ export function activate(context: vscode.ExtensionContext) {
         .get(`usedocker`, false);
     }
   });
-
-  if (storage.showInstallError()) {
-    grpcurl.installed().then((installed) => {
-      if (!installed) {
-        vscode.window.showErrorMessage(
-          `gRPCurl is not installed. You can switch to docker version in extension settings.`
-        );
-      }
-    });
-  }
 }
 
 export function deactivate() {}
