@@ -49,7 +49,7 @@ export class ServerItem extends ClickerItem {
     let icon = `host-on.svg`;
     if (base.services.length === 0) {
       super.collapsibleState = vscode.TreeItemCollapsibleState.None;
-      icon = `host-off.svg`;
+      icon = `host-down.svg`;
     }
     super.iconPath = {
       light: path.join(__filename, "..", "..", "images", icon),
@@ -258,6 +258,5 @@ ${request.response}
 
 export interface RequestData extends RequestHistoryData {
   protoName: string;
-  callTag: string;
   hosts: string[];
 }

@@ -106,7 +106,7 @@ export class Grpcurl {
       server: true,
       plaintext: input.plaintext,
       docker: this.useDocker,
-      args: [meta, maxMsgSize, formedJson, input.call],
+      args: [meta, maxMsgSize, formedJson, input.callTag],
     });
 
     return call;
@@ -170,7 +170,7 @@ export interface Request {
   path: string;
   json: string;
   host: string;
-  call: string;
+  callTag: string;
   plaintext: boolean;
   metadata: string[];
   maxMsgSize: number;
