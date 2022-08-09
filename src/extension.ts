@@ -27,12 +27,27 @@ export function activate(context: vscode.ExtensionContext) {
     files: storage.files.list(),
     headers: storage.headers.list(),
     requests: storage.history.list(),
+    servers: storage.servers.list(),
     describeFileMsg: async (path: string, tag: string): Promise<Message> => {
       const msg = await grpcurl.message({
         source: path,
         server: false,
         plaintext: false,
         tag: tag,
+      });
+      if (typeof msg === `string`) {
+        vscode.window.showErrorMessage(msg);
+      }
+      return msg as Message;
+    },
+    describeServerMsg: async (host: string, tag: string): Promise<Message> => {
+      const msg = await grpcurl.message({
+        source: host,
+        server: true,
+        tag: tag,
+        plaintext: vscode.workspace
+          .getConfiguration(`grpc-clicker`)
+          .get(`plaintext`, true),
       });
       if (typeof msg === `string`) {
         vscode.window.showErrorMessage(msg);
@@ -83,6 +98,31 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
     treeviews.files.refresh(storage.files.list());
+  });
+
+  vscode.commands.registerCommand(`servers.add`, async () => {
+    const host = await vscode.window.showInputBox({
+      title: `proto reflect server for calls`,
+    });
+    if (host === undefined || host === ``) {
+      return;
+    }
+    // TODO
+    // vscode.window.showQuickPick([`plaintext - ON`, `plaintext - OFF`]);
+    let proto = await grpcurl.protoServer({
+      host: host,
+      plaintext: true,
+    });
+    if (typeof proto === `string`) {
+      vscode.window.showErrorMessage(proto);
+      return;
+    }
+    const err = storage.servers.add(proto);
+    if (err !== undefined) {
+      vscode.window.showErrorMessage(err.message);
+      return;
+    }
+    treeviews.servers.refresh(storage.servers.list());
   });
 
   vscode.commands.registerCommand("files.remove", (data: FileItem) => {

@@ -29,6 +29,9 @@
     "onView:files",
     "onCommand:files.add",
     "onCommand:files.refresh",
+    "onView:servers",
+    "onCommand:servers.add",
+    "onCommand:servers.refresh",
     "onView:headers",
     "onCommand:headers.add",
     "onView:history",
@@ -52,6 +55,10 @@
         {
           "id": "files",
           "name": "Proto files"
+        },
+        {
+          "id": "servers",
+          "name": "Protoreflect servers"
         },
         {
           "id": "headers",
@@ -91,6 +98,15 @@
         "category": "gRPC Clicker",
         "command": "files.add",
         "title": "Add new proto file",
+        "icon": {
+          "dark": "images/dark/plus.svg",
+          "light": "images/light/plus.svg"
+        }
+      },
+      {
+        "category": "gRPC Clicker",
+        "command": "servers.add",
+        "title": "Add new proto reflect server",
         "icon": {
           "dark": "images/dark/plus.svg",
           "light": "images/light/plus.svg"
@@ -145,6 +161,15 @@
           "dark": "images/dark/refresh.svg",
           "light": "images/light/refresh.svg"
         }
+      },
+      {
+        "category": "gRPC Clicker",
+        "command": "servers.refresh",
+        "title": "Resresh existing proro reflect servers",
+        "icon": {
+          "dark": "images/dark/refresh.svg",
+          "light": "images/light/refresh.svg"
+        }
       }
     ],
     "menus": {
@@ -155,13 +180,23 @@
           "group": "navigation"
         },
         {
-          "command": "headers.add",
-          "when": "view == headers",
+          "command": "files.refresh",
+          "when": "view == files",
           "group": "navigation"
         },
         {
-          "command": "files.refresh",
-          "when": "view == files",
+          "command": "servers.add",
+          "when": "view == servers",
+          "group": "navigation"
+        },
+        {
+          "command": "servers.refresh",
+          "when": "view == servers",
+          "group": "navigation"
+        },
+        {
+          "command": "headers.add",
+          "when": "view == headers",
           "group": "navigation"
         },
         {
