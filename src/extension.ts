@@ -3,7 +3,13 @@ import { Caller } from "./grpcurl/caller";
 import { Grpcurl, ProtoFile } from "./grpcurl/grpcurl";
 import { Message, Parser, Proto } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
-import { FileItem, HostItem, HostsItem, RequestData } from "./treeviews/items";
+import {
+  FileItem,
+  HeaderItem,
+  HostItem,
+  HostsItem,
+  RequestData,
+} from "./treeviews/items";
 import { TreeViews } from "./treeviews/treeviews";
 import { WebViewFactory } from "./webview";
 
@@ -118,18 +124,13 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.headers.refresh(storage.headers.list());
   });
 
-  vscode.commands.registerCommand("headers.remove", async () => {
-    let headerValues: string[] = [];
-    for (const header of storage.headers.list()) {
-      headerValues.push(header.value);
+  vscode.commands.registerCommand(
+    "headers.remove",
+    async (header: HeaderItem) => {
+      storage.headers.remove(header.header.value);
+      treeviews.headers.refresh(storage.headers.list());
     }
-    const header = await vscode.window.showQuickPick(headerValues);
-    if (header === undefined) {
-      return;
-    }
-    storage.headers.remove(header);
-    treeviews.headers.refresh(storage.headers.list());
-  });
+  );
 
   vscode.commands.registerCommand("headers.switch", async (header: string) => {
     let headers = storage.headers.list();

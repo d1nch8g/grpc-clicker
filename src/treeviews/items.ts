@@ -3,6 +3,7 @@ import * as path from "path";
 import { Service, Call, ProtoType, Message, Field } from "../grpcurl/parser";
 import { ProtoFile } from "../grpcurl/grpcurl";
 import { RequestHistoryData } from "../storage/history";
+import { Header } from "../storage/headers";
 
 export enum ItemType {
   unknown,
@@ -13,6 +14,7 @@ export enum ItemType {
   call,
   message,
   field,
+  header,
 }
 
 export class ClickerItem extends vscode.TreeItem {
@@ -159,6 +161,28 @@ export class FieldItem extends ClickerItem {
     super.iconPath = {
       light: path.join(__filename, "..", "..", "images", icon),
       dark: path.join(__filename, "..", "..", "images", icon),
+    };
+  }
+}
+
+export class HeaderItem extends ClickerItem {
+  private iconName = "meta-off.svg";
+  constructor(public readonly header: Header) {
+    super(header.value);
+    super.type = ItemType.header;
+    super.tooltip = `Header that will be sent with request metadata in context`;
+    super.contextValue = "header";
+    super.command = {
+      command: "headers.switch",
+      title: "Switch grpc host",
+      arguments: [header.value],
+    };
+    if (header.active) {
+      this.iconName = "meta-on.svg";
+    }
+    this.iconPath = {
+      light: path.join(__filename, "..", "..", "images", this.iconName),
+      dark: path.join(__filename, "..", "..", "images", this.iconName),
     };
   }
 }

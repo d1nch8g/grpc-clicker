@@ -1,64 +1,45 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { Header } from "../storage/headers";
+import { ClickerItem, HeaderItem } from "./items";
 
-export class HeadersTreeView implements vscode.TreeDataProvider<HeaderItem> {
+export class HeadersTreeView implements vscode.TreeDataProvider<ClickerItem> {
   constructor(private headers: Header[]) {
     this.headers = headers;
-    this.onChange = new vscode.EventEmitter<HeaderItem | undefined | void>();
+    this.onChange = new vscode.EventEmitter<ClickerItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
   }
 
-  private onChange: vscode.EventEmitter<HeaderItem | undefined | void>;
-  readonly onDidChangeTreeData: vscode.Event<void | HeaderItem | HeaderItem[]>;
+  private onChange: vscode.EventEmitter<ClickerItem | undefined | void>;
+  readonly onDidChangeTreeData: vscode.Event<void | ClickerItem | ClickerItem[]>;
 
   refresh(headers: Header[]): void {
     this.headers = headers;
     this.onChange.fire();
   }
 
-  getTreeItem(element: HeaderItem): vscode.TreeItem {
+  getTreeItem(element: ClickerItem): vscode.TreeItem {
     return element;
   }
 
-  getChildren(element?: HeaderItem): vscode.ProviderResult<HeaderItem[]> {
-    let hostItems: HeaderItem[] = [];
+  getChildren(element?: ClickerItem): vscode.ProviderResult<ClickerItem[]> {
+    let hostItems: ClickerItem[] = [];
     for (var header of this.headers) {
       hostItems.push(new HeaderItem(header));
     }
     return hostItems;
   }
 
-  getParent?(element: HeaderItem): vscode.ProviderResult<HeaderItem> {
+  getParent?(element: ClickerItem): vscode.ProviderResult<ClickerItem> {
     throw new Error("Method not implemented.");
   }
 
   resolveTreeItem?(
     item: vscode.TreeItem,
-    element: HeaderItem,
+    element: ClickerItem,
     token: vscode.CancellationToken
   ): vscode.ProviderResult<vscode.TreeItem> {
     return element;
   }
 }
 
-class HeaderItem extends vscode.TreeItem {
-  private iconName = "meta-off.svg";
-  constructor(header: Header) {
-    super(header.value);
-    super.tooltip = `Meta data that will be sent with request in context`;
-    super.contextValue = "meta";
-    super.command = {
-      command: "headers.switch",
-      title: "Switch grpc host",
-      arguments: [header.value],
-    };
-    if (header.active) {
-      this.iconName = "meta-on.svg";
-    }
-    this.iconPath = {
-      light: path.join(__filename, "..", "..", "images", this.iconName),
-      dark: path.join(__filename, "..", "..", "images", this.iconName),
-    };
-  }
-}
