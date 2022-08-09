@@ -55,6 +55,7 @@ export class ProtoFiles {
     this.save(protos);
   }
 
+  // TODO add test
   removeHost(path: string, host: string) {
     const protos = this.list();
     for (const savedProtoFile of protos) {
