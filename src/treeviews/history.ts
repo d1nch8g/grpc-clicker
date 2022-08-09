@@ -58,10 +58,10 @@ class HistoryItem extends vscode.TreeItem {
 - time of execution: \`${request.time}\`
 - date: \`${request.date}\`
 
-Error message:
+Response:
 
 \`\`\`
-${request.errmes}
+${request.response}
 \`\`\`
 `);
 

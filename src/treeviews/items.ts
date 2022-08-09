@@ -116,7 +116,6 @@ export class CallItem extends ClickerItem {
       response: "",
       time: "",
       date: "",
-      errmes: "",
       metadata: [],
       hosts: parent.parent.base.hosts,
     };
