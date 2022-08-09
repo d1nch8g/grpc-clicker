@@ -159,7 +159,6 @@ export function activate(context: vscode.ExtensionContext) {
       request.response = resp.response;
       request.time = resp.time;
       request.date = resp.date;
-      request.errmes = resp.errmes;
       storage.history.add(request);
       treeviews.history.refresh(storage.history.list());
       return request;

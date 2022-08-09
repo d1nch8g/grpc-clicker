@@ -9,7 +9,6 @@ class MockParser implements Parser {
       code: `ok`,
       response: input,
       time: `ok`,
-      errmes: `ok`,
       date: ``,
     };
   }
@@ -116,7 +115,6 @@ test(`send`, async () => {
     maxMsgSize: 4,
   });
   expect(resp.code).toBe(`ok`);
-  expect(resp.errmes).toBe(`ok`);
 
   const winExpect = `grpcurl -H \"username: user\" -H \"passsword: password\"  -max-msg-sz 4194304 -d \"{}\" -plaintext localhost:12201 pb.v1.Constructions.EmptyCall`;
   const linuxExpect = `grpcurl -H 'username: user' -H 'passsword: password'  -max-msg-sz 4194304 -d '{}' -plaintext localhost:12201 pb.v1.Constructions.EmptyCall`;
