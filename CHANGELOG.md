@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.0.19]
+
+> August 9, 2022
+
+- Added support for protoreflect servers in new treeview
+
 ## [0.0.18]
 
 > August 8, 2022

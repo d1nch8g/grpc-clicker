@@ -125,9 +125,3 @@ test(`send`, async () => {
     expect(resp.response).toBe(linuxExpect);
   }
 });
-
-test(`checkInstalled`, async () => {
-  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
-  const resp = await grpcurl.installed();
-  expect(resp).toBeTruthy();
-});

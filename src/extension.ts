@@ -309,16 +309,6 @@ export function activate(context: vscode.ExtensionContext) {
         .get(`usedocker`, false);
     }
   });
-
-  if (storage.showInstallError()) {
-    grpcurl.installed().then((installed) => {
-      if (!installed) {
-        vscode.window.showErrorMessage(
-          `gRPCurl is not installed. You can switch to docker version in extension settings.`
-        );
-      }
-    });
-  }
 }
 
 export function deactivate() {}

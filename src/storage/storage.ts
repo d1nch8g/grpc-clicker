@@ -11,12 +11,12 @@ export class Storage {
   public readonly history: History;
 
   constructor(private memento: Memento) {
-    if (memento.get(`grpc-clicker-version`) !== "0.0.18") {
+    if (memento.get(`grpc-clicker-version`) !== "0.0.19") {
       for (const key of memento.keys()) {
         memento.update(key, undefined);
       }
     }
-    memento.update(`grpc-clicker-version`, "0.0.18");
+    memento.update(`grpc-clicker-version`, "0.0.19");
     this.files = new ProtoFiles(memento);
     this.servers = new ProtoServers(memento);
     this.headers = new Headers(memento);
