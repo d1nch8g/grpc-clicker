@@ -10,6 +10,7 @@ import {
   HostItem,
   HostsItem,
   RequestData,
+  ServerItem,
 } from "./treeviews/items";
 import { TreeViews } from "./treeviews/treeviews";
 import { WebViewFactory } from "./webview";
@@ -125,9 +126,14 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.servers.refresh(storage.servers.list());
   });
 
-  vscode.commands.registerCommand("files.remove", (data: FileItem) => {
-    storage.files.remove(data.base.path);
+  vscode.commands.registerCommand("files.remove", (item: FileItem) => {
+    storage.files.remove(item.base.path);
     treeviews.files.refresh(storage.files.list());
+  });
+
+  vscode.commands.registerCommand("servers.remove", (item: ServerItem) => {
+    storage.servers.remove(item.base.host);
+    treeviews.servers.refresh(storage.servers.list());
   });
 
   vscode.commands.registerCommand("files.refresh", async () => {

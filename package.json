@@ -154,6 +154,14 @@
         }
       },
       {
+        "command": "servers.remove",
+        "title": "Remove server",
+        "icon": {
+          "dark": "images/dark/trash.svg",
+          "light": "images/light/trash.svg"
+        }
+      },
+      {
         "category": "gRPC Clicker",
         "command": "files.refresh",
         "title": "Resresh existing proro schemas",
@@ -227,6 +235,11 @@
         },
         {
           "command": "files.remove",
+          "when": "view == files && viewItem == file",
+          "group": "inline"
+        },
+        {
+          "command": "servers.remove",
           "when": "view == files && viewItem == file",
           "group": "inline"
         }
