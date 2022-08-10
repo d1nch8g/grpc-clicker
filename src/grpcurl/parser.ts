@@ -136,7 +136,36 @@ export class Parser {
       return msg;
     }
 
+    let currOneOf: Field = {
+      type: ProtoType.field,
+      name: "",
+      datatype: "oneof",
+      description: undefined,
+      innerMessageTag: undefined,
+      fields: [],
+    };
+    let pushToOneOf = false;
     for (const line of splittedInput) {
+      if (line.startsWith(`  oneof`)) {
+        if (currComment !== undefined) {
+          currOneOf.description = currComment.slice(0, -1);
+          currComment = undefined;
+        }
+        currOneOf.name = line.replace(`  oneof `, ``).replace(` {`, ``);
+        pushToOneOf = true;
+      }
+      if (line.endsWith(`}`) && pushToOneOf) {
+        pushToOneOf = false;
+        msg.fields.push(currOneOf);
+        currOneOf = {
+          type: ProtoType.field,
+          name: "",
+          datatype: "oneof",
+          description: undefined,
+          innerMessageTag: undefined,
+          fields: [],
+        };
+      }
       if (line.startsWith(`message `)) {
         if (currComment !== undefined) {
           msg.description = currComment.slice(0, -1);
@@ -162,7 +191,11 @@ export class Parser {
           field.description = currComment;
           currComment = undefined;
         }
-        msg.fields.push(field);
+        if (pushToOneOf) {
+          currOneOf.fields!.push(field);
+        } else {
+          msg.fields.push(field);
+        }
         continue;
       }
       if (line.startsWith(`Message template:\n`)) {
