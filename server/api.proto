@@ -142,11 +142,16 @@ message MapMes {
   map<string, string> message = 1;
 }
 
+// example comment
 message OneofMes {
+  // example 2
   oneof message {
+    // example field comment
     string first = 1;
     int32 second = 2;
   }
+  // comcom
+  int32 name = 3;
 }
 
 message OptionalMes {

@@ -246,6 +246,74 @@ comment`);
   expect(enumParsed).toStrictEqual(expectedEnum);
 });
 
+const oneOfExample = `pb.v1.OneofMes is a message:
+// example comment
+message OneofMes {
+  // example 2
+  oneof message {
+    // example field comment
+    string first = 1;
+    int32 second = 2;
+  }
+  // comcom
+  int32 name = 3;
+}
+
+Message template:
+{
+  "name": 0
+}`;
+
+test(`oneof`, () => {
+  const parser = new Parser();
+  const expectedOneOf: Message = {
+    type: ProtoType.message,
+    name: "OneofMes",
+    tag: "pb.v1.OneofMes",
+    description: "example comment",
+    template: `{
+  "name": 0
+}`,
+    fields: [
+      {
+        type: ProtoType.field,
+        name: "message",
+        datatype: "oneof",
+        description: "example 2",
+        innerMessageTag: undefined,
+        fields: [
+          {
+            type: ProtoType.field,
+            name: "first",
+            datatype: "string",
+            description: `example field comment\n`,
+            innerMessageTag: undefined,
+            fields: undefined,
+          },
+          {
+            type: ProtoType.field,
+            name: "second",
+            datatype: "int32",
+            description: undefined,
+            innerMessageTag: undefined,
+            fields: undefined,
+          },
+        ],
+      },
+      {
+        type: ProtoType.field,
+        name: "name",
+        datatype: "int32",
+        description: `comcom\n`,
+        innerMessageTag: undefined,
+        fields: undefined,
+      },
+    ],
+  };
+  const result = parser.message(oneOfExample);
+  expect(result).toStrictEqual(expectedOneOf);
+});
+
 const codeErr = `EmptyCall
 ERROR:
   Code: AlreadyExists
