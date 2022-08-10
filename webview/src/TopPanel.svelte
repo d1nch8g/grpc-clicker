@@ -29,7 +29,7 @@
 
 <style>
   .top-container {
-    padding-top: 1%;
+    padding-top: 15px;
     padding-left: 6%;
     padding-right: 6%;
   }
