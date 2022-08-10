@@ -1,4 +1,3 @@
-import { request } from "http";
 import * as vscode from "vscode";
 import { Caller } from "./grpcurl/caller";
 import { Grpcurl, ProtoFile, ProtoServer } from "./grpcurl/grpcurl";
