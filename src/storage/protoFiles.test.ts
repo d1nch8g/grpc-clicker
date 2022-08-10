@@ -24,7 +24,6 @@ test(`add`, () => {
   const protos = new ProtoFiles(memento);
   var proto: ProtoFile = {
     type: ProtoType.proto,
-    name: "test",
     services: [],
     path: "",
     hosts: [],
@@ -40,7 +39,6 @@ test(`list`, () => {
   const headers = new ProtoFiles(memento);
   var proto: ProtoFile = {
     type: ProtoType.proto,
-    name: "test",
     services: [],
     path: "",
     hosts: [],
@@ -54,7 +52,6 @@ test(`remove`, () => {
   const headers = new ProtoFiles(memento);
   var proto: ProtoFile = {
     type: ProtoType.proto,
-    name: "test",
     services: [],
     path: "path",
     hosts: [],

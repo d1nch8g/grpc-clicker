@@ -46,7 +46,6 @@ service Constructions {
 test(`proto`, () => {
   const parser = new Parser();
   const proto = parser.proto(protoInput);
-  expect(proto.name).toBe(`pb.v1`);
   expect(proto.services.length).toBe(3);
   expect(proto.services[0].name).toBe(`Streams`);
   expect(proto.services[0].calls.length).toBe(3);
@@ -59,6 +58,10 @@ comment
 right here`);
   expect(proto.services[1].description).toBe(`example svc description`);
   expect(proto.services[1].calls[12].description).toBe(undefined);
+  expect(proto.services[0].tag).toBe(`pb.v1.Streams`);
+  expect(proto.services[0].name).toBe(`Streams`);
+  expect(proto.services[1].tag).toBe(`pb.v1.Basics`);
+  expect(proto.services[1].name).toBe(`Basics`);
 });
 
 const rpcUnaryLine = `  rpc Sint32Call ( .pb.v1.Sint32Mes ) returns ( .pb.v1.Sint32Mes );`;

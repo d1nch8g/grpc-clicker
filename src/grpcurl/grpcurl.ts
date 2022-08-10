@@ -29,7 +29,6 @@ export class Grpcurl {
       type: ProtoType.proto,
       path: input.path,
       hosts: input.hosts,
-      name: parsedProto.name,
       services: parsedProto.services,
     };
   }
@@ -53,7 +52,6 @@ export class Grpcurl {
       type: ProtoType.proto,
       host: input.host,
       plaintext: input.plaintext,
-      name: parsedProto.name,
       services: parsedProto.services,
     };
   }

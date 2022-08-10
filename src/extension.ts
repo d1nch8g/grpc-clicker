@@ -1,4 +1,3 @@
-import { request } from "http";
 import * as vscode from "vscode";
 import { Caller } from "./grpcurl/caller";
 import { Grpcurl, ProtoFile, ProtoServer } from "./grpcurl/grpcurl";
@@ -168,7 +167,6 @@ export function activate(context: vscode.ExtensionContext) {
           host: oldServer.host,
           plaintext: true,
           type: ProtoType.proto,
-          name: oldServer.name,
           services: [],
         });
       } else {
