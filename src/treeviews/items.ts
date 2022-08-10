@@ -41,7 +41,10 @@ export class ServerItem extends ClickerItem {
   constructor(public readonly base: ProtoServer) {
     super(base.adress);
     super.type = ItemType.server;
-    super.tooltip = `Use plaintext: ${base.plaintext}`;
+    super.description = `TLS: on`;
+    if (base.plaintext) {
+      super.description = `TLS: off`;
+    }
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     super.contextValue = `server`;
     let icon = `host-on.svg`;
@@ -76,7 +79,10 @@ export class HostItem extends ClickerItem {
   constructor(public readonly host: Host, public readonly parent: HostsItem) {
     super(host.adress);
     super.type = ItemType.host;
-    super.description = `Plaintext: ${host.plaintext}`;
+    super.description = `TLS: on`;
+    if (host.plaintext) {
+      super.description = `TLS: off`;
+    }
     super.contextValue = `host`;
     const icon = `host-off.svg`;
     super.iconPath = {
