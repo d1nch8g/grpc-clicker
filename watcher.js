@@ -83,11 +83,13 @@ var rebuild = function () {
 
 let count = 1;
 rebuild();
+console.log("\x1b[34m%s\x1b[0m", "Webview watcher started: " + count);
 fs.watch("webview/src", function (event, filename) {
-  console.log("rebuild webview triggered " + count);
+  count += 1;
   try {
     rebuild();
+    console.log("\x1b[32m%s\x1b[0m", "Rebuilt webview for vscode: " + count);
   } catch (e) {
-    console.log(e);
+    console.log("\x1b[31m%s\x1b[0m", "Error rebuilding webview: " + e);
   }
 });
