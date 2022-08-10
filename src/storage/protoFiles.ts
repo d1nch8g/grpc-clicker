@@ -60,9 +60,10 @@ export class ProtoFiles {
     const protos = this.list();
     for (const savedProtoFile of protos) {
       if (savedProtoFile.path === path) {
-        const index = savedProtoFile.hosts.indexOf(host, 0);
-        if (index > -1) {
-          savedProtoFile.hosts.splice(index, 1);
+        for (const [i, savedHost] of savedProtoFile.hosts.entries()) {
+          if (host.adress === savedHost.adress) {
+            savedProtoFile.hosts.splice(i, 1);
+          }
         }
       }
     }
