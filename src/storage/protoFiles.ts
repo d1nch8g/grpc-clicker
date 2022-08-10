@@ -1,5 +1,5 @@
 import { Memento } from "vscode";
-import { ProtoFile } from "../grpcurl/grpcurl";
+import { Host, ProtoFile } from "../grpcurl/grpcurl";
 
 export class ProtoFiles {
   private readonly key: string = "grpc-clicker-structures";
@@ -45,7 +45,7 @@ export class ProtoFiles {
   }
 
   // TODO add test
-  addHost(path: string, host: string) {
+  addHost(path: string, host: Host) {
     const protos = this.list();
     for (const savedProtoFile of protos) {
       if (savedProtoFile.path === path) {
@@ -56,7 +56,7 @@ export class ProtoFiles {
   }
 
   // TODO add test
-  removeHost(path: string, host: string) {
+  removeHost(path: string, host: Host) {
     const protos = this.list();
     for (const savedProtoFile of protos) {
       if (savedProtoFile.path === path) {

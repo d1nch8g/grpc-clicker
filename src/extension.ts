@@ -58,9 +58,9 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("cache.clean", async () => {
     storage.clean();
-    treeviews.headers.refresh([]);
     treeviews.files.refresh([]);
     treeviews.headers.refresh([]);
+    treeviews.servers.refresh([]);
     treeviews.history.refresh([]);
   });
 
@@ -83,10 +83,16 @@ export function activate(context: vscode.ExtensionContext) {
     if (defaultHost === undefined || defaultHost === ``) {
       return;
     }
+    const plaintext = await vscode.window.showQuickPick([`Yes`, `No`], {
+      title: `Use plain text? (for servers without TLS)`,
+    });
+    if (plaintext === undefined || plaintext === ``) {
+      return;
+    }
     const path = choice[0].fsPath;
     let proto = await grpcurl.protoFile({
       path: path,
-      hosts: [defaultHost],
+      hosts: [{ adress: defaultHost, plaintext: plaintext === `Yes` }],
     });
     if (typeof proto === `string`) {
       vscode.window.showErrorMessage(proto);
@@ -107,11 +113,15 @@ export function activate(context: vscode.ExtensionContext) {
     if (host === undefined || host === ``) {
       return;
     }
-    // TODO
-    // vscode.window.showQuickPick([`plaintext - ON`, `plaintext - OFF`]);
+    const plaintext = await vscode.window.showQuickPick([`Yes`, `No`], {
+      title: `Use plain text? (for servers without TLS)`,
+    });
+    if (plaintext === undefined || plaintext === ``) {
+      return;
+    }
     let proto = await grpcurl.protoServer({
       host: host,
-      plaintext: true,
+      plaintext: plaintext === `Yes`,
     });
     if (typeof proto === `string`) {
       vscode.window.showErrorMessage(proto);
@@ -131,7 +141,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   vscode.commands.registerCommand("servers.remove", (item: ServerItem) => {
-    storage.servers.remove(item.base.host);
+    storage.servers.remove(item.base.adress);
     treeviews.servers.refresh(storage.servers.list());
   });
 
@@ -158,13 +168,13 @@ export function activate(context: vscode.ExtensionContext) {
     let newServers: ProtoServer[] = [];
     for (const oldServer of oldServers) {
       const newProto = await grpcurl.protoServer({
-        host: oldServer.host,
+        host: oldServer.adress,
         plaintext: true,
       });
       if (typeof newProto === `string`) {
         vscode.window.showErrorMessage(newProto);
         newServers.push({
-          host: oldServer.host,
+          adress: oldServer.adress,
           plaintext: true,
           type: ProtoType.proto,
           services: [],
@@ -242,9 +252,6 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   vscode.commands.registerCommand("webview.open", async (data: RequestData) => {
-    data.plaintext = vscode.workspace
-      .getConfiguration(`grpc-clicker`)
-      .get(`plaintext`, true);
     data.maxMsgSize = vscode.workspace
       .getConfiguration(`grpc-clicker`)
       .get(`msgsize`, 4);
@@ -264,9 +271,9 @@ export function activate(context: vscode.ExtensionContext) {
       });
     } else {
       msg = await grpcurl.message({
-        source: data.host,
+        source: data.host.adress,
         server: true,
-        plaintext: data.plaintext,
+        plaintext: data.host.plaintext,
         tag: data.inputMessageTag,
       });
     }
@@ -291,7 +298,16 @@ export function activate(context: vscode.ExtensionContext) {
     if (newHost === undefined || newHost === ``) {
       return;
     }
-    storage.files.addHost(host.parent.base.path, newHost);
+    const plaintext = await vscode.window.showQuickPick([`Yes`, `No`], {
+      title: `Use plain text? (for servers without TLS)`,
+    });
+    if (plaintext === undefined || plaintext === ``) {
+      return;
+    }
+    storage.files.addHost(host.parent.base.path, {
+      adress: newHost,
+      plaintext: plaintext === `Yes`,
+    });
     treeviews.files.refresh(storage.files.list());
   });
 

@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { Service, Call, ProtoType, Message, Field } from "../grpcurl/parser";
-import { ProtoFile, ProtoServer } from "../grpcurl/grpcurl";
+import { Host, ProtoFile, ProtoServer } from "../grpcurl/grpcurl";
 import { RequestHistoryData } from "../storage/history";
 import { Header } from "../storage/headers";
 
@@ -39,7 +39,7 @@ export class FileItem extends ClickerItem {
 
 export class ServerItem extends ClickerItem {
   constructor(public readonly base: ProtoServer) {
-    super(base.host);
+    super(base.adress);
     super.type = ItemType.server;
     super.tooltip = `Use plaintext: ${base.plaintext}`;
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
@@ -57,10 +57,7 @@ export class ServerItem extends ClickerItem {
 }
 
 export class HostsItem extends ClickerItem {
-  constructor(
-    public readonly hosts: string[],
-    public readonly parent: FileItem
-  ) {
+  constructor(public readonly hosts: Host[], public readonly parent: FileItem) {
     super(`hosts`);
     super.type = ItemType.hosts;
     super.tooltip = `Hosts for gRPC calls for current file.`;
@@ -76,9 +73,10 @@ export class HostsItem extends ClickerItem {
 }
 
 export class HostItem extends ClickerItem {
-  constructor(public readonly host: string, public readonly parent: HostsItem) {
-    super(host);
+  constructor(public readonly host: Host, public readonly parent: HostsItem) {
+    super(host.adress);
     super.type = ItemType.host;
+    super.description = `Plaintext: ${host.plaintext}`;
     super.contextValue = `host`;
     const icon = `host-off.svg`;
     super.iconPath = {
@@ -131,8 +129,10 @@ export class CallItem extends ClickerItem {
       inputMessageTag: base.inputMessageTag,
       inputMessageName: base.inputMessageTag.split(`.`).pop()!,
       outputMessageName: base.outputMessageTag.split(`.`).pop()!,
-      plaintext: true,
-      host: ``,
+      host: {
+        adress: ``,
+        plaintext: false,
+      },
       json: "",
       maxMsgSize: 0,
       code: "",
@@ -150,8 +150,9 @@ export class CallItem extends ClickerItem {
     }
     if (parent.parent.type === ItemType.server) {
       const server = parent.parent as ServerItem;
-      request.host = server.base.host;
-      request.hosts = [server.base.host];
+      request.host.adress = server.base.adress;
+      request.host.plaintext = server.base.plaintext;
+      request.hosts = [server.base];
     }
     super.command = {
       command: "webview.open",
@@ -257,5 +258,5 @@ ${request.response.split(`\n`).slice(0, 40).join(`\n`)}
 
 export interface RequestData extends RequestHistoryData {
   protoName: string;
-  hosts: string[];
+  hosts: Host[];
 }

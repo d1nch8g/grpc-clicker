@@ -62,7 +62,12 @@ test(`protoFile`, async () => {
   const expectedResult: ProtoFile = {
     type: ProtoType.proto,
     path: "docs/api.proto",
-    hosts: ["localhost:12201"],
+    hosts: [
+      {
+        adress: `localhost:12201`,
+        plaintext: true,
+      },
+    ],
     services: [
       {
         type: ProtoType.service,
@@ -76,7 +81,12 @@ test(`protoFile`, async () => {
   expect(
     await grpcurl.protoFile({
       path: "docs/api.proto",
-      hosts: [`localhost:12201`],
+      hosts: [
+        {
+          adress: `localhost:12201`,
+          plaintext: true,
+        },
+      ],
     })
   ).toStrictEqual(expectedResult);
 });
@@ -85,7 +95,7 @@ test(`protoServer`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
   const expectedResult: ProtoServer = {
     type: ProtoType.proto,
-    host: "localhost:12201",
+    adress: "localhost:12201",
     plaintext: true,
     services: [
       {
@@ -129,9 +139,11 @@ test(`send`, async () => {
   let resp = await grpcurl.send({
     path: "docs/api.proto",
     json: "{}",
-    host: "localhost:12201",
+    host: {
+      adress: `localhost:12201`,
+      plaintext: true,
+    },
     callTag: "pb.v1.Constructions.EmptyCall",
-    plaintext: true,
     metadata: [`username: user`, `passsword: password`],
     maxMsgSize: 4,
   });

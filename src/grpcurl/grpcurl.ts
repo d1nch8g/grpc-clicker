@@ -50,7 +50,7 @@ export class Grpcurl {
     const parsedProto = this.parser.proto(output);
     return {
       type: ProtoType.proto,
-      host: input.host,
+      adress: input.host,
       plaintext: input.plaintext,
       services: parsedProto.services,
     };
@@ -92,9 +92,9 @@ export class Grpcurl {
 
     const call = this.caller.form({
       call: command,
-      source: input.host,
+      source: input.host.adress,
       server: true,
-      plaintext: input.plaintext,
+      plaintext: input.host.plaintext,
       docker: this.useDocker,
       args: [meta, maxMsgSize, formedJson, input.callTag],
     });
@@ -138,12 +138,17 @@ export class Grpcurl {
 
 export interface ProtoFileInput {
   path: string;
-  hosts: string[];
+  hosts: Host[];
+}
+
+export interface Host {
+  adress: string;
+  plaintext: boolean;
 }
 
 export interface ProtoFile extends Proto {
   path: string;
-  hosts: string[];
+  hosts: Host[];
 }
 
 export interface ProtoServerInput {
@@ -152,16 +157,15 @@ export interface ProtoServerInput {
 }
 
 export interface ProtoServer extends Proto {
-  host: string;
+  adress: string;
   plaintext: boolean;
 }
 
 export interface Request {
   path: string;
   json: string;
-  host: string;
+  host: Host;
   callTag: string;
-  plaintext: boolean;
   metadata: string[];
   maxMsgSize: number;
 }

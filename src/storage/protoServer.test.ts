@@ -24,7 +24,7 @@ test(`add`, () => {
   const hosts = new ProtoServers(memento);
   const host: ProtoServer = {
     type: ProtoType.proto,
-    host: "localhost:12201",
+    adress: "localhost:12201",
     plaintext: true,
     services: [],
   };
@@ -39,7 +39,7 @@ test(`list`, () => {
   const hosts = new ProtoServers(memento);
   const host: ProtoServer = {
     type: ProtoType.proto,
-    host: "localhost:12201",
+    adress: "localhost:12201",
     plaintext: true,
     services: [],
   };
@@ -52,7 +52,7 @@ test(`remove`, () => {
   const hosts = new ProtoServers(memento);
   const host: ProtoServer = {
     type: ProtoType.proto,
-    host: "localhost:12201",
+    adress: "localhost:12201",
     plaintext: true,
     services: [],
   };
