@@ -1,12 +1,12 @@
 import * as vscode from "vscode";
 import { HeadersTreeView } from "./headers";
-import { ProtoFilesView } from "./protos";
+import { ProtoFilesView } from "./files";
 import { HistoryTreeView } from "./history";
 import { Message } from "../grpcurl/parser";
 import { Header } from "../storage/headers";
 import { RequestHistoryData } from "../storage/history";
 import { ProtoFile, ProtoServer } from "../grpcurl/grpcurl";
-import { ServerTreeView } from "./server";
+import { ServerTreeView } from "./servers";
 
 export class TreeViews {
   public readonly files: ProtoFilesView;

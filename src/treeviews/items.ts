@@ -188,7 +188,7 @@ export class FieldItem extends ClickerItem {
     super.tooltip = base.description;
     super.description = base.datatype;
     super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
-    if (base.innerMessageTag === undefined) {
+    if (base.innerMessageTag === undefined && !(base.datatype === `oneof`)) {
       super.collapsibleState = vscode.TreeItemCollapsibleState.None;
     }
     const icon = `field.svg`;
