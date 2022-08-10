@@ -2,6 +2,15 @@
   export let reqeustData;
   $: innerHeight = 0;
   $: height = innerHeight - 150;
+
+  $: template = `Response Code: ${reqeustData.code}
+Time: ${reqeustData.time}
+Date: ${reqeustData.date}
+Response:
+${reqeustData.response}`;
+  $: if (reqeustData.time === ``) {
+    template = ``;
+  }
 </script>
 
 <svelte:window bind:innerHeight />
@@ -15,14 +24,6 @@
     <center>
       <vscode-progress-ring></vscode-progress-ring>
     </center>
-  {:else if reqeustData.time === ``}
-    <textarea
-      name=""
-      id=""
-      cols="30"
-      rows="10"
-      style="--height: {height}px"
-      readonly></textarea>
   {:else}
     <textarea
       name=""
@@ -30,13 +31,7 @@
       cols="30"
       rows="10"
       style="--height: {height}px"
-      readonly
-    >
-Response Code: {reqeustData.code}
-Time: {reqeustData.time}
-Date: {reqeustData.date}
-Response:
-{reqeustData.response}</textarea
+      readonly>{template}</textarea
     >
   {/if}
 </div>

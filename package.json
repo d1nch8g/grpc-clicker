@@ -264,6 +264,12 @@
         }
       }
     ],
+    "keybindings": [
+      {
+        "key": "ctrl+shift+r",
+        "command": "workbench.view.extension.grpc-clicker"
+      }
+    ],
     "walkthroughs": [
       {
         "id": "grpc-clicker-walkthrow",
