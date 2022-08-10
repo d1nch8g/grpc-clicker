@@ -253,13 +253,7 @@
             "title": "Maximum message size to recieve",
             "type": "integer",
             "default": 4,
-            "markdownDescription": "The maximum encoded size of a *response* message, in bytes, that grpcurl will accept. Default is `4` mb."
-          },
-          "grpc-clicker.plaintext": {
-            "title": "Plain text",
-            "type": "boolean",
-            "default": true,
-            "markdownDescription": "Use plain-text `HTTP/2` when connecting to server (no TLS)."
+            "markdownDescription": "The maximum encoded size of a *response* message, in bytes, that grpcurl will accept. Default is `4 mb`."
           },
           "grpc-clicker.usedocker": {
             "title": "Use docker version of extension",

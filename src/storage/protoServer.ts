@@ -25,7 +25,7 @@ export class ProtoServers {
   add(host: ProtoServer): Error | undefined {
     const hosts = this.list();
     for (const savedProtoServer of hosts) {
-      if (savedProtoServer.host === host.host) {
+      if (savedProtoServer.adress === host.adress) {
         return new Error(`host you are trying to add already exists`);
       }
     }
@@ -37,7 +37,7 @@ export class ProtoServers {
   remove(hostAdress: string) {
     const hosts = this.list();
     for (let i = 0; i < hosts.length; i++) {
-      if (hosts[i].host === hostAdress) {
+      if (hosts[i].adress === hostAdress) {
         hosts.splice(i, 1);
       }
     }

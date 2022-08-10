@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { Host } from "./grpcurl/grpcurl";
 import { RequestData } from "./treeviews/items";
 
 export class WebViewFactory {
@@ -69,9 +70,11 @@ class GrpcClickerView {
           request.json = out.text;
           return;
         case "host":
-          request.host = out.text;
+          request.host = JSON.parse(out.text) as Host;
+          return;
         case "export":
-          this.exportCallback(JSON.parse(out.text) as RequestData);
+          this.exportCallback(request);
+          return;
       }
     });
 

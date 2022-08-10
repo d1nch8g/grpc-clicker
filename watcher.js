@@ -81,8 +81,10 @@ var rebuild = function () {
   }
 };
 
+let count = 1;
+rebuild();
 fs.watch("webview/src", function (event, filename) {
-  console.log("rebuild webview triggered" + event + filename);
+  console.log("rebuild webview triggered " + count);
   try {
     rebuild();
   } catch (e) {

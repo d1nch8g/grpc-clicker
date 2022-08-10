@@ -24,10 +24,12 @@ test(`add`, () => {
     history.add({
       path: "example",
       json: "",
-      host: "",
+      host: {
+        adress: ``,
+        plaintext: true,
+      },
       call: "",
       callTag: "",
-      plaintext: false,
       metadata: [],
       maxMsgSize: i,
       code: "",
@@ -49,10 +51,12 @@ test(`list`, () => {
   history.add({
     path: "example",
     json: "",
-    host: "",
+    host: {
+      adress: ``,
+      plaintext: true,
+    },
     call: "",
     callTag: "",
-    plaintext: false,
     metadata: [],
     maxMsgSize: 420,
     code: "",
@@ -70,10 +74,12 @@ test(`list`, () => {
     {
       path: "example",
       json: "",
-      host: "",
+      host: {
+        adress: ``,
+        plaintext: true,
+      },
       call: "",
       callTag: "",
-      plaintext: false,
       metadata: [],
       maxMsgSize: 420,
       code: "",
@@ -94,10 +100,12 @@ test(`clean`, () => {
   history.add({
     path: "example",
     json: "",
-    host: "",
+    host: {
+      adress: ``,
+      plaintext: true,
+    },
     callTag: "",
     call: "",
-    plaintext: false,
     metadata: [],
     maxMsgSize: 420,
     code: "",

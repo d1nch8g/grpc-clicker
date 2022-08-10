@@ -1,16 +1,15 @@
 <script>
-  export let reqName = "";
-  export let json = "";
+  export let reqeustData;
   export let edit;
   $: innerHeight = 0;
-  $: height = innerHeight - 140;
+  $: height = innerHeight - 150;
 </script>
 
 <svelte:window bind:innerHeight />
 
 <div>
   <center>
-    <vscode-option>Request: {reqName}</vscode-option>
+    <vscode-option>Request: {reqeustData.inputMessageName}</vscode-option>
   </center>
 
   <textarea
@@ -19,7 +18,7 @@
     cols="30"
     rows="10"
     style="--height: {height}px"
-    bind:value="{json}"
+    bind:value="{reqeustData.json}"
     on:input="{edit}"></textarea>
 </div>
 
@@ -28,7 +27,7 @@
     padding-bottom: 10px;
   }
   div {
-    padding-top: 2%;
+    padding-top: 10px;
     padding-left: 7%;
     padding-right: 3%;
   }

@@ -1,28 +1,22 @@
 <script>
-  export let service = "";
-  export let call = "";
-  export let protoName = "";
-  export let hosts = ["http://localhost:12201"];
+  export let reqeustData = { hosts: [{ adress: ``, plaintext: true }] };
   export let onSend;
   export let onExport;
+  export let onHost;
+  reqeustData.hosts = { hosts: [{ adress: ``, plaintext: true }] };
 </script>
 
 <div class="top-container">
   <table>
     <tr>
-      <td><vscode-badge>{protoName}</vscode-badge></td>
-      <td><vscode-badge>{service}</vscode-badge></td>
-      <td><vscode-badge>{call}</vscode-badge></td>
+      <td><vscode-badge>{reqeustData.protoName}</vscode-badge></td>
+      <td><vscode-badge>{reqeustData.service}</vscode-badge></td>
+      <td><vscode-badge>{reqeustData.call}</vscode-badge></td>
       <td class="expanded">
         <vscode-dropdown>
-          {#each hosts as host}
-            <vscode-option
-              on:click="{() => {
-                vscode.postMessage({
-                  command: 'host',
-                  text: host,
-                });
-              }}">{host}</vscode-option
+          {#each reqeustData.hosts as host}
+            <vscode-option on:click="{onHost(host)}"
+              >{host.adress}</vscode-option
             >
           {/each}
         </vscode-dropdown>

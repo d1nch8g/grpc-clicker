@@ -59,11 +59,11 @@ export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
       const elem = element as CallItem;
       const file = elem.parent.parent as ServerItem;
       const input = await this.describeMsg(
-        file.base.host,
+        file.base.adress,
         elem.base.inputMessageTag
       );
       const output = await this.describeMsg(
-        file.base.host,
+        file.base.adress,
         elem.base.outputMessageTag
       );
       items.push(new MessageItem(input, elem));
@@ -85,7 +85,7 @@ export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
       }
       if (elem.base.innerMessageTag !== undefined) {
         const inner = await this.describeMsg(
-          file.base.host,
+          file.base.adress,
           elem.base.innerMessageTag
         );
         for (const field of inner.fields) {
