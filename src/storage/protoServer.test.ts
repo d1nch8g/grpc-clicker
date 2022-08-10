@@ -26,7 +26,6 @@ test(`add`, () => {
     type: ProtoType.proto,
     host: "localhost:12201",
     plaintext: true,
-    name: "pb.v1",
     services: [],
   };
   expect(hosts.add(host)).toBeUndefined();
@@ -42,7 +41,6 @@ test(`list`, () => {
     type: ProtoType.proto,
     host: "localhost:12201",
     plaintext: true,
-    name: "pb.v1",
     services: [],
   };
   memento.values = [JSON.stringify(host)];
@@ -56,7 +54,6 @@ test(`remove`, () => {
     type: ProtoType.proto,
     host: "localhost:12201",
     plaintext: true,
-    name: "pb.v1",
     services: [],
   };
   memento.values = [JSON.stringify(host)];

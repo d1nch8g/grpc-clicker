@@ -14,8 +14,15 @@ class MockParser implements Parser {
   }
   proto(input: string): Proto {
     return {
-      name: input,
-      services: [],
+      services: [
+        {
+          type: ProtoType.service,
+          name: ``,
+          tag: ``,
+          description: input,
+          calls: [],
+        },
+      ],
       type: ProtoType.proto,
     };
   }
@@ -55,9 +62,16 @@ test(`protoFile`, async () => {
   const expectedResult: ProtoFile = {
     type: ProtoType.proto,
     path: "docs/api.proto",
-    name: "grpcurl -import-path / -proto docs/api.proto describe",
     hosts: ["localhost:12201"],
-    services: [],
+    services: [
+      {
+        type: ProtoType.service,
+        name: ``,
+        tag: ``,
+        description: "grpcurl -import-path / -proto docs/api.proto describe",
+        calls: [],
+      },
+    ],
   };
   expect(
     await grpcurl.protoFile({
@@ -73,8 +87,15 @@ test(`protoServer`, async () => {
     type: ProtoType.proto,
     host: "localhost:12201",
     plaintext: true,
-    name: "grpcurl -plaintext localhost:12201 describe",
-    services: [],
+    services: [
+      {
+        type: ProtoType.service,
+        name: ``,
+        tag: ``,
+        description: "grpcurl -plaintext localhost:12201 describe",
+        calls: [],
+      },
+    ],
   };
   expect(
     await grpcurl.protoServer({

@@ -6,13 +6,13 @@ export class Parser {
 
     let currComment = undefined;
     let proto: Proto = {
-      name: ``,
       services: [],
       type: ProtoType.proto,
     };
     let currSvc: Service = {
       name: ``,
       description: undefined,
+      tag: ``,
       calls: [],
       type: ProtoType.service,
     };
@@ -25,18 +25,16 @@ export class Parser {
         currComment += line.replace(`//`, ``).trim() + `\n`;
         continue;
       }
-      if (
-        line.trim().includes(`is a service:`) &&
-        !line.startsWith(`grpc.reflection.v1alpha`)
-      ) {
-        if (proto.name !== ``) {
-          continue;
-        }
-        proto.name = line
-          .replace(` is a service:`, ``)
-          .split(`.`)
-          .slice(0, -1)
-          .join(`.`);
+      if (line.trim().endsWith(` is a service:`)) {
+        const svcTag = line.replace(` is a service:`, ``);
+        const splittedTag = svcTag.split(`.`);
+        currSvc = {
+          name: splittedTag[splittedTag.length - 1],
+          tag: svcTag,
+          description: undefined,
+          calls: [],
+          type: ProtoType.service,
+        };
         continue;
       }
       if (line.startsWith(`service `)) {
@@ -48,12 +46,6 @@ export class Parser {
       }
       if (line === `}`) {
         proto.services.push(currSvc);
-        currSvc = {
-          name: ``,
-          description: undefined,
-          calls: [],
-          type: ProtoType.service,
-        };
         continue;
       }
       if (line.includes(`  rpc `)) {
@@ -250,13 +242,13 @@ export enum ProtoType {
 
 export interface Proto {
   type: ProtoType;
-  name: string;
   services: Service[];
 }
 
 export interface Service {
   type: ProtoType;
   name: string;
+  tag: string;
   description: string | undefined;
   calls: Call[];
 }

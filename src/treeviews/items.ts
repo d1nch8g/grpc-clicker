@@ -24,9 +24,8 @@ export class ClickerItem extends vscode.TreeItem {
 
 export class FileItem extends ClickerItem {
   constructor(public readonly base: ProtoFile) {
-    super(base.name);
+    super(base.path.replace(/^.*[\\\/]/, ""));
     super.type = ItemType.file;
-    super.description = base.path.replace(/^.*[\\\/]/, "");
     super.tooltip = base.path;
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     super.contextValue = `file`;
@@ -42,7 +41,6 @@ export class ServerItem extends ClickerItem {
   constructor(public readonly base: ProtoServer) {
     super(base.host);
     super.type = ItemType.server;
-    super.description = base.name;
     super.tooltip = `Use plaintext: ${base.plaintext}`;
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     super.contextValue = `server`;
@@ -98,6 +96,7 @@ export class ServiceItem extends ClickerItem {
   ) {
     super(base.name);
     super.type = ItemType.service;
+    super.description = base.tag;
     const icon = `svc.svg`;
     super.iconPath = {
       light: path.join(__filename, "..", "..", "images", icon),
@@ -125,10 +124,10 @@ export class CallItem extends ClickerItem {
     super.contextValue = "call";
     let request: RequestData = {
       path: ``,
-      protoName: parent.parent.base.name,
+      protoName: parent.base.tag.split(`.`).slice(0, -1).join(`.`),
       service: parent.base.name,
       call: base.name,
-      callTag: `${parent.parent.base.name}.${parent.base.name}/${base.name}`,
+      callTag: `${parent.base.tag}/${base.name}`,
       inputMessageTag: base.inputMessageTag,
       inputMessageName: base.inputMessageTag.split(`.`).pop()!,
       outputMessageName: base.outputMessageTag.split(`.`).pop()!,
@@ -227,7 +226,7 @@ export class HistoryItem extends ClickerItem {
     super(request.call);
     super.description = request.date;
     super.contextValue = "call";
-    super.tooltip = new vscode.MarkdownString(`## Request information:
+    super.tooltip = new vscode.MarkdownString(`### Request information:
 - host for execution: \`${request.host}\`
 - method used in request: \`${request.call}\`
 - response code: \`${request.code}\`
@@ -236,8 +235,8 @@ export class HistoryItem extends ClickerItem {
 
 Response:
 
-\`\`\`
-${request.response}
+\`\`\`json
+${request.response.split(`\n`).slice(0, 40).join(`\n`)}
 \`\`\`
 `);
     super.command = {

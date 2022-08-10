@@ -168,7 +168,6 @@ export function activate(context: vscode.ExtensionContext) {
           host: oldServer.host,
           plaintext: true,
           type: ProtoType.proto,
-          name: oldServer.name,
           services: [],
         });
       } else {
