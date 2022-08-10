@@ -2,13 +2,13 @@ import * as vscode from "vscode";
 import { Caller } from "./grpcurl/caller";
 import { Grpcurl, ProtoFile, ProtoServer } from "./grpcurl/grpcurl";
 import { Message, Parser, Proto, ProtoType } from "./grpcurl/parser";
+import { RequestData } from "./storage/history";
 import { Storage } from "./storage/storage";
 import {
   FileItem,
   HeaderItem,
   HostItem,
   HostsItem,
-  RequestData,
   ServerItem,
 } from "./treeviews/items";
 import { TreeViews } from "./treeviews/treeviews";

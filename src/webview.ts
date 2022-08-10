@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { Host } from "./grpcurl/grpcurl";
-import { RequestData } from "./treeviews/items";
+import { RequestData } from "./storage/history";
 
 export class WebViewFactory {
   private views: GrpcClickerView[] = [];

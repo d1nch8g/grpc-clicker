@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as path from "path";
 import { Service, Call, ProtoType, Message, Field } from "../grpcurl/parser";
 import { Host, ProtoFile, ProtoServer } from "../grpcurl/grpcurl";
-import { RequestHistoryData } from "../storage/history";
+import { RequestData } from "../storage/history";
 import { Header } from "../storage/headers";
 
 export enum ItemType {
@@ -229,7 +229,7 @@ export class HeaderItem extends ClickerItem {
 }
 
 export class HistoryItem extends ClickerItem {
-  constructor(request: RequestHistoryData) {
+  constructor(request: RequestData) {
     super(request.call);
     super.description = request.date;
     super.contextValue = "call";
@@ -260,9 +260,4 @@ ${request.response.split(`\n`).slice(0, 40).join(`\n`)}
       dark: path.join(__filename, "..", "..", "images", icon),
     };
   }
-}
-
-export interface RequestData extends RequestHistoryData {
-  protoName: string;
-  hosts: Host[];
 }

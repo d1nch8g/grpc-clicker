@@ -1,11 +1,11 @@
 import { Memento } from "vscode";
-import { Request, Response } from "../grpcurl/grpcurl";
+import { Host, Request, Response } from "../grpcurl/grpcurl";
 
 export class History {
   private readonly key: string = "grpc-clicker-history";
   constructor(private memento: Memento) {}
 
-  public list(): RequestHistoryData[] {
+  public list(): RequestData[] {
     const requestStrings = this.memento.get<string[]>(this.key, []);
     const requests = [];
     for (const reqString of requestStrings) {
@@ -14,7 +14,7 @@ export class History {
     return requests;
   }
 
-  public add(request: RequestHistoryData): RequestHistoryData[] {
+  public add(request: RequestData): RequestData[] {
     let requestStrings = this.memento.get<string[]>(this.key, []);
     if (requestStrings.length >= 100) {
       requestStrings.pop();
@@ -29,10 +29,12 @@ export class History {
   }
 }
 
-export interface RequestHistoryData extends Request, Response {
+export interface RequestData extends Request, Response {
   service: string;
   call: string;
   inputMessageTag: string;
   inputMessageName: string;
   outputMessageName: string;
+  protoName: string;
+  hosts: Host[];
 }

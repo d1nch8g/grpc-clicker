@@ -40,6 +40,8 @@ test(`add`, () => {
       inputMessageTag: "",
       inputMessageName: "",
       outputMessageName: "",
+      protoName: "",
+      hosts: [],
     });
   }
   expect(storage.values.length).toBe(100);
@@ -67,6 +69,8 @@ test(`list`, () => {
     inputMessageTag: "",
     inputMessageName: "",
     outputMessageName: "",
+    protoName: "",
+    hosts: [],
   });
 
   let resp = history.list();
@@ -90,6 +94,8 @@ test(`list`, () => {
       inputMessageTag: "",
       inputMessageName: "",
       outputMessageName: "",
+      protoName: "",
+      hosts: [],
     },
   ]);
 });
@@ -116,6 +122,8 @@ test(`clean`, () => {
     inputMessageTag: "",
     inputMessageName: "",
     outputMessageName: "",
+    protoName: "",
+    hosts: [],
   });
 
   history.clean();

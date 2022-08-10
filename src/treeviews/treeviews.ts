@@ -4,7 +4,7 @@ import { ProtoFilesView } from "./files";
 import { HistoryTreeView } from "./history";
 import { Message } from "../grpcurl/parser";
 import { Header } from "../storage/headers";
-import { RequestHistoryData } from "../storage/history";
+import { RequestData } from "../storage/history";
 import { ProtoFile, ProtoServer } from "../grpcurl/grpcurl";
 import { ServerTreeView } from "./servers";
 
@@ -15,7 +15,7 @@ export class TreeViews {
   public readonly history: HistoryTreeView;
   constructor(input: {
     headers: Header[];
-    requests: RequestHistoryData[];
+    requests: RequestData[];
     files: ProtoFile[];
     servers: ProtoServer[];
     describeFileMsg: (path: string, tag: string) => Promise<Message>;
