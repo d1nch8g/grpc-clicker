@@ -648,6 +648,7 @@ var Basics_ServiceDesc = grpc.ServiceDesc{
 type ConstructionsClient interface {
 	EnumCall(ctx context.Context, in *EnumMes, opts ...grpc.CallOption) (*EnumMes, error)
 	AnyCall(ctx context.Context, in *anypb.Any, opts ...grpc.CallOption) (*anypb.Any, error)
+	// this call causes error
 	EmptyCall(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	ListCall(ctx context.Context, in *ListMes, opts ...grpc.CallOption) (*ListMes, error)
 	MapCall(ctx context.Context, in *MapMes, opts ...grpc.CallOption) (*MapMes, error)
@@ -742,6 +743,7 @@ func (c *constructionsClient) NestedCall(ctx context.Context, in *NestedMes, opt
 type ConstructionsServer interface {
 	EnumCall(context.Context, *EnumMes) (*EnumMes, error)
 	AnyCall(context.Context, *anypb.Any) (*anypb.Any, error)
+	// this call causes error
 	EmptyCall(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	ListCall(context.Context, *ListMes) (*ListMes, error)
 	MapCall(context.Context, *MapMes) (*MapMes, error)
@@ -1074,7 +1076,7 @@ func (c *streamsClient) BiDirectioalStream(ctx context.Context, opts ...grpc.Cal
 
 type Streams_BiDirectioalStreamClient interface {
 	Send(*StringMes) error
-	Recv() (*StringMes, error)
+	Recv() (*TestMessage, error)
 	grpc.ClientStream
 }
 
@@ -1086,8 +1088,8 @@ func (x *streamsBiDirectioalStreamClient) Send(m *StringMes) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *streamsBiDirectioalStreamClient) Recv() (*StringMes, error) {
-	m := new(StringMes)
+func (x *streamsBiDirectioalStreamClient) Recv() (*TestMessage, error) {
+	m := new(TestMessage)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -1182,7 +1184,7 @@ func _Streams_BiDirectioalStream_Handler(srv interface{}, stream grpc.ServerStre
 }
 
 type Streams_BiDirectioalStreamServer interface {
-	Send(*StringMes) error
+	Send(*TestMessage) error
 	Recv() (*StringMes, error)
 	grpc.ServerStream
 }
@@ -1191,7 +1193,7 @@ type streamsBiDirectioalStreamServer struct {
 	grpc.ServerStream
 }
 
-func (x *streamsBiDirectioalStreamServer) Send(m *StringMes) error {
+func (x *streamsBiDirectioalStreamServer) Send(m *TestMessage) error {
 	return x.ServerStream.SendMsg(m)
 }
 
