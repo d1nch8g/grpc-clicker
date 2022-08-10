@@ -19,7 +19,11 @@ export class TreeViews {
     files: ProtoFile[];
     servers: ProtoServer[];
     describeFileMsg: (path: string, tag: string) => Promise<Message>;
-    describeServerMsg: (path: string, tag: string) => Promise<Message>;
+    describeServerMsg: (
+      path: string,
+      plaintext: boolean,
+      tag: string
+    ) => Promise<Message>;
   }) {
     this.files = new ProtoFilesView(input.files, input.describeFileMsg);
     this.servers = new ServerTreeView(input.servers, input.describeServerMsg);

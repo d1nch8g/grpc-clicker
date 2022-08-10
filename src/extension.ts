@@ -40,14 +40,16 @@ export function activate(context: vscode.ExtensionContext) {
       }
       return msg as Message;
     },
-    describeServerMsg: async (host: string, tag: string): Promise<Message> => {
+    describeServerMsg: async (
+      host: string,
+      plaintext: boolean,
+      tag: string
+    ): Promise<Message> => {
       const msg = await grpcurl.message({
         source: host,
         server: true,
         tag: tag,
-        plaintext: vscode.workspace
-          .getConfiguration(`grpc-clicker`)
-          .get(`plaintext`, true),
+        plaintext: plaintext,
       });
       if (typeof msg === `string`) {
         vscode.window.showErrorMessage(msg);

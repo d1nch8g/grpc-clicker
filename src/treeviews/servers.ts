@@ -14,7 +14,11 @@ import {
 export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
   constructor(
     private servers: ProtoServer[],
-    private describeMsg: (host: string, tag: string) => Promise<Message>
+    private describeMsg: (
+      path: string,
+      plaintext: boolean,
+      tag: string
+    ) => Promise<Message>
   ) {
     this.onChange = new vscode.EventEmitter<ClickerItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
@@ -57,13 +61,15 @@ export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
     }
     if (element.type === ItemType.call) {
       const elem = element as CallItem;
-      const file = elem.parent.parent as ServerItem;
+      const server = elem.parent.parent as ServerItem;
       const input = await this.describeMsg(
-        file.base.adress,
+        server.base.adress,
+        server.base.plaintext,
         elem.base.inputMessageTag
       );
       const output = await this.describeMsg(
-        file.base.adress,
+        server.base.adress,
+        server.base.plaintext,
         elem.base.outputMessageTag
       );
       items.push(new MessageItem(input, elem));
@@ -77,7 +83,7 @@ export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
     }
     if (element.type === ItemType.field) {
       const elem = element as FieldItem;
-      const file = elem.parent.parent.parent.parent as ServerItem;
+      const server = elem.parent.parent.parent.parent as ServerItem;
       if (elem.base.datatype === `oneof`) {
         for (const field of elem.base.fields!) {
           items.push(new FieldItem(field, elem.parent));
@@ -85,7 +91,8 @@ export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
       }
       if (elem.base.innerMessageTag !== undefined) {
         const inner = await this.describeMsg(
-          file.base.adress,
+          server.base.adress,
+          server.base.plaintext,
           elem.base.innerMessageTag
         );
         for (const field of inner.fields) {
