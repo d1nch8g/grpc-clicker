@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Service, Call, ProtoType, Message, Field } from "../grpcurl/parser";
+import { Service, Call, Message, Field } from "../grpcurl/parser";
 import { Host, ProtoFile, ProtoServer } from "../grpcurl/grpcurl";
 import { RequestData } from "../storage/history";
 import { Header } from "../storage/headers";

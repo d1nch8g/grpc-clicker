@@ -1,7 +1,6 @@
 import { performance } from "perf_hooks";
-import { Caller, RequestForm } from "./caller";
+import { Caller } from "./caller";
 import { Message, Parser, Proto, ProtoType } from "./parser";
-import * as util from "util";
 
 export class Grpcurl {
   constructor(
