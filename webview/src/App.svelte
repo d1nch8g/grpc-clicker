@@ -3,116 +3,57 @@
   import Request from "./Request.svelte";
   import Response from "./Response.svelte";
 
-  $: path = ``;
-  $: protoName = ``;
-  $: service = ``;
-  $: call = ``;
-  $: callTag = ``;
-  $: inputMessageTag = ``;
-  $: inputMessageName = ``;
-  $: outputMessageName = ``;
-  $: plaintext = false;
-  $: host = ``;
-  $: json = ``;
-  $: maxMsgSize = 0;
-  $: code = ``;
-  $: response = ``;
-  $: time = ``;
-  $: date = ``;
-  $: metadata = [];
-  $: hosts = [];
+  $: reqeustData = {};
 
   window.addEventListener("message", (event) => {
-    console.log(`${event.data}`);
-    const obj = JSON.parse(`${event.data}`);
-    path = obj.path;
-    protoName = obj.protoName;
-    service = obj.service;
-    call = obj.call;
-    callTag = obj.callTag;
-    inputMessageTag = obj.inputMessageTag;
-    inputMessageName = obj.inputMessageName;
-    outputMessageName = obj.outputMessageName;
-    plaintext = obj.plaintext;
-    host = obj.host;
-    json = obj.json;
-    maxMsgSize = obj.maxMsgSize;
-    code = obj.code;
-    response = obj.response;
-    time = obj.time;
-    date = obj.date;
-    metadata = obj.metadata;
-    hosts = obj.hosts;
-    hosts.splice(hosts.indexOf(obj.host), 1);
-    hosts = [obj.host].concat(hosts);
+    console.log(event.data);
+    reqeustData = JSON.parse(`${event.data}`);
   });
 
   function onSend() {
-    response = "waiter";
+    reqeustData.response = "waiter";
     vscode.postMessage({
       command: "send",
-      text: json,
+      text: reqeustData.json,
     });
   }
 
   function onEdit() {
     vscode.postMessage({
       command: "edit",
-      text: json,
+      text: reqeustData.json,
     });
   }
 
   function onExport() {
-    console.log(`making attemp to export`);
-    const request = JSON.stringify({
-      path: path,
-      protoName: protoName,
-      service: service,
-      call: call,
-      callTag: callTag,
-      inputMessageTag: inputMessageTag,
-      inputMessageName: inputMessageName,
-      outputMessageName: outputMessageName,
-      plaintext: plaintext,
-      host: host,
-      json: json,
-      maxMsgSize: maxMsgSize,
-      code: code,
-      response: response,
-      time: time,
-      date: date,
-      metadata: metadata,
-      hosts: hosts,
-    });
     vscode.postMessage({
       command: "export",
-      text: request,
+      text: JSON.stringify(reqeustData),
+    });
+  }
+
+  function onHost(host) {
+    vscode.postMessage({
+      command: "host",
+      text: JSON.stringify(host),
     });
   }
 </script>
 
 <TopPanel
-  service="{service}"
-  protoName="{protoName}"
-  call="{call}"
-  hosts="{hosts}"
+  reqeustData="{reqeustData}"
   onSend="{onSend}"
   onExport="{onExport}"
+  onHost="{onHost}"
 />
 
 <table>
   <td>
-    <Request reqName="{inputMessageName}" edit="{onEdit}" bind:json />
+    <Request bind:reqeustData edit="{onEdit}" />
   </td>
 
   <td>
-    <Response
-      respName="{outputMessageName}"
-      code="{code}"
-      time="{time}"
-      date="{date}"
-      bind:response
-    />
+    <Response bind:reqeustData />
   </td>
 </table>
 

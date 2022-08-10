@@ -1,9 +1,5 @@
 <script>
-  export let response = ``;
-  export let respName = ``;
-  export let code = ``;
-  export let time = ``;
-  export let date = ``;
+  export let reqeustData;
   $: innerHeight = 0;
   $: height = innerHeight - 140;
 </script>
@@ -12,14 +8,14 @@
 
 <div>
   <center>
-    <vscode-option>Response: {respName}</vscode-option>
+    <vscode-option>Response: {reqeustData.outputMessageName}</vscode-option>
   </center>
-  {#if response === "waiter"}
+  {#if reqeustData.response === "waiter"}
     <div class="top-space" style="--height: {height / 2.2}px"></div>
     <center>
       <vscode-progress-ring></vscode-progress-ring>
     </center>
-  {:else if time === ``}
+  {:else if reqeustData.time === ``}
     <textarea
       name=""
       id=""
@@ -36,12 +32,12 @@
       style="--height: {height}px"
       readonly
     >
-Response
-Code: {code}
-Time: {time}
-Date: {date}
+Response Code: {reqeustData.code}
+Time: {reqeustData.time}
+Date: {reqeustData.date}
 Response:
-{response}</textarea>
+{reqeustData.response}</textarea
+    >
   {/if}
 </div>
 
