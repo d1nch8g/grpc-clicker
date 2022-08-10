@@ -14,7 +14,6 @@
     reqeustData.response = "waiter";
     vscode.postMessage({
       command: "send",
-      text: reqeustData.json,
     });
   }
 
@@ -26,9 +25,9 @@
   }
 
   function onExport() {
+    console.log(`export triggered`);
     vscode.postMessage({
       command: "export",
-      text: JSON.stringify(reqeustData),
     });
   }
 

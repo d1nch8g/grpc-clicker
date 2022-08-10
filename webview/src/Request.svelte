@@ -2,7 +2,7 @@
   export let reqeustData;
   export let edit;
   $: innerHeight = 0;
-  $: height = innerHeight - 140;
+  $: height = innerHeight - 150;
 </script>
 
 <svelte:window bind:innerHeight />
@@ -27,7 +27,7 @@
     padding-bottom: 10px;
   }
   div {
-    padding-top: 2%;
+    padding-top: 10px;
     padding-left: 7%;
     padding-right: 3%;
   }
