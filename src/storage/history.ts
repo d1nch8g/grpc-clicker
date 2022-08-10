@@ -1,5 +1,5 @@
 import { Memento } from "vscode";
-import { Host, Request, Response } from "../grpcurl/grpcurl";
+import { RequestData } from "../webview";
 
 export class History {
   private readonly key: string = "grpc-clicker-history";
@@ -27,14 +27,4 @@ export class History {
   public clean() {
     this.memento.update(this.key, undefined);
   }
-}
-
-export interface RequestData extends Request, Response {
-  service: string;
-  call: string;
-  inputMessageTag: string;
-  inputMessageName: string;
-  outputMessageName: string;
-  protoName: string;
-  hosts: Host[];
 }

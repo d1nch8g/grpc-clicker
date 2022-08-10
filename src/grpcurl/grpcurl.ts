@@ -33,7 +33,7 @@ export class Grpcurl {
   }
 
   async protoServer(input: ProtoServerInput): Promise<ProtoServer | string> {
-    const command = `grpcurl |SRC| describe`;
+    const command = `grpcurl -max-time 0.5 |SRC| describe`;
     const call = this.caller.form({
       call: command,
       source: input.host,
@@ -83,7 +83,10 @@ export class Grpcurl {
   formCall(input: Request): string {
     const command = `grpcurl %s %s -d %s |SRC| %s`;
     const formedJson = this.jsonPreprocess(input.json);
-    const maxMsgSize = `-max-msg-sz ${input.maxMsgSize * 1048576}`;
+    let maxMsgSize = ``;
+    if (input.maxMsgSize !== 4) {
+      maxMsgSize = `-max-msg-sz ${input.maxMsgSize * 1048576}`;
+    }
     let meta = ``;
     for (const metafield of input.metadata) {
       meta = meta + this.headerPreprocess(metafield);
