@@ -6,8 +6,6 @@
   requestData.hosts = { hosts: [{ adress: ``, plaintext: true }] };
 </script>
 
-
-
 <div class="top-container">
   <table>
     <tr>
@@ -37,13 +35,16 @@
   }
   table {
     margin: 4px;
-    border: 0.2px solid;
+    border: 2px;
     border-collapse: collapse;
+    border: 1px solid;
+    border-color: var(--vscode-input-border);
   }
   td {
     margin: 6px;
     padding: 6px;
-    border: 0.2px solid;
+    border: 1px solid;
+    border-color: var(--vscode-input-border);
     border-collapse: collapse;
   }
   vscode-dropdown {

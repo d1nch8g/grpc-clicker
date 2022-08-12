@@ -2,7 +2,19 @@
   export let requestData;
   export let edit;
   $: innerHeight = 0;
-  $: height = innerHeight - 150;
+
+  $: bordercolor = `#FF5555`;
+
+  function validate(input) {
+    try {
+      JSON.parse(input);
+      console.log(`ok`);
+    } catch {
+      console.log(`nok`);
+    }
+  }
+
+  $: validate(requestData.json);
 </script>
 
 <svelte:window bind:innerHeight />
@@ -18,7 +30,7 @@
     id=""
     cols="30"
     rows="10"
-    style="--height: {height}px"
+    style="--height: {innerHeight - 150}px"
     bind:value="{requestData.json}"
     on:input="{edit}"></textarea>
 </div>

@@ -81,7 +81,7 @@ export class Grpcurl {
   }
 
   formCall(input: Request): string {
-    const command = `grpcurl %s %s -d %s |SRC| %s`;
+    const command = `grpcurl -emit-defaults %s %s -d %s |SRC| %s`;
     const formedJson = this.jsonPreprocess(input.json);
     let maxMsgSize = ``;
     if (input.maxMsgSize !== 4) {

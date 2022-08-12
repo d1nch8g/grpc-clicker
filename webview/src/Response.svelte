@@ -3,11 +3,7 @@
   $: innerHeight = 0;
   $: height = innerHeight - 150;
 
-  $: template = `Response Code: ${requestData.code}
-Time: ${requestData.time}
-Date: ${requestData.date}
-Response:
-${requestData.response}`;
+  $: template = `Response Code: ${requestData.code}\nTime: ${requestData.time}\nDate: ${requestData.date}\nResponse:\n${requestData.response}`;
   $: if (requestData.time === ``) {
     template = ``;
   }
