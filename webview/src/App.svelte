@@ -1,7 +1,7 @@
 <script>
   import TopPanel from "./TopPanel.svelte";
-  import Request from "./Request.svelte";
-  import Response from "./Response.svelte";
+  import Request from "./left/Request.svelte";
+  import Response from "./right/Response.svelte";
 
   $: requestData = {
     path: ``,

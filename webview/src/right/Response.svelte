@@ -1,5 +1,5 @@
 <script>
-  import ResponseInfo from "./ResponseInfo.svelte";
+  import ResponseInfo from ".../ResponseInfo.svelte";
 
   export let requestData;
   $: innerHeight = 0;

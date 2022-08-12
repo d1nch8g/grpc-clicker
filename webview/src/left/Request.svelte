@@ -1,5 +1,5 @@
 <script>
-  import RequestInfo from "./RequestInfo.svelte";
+  import RequestInfo from ".../RequestInfo.svelte";
 
   export let requestData;
   export let edit;
