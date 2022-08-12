@@ -42,6 +42,9 @@ test(`add`, () => {
       outputMessageName: "",
       protoName: "",
       hosts: [],
+      expectedResponse: "",
+      expectedCode: "",
+      expectedTime: "",
     });
   }
   expect(storage.values.length).toBe(100);
@@ -71,6 +74,9 @@ test(`list`, () => {
     outputMessageName: "",
     protoName: "",
     hosts: [],
+    expectedResponse: "",
+    expectedCode: "",
+    expectedTime: "",
   });
 
   let resp = history.list();
@@ -96,6 +102,9 @@ test(`list`, () => {
       outputMessageName: "",
       protoName: "",
       hosts: [],
+      expectedResponse: "",
+      expectedCode: "",
+      expectedTime: "",
     },
   ]);
 });
@@ -124,6 +133,9 @@ test(`clean`, () => {
     outputMessageName: "",
     protoName: "",
     hosts: [],
+    expectedResponse: "",
+    expectedCode: "",
+    expectedTime: "",
   });
 
   history.clean();

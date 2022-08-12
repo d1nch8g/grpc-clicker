@@ -1,5 +1,5 @@
 <script>
-  export let reqeustData;
+  export let requestData;
   export let edit;
   $: innerHeight = 0;
   $: height = innerHeight - 150;
@@ -9,7 +9,7 @@
 
 <div>
   <center>
-    <vscode-option>Request: {reqeustData.inputMessageName}</vscode-option>
+    <vscode-option>Request: {requestData.inputMessageName}</vscode-option>
   </center>
 
   <textarea
@@ -18,7 +18,7 @@
     cols="30"
     rows="10"
     style="--height: {height}px"
-    bind:value="{reqeustData.json}"
+    bind:value="{requestData.json}"
     on:input="{edit}"></textarea>
 </div>
 

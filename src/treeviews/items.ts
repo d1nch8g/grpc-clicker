@@ -148,6 +148,9 @@ export class CallItem extends ClickerItem {
       date: "",
       metadata: [],
       hosts: [],
+      expectedResponse: "",
+      expectedCode: "",
+      expectedTime: "",
     };
     if (parent.parent.type === ItemType.file) {
       const file = parent.parent as FileItem;

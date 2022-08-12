@@ -135,4 +135,7 @@ export interface RequestData extends Request, Response {
   outputMessageName: string;
   protoName: string;
   hosts: Host[];
+  expectedResponse: string;
+  expectedCode: string;
+  expectedTime: string;
 }

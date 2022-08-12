@@ -1,14 +1,14 @@
 <script>
-  export let reqeustData;
+  export let requestData;
   $: innerHeight = 0;
   $: height = innerHeight - 150;
 
-  $: template = `Response Code: ${reqeustData.code}
-Time: ${reqeustData.time}
-Date: ${reqeustData.date}
+  $: template = `Response Code: ${requestData.code}
+Time: ${requestData.time}
+Date: ${requestData.date}
 Response:
-${reqeustData.response}`;
-  $: if (reqeustData.time === ``) {
+${requestData.response}`;
+  $: if (requestData.time === ``) {
     template = ``;
   }
 </script>
@@ -17,9 +17,9 @@ ${reqeustData.response}`;
 
 <div>
   <center>
-    <vscode-option>Response: {reqeustData.outputMessageName}</vscode-option>
+    <vscode-option>Response: {requestData.outputMessageName}</vscode-option>
   </center>
-  {#if reqeustData.response === "waiter"}
+  {#if requestData.response === "waiter"}
     <div class="top-space" style="--height: {height / 2.2}px"></div>
     <center>
       <vscode-progress-ring></vscode-progress-ring>
