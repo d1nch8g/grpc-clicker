@@ -1,9 +1,9 @@
 <script>
   import TopPanel from "./TopPanel.svelte";
-  import Request from "./left/Request.svelte";
-  import Response from "./right/Response.svelte";
+  import Request from "./Request.svelte";
+  import Response from "./Response.svelte";
 
-  $: requestData = {
+  $: data = {
     path: ``,
     protoName: ``,
     service: ``,
@@ -30,11 +30,11 @@
   };
 
   window.addEventListener("message", (event) => {
-    requestData = JSON.parse(`${event.data}`);
+    data = JSON.parse(`${event.data}`);
   });
 
   function onSend() {
-    requestData.response = "waiter";
+    data.response = "waiter";
     vscode.postMessage({
       command: "send",
     });
@@ -43,7 +43,7 @@
   function onEditRequest() {
     vscode.postMessage({
       command: "edit",
-      text: requestData.json,
+      text: data.json,
     });
   }
 
@@ -62,7 +62,7 @@
 </script>
 
 <TopPanel
-  requestData="{requestData}"
+  data="{data}"
   onSend="{onSend}"
   onExport="{onExport}"
   onHost="{onHost}"
@@ -70,10 +70,10 @@
 
 <table>
   <td>
-    <Request bind:requestData edit="{onEditRequest}" />
+    <Request bind:data edit="{onEditRequest}" />
   </td>
   <td>
-    <Response bind:requestData />
+    <Response bind:data />
   </td>
 </table>
 

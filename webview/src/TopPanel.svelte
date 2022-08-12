@@ -1,20 +1,20 @@
 <script>
-  export let requestData = { hosts: [{ adress: ``, plaintext: true }] };
+  export let data = { hosts: [{ adress: ``, plaintext: true }] };
   export let onSend;
   export let onExport;
   export let onHost;
-  requestData.hosts = { hosts: [{ adress: ``, plaintext: true }] };
+  data.hosts = { hosts: [{ adress: ``, plaintext: true }] };
 </script>
 
 <div class="top-container">
   <table>
     <tr>
-      <td><vscode-badge>{requestData.protoName}</vscode-badge></td>
-      <td><vscode-badge>{requestData.service}</vscode-badge></td>
-      <td><vscode-badge>{requestData.call}</vscode-badge></td>
+      <td><vscode-badge>{data.protoName}</vscode-badge></td>
+      <td><vscode-badge>{data.service}</vscode-badge></td>
+      <td><vscode-badge>{data.call}</vscode-badge></td>
       <td class="expanded">
         <vscode-dropdown>
-          {#each requestData.hosts as host}
+          {#each data.hosts as host}
             <vscode-option on:click="{onHost(host)}"
               >{host.adress}</vscode-option
             >

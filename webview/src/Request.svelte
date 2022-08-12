@@ -1,21 +1,17 @@
 <script>
-  import ResponseInfo from ".../ResponseInfo.svelte";
+  import RequestInfo from "./RequestInfo.svelte";
 
-  export let requestData;
+  export let data;
+  export let edit;
   $: innerHeight = 0;
-
-  $: if (requestData.response === ``) {
-    template = ``;
-  }
 </script>
 
 <svelte:window bind:innerHeight />
 
 <div>
   <vscode-panels>
-    <vscode-panel-tab id="tab-1">OUTPUT</vscode-panel-tab>
+    <vscode-panel-tab id="tab-1">JSON INPUT</vscode-panel-tab>
     <vscode-panel-tab id="tab-2">INFORMATION</vscode-panel-tab>
-    <vscode-panel-tab id="tab-3">TESTING</vscode-panel-tab>
     <vscode-panel-view id="view-1">
       <textarea
         class="code"
@@ -24,13 +20,12 @@
         cols="30"
         rows="10"
         style="--height: {innerHeight - 150}px"
-        bind:value="{requestData.response}"
-        readonly></textarea>
+        bind:value="{data.json}"
+        on:input="{edit}"></textarea>
     </vscode-panel-view>
-    <vscode-panel-view id="view-2"
-      ><ResponseInfo data="{requestData}" /></vscode-panel-view
-    >
-    <vscode-panel-view id="view-3">INFORMATION CONTENT</vscode-panel-view>
+    <vscode-panel-view id="view-2">
+      <RequestInfo bind:data />
+    </vscode-panel-view>
   </vscode-panels>
 </div>
 
