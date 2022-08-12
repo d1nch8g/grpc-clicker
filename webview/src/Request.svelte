@@ -2,47 +2,35 @@
   export let requestData;
   export let edit;
   $: innerHeight = 0;
-
-  $: bordercolor = `#FF5555`;
-
-  function validate(input) {
-    try {
-      JSON.parse(input);
-      console.log(`ok`);
-    } catch {
-      console.log(`nok`);
-    }
-  }
-
-  $: validate(requestData.json);
 </script>
 
 <svelte:window bind:innerHeight />
 
 <div>
-  <center>
-    <vscode-option>Request: {requestData.inputMessageName}</vscode-option>
-  </center>
-
-  <textarea
-    class="code"
-    name=""
-    id=""
-    cols="30"
-    rows="10"
-    style="--height: {innerHeight - 150}px"
-    bind:value="{requestData.json}"
-    on:input="{edit}"></textarea>
+  <vscode-panels>
+    <vscode-panel-tab id="tab-1">JSON INPUT</vscode-panel-tab>
+    <vscode-panel-tab id="tab-2">REQUEST HEADERS</vscode-panel-tab>
+    <vscode-panel-tab id="tab-3">INFORMATION</vscode-panel-tab>
+    <vscode-panel-view id="view-1">
+      <textarea
+        class="code"
+        name=""
+        id=""
+        cols="30"
+        rows="10"
+        style="--height: {innerHeight - 150}px"
+        bind:value="{requestData.json}"
+        on:input="{edit}"></textarea>
+    </vscode-panel-view>
+    <vscode-panel-view id="view-2">Output content.</vscode-panel-view>
+    <vscode-panel-view id="view-3">Debug content.</vscode-panel-view>
+  </vscode-panels>
 </div>
 
 <style>
-  center {
-    padding-bottom: 10px;
-  }
   div {
-    padding-top: 10px;
-    padding-left: 7%;
-    padding-right: 3%;
+    padding-left: 3%;
+    padding-right: 1%;
   }
   textarea {
     height: var(--height);

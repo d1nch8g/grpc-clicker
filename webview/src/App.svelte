@@ -1,7 +1,6 @@
 <script>
   import TopPanel from "./TopPanel.svelte";
   import Request from "./Request.svelte";
-  import Testing from "./Testing.svelte";
   import Response from "./Response.svelte";
 
   $: requestData = {};
@@ -36,16 +35,6 @@
       text: JSON.stringify(host),
     });
   }
-
-  function onEditExpectedResponse() {}
-
-  function onEditExpectedTime() {}
-
-  function onEditExpectedCode() {}
-
-  function onTestSwitch() {
-    testOn = !testOn;
-  }
 </script>
 
 <TopPanel
@@ -53,7 +42,6 @@
   onSend="{onSend}"
   onExport="{onExport}"
   onHost="{onHost}"
-  onTest="{onTestSwitch}"
 />
 
 <table>

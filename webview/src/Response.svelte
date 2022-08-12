@@ -12,25 +12,31 @@
 <svelte:window bind:innerHeight />
 
 <div>
-  <center>
-    <vscode-option>Response: {requestData.outputMessageName}</vscode-option>
-  </center>
-  {#if requestData.response === "waiter"}
-    <div class="top-space" style="--height: {height / 2.2}px"></div>
-    <center>
-      <vscode-progress-ring></vscode-progress-ring>
-    </center>
-  {:else}
-    <textarea
-      class="code"
-      name=""
-      id=""
-      cols="30"
-      rows="10"
-      style="--height: {height}px"
-      readonly>{template}</textarea
-    >
-  {/if}
+  <vscode-panels>
+    <vscode-panel-tab id="tab-1">RESPONSE</vscode-panel-tab>
+    <vscode-panel-tab id="tab-2">TESTING</vscode-panel-tab>
+    <vscode-panel-tab id="tab-3">INFORMATION</vscode-panel-tab>
+    <vscode-panel-view id="view-1">
+      {#if requestData.response === "waiter"}
+        <div class="top-space" style="--height: {height / 2.2}px"></div>
+        <center>
+          <vscode-progress-ring></vscode-progress-ring>
+        </center>
+      {:else}
+        <textarea
+          class="code"
+          name=""
+          id=""
+          cols="30"
+          rows="10"
+          style="--height: {height}px"
+          readonly>{template}</textarea
+        >
+      {/if}
+    </vscode-panel-view>
+    <vscode-panel-view id="view-2">Output content.</vscode-panel-view>
+    <vscode-panel-view id="view-3">Debug content.</vscode-panel-view>
+  </vscode-panels>
 </div>
 
 <style>
@@ -38,9 +44,8 @@
     padding-bottom: 10px;
   }
   div {
-    padding-top: 10px;
-    padding-left: 3%;
-    padding-right: 7%;
+    padding-left: 1%;
+    padding-right: 3%;
   }
   .top-space {
     height: var(--height);
