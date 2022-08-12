@@ -26,6 +26,7 @@ ${requestData.response}`;
     </center>
   {:else}
     <textarea
+      class="code"
       name=""
       id=""
       cols="30"
@@ -45,12 +46,22 @@ ${requestData.response}`;
     padding-left: 3%;
     padding-right: 7%;
   }
-  textarea {
-    resize: none;
-    height: var(--height);
-    padding: 8px;
-  }
   .top-space {
     height: var(--height);
+  }
+  textarea {
+    height: var(--height);
+    resize: none;
+    display: block;
+    width: 100%;
+    color: var(--vscode-input-foreground);
+    outline-color: var(--vscode-input-border);
+    background-color: var(--vscode-input-background);
+    padding: 6px;
+    font-family: var(--vscode-editor-font-family);
+    font-size: var(--vscode-editor-font-size);
+  }
+  textarea:focus {
+    outline-color: var(--vscode-focusBorder) !important;
   }
 </style>

@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
   export let requestData;
   export let editResponse;
   export let editCode;
@@ -38,4 +38,4 @@
 </div>
 
 <style>
-</style>
+</style> -->
