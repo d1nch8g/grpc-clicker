@@ -1,10 +1,8 @@
 <script>
   export let requestData;
   $: innerHeight = 0;
-  $: height = innerHeight - 150;
 
-  $: template = `Response Code: ${requestData.code}\nTime: ${requestData.time}\nDate: ${requestData.date}\nResponse:\n${requestData.response}`;
-  $: if (requestData.time === ``) {
+  $: if (requestData.response === ``) {
     template = ``;
   }
 </script>
@@ -13,42 +11,29 @@
 
 <div>
   <vscode-panels>
-    <vscode-panel-tab id="tab-1">RESPONSE</vscode-panel-tab>
-    <vscode-panel-tab id="tab-2">TESTING</vscode-panel-tab>
-    <vscode-panel-tab id="tab-3">INFORMATION</vscode-panel-tab>
+    <vscode-panel-tab id="tab-1">JSON OUTPUT</vscode-panel-tab>
+    <vscode-panel-tab id="tab-2">INFORMATION</vscode-panel-tab>
+    <vscode-panel-tab id="tab-3">TESTING</vscode-panel-tab>
     <vscode-panel-view id="view-1">
-      {#if requestData.response === "waiter"}
-        <div class="top-space" style="--height: {height / 2.2}px"></div>
-        <center>
-          <vscode-progress-ring></vscode-progress-ring>
-        </center>
-      {:else}
-        <textarea
-          class="code"
-          name=""
-          id=""
-          cols="30"
-          rows="10"
-          style="--height: {height}px"
-          readonly>{template}</textarea
-        >
-      {/if}
+      <textarea
+        class="code"
+        name=""
+        id=""
+        cols="30"
+        rows="10"
+        style="--height: {innerHeight - 150}px"
+        bind:value="{requestData.response}"
+        readonly></textarea>
     </vscode-panel-view>
-    <vscode-panel-view id="view-2">Output content.</vscode-panel-view>
-    <vscode-panel-view id="view-3">Debug content.</vscode-panel-view>
+    <vscode-panel-view id="view-2">HEADERS CONTENT</vscode-panel-view>
+    <vscode-panel-view id="view-3">INFORMATION CONTENT</vscode-panel-view>
   </vscode-panels>
 </div>
 
 <style>
-  center {
-    padding-bottom: 10px;
-  }
   div {
-    padding-left: 1%;
-    padding-right: 3%;
-  }
-  .top-space {
-    height: var(--height);
+    padding-left: 3%;
+    padding-right: 1%;
   }
   textarea {
     height: var(--height);

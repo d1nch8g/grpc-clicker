@@ -9,8 +9,8 @@
 <div>
   <vscode-panels>
     <vscode-panel-tab id="tab-1">JSON INPUT</vscode-panel-tab>
-    <vscode-panel-tab id="tab-2">REQUEST HEADERS</vscode-panel-tab>
-    <vscode-panel-tab id="tab-3">INFORMATION</vscode-panel-tab>
+    <vscode-panel-tab id="tab-2">INFORMATION</vscode-panel-tab>
+    <vscode-panel-tab id="tab-3">REQUEST HEADERS</vscode-panel-tab>
     <vscode-panel-view id="view-1">
       <textarea
         class="code"
@@ -22,8 +22,8 @@
         bind:value="{requestData.json}"
         on:input="{edit}"></textarea>
     </vscode-panel-view>
-    <vscode-panel-view id="view-2">Output content.</vscode-panel-view>
-    <vscode-panel-view id="view-3">Debug content.</vscode-panel-view>
+    <vscode-panel-view id="view-2">HEADERS CONTENT</vscode-panel-view>
+    <vscode-panel-view id="view-3">INFORMATION CONTENT</vscode-panel-view>
   </vscode-panels>
 </div>
 
