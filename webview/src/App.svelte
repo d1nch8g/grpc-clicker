@@ -3,7 +3,31 @@
   import Request from "./Request.svelte";
   import Response from "./Response.svelte";
 
-  $: requestData = {};
+  $: requestData = {
+    path: ``,
+    protoName: ``,
+    service: ``,
+    call: ``,
+    callTag: ``,
+    inputMessageTag: ``,
+    inputMessageName: ``,
+    outputMessageName: ``,
+    host: {
+      adress: ``,
+      plaintext: false,
+    },
+    json: "",
+    maxMsgSize: 0,
+    code: "",
+    response: "",
+    time: "",
+    date: "",
+    metadata: [],
+    hosts: [],
+    expectedResponse: "",
+    expectedCode: "",
+    expectedTime: "",
+  };
 
   window.addEventListener("message", (event) => {
     requestData = JSON.parse(`${event.data}`);

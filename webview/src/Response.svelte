@@ -1,4 +1,6 @@
 <script>
+  import ResponseInfo from "./ResponseInfo.svelte";
+
   export let requestData;
   $: innerHeight = 0;
 
@@ -11,7 +13,7 @@
 
 <div>
   <vscode-panels>
-    <vscode-panel-tab id="tab-1">JSON OUTPUT</vscode-panel-tab>
+    <vscode-panel-tab id="tab-1">OUTPUT</vscode-panel-tab>
     <vscode-panel-tab id="tab-2">INFORMATION</vscode-panel-tab>
     <vscode-panel-tab id="tab-3">TESTING</vscode-panel-tab>
     <vscode-panel-view id="view-1">
@@ -25,7 +27,9 @@
         bind:value="{requestData.response}"
         readonly></textarea>
     </vscode-panel-view>
-    <vscode-panel-view id="view-2">HEADERS CONTENT</vscode-panel-view>
+    <vscode-panel-view id="view-2"
+      ><ResponseInfo data="{requestData}" /></vscode-panel-view
+    >
     <vscode-panel-view id="view-3">INFORMATION CONTENT</vscode-panel-view>
   </vscode-panels>
 </div>
