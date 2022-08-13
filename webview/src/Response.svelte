@@ -1,38 +1,18 @@
 <script>
   export let data;
   $: innerHeight = 0;
-
-  $: if (data.response === ``) {
-    template = ``;
-  }
 </script>
 
 <svelte:window bind:innerHeight />
 
 <table>
   <tr>
-    <vscode-data-grid aria-label="Basic">
-      <vscode-data-grid-row>
-        <vscode-data-grid-cell grid-column="1">
-          {#if data.code !== ``}
-            <div>{data.code}</div>
-          {:else}
-            <div>Not executed</div>
-          {/if}
-        </vscode-data-grid-cell>
-        <vscode-data-grid-cell grid-column="2">
-          {#if data.time !== ``}
-            <div>{data.time} seconds</div>
-          {:else}
-            <div>0 seconds</div>
-          {/if}
-        </vscode-data-grid-cell>
-      </vscode-data-grid-row>
-    </vscode-data-grid>
-  </tr>
-  <tr>
     <center>
-      <b>Response type: {data.outputMessageName}</b>
+      {#if data.time === ``}
+        <div>Response: {data.outputMessageName}</div>
+      {:else}
+        <div>{data.code} - {data.time}</div>
+      {/if}
     </center>
   </tr>
   <tr>
@@ -42,7 +22,7 @@
       id=""
       cols="30"
       rows="10"
-      style="--height: {innerHeight - 220}px"
+      style="--height: {innerHeight - 180}px"
       bind:value="{data.response}"
       readonly></textarea>
   </tr>
@@ -56,7 +36,7 @@
     width: 100%;
   }
   center {
-    padding-top: 10px;
+    padding-top: 2px;
     padding-bottom: 5px;
   }
   textarea {

@@ -8,20 +8,8 @@
 
 <table>
   <tr>
-    <vscode-data-grid aria-label="Basic">
-      <vscode-data-grid-row>
-        <vscode-data-grid-cell grid-column="1">
-          <div>Message tag</div>
-        </vscode-data-grid-cell>
-        <vscode-data-grid-cell grid-column="2">
-          <div>{data.inputMessageTag}</div>
-        </vscode-data-grid-cell>
-      </vscode-data-grid-row>
-    </vscode-data-grid>
-  </tr>
-  <tr>
     <center>
-      <b>Request type: {data.inputMessageName}</b>
+      <div>Request type: {data.inputMessageName}</div>
     </center>
   </tr>
   <tr>
@@ -31,7 +19,7 @@
       id=""
       cols="30"
       rows="10"
-      style="--height: {innerHeight - 220}px"
+      style="--height: {innerHeight - 180}px"
       bind:value="{data.json}"
       on:input="{edit}"></textarea>
   </tr>
@@ -45,7 +33,7 @@
     width: 100%;
   }
   center {
-    padding-top: 10px;
+    padding-top: 2px;
     padding-bottom: 5px;
   }
   textarea {

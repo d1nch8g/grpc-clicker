@@ -316,13 +316,9 @@ ${request.response.split(`\n`).slice(0, 40).join(`\n`)}
       title: "Trigger opening of webview for grpc call",
       arguments: [request],
     };
-    let icon = `success.svg`;
+    super.iconPath = new vscode.ThemeIcon(`testing-passed-icon`);
     if (request.code !== `OK`) {
-      icon = `error.svg`;
+      super.iconPath = new vscode.ThemeIcon(`testing-failed-icon`);
     }
-    super.iconPath = {
-      light: path.join(__filename, "..", "..", "images", icon),
-      dark: path.join(__filename, "..", "..", "images", icon),
-    };
   }
 }
