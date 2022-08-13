@@ -10,6 +10,7 @@ import { Message, Parser, ProtoType } from "./grpcurl/parser";
 import { Collection } from "./storage/collections";
 import { Storage } from "./storage/storage";
 import {
+  CollectionItem,
   FileItem,
   HeaderItem,
   HostItem,
@@ -33,6 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
     headers: storage.headers.list(),
     requests: storage.history.list(),
     servers: storage.servers.list(),
+    collections: storage.collections.list(),
     describeFileMsg: async (path: string, tag: string): Promise<Message> => {
       const msg = await grpcurl.message({
         source: path,
@@ -337,7 +339,16 @@ export function activate(context: vscode.ExtensionContext) {
       name: collectionName,
       tests: [],
     });
+    treeviews.collections.refresh(storage.collections.list());
   });
+
+  vscode.commands.registerCommand(
+    "colections.remove",
+    async (col: CollectionItem) => {
+      storage.collections.remove(col.base.name);
+      treeviews.collections.refresh(storage.collections.list());
+    }
+  );
 
   vscode.workspace.onDidChangeConfiguration((event) => {
     if (event.affectsConfiguration(`grpc-clicker.usedocker`)) {

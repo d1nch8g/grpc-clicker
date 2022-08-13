@@ -4,6 +4,7 @@ import { Service, Call, Message, Field } from "../grpcurl/parser";
 import { Host, ProtoFile, ProtoServer, RequestData } from "../grpcurl/grpcurl";
 
 import { Header } from "../storage/headers";
+import { Collection } from "../storage/collections";
 
 export enum ItemType {
   unknown,
@@ -16,10 +17,34 @@ export enum ItemType {
   message,
   field,
   header,
+  collection,
+  test,
 }
 
 export class ClickerItem extends vscode.TreeItem {
   public type: ItemType = ItemType.unknown;
+}
+
+export class CollectionItem extends ClickerItem {
+  constructor(public readonly base: Collection) {
+    super(base.name);
+    super.type = ItemType.collection;
+    super.tooltip = new vscode.MarkdownString(`
+#### Collection with gRPC tests
+- You can add new items from gRPC request
+- Collection will execute tests sequentially
+    `);
+    super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+    super.contextValue = `collection`;
+    const icon = `collection.svg`;
+    if (base.tests.length === 0) {
+      super.collapsibleState = vscode.TreeItemCollapsibleState.None;
+    }
+    super.iconPath = {
+      light: path.join(__filename, "..", "..", "images", icon),
+      dark: path.join(__filename, "..", "..", "images", icon),
+    };
+  }
 }
 
 export class FileItem extends ClickerItem {
