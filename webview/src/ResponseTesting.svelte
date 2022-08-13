@@ -9,15 +9,31 @@
   <tr>
     <vscode-data-grid aria-label="Basic">
       <vscode-data-grid-row>
-        <vscode-data-grid-cell grid-column="1">
+        <vscode-data-grid-cell grid-column="1" class="dropdown">
           <b>Expected time</b>
         </vscode-data-grid-cell>
         <vscode-data-grid-cell grid-column="2">
-          <b>{data.protoName}</b>
+          <vscode-dropdown position="below">
+            <vscode-option>0.005s</vscode-option>
+            <vscode-option>0.01s</vscode-option>
+            <vscode-option>0.025s</vscode-option>
+            <vscode-option>0.5s</vscode-option>
+            <vscode-option>1s</vscode-option>
+            <vscode-option>2s</vscode-option>
+            <vscode-option>3s</vscode-option>
+            <vscode-option>4s</vscode-option>
+            <vscode-option>5s</vscode-option>
+            <vscode-option>10s</vscode-option>
+            <vscode-option>15s</vscode-option>
+            <vscode-option>30s</vscode-option>
+            <vscode-option>1m</vscode-option>
+            <vscode-option>3m</vscode-option>
+            <vscode-option>5m</vscode-option>
+          </vscode-dropdown>
         </vscode-data-grid-cell>
       </vscode-data-grid-row>
       <vscode-data-grid-row>
-        <vscode-data-grid-cell grid-column="1" class="ecode">
+        <vscode-data-grid-cell grid-column="1" class="dropdown">
           <b>Expected code</b>
         </vscode-data-grid-cell>
         <vscode-data-grid-cell grid-column="2">
@@ -59,24 +75,39 @@
       id=""
       cols="30"
       rows="10"
-      style="--height: {innerHeight - 255}px"></textarea>
+      style="--height: {innerHeight - 285}px"></textarea>
+  </tr>
+  <tr>
+    <div class="button-padding">
+      <vscode-button>Create test</vscode-button>
+    </div>
   </tr>
 </table>
 
 <style>
-  table {
-    width: 100%;
-  }
-  tr {
-    width: 100%;
-  }
   vscode-dropdown {
     width: 100%;
   }
   vscode-option {
     width: 100%;
   }
-  .ecode {
+  vscode-button {
+    padding-left: 5%;
+    padding-right: 5%;
+    width: 90%;
+  }
+  .button-padding {
+    padding-top: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  table {
+    width: 100%;
+  }
+  tr {
+    width: 100%;
+  }
+  .dropdown {
     padding-top: 10px;
   }
   textarea {
