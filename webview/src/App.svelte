@@ -2,6 +2,8 @@
   import TopPanel from "./TopPanel.svelte";
   import Request from "./Request.svelte";
   import Response from "./Response.svelte";
+  import Testing from "./Testing.svelte";
+  import Info from "./Info.svelte";
 
   $: data = {
     path: ``,
@@ -69,11 +71,33 @@
 />
 
 <table>
-  <td>
-    <Request bind:data edit="{onEditRequest}" />
+  <td class="left-side">
+    <div>
+      <vscode-panels>
+        <vscode-panel-tab id="tab-1">INPUT</vscode-panel-tab>
+        <vscode-panel-tab id="tab-2">INFORMATION</vscode-panel-tab>
+        <vscode-panel-view id="view-1">
+          <Request bind:data edit="{onEditRequest}" />
+        </vscode-panel-view>
+        <vscode-panel-view id="view-2">
+          <Info bind:data />
+        </vscode-panel-view>
+      </vscode-panels>
+    </div>
   </td>
-  <td>
-    <Response bind:data />
+  <td class="right-side">
+    <div>
+      <vscode-panels>
+        <vscode-panel-tab id="tab-1">OUTPUT</vscode-panel-tab>
+        <vscode-panel-tab id="tab-2">TESTING</vscode-panel-tab>
+        <vscode-panel-view id="view-1">
+          <Response bind:data />
+        </vscode-panel-view>
+        <vscode-panel-view id="view-2">
+          <Testing bind:data />
+        </vscode-panel-view>
+      </vscode-panels>
+    </div>
   </td>
 </table>
 
@@ -81,9 +105,16 @@
   table {
     width: 100%;
   }
-
   td {
     height: 100%;
     width: 50%;
+  }
+  .left-side {
+    padding-left: 3%;
+    padding-right: 1%;
+  }
+  .right-side {
+    padding-right: 3%;
+    padding-left: 1%;
   }
 </style>

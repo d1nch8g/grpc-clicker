@@ -1,6 +1,4 @@
 <script>
-  import ResponseTesting from "./ResponseTesting.svelte";
-
   export let data;
   $: innerHeight = 0;
 
@@ -11,32 +9,17 @@
 
 <svelte:window bind:innerHeight />
 
-<div>
-  <vscode-panels>
-    <vscode-panel-tab id="tab-1">OUTPUT</vscode-panel-tab>
-    <vscode-panel-tab id="tab-2">TESTING</vscode-panel-tab>
-    <vscode-panel-view id="view-1">
-      <textarea
-        class="code"
-        name=""
-        id=""
-        cols="30"
-        rows="10"
-        style="--height: {innerHeight - 150}px"
-        bind:value="{data.response}"
-        readonly></textarea>
-    </vscode-panel-view>
-    <vscode-panel-view id="view-2">
-      <ResponseTesting bind:data />
-    </vscode-panel-view>
-  </vscode-panels>
-</div>
+<textarea
+  class="code"
+  name=""
+  id=""
+  cols="30"
+  rows="10"
+  style="--height: {innerHeight - 150}px"
+  bind:value="{data.response}"
+  readonly></textarea>
 
 <style>
-  div {
-    padding-left: 3%;
-    padding-right: 1%;
-  }
   textarea {
     height: var(--height);
     resize: none;

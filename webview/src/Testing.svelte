@@ -1,10 +1,7 @@
 <script>
   export let data;
-  $: innerHeight = 0;
 
-  function onClick() {
-    console.log(data);
-  }
+  $: innerHeight = 0;
 </script>
 
 <svelte:window bind:innerHeight />

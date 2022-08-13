@@ -1,6 +1,4 @@
 <script>
-  import RequestInfo from "./RequestInfo.svelte";
-
   export let data;
   export let edit;
   $: innerHeight = 0;
@@ -8,32 +6,17 @@
 
 <svelte:window bind:innerHeight />
 
-<div>
-  <vscode-panels>
-    <vscode-panel-tab id="tab-1">INPUT</vscode-panel-tab>
-    <vscode-panel-tab id="tab-2">INFORMATION</vscode-panel-tab>
-    <vscode-panel-view id="view-1">
-      <textarea
-        class="code"
-        name=""
-        id=""
-        cols="30"
-        rows="10"
-        style="--height: {innerHeight - 150}px"
-        bind:value="{data.json}"
-        on:input="{edit}"></textarea>
-    </vscode-panel-view>
-    <vscode-panel-view id="view-2">
-      <RequestInfo bind:data />
-    </vscode-panel-view>
-  </vscode-panels>
-</div>
+<textarea
+  class="code"
+  name=""
+  id=""
+  cols="30"
+  rows="10"
+  style="--height: {innerHeight - 150}px"
+  bind:value="{data.json}"
+  on:input="{edit}"></textarea>
 
 <style>
-  div {
-    padding-left: 3%;
-    padding-right: 1%;
-  }
   textarea {
     height: var(--height);
     resize: none;
