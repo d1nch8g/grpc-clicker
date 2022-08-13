@@ -1,6 +1,9 @@
 <script>
   export let data;
+  $: innerHeight = 0;
 </script>
+
+<svelte:window bind:innerHeight />
 
 <table>
   <tr>
@@ -50,6 +53,14 @@
       </vscode-data-grid-row>
     </vscode-data-grid>
   </tr>
+  <tr>
+    <textarea
+      name=""
+      id=""
+      cols="30"
+      rows="10"
+      style="--height: {innerHeight - 255}px"></textarea>
+  </tr>
 </table>
 
 <style>
@@ -67,5 +78,17 @@
   }
   .ecode {
     padding-top: 10px;
+  }
+  textarea {
+    height: var(--height);
+    resize: none;
+    display: block;
+    width: 98%;
+    color: var(--vscode-input-foreground);
+    outline-color: var(--vscode-input-border);
+    background-color: var(--vscode-input-background);
+    padding: 6px;
+    font-family: var(--vscode-editor-font-family);
+    font-size: var(--vscode-editor-font-size);
   }
 </style>
