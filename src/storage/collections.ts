@@ -26,7 +26,7 @@ export class Collections {
     let headers = this.list();
     for (const savedValue of headers) {
       if (savedValue.name === header.name) {
-        return new Error(`collection you are trying to add already exists`);
+        return new Error(`collection with same name exists`);
       }
     }
     headers.push(header);
