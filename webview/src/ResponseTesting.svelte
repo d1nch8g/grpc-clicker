@@ -5,14 +5,7 @@
 
 <svelte:window bind:innerHeight />
 
-<textarea
-  class="code"
-  name=""
-  id=""
-  cols="30"
-  rows="10"
-  bind:value="{data.expectedTime}"
-  readonly></textarea>
+<textarea name="" id="" cols="1" bind:value="{data.expectedTime}"></textarea>
 
 <style>
   textarea {

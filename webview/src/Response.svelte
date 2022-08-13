@@ -1,5 +1,4 @@
 <script>
-  import ResponseInfo from "./ResponseInfo.svelte";
   import ResponseTesting from "./ResponseTesting.svelte";
 
   export let data;
@@ -15,8 +14,7 @@
 <div>
   <vscode-panels>
     <vscode-panel-tab id="tab-1">OUTPUT</vscode-panel-tab>
-    <vscode-panel-tab id="tab-2">INFORMATION</vscode-panel-tab>
-    <vscode-panel-tab id="tab-3">TESTING</vscode-panel-tab>
+    <vscode-panel-tab id="tab-2">TESTING</vscode-panel-tab>
     <vscode-panel-view id="view-1">
       <textarea
         class="code"
@@ -28,10 +26,7 @@
         bind:value="{data.response}"
         readonly></textarea>
     </vscode-panel-view>
-    <vscode-panel-view id="view-2"
-      ><ResponseInfo data="{data}" /></vscode-panel-view
-    >
-    <vscode-panel-view id="view-3">
+    <vscode-panel-view id="view-2">
       <ResponseTesting bind:data />
     </vscode-panel-view>
   </vscode-panels>
