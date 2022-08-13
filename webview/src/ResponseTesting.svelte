@@ -1,7 +1,10 @@
 <script>
   export let data;
   $: innerHeight = 0;
-  console.log(data);
+
+  function onClick() {
+    console.log(data);
+  }
 </script>
 
 <svelte:window bind:innerHeight />
@@ -76,12 +79,12 @@
       id=""
       cols="30"
       rows="10"
-      style="--height: {innerHeight - 295}px"></textarea>
+      style="--height: {innerHeight - 300}px"></textarea>
   </tr>
   <tr>
     <div class="button-padding">
       <center>
-        <vscode-button>Create test</vscode-button>
+        <button on:click="{onClick}">Create test</button>
       </center>
     </div>
   </tr>
@@ -99,7 +102,24 @@
     padding-left: 30px;
     padding-right: 30px;
   }
-  vscode-button {
+  button {
+    border: none;
+    padding: var(--input-padding-vertical) var(--input-padding-horizontal);
+    width: 100%;
+    text-align: center;
+    outline: 1px solid transparent;
+    outline-offset: 2px !important;
+    color: var(--vscode-button-foreground);
+    background: var(--vscode-button-background);
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+  button:hover {
+    cursor: pointer;
+    background: var(--vscode-button-hoverBackground);
+  }
+  button:focus {
+    outline-color: var(--vscode-focusBorder);
   }
   table {
     width: 100%;

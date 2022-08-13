@@ -21,7 +21,7 @@
           {/each}
         </vscode-dropdown>
       </td>
-      <td><vscode-button on:click="{onExport}">Export</vscode-button></td>
+      <td><vscode-button on:click="{onExport}" appearance="secondary">Export</vscode-button></td>
       <td><vscode-button on:click="{onSend}">Send</vscode-button></td>
     </tr>
   </table>
