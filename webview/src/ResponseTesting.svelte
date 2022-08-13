@@ -1,6 +1,7 @@
 <script>
   export let data;
   $: innerHeight = 0;
+  console.log(data);
 </script>
 
 <svelte:window bind:innerHeight />
@@ -75,11 +76,13 @@
       id=""
       cols="30"
       rows="10"
-      style="--height: {innerHeight - 285}px"></textarea>
+      style="--height: {innerHeight - 295}px"></textarea>
   </tr>
   <tr>
     <div class="button-padding">
-      <vscode-button>Create test</vscode-button>
+      <center>
+        <vscode-button>Create test</vscode-button>
+      </center>
     </div>
   </tr>
 </table>
@@ -91,15 +94,12 @@
   vscode-option {
     width: 100%;
   }
-  vscode-button {
-    padding-left: 5%;
-    padding-right: 5%;
-    width: 90%;
-  }
   .button-padding {
     padding-top: 10px;
     padding-left: 30px;
     padding-right: 30px;
+  }
+  vscode-button {
   }
   table {
     width: 100%;
