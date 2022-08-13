@@ -61,6 +61,27 @@
       text: JSON.stringify(host),
     });
   }
+
+  function onEditExpectedResponse() {
+    vscode.postMessage({
+      command: "expectedResponse",
+      text: data.expectedResponse,
+    });
+  }
+
+  function onExpectedCode(code) {
+    vscode.postMessage({
+      command: "expectedCode",
+      text: code,
+    });
+  }
+
+  function onExpectedTime(time) {
+    vscode.postMessage({
+      command: "expectedCode",
+      text: time,
+    });
+  }
 </script>
 
 <TopPanel

@@ -1,5 +1,46 @@
 <script>
   export let data;
+  export let onEdit;
+  export let onCode;
+  export let onTime;
+  export let onCreate;
+
+  const timeOptions = [
+    `0.1s`,
+    `0.25s`,
+    `0.5s`,
+    `1s`,
+    `2s`,
+    `3s`,
+    `4s`,
+    `5s`,
+    `10s`,
+    `15s`,
+    `30s`,
+    `1m`,
+    `3m`,
+    `5m`,
+  ];
+
+  const codeOptions = [
+    `OK`,
+    `Cancelled`,
+    `Unknown`,
+    `InvalidArgument`,
+    `DeadlineExceeded`,
+    `NotFound`,
+    `AlreadyExists`,
+    `PermissionDenied`,
+    `ResourceExhausted`,
+    `FailedPrecondition`,
+    `Aborted`,
+    `OutOfRange`,
+    `Unimplemented`,
+    `Internal`,
+    `Unavailable`,
+    `DataLoss`,
+    `Unauthenticated`,
+  ];
 
   $: innerHeight = 0;
 </script>
@@ -15,21 +56,9 @@
         </vscode-data-grid-cell>
         <vscode-data-grid-cell grid-column="2">
           <vscode-dropdown position="below">
-            <vscode-option>0.005s</vscode-option>
-            <vscode-option>0.01s</vscode-option>
-            <vscode-option>0.025s</vscode-option>
-            <vscode-option>0.5s</vscode-option>
-            <vscode-option>1s</vscode-option>
-            <vscode-option>2s</vscode-option>
-            <vscode-option>3s</vscode-option>
-            <vscode-option>4s</vscode-option>
-            <vscode-option>5s</vscode-option>
-            <vscode-option>10s</vscode-option>
-            <vscode-option>15s</vscode-option>
-            <vscode-option>30s</vscode-option>
-            <vscode-option>1m</vscode-option>
-            <vscode-option>3m</vscode-option>
-            <vscode-option>5m</vscode-option>
+            {#each timeOptions as time}
+              <vscode-option on:click="{onTime(time)}">{time}</vscode-option>
+            {/each}
           </vscode-dropdown>
         </vscode-data-grid-cell>
       </vscode-data-grid-row>
@@ -39,23 +68,9 @@
         </vscode-data-grid-cell>
         <vscode-data-grid-cell grid-column="2">
           <vscode-dropdown position="below">
-            <vscode-option>OK</vscode-option>
-            <vscode-option>Cancelled</vscode-option>
-            <vscode-option>Unknown</vscode-option>
-            <vscode-option>InvalidArgument</vscode-option>
-            <vscode-option>DeadlineExceeded</vscode-option>
-            <vscode-option>NotFound</vscode-option>
-            <vscode-option>AlreadyExists</vscode-option>
-            <vscode-option>PermissionDenied</vscode-option>
-            <vscode-option>ResourceExhausted</vscode-option>
-            <vscode-option>FailedPrecondition</vscode-option>
-            <vscode-option>Aborted</vscode-option>
-            <vscode-option>OutOfRange</vscode-option>
-            <vscode-option>Unimplemented</vscode-option>
-            <vscode-option>Internal</vscode-option>
-            <vscode-option>Unavailable</vscode-option>
-            <vscode-option>DataLoss</vscode-option>
-            <vscode-option>Unauthenticated</vscode-option>
+            {#each codeOptions as code}
+              <vscode-option on:click="{onCode(code)}">{code}</vscode-option>
+            {/each}
           </vscode-dropdown>
         </vscode-data-grid-cell>
       </vscode-data-grid-row>
@@ -76,12 +91,14 @@
       id=""
       cols="30"
       rows="10"
-      style="--height: {innerHeight - 300}px"></textarea>
+      style="--height: {innerHeight - 300}px"
+      bind:value="{data.expectedResponse}"
+      on:input="{onEdit}"></textarea>
   </tr>
   <tr>
     <div class="button-padding">
       <center>
-        <button on:click="{onClick}">Create test</button>
+        <button on:click="{onCreate}">Create test</button>
       </center>
     </div>
   </tr>
