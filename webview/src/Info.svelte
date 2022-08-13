@@ -2,7 +2,7 @@
   export let data;
 </script>
 
-<vscode-data-grid aria-label="Basic">
+<vscode-data-grid aria-label="Basic" grid-template-columns="40% 60%">
   {#if data.path !== ``}
     <vscode-data-grid-row>
       <vscode-data-grid-cell grid-column="1">
@@ -55,7 +55,7 @@
   </vscode-data-grid-row>
   <vscode-data-grid-row>
     <vscode-data-grid-cell grid-column="1">
-      <div>Max recieve message size</div>
+      <div>Max message size</div>
     </vscode-data-grid-cell>
     <vscode-data-grid-cell grid-column="2">
       <div>{data.maxMsgSize} mb</div>

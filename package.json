@@ -55,24 +55,24 @@
     "views": {
       "grpc-clicker": [
         {
-          "id": "files",
-          "name": "proto files"
-        },
-        {
           "id": "servers",
           "name": "reflect servers"
+        },
+        {
+          "id": "files",
+          "name": "proto files"
         },
         {
           "id": "headers",
           "name": "Request headers"
         },
         {
-          "id": "history",
-          "name": "Request history"
-        },
-        {
           "id": "collections",
           "name": "collections"
+        },
+        {
+          "id": "history",
+          "name": "Request history"
         }
       ]
     },

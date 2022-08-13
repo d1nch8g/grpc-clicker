@@ -1,14 +1,15 @@
 import * as vscode from "vscode";
 import { Caller } from "./grpcurl/caller";
+import { Message, Parser, ProtoType } from "./grpcurl/parser";
+import { Storage } from "./storage/storage";
+import { TreeViews } from "./treeviews/treeviews";
+import { WebViewFactory } from "./webview";
 import {
   Grpcurl,
   ProtoFile,
   ProtoServer,
   RequestData,
 } from "./grpcurl/grpcurl";
-import { Message, Parser, ProtoType } from "./grpcurl/parser";
-import { Collection } from "./storage/collections";
-import { Storage } from "./storage/storage";
 import {
   CollectionItem,
   FileItem,
@@ -18,8 +19,6 @@ import {
   ServerItem,
   TestItem,
 } from "./treeviews/items";
-import { TreeViews } from "./treeviews/treeviews";
-import { WebViewFactory } from "./webview";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
@@ -366,6 +365,11 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand(
     "colections.run",
     async (col: CollectionItem) => {
+      for (const test of col.base.tests) {
+        test.testPassed = undefined;
+      }
+      storage.collections.update(col.base);
+      treeviews.collections.refresh(storage.collections.list());
       for (const test of col.base.tests) {
         const result = await grpcurl.test(test);
         if (result !== ``) {
