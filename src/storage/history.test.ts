@@ -45,6 +45,7 @@ test(`add`, () => {
       expectedResponse: "",
       expectedCode: "",
       expectedTime: "",
+      markdownTestResult: "",
     });
   }
   expect(storage.values.length).toBe(100);
@@ -77,6 +78,7 @@ test(`list`, () => {
     expectedResponse: "",
     expectedCode: "",
     expectedTime: "",
+    markdownTestResult: "",
   });
 
   let resp = history.list();
@@ -105,6 +107,7 @@ test(`list`, () => {
       expectedResponse: "",
       expectedCode: "",
       expectedTime: "",
+      markdownTestResult: "",
     },
   ]);
 });
@@ -136,6 +139,7 @@ test(`clean`, () => {
     expectedResponse: "",
     expectedCode: "",
     expectedTime: "",
+    markdownTestResult: "",
   });
 
   history.clean();

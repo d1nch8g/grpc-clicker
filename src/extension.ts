@@ -1,6 +1,11 @@
 import * as vscode from "vscode";
 import { Caller } from "./grpcurl/caller";
-import { Grpcurl, ProtoFile, ProtoServer, RequestData } from "./grpcurl/grpcurl";
+import {
+  Grpcurl,
+  ProtoFile,
+  ProtoServer,
+  RequestData,
+} from "./grpcurl/grpcurl";
 import { Message, Parser, ProtoType } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
 import {
@@ -243,12 +248,15 @@ export function activate(context: vscode.ExtensionContext) {
       treeviews.history.refresh(storage.history.list());
       return request;
     },
-    (request: RequestData) => {
-      const command = grpcurl.formCall(request);
+    (data: RequestData) => {
+      const command = grpcurl.formCall(data);
       vscode.env.clipboard.writeText(command);
       vscode.window.showInformationMessage(
         `gRPCurl command have been copied to clipboard`
       );
+    },
+    (data: RequestData) => {
+      // TODO add collection callback
     }
   );
 

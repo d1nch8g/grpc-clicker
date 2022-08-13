@@ -121,6 +121,35 @@ export class Grpcurl {
     return response;
   }
 
+  async test(input: RequestData): Promise<string> {
+    let markdownTestResult: string = ``;
+    const resp = await this.send(input);
+    if (resp.code !== input.expectedCode) {
+      markdownTestResult += `- Code not matches: ${resp.code} vs ${input.expectedCode}\n`;
+    }
+    let expectedTime: number;
+    if (input.expectedTime.endsWith(`s`)) {
+      expectedTime = +input.expectedTime.substring(
+        0,
+        input.expectedTime.length - 1
+      );
+    } else {
+      const expectedTimeInminutes = +input.expectedTime.substring(
+        0,
+        input.expectedTime.length - 1
+      );
+      expectedTime = expectedTimeInminutes * 60;
+    }
+    const actualTime: number = +resp.time.substring(0, resp.time.length - 1);
+    if (actualTime > expectedTime) {
+      markdownTestResult += `- Time not matches: ${resp.time} vs ${expectedTime}s\n`;
+    }
+    if (resp.response !== input.expectedResponse) {
+      markdownTestResult += `- Response not matches:`;
+    }
+    return markdownTestResult;
+  }
+
   private jsonPreprocess(input: string): string {
     input = JSON.stringify(JSON.parse(input));
     if (process.platform === "win32") {
@@ -190,4 +219,5 @@ export interface RequestData extends Request, Response {
   expectedResponse: string;
   expectedCode: string;
   expectedTime: string;
+  markdownTestResult: string;
 }
