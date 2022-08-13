@@ -47,6 +47,29 @@ export class CollectionItem extends ClickerItem {
   }
 }
 
+export class TestItem extends ClickerItem {
+  constructor(public readonly base: RequestData) {
+    super(`${base.call}`);
+    super.type = ItemType.test;
+    super.tooltip = new vscode.MarkdownString(`
+#### Test item
+- Expected code: ${base.expectedCode}
+- Expected time: ${base.expectedTime}
+- Expected response
+
+\`\`\`json
+${base.json.split(`\n`).slice(0, 40).join(`\n`)}
+\`\`\`
+    `);
+    super.collapsibleState = vscode.TreeItemCollapsibleState.None;
+    const icon = `collection.svg`;
+    super.iconPath = {
+      light: path.join(__filename, "..", "..", "images", icon),
+      dark: path.join(__filename, "..", "..", "images", icon),
+    };
+  }
+}
+
 export class FileItem extends ClickerItem {
   constructor(public readonly base: ProtoFile) {
     super(base.path.replace(/^.*[\\\/]/, ""));

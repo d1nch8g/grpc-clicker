@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { Collection } from "../storage/collections";
-import { ClickerItem, CollectionItem } from "./items";
+import { ClickerItem, CollectionItem, ItemType, TestItem } from "./items";
 
 export class CollectionsTreeView
   implements vscode.TreeDataProvider<ClickerItem>
@@ -30,6 +30,13 @@ export class CollectionsTreeView
     if (element === undefined) {
       for (const collection of this.collections) {
         items.push(new CollectionItem(collection));
+      }
+      return;
+    }
+    if (element.type === ItemType.collection) {
+      const collection = element as CollectionItem;
+      for (const data of collection.base.tests) {
+        items.push(new TestItem(data));
       }
     }
     return items;
