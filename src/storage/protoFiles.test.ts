@@ -36,7 +36,7 @@ test(`add`, () => {
 
 test(`list`, () => {
   const memento = new MockMemento();
-  const headers = new ProtoFiles(memento);
+  const protos = new ProtoFiles(memento);
   var proto: ProtoFile = {
     type: ProtoType.proto,
     services: [],
@@ -44,12 +44,12 @@ test(`list`, () => {
     hosts: [],
   };
   memento.values = [JSON.stringify(proto)];
-  expect(headers.list()).toStrictEqual([proto]);
+  expect(protos.list()).toStrictEqual([proto]);
 });
 
 test(`remove`, () => {
   const memento = new MockMemento();
-  const headers = new ProtoFiles(memento);
+  const protos = new ProtoFiles(memento);
   var proto: ProtoFile = {
     type: ProtoType.proto,
     services: [],
@@ -57,6 +57,49 @@ test(`remove`, () => {
     hosts: [],
   };
   memento.values = [JSON.stringify(proto)];
-  headers.remove(`path`);
+  protos.remove(`path`);
   expect(memento.values).toStrictEqual([]);
+});
+
+test(`add host`, () => {
+  const memento = new MockMemento();
+  const protos = new ProtoFiles(memento);
+  var proto: ProtoFile = {
+    type: ProtoType.proto,
+    services: [],
+    path: "path",
+    hosts: [],
+  };
+  memento.values = [JSON.stringify(proto)];
+  protos.addHost(`path`, {
+    adress: "testx",
+    plaintext: true,
+  });
+  let host = protos.list()[0].hosts[0];
+  expect(host).toStrictEqual({
+    adress: "testx",
+    plaintext: true,
+  });
+});
+
+test(`remove host`, () => {
+  const memento = new MockMemento();
+  const protos = new ProtoFiles(memento);
+  var proto: ProtoFile = {
+    type: ProtoType.proto,
+    services: [],
+    path: "path",
+    hosts: [
+      {
+        adress: "testx",
+        plaintext: true,
+      },
+    ],
+  };
+  memento.values = [JSON.stringify(proto)];
+  protos.removeHost(`path`, {
+    adress: "testx",
+    plaintext: true,
+  });
+  expect(protos.list()[0].hosts.length).toBe(0);
 });
