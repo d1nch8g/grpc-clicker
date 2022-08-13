@@ -7,6 +7,7 @@ import {
   RequestData,
 } from "./grpcurl/grpcurl";
 import { Message, Parser, ProtoType } from "./grpcurl/parser";
+import { Collection } from "./storage/collections";
 import { Storage } from "./storage/storage";
 import {
   FileItem,
@@ -323,6 +324,20 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand("hosts.remove", (host: HostItem) => {
     storage.files.removeHost(host.parent.parent.base.path, host.host);
     treeviews.files.refresh(storage.files.list());
+  });
+
+  vscode.commands.registerCommand("collections.create", async () => {
+    const collectionName = await vscode.window.showInputBox({
+      title: `Name for new collection`,
+    });
+    if (collectionName === "" || collectionName === undefined) {
+      return;
+    }
+    storage.collections.add({
+      name: collectionName,
+      tests: [],
+    });
+    
   });
 
   vscode.workspace.onDidChangeConfiguration((event) => {

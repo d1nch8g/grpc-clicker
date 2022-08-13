@@ -80,7 +80,7 @@
       {
         "category": "gRPC Clicker",
         "command": "collections.create",
-        "title": "Create new group of collections",
+        "title": "Create new collection of tests",
         "icon": {
           "dark": "images/dark/plus.svg",
           "light": "images/light/plus.svg"

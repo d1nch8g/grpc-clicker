@@ -2,47 +2,47 @@ import { Memento } from "vscode";
 import { RequestData } from "../grpcurl/grpcurl";
 
 export class Collections {
-  private readonly key: string = "grpc-clicker-headers";
+  private readonly key: string = "grpc-clicker-collections";
   constructor(private memento: Memento) {}
 
-  save(headers: Collection[]) {
-    let headerStrings: string[] = [];
-    for (const header of headers) {
-      headerStrings.push(JSON.stringify(header));
+  save(collections: Collection[]) {
+    let collectionStrings: string[] = [];
+    for (const collection of collections) {
+      collectionStrings.push(JSON.stringify(collection));
     }
-    this.memento.update(this.key, headerStrings);
+    this.memento.update(this.key, collectionStrings);
   }
 
   list(): Collection[] {
-    let headerStrings = this.memento.get<string[]>(this.key, []);
-    let headerValues: Collection[] = [];
-    for (const headerString of headerStrings) {
-      headerValues.push(JSON.parse(headerString));
+    let collectionStrings = this.memento.get<string[]>(this.key, []);
+    let collectionValues: Collection[] = [];
+    for (const collectionString of collectionStrings) {
+      collectionValues.push(JSON.parse(collectionString));
     }
-    return headerValues;
+    return collectionValues;
   }
 
-  add(header: Collection) {
-    let headers = this.list();
-    for (const savedValue of headers) {
-      if (savedValue.name === header.name) {
+  add(collection: Collection) {
+    let collections = this.list();
+    for (const savedValue of collections) {
+      if (savedValue.name === collection.name) {
         return new Error(`collection with same name exists`);
       }
     }
-    headers.push(header);
-    this.save(headers);
+    collections.push(collection);
+    this.save(collections);
     return undefined;
   }
 
-  remove(value: string) {
-    let headers = this.list();
-    for (let i = 0; i < headers.length; i++) {
-      if (headers[i].name === value) {
-        headers.splice(i, 1);
+  remove(name: string) {
+    let collections = this.list();
+    for (let i = 0; i < collections.length; i++) {
+      if (collections[i].name === name) {
+        collections.splice(i, 1);
       }
     }
-    this.save(headers);
-    return headers;
+    this.save(collections);
+    return collections;
   }
 }
 
