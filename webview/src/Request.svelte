@@ -10,7 +10,7 @@
 
 <div>
   <vscode-panels>
-    <vscode-panel-tab id="tab-1">JSON INPUT</vscode-panel-tab>
+    <vscode-panel-tab id="tab-1">INPUT</vscode-panel-tab>
     <vscode-panel-tab id="tab-2">INFORMATION</vscode-panel-tab>
     <vscode-panel-view id="view-1">
       <textarea

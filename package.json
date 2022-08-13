@@ -353,10 +353,10 @@
     ]
   },
   "scripts": {
-    "watch:webview": "node watcher.js",
-    "serve:grpc": "go run server/main.go",
-    "build": "vsce package",
-    "protogen": "protoc --go_out=server/ --go-grpc_out=server/ server/api.proto",
+    "serve-grpc": "go run server/main.go",
+    "watch-webview": "node watcher.js",
+    "package-ext": "vsce package",
+    "generate-proto": "protoc --go_out=server/ --go-grpc_out=server/ server/api.proto",
     "vscode:prepublish": "npm run package",
     "compile": "webpack",
     "watch": "webpack --watch",
