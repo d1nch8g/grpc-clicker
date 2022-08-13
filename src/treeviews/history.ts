@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { RequestData } from "../webview";
+import { RequestData } from "../grpcurl/grpcurl";
 
 import { ClickerItem, HistoryItem } from "./items";
 

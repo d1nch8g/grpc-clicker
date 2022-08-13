@@ -178,3 +178,16 @@ export interface Response {
   time: string;
   date: string;
 }
+
+export interface RequestData extends Request, Response {
+  service: string;
+  call: string;
+  inputMessageTag: string;
+  inputMessageName: string;
+  outputMessageName: string;
+  protoName: string;
+  hosts: Host[];
+  expectedResponse: string;
+  expectedCode: string;
+  expectedTime: string;
+}

@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { Caller } from "./grpcurl/caller";
-import { Grpcurl, ProtoFile, ProtoServer } from "./grpcurl/grpcurl";
+import { Grpcurl, ProtoFile, ProtoServer, RequestData } from "./grpcurl/grpcurl";
 import { Message, Parser, ProtoType } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
 import {
@@ -11,7 +11,7 @@ import {
   ServerItem,
 } from "./treeviews/items";
 import { TreeViews } from "./treeviews/treeviews";
-import { RequestData, WebViewFactory } from "./webview";
+import { WebViewFactory } from "./webview";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
