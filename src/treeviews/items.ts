@@ -51,21 +51,22 @@ export class TestItem extends ClickerItem {
   constructor(public readonly base: RequestData) {
     super(`${base.call}`);
     super.type = ItemType.test;
-    super.tooltip = new vscode.MarkdownString(`
-#### Test for ${base.protoName} - ${base.call}
+    super.tooltip = new vscode.MarkdownString(
+      `#### Test for ${base.protoName} - ${base.call}
 - Expected code: \`${base.expectedCode}\`
 - Expected time: \`${base.expectedTime}\`
 - Expected response
 
 ---
 
+#### Response:
 \`\`\`json
 ${base.json.split(`\n`).slice(0, 40).join(`\n`)}
 \`\`\`
 ---
 
-${base.testMdResult}
-    `);
+${base.testMdResult}`
+    );
     super.collapsibleState = vscode.TreeItemCollapsibleState.None;
     switch (base.testPassed) {
       case undefined:

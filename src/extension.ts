@@ -372,6 +372,7 @@ export function activate(context: vscode.ExtensionContext) {
           test.testMdResult = result;
         } else {
           test.testPassed = true;
+          test.testMdResult = ``;
         }
         storage.collections.update(col.base);
         treeviews.collections.refresh(storage.collections.list());

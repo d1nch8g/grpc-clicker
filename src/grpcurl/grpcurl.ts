@@ -145,7 +145,7 @@ export class Grpcurl {
       markdownTestResult += `- Time not matches: ${resp.time} vs ${expectedTime}s\n`;
     }
     if (resp.response !== input.expectedResponse) {
-      markdownTestResult += `- Response not matches:`;
+      markdownTestResult += `- Response is not matching`;
     }
     return markdownTestResult;
   }
