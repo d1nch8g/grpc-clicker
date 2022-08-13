@@ -48,9 +48,13 @@ export class CollectionItem extends ClickerItem {
 }
 
 export class TestItem extends ClickerItem {
-  constructor(public readonly base: RequestData) {
+  constructor(
+    public readonly base: RequestData,
+    public readonly parent: CollectionItem
+  ) {
     super(`${base.call}`);
     super.type = ItemType.test;
+    super.contextValue = `test`;
     super.tooltip = new vscode.MarkdownString(
       `#### Test for ${base.protoName} - ${base.call}
 - Expected code: \`${base.expectedCode}\`

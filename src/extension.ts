@@ -16,6 +16,7 @@ import {
   HostItem,
   HostsItem,
   ServerItem,
+  TestItem,
 } from "./treeviews/items";
 import { TreeViews } from "./treeviews/treeviews";
 import { WebViewFactory } from "./webview";
@@ -387,6 +388,18 @@ export function activate(context: vscode.ExtensionContext) {
       treeviews.collections.refresh(storage.collections.list());
     }
   );
+
+  vscode.commands.registerCommand("tests.remove", async (test: TestItem) => {
+    const collection = test.parent.base;
+    const testString = JSON.stringify(test.base);
+    collection.tests.forEach((test, idx) => {
+      if (JSON.stringify(test) === testString) {
+        collection.tests.splice(idx, 1);
+      }
+    });
+    storage.collections.update(collection);
+    treeviews.collections.refresh(storage.collections.list());
+  });
 
   vscode.workspace.onDidChangeConfiguration((event) => {
     if (event.affectsConfiguration(`grpc-clicker.usedocker`)) {
