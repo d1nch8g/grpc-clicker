@@ -1,7 +1,6 @@
 import { performance } from "perf_hooks";
-import { Caller, RequestForm } from "./caller";
+import { Caller } from "./caller";
 import { Message, Parser, Proto, ProtoType } from "./parser";
-import * as util from "util";
 
 export class Grpcurl {
   constructor(
@@ -34,7 +33,7 @@ export class Grpcurl {
   }
 
   async protoServer(input: ProtoServerInput): Promise<ProtoServer | string> {
-    const command = `grpcurl |SRC| describe`;
+    const command = `grpcurl -max-time 0.5 |SRC| describe`;
     const call = this.caller.form({
       call: command,
       source: input.host,
@@ -82,9 +81,12 @@ export class Grpcurl {
   }
 
   formCall(input: Request): string {
-    const command = `grpcurl %s %s -d %s |SRC| %s`;
+    const command = `grpcurl -emit-defaults %s %s -d %s |SRC| %s`;
     const formedJson = this.jsonPreprocess(input.json);
-    const maxMsgSize = `-max-msg-sz ${input.maxMsgSize * 1048576}`;
+    let maxMsgSize = ``;
+    if (input.maxMsgSize !== 4) {
+      maxMsgSize = `-max-msg-sz ${input.maxMsgSize * 1048576}`;
+    }
     let meta = ``;
     for (const metafield of input.metadata) {
       meta = meta + this.headerPreprocess(metafield);
@@ -117,6 +119,35 @@ export class Grpcurl {
     response.date = new Date().toUTCString();
     response.time = `${Math.round(end - start) / 1000}s`;
     return response;
+  }
+
+  async test(input: RequestData): Promise<string> {
+    let markdownTestResult: string = ``;
+    const resp = await this.send(input);
+    if (resp.code !== input.expectedCode) {
+      markdownTestResult += `- Code not matches: ${resp.code} vs ${input.expectedCode}\n`;
+    }
+    let expectedTime: number;
+    if (input.expectedTime.endsWith(`s`)) {
+      expectedTime = +input.expectedTime.substring(
+        0,
+        input.expectedTime.length - 1
+      );
+    } else {
+      const expectedTimeInminutes = +input.expectedTime.substring(
+        0,
+        input.expectedTime.length - 1
+      );
+      expectedTime = expectedTimeInminutes * 60;
+    }
+    const actualTime: number = +resp.time.substring(0, resp.time.length - 1);
+    if (actualTime > expectedTime) {
+      markdownTestResult += `- Time not matches: ${resp.time} vs ${expectedTime}s\n`;
+    }
+    if (resp.response !== input.expectedResponse) {
+      markdownTestResult += `- Response is not matching`;
+    }
+    return markdownTestResult;
   }
 
   private jsonPreprocess(input: string): string {
@@ -175,4 +206,19 @@ export interface Response {
   response: string;
   time: string;
   date: string;
+}
+
+export interface RequestData extends Request, Response {
+  service: string;
+  call: string;
+  inputMessageTag: string;
+  inputMessageName: string;
+  outputMessageName: string;
+  protoName: string;
+  hosts: Host[];
+  expectedResponse: string;
+  expectedCode: string;
+  expectedTime: string;
+  testPassed: boolean | undefined;
+  testMdResult: string;
 }

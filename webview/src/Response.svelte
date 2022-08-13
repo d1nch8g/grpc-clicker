@@ -1,61 +1,57 @@
 <script>
-  export let reqeustData;
+  export let data;
   $: innerHeight = 0;
-  $: height = innerHeight - 150;
 </script>
 
 <svelte:window bind:innerHeight />
 
-<div>
-  <center>
-    <vscode-option>Response: {reqeustData.outputMessageName}</vscode-option>
-  </center>
-  {#if reqeustData.response === "waiter"}
-    <div class="top-space" style="--height: {height / 2.2}px"></div>
+<table>
+  <tr>
     <center>
-      <vscode-progress-ring></vscode-progress-ring>
+      {#if data.time === ``}
+        <div>Response: {data.outputMessageName}</div>
+      {:else}
+        <div>{data.code} - {data.time}</div>
+      {/if}
     </center>
-  {:else if reqeustData.time === ``}
+  </tr>
+  <tr>
     <textarea
+      class="code"
       name=""
       id=""
       cols="30"
       rows="10"
-      style="--height: {height}px"
+      style="--height: {innerHeight - 180}px"
+      bind:value="{data.response}"
       readonly></textarea>
-  {:else}
-    <textarea
-      name=""
-      id=""
-      cols="30"
-      rows="10"
-      style="--height: {height}px"
-      readonly
-    >
-Response Code: {reqeustData.code}
-Time: {reqeustData.time}
-Date: {reqeustData.date}
-Response:
-{reqeustData.response}</textarea
-    >
-  {/if}
-</div>
+  </tr>
+</table>
 
 <style>
-  center {
-    padding-bottom: 10px;
+  table {
+    width: 100%;
   }
-  div {
-    padding-top: 10px;
-    padding-left: 3%;
-    padding-right: 7%;
+  tr {
+    width: 100%;
+  }
+  center {
+    padding-top: 2px;
+    padding-bottom: 5px;
   }
   textarea {
+    height: var(--height);
     resize: none;
-    height: var(--height);
-    padding: 8px;
+    display: block;
+    width: 98%;
+    padding: 6px;
+    color: var(--vscode-input-foreground);
+    outline-color: var(--vscode-input-border);
+    background-color: var(--vscode-input-background);
+    font-family: var(--vscode-editor-font-family);
+    font-size: var(--vscode-editor-font-size);
   }
-  .top-space {
-    height: var(--height);
+  textarea:focus {
+    outline-color: var(--vscode-focusBorder) !important;
   }
 </style>

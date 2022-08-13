@@ -40,6 +40,13 @@ test(`add`, () => {
       inputMessageTag: "",
       inputMessageName: "",
       outputMessageName: "",
+      protoName: "",
+      hosts: [],
+      expectedResponse: "",
+      expectedCode: "",
+      expectedTime: "",
+      testMdResult: "",
+      testPassed: undefined,
     });
   }
   expect(storage.values.length).toBe(100);
@@ -67,6 +74,13 @@ test(`list`, () => {
     inputMessageTag: "",
     inputMessageName: "",
     outputMessageName: "",
+    protoName: "",
+    hosts: [],
+    expectedResponse: "",
+    expectedCode: "",
+    expectedTime: "",
+    testMdResult: "",
+    testPassed: undefined,
   });
 
   let resp = history.list();
@@ -90,6 +104,12 @@ test(`list`, () => {
       inputMessageTag: "",
       inputMessageName: "",
       outputMessageName: "",
+      protoName: "",
+      hosts: [],
+      expectedResponse: "",
+      expectedCode: "",
+      expectedTime: "",
+      testMdResult: "",
     },
   ]);
 });
@@ -116,6 +136,13 @@ test(`clean`, () => {
     inputMessageTag: "",
     inputMessageName: "",
     outputMessageName: "",
+    protoName: "",
+    hosts: [],
+    expectedResponse: "",
+    expectedCode: "",
+    expectedTime: "",
+    testMdResult: "",
+    testPassed: undefined,
   });
 
   history.clean();

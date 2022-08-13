@@ -1,39 +1,54 @@
 <script>
-  export let reqeustData;
+  export let data;
   export let edit;
   $: innerHeight = 0;
-  $: height = innerHeight - 150;
 </script>
 
 <svelte:window bind:innerHeight />
 
-<div>
-  <center>
-    <vscode-option>Request: {reqeustData.inputMessageName}</vscode-option>
-  </center>
-
-  <textarea
-    name=""
-    id=""
-    cols="30"
-    rows="10"
-    style="--height: {height}px"
-    bind:value="{reqeustData.json}"
-    on:input="{edit}"></textarea>
-</div>
+<table>
+  <tr>
+    <center>
+      <div>Request type: {data.inputMessageName}</div>
+    </center>
+  </tr>
+  <tr>
+    <textarea
+      class="code"
+      name=""
+      id=""
+      cols="30"
+      rows="10"
+      style="--height: {innerHeight - 180}px"
+      bind:value="{data.json}"
+      on:input="{edit}"></textarea>
+  </tr>
+</table>
 
 <style>
-  center {
-    padding-bottom: 10px;
+  table {
+    width: 100%;
   }
-  div {
-    padding-top: 10px;
-    padding-left: 7%;
-    padding-right: 3%;
+  tr {
+    width: 100%;
+  }
+  center {
+    padding-top: 2px;
+    padding-bottom: 5px;
   }
   textarea {
-    resize: none;
     height: var(--height);
-    padding: 8px;
+    resize: none;
+    display: block;
+    width: 98%;
+    padding: 6px;
+    color: var(--vscode-input-foreground);
+    outline-color: var(--vscode-input-border);
+    background-color: var(--vscode-input-background);
+    font-family: var(--vscode-editor-font-family);
+    font-size: var(--vscode-editor-font-size);
+  }
+  textarea:focus {
+    outline-color: var(--vscode-focusBorder) !important;
   }
 </style>

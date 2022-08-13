@@ -148,7 +148,7 @@ message OneofMes {
   oneof message {
     // example field comment
     string first = 1;
-    int32 second = 2;
+    MapMes second = 2;
   }
   // comcom
   int32 name = 3;

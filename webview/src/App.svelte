@@ -2,30 +2,54 @@
   import TopPanel from "./TopPanel.svelte";
   import Request from "./Request.svelte";
   import Response from "./Response.svelte";
+  import Testing from "./Testing.svelte";
+  import Info from "./Info.svelte";
 
-  $: reqeustData = {};
+  $: data = {
+    path: ``,
+    protoName: ``,
+    service: ``,
+    call: ``,
+    callTag: ``,
+    inputMessageTag: ``,
+    inputMessageName: ``,
+    outputMessageName: ``,
+    host: {
+      adress: ``,
+      plaintext: false,
+    },
+    json: "",
+    maxMsgSize: 0,
+    code: "",
+    response: "",
+    time: "",
+    date: "",
+    metadata: [],
+    hosts: [],
+    expectedResponse: "",
+    expectedCode: "",
+    expectedTime: "",
+  };
 
   window.addEventListener("message", (event) => {
-    console.log(event.data);
-    reqeustData = JSON.parse(`${event.data}`);
+    data = JSON.parse(`${event.data}`);
   });
 
   function onSend() {
-    reqeustData.response = "waiter";
+    data.response = "... processing";
     vscode.postMessage({
       command: "send",
     });
   }
 
-  function onEdit() {
+  function onEditRequest() {
     vscode.postMessage({
       command: "edit",
-      text: reqeustData.json,
+      text: data.json,
     });
   }
 
   function onExport() {
-    console.log(`export triggered`);
     vscode.postMessage({
       command: "export",
     });
@@ -37,22 +61,57 @@
       text: JSON.stringify(host),
     });
   }
+
+  function onEditResponse() {
+    vscode.postMessage({
+      command: "expectedResponse",
+      text: data.expectedResponse,
+    });
+  }
+
+  function onCreateTest() {
+    vscode.postMessage({
+      command: "test",
+      text: JSON.stringify(data),
+    });
+  }
 </script>
 
 <TopPanel
-  reqeustData="{reqeustData}"
+  data="{data}"
   onSend="{onSend}"
   onExport="{onExport}"
   onHost="{onHost}"
 />
 
 <table>
-  <td>
-    <Request bind:reqeustData edit="{onEdit}" />
+  <td class="left-side">
+    <div>
+      <vscode-panels>
+        <vscode-panel-tab id="tab-1">INPUT</vscode-panel-tab>
+        <vscode-panel-tab id="tab-2">INFORMATION</vscode-panel-tab>
+        <vscode-panel-view id="view-1">
+          <Request bind:data edit="{onEditRequest}" />
+        </vscode-panel-view>
+        <vscode-panel-view id="view-2">
+          <Info bind:data />
+        </vscode-panel-view>
+      </vscode-panels>
+    </div>
   </td>
-
-  <td>
-    <Response bind:reqeustData />
+  <td class="right-side">
+    <div>
+      <vscode-panels>
+        <vscode-panel-tab id="tab-1">OUTPUT</vscode-panel-tab>
+        <vscode-panel-tab id="tab-2">TESTING</vscode-panel-tab>
+        <vscode-panel-view id="view-1">
+          <Response bind:data />
+        </vscode-panel-view>
+        <vscode-panel-view id="view-2">
+          <Testing bind:data edit="{onEditResponse}" craete="{onCreateTest}" />
+        </vscode-panel-view>
+      </vscode-panels>
+    </div>
   </td>
 </table>
 
@@ -60,9 +119,16 @@
   table {
     width: 100%;
   }
-
   td {
     height: 100%;
     width: 50%;
+  }
+  .left-side {
+    padding-left: 3%;
+    padding-right: 1%;
+  }
+  .right-side {
+    padding-right: 3%;
+    padding-left: 1%;
   }
 </style>

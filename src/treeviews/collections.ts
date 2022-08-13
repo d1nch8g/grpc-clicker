@@ -1,11 +1,12 @@
 import * as vscode from "vscode";
-import { RequestData } from "../grpcurl/grpcurl";
+import { Collection } from "../storage/collections";
+import { ClickerItem, CollectionItem, ItemType, TestItem } from "./items";
 
-import { ClickerItem, HistoryItem } from "./items";
-
-export class HistoryTreeView implements vscode.TreeDataProvider<ClickerItem> {
-  constructor(private requests: RequestData[]) {
-    this.requests = requests;
+export class CollectionsTreeView
+  implements vscode.TreeDataProvider<ClickerItem>
+{
+  constructor(private collections: Collection[]) {
+    this.collections = collections;
     this.onChange = new vscode.EventEmitter<ClickerItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
   }
@@ -15,8 +16,8 @@ export class HistoryTreeView implements vscode.TreeDataProvider<ClickerItem> {
     void | ClickerItem | ClickerItem[]
   >;
 
-  refresh(requests: RequestData[]): void {
-    this.requests = requests;
+  refresh(collections: Collection[]): void {
+    this.collections = collections;
     this.onChange.fire();
   }
 
@@ -25,11 +26,20 @@ export class HistoryTreeView implements vscode.TreeDataProvider<ClickerItem> {
   }
 
   getChildren(element?: ClickerItem): vscode.ProviderResult<ClickerItem[]> {
-    let hitoryItems: ClickerItem[] = [];
-    for (const request of this.requests) {
-      hitoryItems.push(new HistoryItem(request));
+    let items: ClickerItem[] = [];
+    if (element === undefined) {
+      for (const collection of this.collections) {
+        items.push(new CollectionItem(collection));
+      }
+      return items;
     }
-    return hitoryItems;
+    if (element.type === ItemType.collection) {
+      const collection = element as CollectionItem;
+      for (const data of collection.base.tests) {
+        items.push(new TestItem(data, collection));
+      }
+    }
+    return items;
   }
 
   getParent?(element: ClickerItem): vscode.ProviderResult<ClickerItem> {

@@ -4,20 +4,23 @@ import { ProtoFilesView } from "./files";
 import { HistoryTreeView } from "./history";
 import { Message } from "../grpcurl/parser";
 import { Header } from "../storage/headers";
-import { RequestHistoryData } from "../storage/history";
-import { ProtoFile, ProtoServer } from "../grpcurl/grpcurl";
+import { ProtoFile, ProtoServer, RequestData } from "../grpcurl/grpcurl";
 import { ServerTreeView } from "./servers";
+import { CollectionsTreeView } from "./collections";
+import { Collection } from "../storage/collections";
 
 export class TreeViews {
   public readonly files: ProtoFilesView;
   public readonly servers: ServerTreeView;
   public readonly headers: HeadersTreeView;
   public readonly history: HistoryTreeView;
+  public readonly collections: CollectionsTreeView;
   constructor(input: {
     headers: Header[];
-    requests: RequestHistoryData[];
+    requests: RequestData[];
     files: ProtoFile[];
     servers: ProtoServer[];
+    collections: Collection[];
     describeFileMsg: (path: string, tag: string) => Promise<Message>;
     describeServerMsg: (
       path: string,
@@ -29,10 +32,12 @@ export class TreeViews {
     this.servers = new ServerTreeView(input.servers, input.describeServerMsg);
     this.headers = new HeadersTreeView(input.headers);
     this.history = new HistoryTreeView(input.requests);
+    this.collections = new CollectionsTreeView(input.collections);
 
     vscode.window.registerTreeDataProvider("files", this.files);
     vscode.window.registerTreeDataProvider("servers", this.servers);
     vscode.window.registerTreeDataProvider("headers", this.headers);
     vscode.window.registerTreeDataProvider("history", this.history);
+    vscode.window.registerTreeDataProvider("collections", this.collections);
   }
 }

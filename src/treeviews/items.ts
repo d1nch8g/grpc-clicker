@@ -1,9 +1,10 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Service, Call, ProtoType, Message, Field } from "../grpcurl/parser";
-import { Host, ProtoFile, ProtoServer } from "../grpcurl/grpcurl";
-import { RequestHistoryData } from "../storage/history";
+import { Service, Call, Message, Field } from "../grpcurl/parser";
+import { Host, ProtoFile, ProtoServer, RequestData } from "../grpcurl/grpcurl";
+
 import { Header } from "../storage/headers";
+import { Collection } from "../storage/collections";
 
 export enum ItemType {
   unknown,
@@ -16,10 +17,73 @@ export enum ItemType {
   message,
   field,
   header,
+  collection,
+  test,
 }
 
 export class ClickerItem extends vscode.TreeItem {
   public type: ItemType = ItemType.unknown;
+}
+
+export class CollectionItem extends ClickerItem {
+  constructor(public readonly base: Collection) {
+    super(base.name);
+    super.type = ItemType.collection;
+    super.tooltip = new vscode.MarkdownString(`
+#### Collection with gRPC tests
+- You can add new items from gRPC request
+- Collection will execute tests sequentially
+    `);
+    super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+    super.contextValue = `collection`;
+    const icon = `collection.svg`;
+    if (base.tests.length === 0) {
+      super.collapsibleState = vscode.TreeItemCollapsibleState.None;
+    }
+    super.iconPath = {
+      light: path.join(__filename, "..", "..", "images", icon),
+      dark: path.join(__filename, "..", "..", "images", icon),
+    };
+  }
+}
+
+export class TestItem extends ClickerItem {
+  constructor(
+    public readonly base: RequestData,
+    public readonly parent: CollectionItem
+  ) {
+    super(`${base.call}`);
+    super.type = ItemType.test;
+    super.contextValue = `test`;
+    super.tooltip = new vscode.MarkdownString(
+      `#### Test for ${base.protoName} - ${base.call}
+- Expected code: \`${base.expectedCode}\`
+- Expected time: \`${base.expectedTime}\`
+- Expected response
+
+---
+
+#### Response:
+\`\`\`json
+${base.json.split(`\n`).slice(0, 40).join(`\n`)}
+\`\`\`
+---
+
+${base.testMdResult}`
+    );
+    super.collapsibleState = vscode.TreeItemCollapsibleState.None;
+    switch (base.testPassed) {
+      case undefined:
+        super.iconPath = new vscode.ThemeIcon("testing-unset-icon");
+        return;
+      case true:
+        super.iconPath = new vscode.ThemeIcon(`testing-passed-icon`);
+        return;
+      case false:
+        super.iconPath = new vscode.ThemeIcon(`testing-failed-icon`);
+        return;
+    }
+  }
 }
 
 export class FileItem extends ClickerItem {
@@ -147,6 +211,11 @@ export class CallItem extends ClickerItem {
       date: "",
       metadata: [],
       hosts: [],
+      expectedResponse: "",
+      expectedCode: "",
+      expectedTime: "",
+      testMdResult: "",
+      testPassed: undefined,
     };
     if (parent.parent.type === ItemType.file) {
       const file = parent.parent as FileItem;
@@ -229,12 +298,12 @@ export class HeaderItem extends ClickerItem {
 }
 
 export class HistoryItem extends ClickerItem {
-  constructor(request: RequestHistoryData) {
+  constructor(request: RequestData) {
     super(request.call);
     super.description = request.date;
     super.contextValue = "call";
     super.tooltip = new vscode.MarkdownString(`### Request information:
-- host for execution: \`${request.host}\`
+- host for execution: \`${request.host.adress}\`
 - method used in request: \`${request.call}\`
 - response code: \`${request.code}\`
 - time of execution: \`${request.time}\`
@@ -251,18 +320,9 @@ ${request.response.split(`\n`).slice(0, 40).join(`\n`)}
       title: "Trigger opening of webview for grpc call",
       arguments: [request],
     };
-    let icon = `success.svg`;
+    super.iconPath = new vscode.ThemeIcon(`testing-passed-icon`);
     if (request.code !== `OK`) {
-      icon = `error.svg`;
+      super.iconPath = new vscode.ThemeIcon(`testing-failed-icon`);
     }
-    super.iconPath = {
-      light: path.join(__filename, "..", "..", "images", icon),
-      dark: path.join(__filename, "..", "..", "images", icon),
-    };
   }
-}
-
-export interface RequestData extends RequestHistoryData {
-  protoName: string;
-  hosts: Host[];
 }

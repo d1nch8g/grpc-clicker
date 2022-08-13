@@ -1,15 +1,22 @@
 import * as vscode from "vscode";
 import { Caller } from "./grpcurl/caller";
-import { Grpcurl, ProtoFile, ProtoServer } from "./grpcurl/grpcurl";
-import { Message, Parser, Proto, ProtoType } from "./grpcurl/parser";
+import {
+  Grpcurl,
+  ProtoFile,
+  ProtoServer,
+  RequestData,
+} from "./grpcurl/grpcurl";
+import { Message, Parser, ProtoType } from "./grpcurl/parser";
+import { Collection } from "./storage/collections";
 import { Storage } from "./storage/storage";
 import {
+  CollectionItem,
   FileItem,
   HeaderItem,
   HostItem,
   HostsItem,
-  RequestData,
   ServerItem,
+  TestItem,
 } from "./treeviews/items";
 import { TreeViews } from "./treeviews/treeviews";
 import { WebViewFactory } from "./webview";
@@ -28,6 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
     headers: storage.headers.list(),
     requests: storage.history.list(),
     servers: storage.servers.list(),
+    collections: storage.collections.list(),
     describeFileMsg: async (path: string, tag: string): Promise<Message> => {
       const msg = await grpcurl.message({
         source: path,
@@ -55,6 +63,56 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showErrorMessage(msg);
       }
       return msg as Message;
+    },
+  });
+
+  const webview = new WebViewFactory({
+    uri: context.extensionUri,
+
+    requestCallback: async (request) => {
+      let metadata: string[] = [];
+      const headers = storage.headers.list();
+      for (const header of headers) {
+        if (header.active) {
+          metadata.push(header.value);
+        }
+      }
+      const resp = await grpcurl.send(request);
+      request.code = resp.code;
+      request.response = resp.response;
+      request.time = resp.time;
+      request.date = resp.date;
+      storage.history.add(request);
+      treeviews.history.refresh(storage.history.list());
+      return request;
+    },
+
+    exportCallback: (data: RequestData) => {
+      const command = grpcurl.formCall(data);
+      vscode.env.clipboard.writeText(command);
+      vscode.window.showInformationMessage(
+        `gRPCurl command have been copied to clipboard`
+      );
+    },
+
+    addTestCallback: async (data: RequestData) => {
+      const collections = storage.collections.list();
+      if (collections.length === 0) {
+        vscode.window.showErrorMessage(
+          `You should create collection in side panel, then append this test to collection.`
+        );
+        return;
+      }
+      let collectionNames: string[] = [];
+      for (const collection of collections) {
+        collectionNames.push(collection.name);
+      }
+      const choice = await vscode.window.showQuickPick(collectionNames);
+      if (choice === undefined) {
+        return;
+      }
+      storage.collections.addTest(choice, data);
+      treeviews.collections.refresh(storage.collections.list());
     },
   });
 
@@ -225,34 +283,6 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.headers.refresh(storage.headers.list());
   });
 
-  const webviewFactory = new WebViewFactory(
-    context.extensionUri,
-    async (request) => {
-      let metadata: string[] = [];
-      const headers = storage.headers.list();
-      for (const header of headers) {
-        if (header.active) {
-          metadata.push(header.value);
-        }
-      }
-      const resp = await grpcurl.send(request);
-      request.code = resp.code;
-      request.response = resp.response;
-      request.time = resp.time;
-      request.date = resp.date;
-      storage.history.add(request);
-      treeviews.history.refresh(storage.history.list());
-      return request;
-    },
-    (request: RequestData) => {
-      const command = grpcurl.formCall(request);
-      vscode.env.clipboard.writeText(command);
-      vscode.window.showInformationMessage(
-        `gRPCurl command have been copied to clipboard`
-      );
-    }
-  );
-
   vscode.commands.registerCommand("webview.open", async (data: RequestData) => {
     data.maxMsgSize = vscode.workspace
       .getConfiguration(`grpc-clicker`)
@@ -285,7 +315,7 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
     data.json = msg.template!;
-    webviewFactory.create(data);
+    webview.create(data);
   });
 
   vscode.commands.registerCommand("history.clean", () => {
@@ -316,6 +346,59 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand("hosts.remove", (host: HostItem) => {
     storage.files.removeHost(host.parent.parent.base.path, host.host);
     treeviews.files.refresh(storage.files.list());
+  });
+
+  vscode.commands.registerCommand("collections.create", async () => {
+    const collectionName = await vscode.window.showInputBox({
+      title: `Name for new collection`,
+    });
+    if (collectionName === "" || collectionName === undefined) {
+      return;
+    }
+    storage.collections.add({
+      name: collectionName,
+      tests: [],
+    });
+    let list = storage.collections.list();
+    treeviews.collections.refresh(list);
+  });
+
+  vscode.commands.registerCommand(
+    "colections.run",
+    async (col: CollectionItem) => {
+      for (const test of col.base.tests) {
+        const result = await grpcurl.test(test);
+        if (result !== ``) {
+          test.testPassed = false;
+          test.testMdResult = result;
+        } else {
+          test.testPassed = true;
+          test.testMdResult = ``;
+        }
+        storage.collections.update(col.base);
+        treeviews.collections.refresh(storage.collections.list());
+      }
+    }
+  );
+
+  vscode.commands.registerCommand(
+    "colections.remove",
+    async (col: CollectionItem) => {
+      storage.collections.remove(col.base.name);
+      treeviews.collections.refresh(storage.collections.list());
+    }
+  );
+
+  vscode.commands.registerCommand("tests.remove", async (test: TestItem) => {
+    const collection = test.parent.base;
+    const testString = JSON.stringify(test.base);
+    collection.tests.forEach((test, idx) => {
+      if (JSON.stringify(test) === testString) {
+        collection.tests.splice(idx, 1);
+      }
+    });
+    storage.collections.update(collection);
+    treeviews.collections.refresh(storage.collections.list());
   });
 
   vscode.workspace.onDidChangeConfiguration((event) => {

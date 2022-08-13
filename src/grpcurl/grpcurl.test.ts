@@ -102,7 +102,8 @@ test(`protoServer`, async () => {
         type: ProtoType.service,
         name: ``,
         tag: ``,
-        description: "grpcurl -plaintext localhost:12201 describe",
+        description:
+          "grpcurl -max-time 0.5 -plaintext localhost:12201 describe",
         calls: [],
       },
     ],
@@ -149,8 +150,8 @@ test(`send`, async () => {
   });
   expect(resp.code).toBe(`ok`);
 
-  const winExpect = `grpcurl -H \"username: user\" -H \"passsword: password\"  -max-msg-sz 4194304 -d \"{}\" -plaintext localhost:12201 pb.v1.Constructions.EmptyCall`;
-  const linuxExpect = `grpcurl -H 'username: user' -H 'passsword: password'  -max-msg-sz 4194304 -d '{}' -plaintext localhost:12201 pb.v1.Constructions.EmptyCall`;
+  const winExpect = `grpcurl -emit-defaults -H \"username: user\" -H \"passsword: password\"   -d \"{}\" -plaintext localhost:12201 pb.v1.Constructions.EmptyCall`;
+  const linuxExpect = `grpcurl -emit-defaults -H 'username: user' -H 'passsword: password'   -d '{}' -plaintext localhost:12201 pb.v1.Constructions.EmptyCall`;
 
   if (process.platform === "win32") {
     expect(resp.response).toBe(winExpect);

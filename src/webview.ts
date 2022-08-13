@@ -1,14 +1,25 @@
 import * as vscode from "vscode";
-import { Host } from "./grpcurl/grpcurl";
-import { RequestData } from "./treeviews/items";
+import { Host, RequestData } from "./grpcurl/grpcurl";
 
 export class WebViewFactory {
   private views: GrpcClickerView[] = [];
-  constructor(
-    private uri: vscode.Uri,
-    private requestCallback: (request: RequestData) => Promise<RequestData>,
-    private exportCallback: (request: RequestData) => void
-  ) {}
+
+  private uri: vscode.Uri;
+  private requestCallback: (data: RequestData) => Promise<RequestData>;
+  private exportCallback: (data: RequestData) => void;
+  private addTestCallback: (data: RequestData) => void;
+
+  constructor(input: {
+    uri: vscode.Uri;
+    requestCallback: (data: RequestData) => Promise<RequestData>;
+    exportCallback: (data: RequestData) => void;
+    addTestCallback: (data: RequestData) => void;
+  }) {
+    this.uri = input.uri;
+    this.requestCallback = input.requestCallback;
+    this.exportCallback = input.exportCallback;
+    this.addTestCallback = input.addTestCallback;
+  }
 
   create(data: RequestData) {
     this.removeClosedPanels();
@@ -27,7 +38,8 @@ export class WebViewFactory {
       this.uri,
       data,
       this.requestCallback,
-      this.exportCallback
+      this.exportCallback,
+      this.addTestCallback
     );
     this.views.push(view);
   }
@@ -49,8 +61,9 @@ class GrpcClickerView {
   constructor(
     private uri: vscode.Uri,
     public request: RequestData,
-    private requestCallback: (request: RequestData) => Promise<RequestData>,
-    private exportCallback: (request: RequestData) => void
+    private requestCallback: (data: RequestData) => Promise<RequestData>,
+    private exportCallback: (data: RequestData) => void,
+    private addTestCallback: (data: RequestData) => void
   ) {
     this.panel = vscode.window.createWebviewPanel(
       "callgrpc",
@@ -74,6 +87,19 @@ class GrpcClickerView {
           return;
         case "export":
           this.exportCallback(request);
+          return;
+        case "expectedResponse":
+          request.expectedResponse = out.text;
+          return;
+        case "test":
+          const data = JSON.parse(out.text) as RequestData;
+          if (data.expectedTime === ``) {
+            data.expectedTime = `0.1s`;
+          }
+          if (data.expectedCode === ``) {
+            data.expectedCode = `OK`;
+          }
+          this.addTestCallback(data);
           return;
       }
     });
