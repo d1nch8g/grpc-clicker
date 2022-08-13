@@ -74,6 +74,15 @@ class GrpcClickerView {
         case "export":
           this.exportCallback(request);
           return;
+        case "expectedResponse":
+          request.expectedResponse = out.text;
+          return;
+        case "expectedCode":
+          request.expectedCode = out.text;
+          return;
+        case "expectedTime":
+          request.expectedTime = out.text;
+          return;
       }
     });
 

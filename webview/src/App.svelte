@@ -69,20 +69,6 @@
     });
   }
 
-  function onExpectedCode(code) {
-    vscode.postMessage({
-      command: "expectedCode",
-      text: code,
-    });
-  }
-
-  function onExpectedTime(time) {
-    vscode.postMessage({
-      command: "expectedCode",
-      text: time,
-    });
-  }
-
   function onCreateTest() {
     vscode.postMessage({
       command: "test",
@@ -125,8 +111,6 @@
           <Testing
             bind:data
             onEdit="{onEditExpectedResponse}"
-            onCode="{onExpectedCode}"
-            onTime="{onExpectedTime}"
             onCreate="{onCreateTest}"
           />
         </vscode-panel-view>

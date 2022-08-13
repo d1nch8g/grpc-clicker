@@ -1,8 +1,6 @@
 <script>
   export let data;
   export let onEdit;
-  export let onCode;
-  export let onTime;
   export let onCreate;
 
   const timeOptions = [
@@ -57,7 +55,13 @@
         <vscode-data-grid-cell grid-column="2">
           <vscode-dropdown position="below">
             {#each timeOptions as time}
-              <vscode-option on:click="{onTime(time)}">{time}</vscode-option>
+              <vscode-option
+                on:click="{() => {
+                  data.expectedTime = time;
+                }}"
+              >
+                <div>{time}</div>
+              </vscode-option>
             {/each}
           </vscode-dropdown>
         </vscode-data-grid-cell>
@@ -69,7 +73,13 @@
         <vscode-data-grid-cell grid-column="2">
           <vscode-dropdown position="below">
             {#each codeOptions as code}
-              <vscode-option on:click="{onCode(code)}">{code}</vscode-option>
+              <vscode-option
+                on:click="{() => {
+                  data.expectedCode = code;
+                }}"
+              >
+                <div>{code}</div>
+              </vscode-option>
             {/each}
           </vscode-dropdown>
         </vscode-data-grid-cell>
