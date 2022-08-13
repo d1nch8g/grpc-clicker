@@ -337,7 +337,6 @@ export function activate(context: vscode.ExtensionContext) {
       name: collectionName,
       tests: [],
     });
-    
   });
 
   vscode.workspace.onDidChangeConfiguration((event) => {
