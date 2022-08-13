@@ -6,94 +6,94 @@
   {#if data.path !== ``}
     <vscode-data-grid-row>
       <vscode-data-grid-cell grid-column="1">
-        <p>Proto path</p>
+        <div>Proto path</div>
       </vscode-data-grid-cell>
       <vscode-data-grid-cell grid-column="2">
-        <p>{data.path}</p>
+        <div>{data.path}</div>
       </vscode-data-grid-cell>
     </vscode-data-grid-row>
   {/if}
   <vscode-data-grid-row>
     <vscode-data-grid-cell grid-column="1">
-      <p>Proto</p>
+      <div>Proto</div>
     </vscode-data-grid-cell>
     <vscode-data-grid-cell grid-column="2">
-      <p>{data.protoName}</p>
+      <div>{data.protoName}</div>
     </vscode-data-grid-cell>
   </vscode-data-grid-row>
   <vscode-data-grid-row>
     <vscode-data-grid-cell grid-column="1">
-      <p>Service</p>
+      <div>Service</div>
     </vscode-data-grid-cell>
     <vscode-data-grid-cell grid-column="2">
-      <p>{data.service}</p>
+      <div>{data.service}</div>
     </vscode-data-grid-cell>
   </vscode-data-grid-row>
   <vscode-data-grid-row>
     <vscode-data-grid-cell grid-column="1">
-      <p>RPC Call</p>
+      <div>RPC Call</div>
     </vscode-data-grid-cell>
     <vscode-data-grid-cell grid-column="2">
-      <p>{data.call}</p>
+      <div>{data.call}</div>
     </vscode-data-grid-cell>
   </vscode-data-grid-row>
   <vscode-data-grid-row>
     <vscode-data-grid-cell grid-column="1">
-      <p>Input message</p>
+      <div>Input message</div>
     </vscode-data-grid-cell>
     <vscode-data-grid-cell grid-column="2">
-      <p>{data.inputMessageName}</p>
+      <div>{data.inputMessageName}</div>
     </vscode-data-grid-cell>
   </vscode-data-grid-row>
   <vscode-data-grid-row>
     <vscode-data-grid-cell grid-column="1">
-      <p>Output message</p>
+      <div>Output message</div>
     </vscode-data-grid-cell>
     <vscode-data-grid-cell grid-column="2">
-      <p>{data.outputMessageName}</p>
+      <div>{data.outputMessageName}</div>
     </vscode-data-grid-cell>
   </vscode-data-grid-row>
   <vscode-data-grid-row>
     <vscode-data-grid-cell grid-column="1">
-      <p>Max recieve message size</p>
+      <div>Max recieve message size</div>
     </vscode-data-grid-cell>
     <vscode-data-grid-cell grid-column="2">
-      <p>{data.maxMsgSize} mb</p>
+      <div>{data.maxMsgSize} mb</div>
     </vscode-data-grid-cell>
   </vscode-data-grid-row>
   {#each data.metadata as header}
     <vscode-data-grid-row>
       <vscode-data-grid-cell grid-column="1">
-        <p>Header</p>
+        <div>Header</div>
       </vscode-data-grid-cell>
       <vscode-data-grid-cell grid-column="2">
-        <p><i>{header}</i></p>
+        <div><i>{header}</i></div>
       </vscode-data-grid-cell>
     </vscode-data-grid-row>
   {/each}
   {#if data.time !== ``}
     <vscode-data-grid-row>
       <vscode-data-grid-cell grid-column="1">
-        <p>Response code</p>
+        <div>Response code</div>
       </vscode-data-grid-cell>
       <vscode-data-grid-cell grid-column="2">
-        <p>{data.code}</p>
+        <div>{data.code}</div>
       </vscode-data-grid-cell>
     </vscode-data-grid-row>
     <vscode-data-grid-row>
       <vscode-data-grid-cell grid-column="1">
-        <p>Time</p>
+        <div>Time</div>
       </vscode-data-grid-cell>
       <vscode-data-grid-cell grid-column="2">
-        <p>{data.time} seconds</p>
+        <div>{data.time} seconds</div>
       </vscode-data-grid-cell>
     </vscode-data-grid-row>
     <vscode-data-grid-row>
       <vscode-data-grid-cell grid-column="1">
-        <p>Output message</p>
+        <div>Output message</div>
       </vscode-data-grid-cell>
       <vscode-data-grid-cell grid-column="2">
-        <p>{data.outputMessageName}</p>
+        <div>{data.outputMessageName}</div>
       </vscode-data-grid-cell>
     </vscode-data-grid-row>
   {/if}
