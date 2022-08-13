@@ -81,28 +81,19 @@
         "category": "gRPC Clicker",
         "command": "collections.create",
         "title": "Create new collection of tests",
-        "icon": {
-          "dark": "images/dark/plus.svg",
-          "light": "images/light/plus.svg"
-        }
+        "icon": "$(settings-add)"
       },
       {
         "category": "gRPC Clicker",
         "command": "history.clean",
         "title": "Clean history of requests",
-        "icon": {
-          "dark": "images/dark/trash.svg",
-          "light": "images/light/trash.svg"
-        }
+        "icon": "$(terminal-kill)"
       },
       {
         "category": "gRPC Clicker",
         "command": "cache.clean",
         "title": "Clean all extension cache",
-        "icon": {
-          "dark": "images/dark/trash.svg",
-          "light": "images/light/trash.svg"
-        }
+        "icon": "$(terminal-kill)"
       },
       {
         "category": "gRPC Clicker",
@@ -113,104 +104,68 @@
         "category": "gRPC Clicker",
         "command": "files.add",
         "title": "Add new proto file",
-        "icon": {
-          "dark": "images/dark/plus.svg",
-          "light": "images/light/plus.svg"
-        }
+        "icon": "$(settings-add)"
       },
       {
         "category": "gRPC Clicker",
         "command": "servers.add",
         "title": "Add new proto reflect server",
-        "icon": {
-          "dark": "images/dark/plus.svg",
-          "light": "images/light/plus.svg"
-        }
+        "icon": "$(settings-add)"
       },
       {
         "command": "files.remove",
         "title": "Remove existing proto file",
-        "icon": {
-          "dark": "images/dark/trash.svg",
-          "light": "images/light/trash.svg"
-        }
+        "icon": "$(terminal-kill)"
       },
       {
         "category": "gRPC Clicker",
         "command": "headers.add",
         "title": "Add new metadata to request",
-        "icon": {
-          "dark": "images/dark/plus.svg",
-          "light": "images/light/plus.svg"
-        }
+        "icon": "$(settings-add)"
       },
       {
         "command": "headers.remove",
         "title": "Remove header",
-        "icon": {
-          "dark": "images/dark/trash.svg",
-          "light": "images/light/trash.svg"
-        }
+        "icon": "$(terminal-kill)"
       },
       {
         "command": "hosts.add",
         "title": "Add new host",
-        "icon": {
-          "dark": "images/dark/plus.svg",
-          "light": "images/light/plus.svg"
-        }
+        "icon": "$(settings-add)"
       },
       {
         "command": "hosts.remove",
         "title": "Remove host",
-        "icon": {
-          "dark": "images/dark/trash.svg",
-          "light": "images/light/trash.svg"
-        }
+        "icon": "$(terminal-kill)"
       },
       {
         "command": "servers.remove",
         "title": "Remove server",
-        "icon": {
-          "dark": "images/dark/trash.svg",
-          "light": "images/light/trash.svg"
-        }
+        "icon": "$(terminal-kill)"
       },
       {
         "category": "gRPC Clicker",
         "command": "files.refresh",
         "title": "Resresh existing proro schemas",
-        "icon": {
-          "dark": "images/dark/refresh.svg",
-          "light": "images/light/refresh.svg"
-        }
+        "icon": "$(extensions-refresh)"
       },
       {
         "category": "gRPC Clicker",
         "command": "servers.refresh",
         "title": "Resresh existing proro reflect servers",
-        "icon": {
-          "dark": "images/dark/refresh.svg",
-          "light": "images/light/refresh.svg"
-        }
+        "icon": "$(extensions-refresh)"
       },
       {
         "category": "gRPC Clicker",
         "command": "colections.execute",
         "title": "Run collection",
-        "icon": {
-          "dark": "images/dark/play.svg",
-          "light": "images/light/play.svg"
-        }
+        "icon": "$(testing-run-icon)"
       },
       {
         "category": "gRPC Clicker",
         "command": "colections.remove",
         "title": "Remove collection",
-        "icon": {
-          "dark": "images/dark/trash.svg",
-          "light": "images/light/trash.svg"
-        }
+        "icon": "$(terminal-kill)"
       }
     ],
     "menus": {

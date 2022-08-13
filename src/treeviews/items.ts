@@ -52,9 +52,9 @@ export class TestItem extends ClickerItem {
     super(`${base.call}`);
     super.type = ItemType.test;
     super.tooltip = new vscode.MarkdownString(`
-#### Test item
-- Expected code: ${base.expectedCode}
-- Expected time: ${base.expectedTime}
+#### Test for ${base.protoName} - ${base.call}
+- Expected code: \`${base.expectedCode}\`
+- Expected time: \`${base.expectedTime}\`
 - Expected response
 
 \`\`\`json
@@ -62,11 +62,17 @@ ${base.json.split(`\n`).slice(0, 40).join(`\n`)}
 \`\`\`
     `);
     super.collapsibleState = vscode.TreeItemCollapsibleState.None;
-    const icon = `collection.svg`;
-    super.iconPath = {
-      light: path.join(__filename, "..", "..", "images", icon),
-      dark: path.join(__filename, "..", "..", "images", icon),
-    };
+    switch (base.testPassed) {
+      case undefined:
+        super.iconPath = new vscode.ThemeIcon("testing-unset-icon");
+        return;
+      case true:
+        super.iconPath = new vscode.ThemeIcon(`testing-passed-icon`);
+        return;
+      case false:
+        super.iconPath = new vscode.ThemeIcon(`testing-failed-icon`);
+        return;
+    }
   }
 }
 
@@ -287,7 +293,7 @@ export class HistoryItem extends ClickerItem {
     super.description = request.date;
     super.contextValue = "call";
     super.tooltip = new vscode.MarkdownString(`### Request information:
-- host for execution: \`${request.host}\`
+- host for execution: \`${request.host.adress}\`
 - method used in request: \`${request.call}\`
 - response code: \`${request.code}\`
 - time of execution: \`${request.time}\`
