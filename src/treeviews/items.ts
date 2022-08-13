@@ -192,6 +192,7 @@ export class CallItem extends ClickerItem {
     super.contextValue = "call";
     let request: RequestData = {
       path: ``,
+      importPath: ``,
       protoName: parent.base.tag.split(`.`).slice(0, -1).join(`.`),
       service: parent.base.name,
       call: base.name,
@@ -220,6 +221,7 @@ export class CallItem extends ClickerItem {
     if (parent.parent.type === ItemType.file) {
       const file = parent.parent as FileItem;
       request.path = file.base.path;
+      request.importPath = file.base.importPath;
       request.host = file.base.hosts[0];
       request.hosts = file.base.hosts;
     }

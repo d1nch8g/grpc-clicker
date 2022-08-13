@@ -27,6 +27,7 @@ test(`add`, () => {
     services: [],
     path: "",
     hosts: [],
+    importPath: `/`,
   };
   expect(protos.add(proto)).toBeUndefined();
   expect(protos.add(proto)).toStrictEqual(
@@ -42,6 +43,7 @@ test(`list`, () => {
     services: [],
     path: "",
     hosts: [],
+    importPath: `/`,
   };
   memento.values = [JSON.stringify(proto)];
   expect(protos.list()).toStrictEqual([proto]);
@@ -55,6 +57,7 @@ test(`remove`, () => {
     services: [],
     path: "path",
     hosts: [],
+    importPath: `/`,
   };
   memento.values = [JSON.stringify(proto)];
   protos.remove(`path`);
@@ -69,6 +72,7 @@ test(`add host`, () => {
     services: [],
     path: "path",
     hosts: [],
+    importPath: `/`,
   };
   memento.values = [JSON.stringify(proto)];
   protos.addHost(`path`, {
@@ -89,6 +93,7 @@ test(`remove host`, () => {
     type: ProtoType.proto,
     services: [],
     path: "path",
+    importPath: `/`,
     hosts: [
       {
         adress: "testx",

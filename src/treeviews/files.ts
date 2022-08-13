@@ -16,7 +16,11 @@ import {
 export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
   constructor(
     private files: ProtoFile[],
-    private describeMsg: (path: string, tag: string) => Promise<Message>
+    private describeMsg: (
+      path: string,
+      importPath: string,
+      tag: string
+    ) => Promise<Message>
   ) {
     this.files = files;
     this.onChange = new vscode.EventEmitter<ClickerItem | undefined | void>();
@@ -70,10 +74,12 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
       const file = elem.parent.parent as FileItem;
       const input = await this.describeMsg(
         file.base.path,
+        file.base.importPath,
         elem.base.inputMessageTag
       );
       const output = await this.describeMsg(
         file.base.path,
+        file.base.importPath,
         elem.base.outputMessageTag
       );
       items.push(new MessageItem(input, elem));
@@ -96,6 +102,7 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
       if (elem.base.innerMessageTag !== undefined) {
         const inner = await this.describeMsg(
           file.base.path,
+          file.base.importPath,
           elem.base.innerMessageTag
         );
         for (const field of inner.fields) {

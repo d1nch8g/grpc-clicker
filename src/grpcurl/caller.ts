@@ -1,10 +1,10 @@
 import * as util from "util";
 
 export class Caller {
-  form(input: RequestForm): string {
+  formSource(input: RequestForm): string {
     let source = input.source;
     if (!input.server) {
-      source = `-import-path / -proto ${source}`;
+      source = `-import-path ${input.importPath} -proto ${source}`;
     }
     if (input.plaintext) {
       source = `-plaintext ${source}`;
@@ -65,5 +65,6 @@ export interface RequestForm {
   server: boolean;
   plaintext: boolean;
   docker: boolean;
+  importPath: string;
   args: string[];
 }

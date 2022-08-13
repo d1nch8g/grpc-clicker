@@ -11,13 +11,14 @@ export class Grpcurl {
 
   async protoFile(input: ProtoFileInput): Promise<ProtoFile | string> {
     const command = `grpcurl |SRC| describe`;
-    const call = this.caller.form({
+    const call = this.caller.formSource({
       call: command,
       source: input.path,
       server: false,
       plaintext: false,
       docker: this.useDocker,
       args: [],
+      importPath: input.importPath,
     });
     const [output, err] = await this.caller.execute(call);
     if (err !== undefined) {
@@ -28,19 +29,21 @@ export class Grpcurl {
       type: ProtoType.proto,
       path: input.path,
       hosts: input.hosts,
+      importPath: input.importPath,
       services: parsedProto.services,
     };
   }
 
   async protoServer(input: ProtoServerInput): Promise<ProtoServer | string> {
     const command = `grpcurl -max-time 0.5 |SRC| describe`;
-    const call = this.caller.form({
+    const call = this.caller.formSource({
       call: command,
       source: input.host,
       server: true,
       plaintext: input.plaintext,
       docker: this.useDocker,
       args: [],
+      importPath: ``,
     });
     const [output, err] = await this.caller.execute(call);
     if (err !== undefined) {
@@ -60,16 +63,18 @@ export class Grpcurl {
     server: boolean;
     plaintext: boolean;
     tag: string;
+    importPath: string;
   }): Promise<Message | string> {
     let command = `grpcurl -msg-template |SRC| describe %s`;
 
-    const call = this.caller.form({
+    const call = this.caller.formSource({
       call: command,
       source: input.source,
       server: input.server,
       plaintext: input.plaintext,
       docker: this.useDocker,
       args: [input.tag],
+      importPath: input.importPath,
     });
 
     const [resp, err] = await this.caller.execute(call);
@@ -92,13 +97,14 @@ export class Grpcurl {
       meta = meta + this.headerPreprocess(metafield);
     }
 
-    const call = this.caller.form({
+    const call = this.caller.formSource({
       call: command,
       source: input.host.adress,
       server: true,
       plaintext: input.host.plaintext,
       docker: this.useDocker,
       args: [meta, maxMsgSize, formedJson, input.callTag],
+      importPath: ``,
     });
 
     return call;
@@ -169,6 +175,7 @@ export class Grpcurl {
 
 export interface ProtoFileInput {
   path: string;
+  importPath: string;
   hosts: Host[];
 }
 
@@ -179,6 +186,7 @@ export interface Host {
 
 export interface ProtoFile extends Proto {
   path: string;
+  importPath: string;
   hosts: Host[];
 }
 
@@ -194,11 +202,12 @@ export interface ProtoServer extends Proto {
 
 export interface Request {
   path: string;
+  importPath: string;
   json: string;
   host: Host;
   callTag: string;
-  metadata: string[];
   maxMsgSize: number;
+  metadata: string[];
 }
 
 export interface Response {

@@ -59,6 +59,7 @@ test(`add test`, () => {
   };
   memento.values = [JSON.stringify(collection)];
   collections.addTest(`testcol`, {
+    importPath: `/`,
     service: "",
     call: "",
     inputMessageTag: "",
@@ -98,6 +99,7 @@ test(`update`, () => {
   memento.values = [JSON.stringify(collection)];
   collection.tests = [
     {
+      importPath: `/`,
       service: "",
       call: "",
       inputMessageTag: "",

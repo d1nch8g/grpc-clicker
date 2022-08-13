@@ -21,7 +21,11 @@ export class TreeViews {
     files: ProtoFile[];
     servers: ProtoServer[];
     collections: Collection[];
-    describeFileMsg: (path: string, tag: string) => Promise<Message>;
+    describeFileMsg: (
+      path: string,
+      importPath: string,
+      tag: string
+    ) => Promise<Message>;
     describeServerMsg: (
       path: string,
       plaintext: boolean,

@@ -35,12 +35,17 @@ export function activate(context: vscode.ExtensionContext) {
     requests: storage.history.list(),
     servers: storage.servers.list(),
     collections: storage.collections.list(),
-    describeFileMsg: async (path: string, tag: string): Promise<Message> => {
+    describeFileMsg: async (
+      path: string,
+      importPath: string,
+      tag: string
+    ): Promise<Message> => {
       const msg = await grpcurl.message({
         source: path,
         server: false,
         plaintext: false,
         tag: tag,
+        importPath: importPath,
       });
       if (typeof msg === `string`) {
         vscode.window.showErrorMessage(msg);
@@ -57,6 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
         server: true,
         tag: tag,
         plaintext: plaintext,
+        importPath: ``,
       });
       if (typeof msg === `string`) {
         vscode.window.showErrorMessage(msg);
@@ -121,6 +127,7 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.headers.refresh([]);
     treeviews.servers.refresh([]);
     treeviews.history.refresh([]);
+    treeviews.collections.refresh([]);
   });
 
   vscode.commands.registerCommand("files.add", async () => {
@@ -148,9 +155,17 @@ export function activate(context: vscode.ExtensionContext) {
     if (plaintext === undefined || plaintext === ``) {
       return;
     }
+    const importPath = await vscode.window.showInputBox({
+      value: `/`,
+      title: `Specify import path for imports.`,
+    });
+    if (importPath === undefined || importPath === ``) {
+      return;
+    }
     const path = choice[0].fsPath;
     let proto = await grpcurl.protoFile({
       path: path,
+      importPath: importPath,
       hosts: [{ adress: defaultHost, plaintext: plaintext === `Yes` }],
     });
     if (typeof proto === `string`) {
@@ -207,10 +222,11 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand("files.refresh", async () => {
     const olfFiles = storage.files.list();
     let newFiles: ProtoFile[] = [];
-    for (const olfFile of olfFiles) {
+    for (const oldFile of olfFiles) {
       const newProto = await grpcurl.protoFile({
-        path: olfFile.path,
-        hosts: olfFile.hosts,
+        path: oldFile.path,
+        importPath: oldFile.importPath,
+        hosts: oldFile.hosts,
       });
       if (typeof newProto === `string`) {
         vscode.window.showErrorMessage(newProto);
@@ -299,6 +315,7 @@ export function activate(context: vscode.ExtensionContext) {
         server: false,
         plaintext: false,
         tag: data.inputMessageTag,
+        importPath: data.importPath,
       });
     } else {
       msg = await grpcurl.message({
@@ -306,6 +323,7 @@ export function activate(context: vscode.ExtensionContext) {
         server: true,
         plaintext: data.host.plaintext,
         tag: data.inputMessageTag,
+        importPath: ``,
       });
     }
 

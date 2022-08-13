@@ -9,9 +9,10 @@ test(`form`, () => {
     plaintext: true,
     docker: false,
     args: [`.google.protobuf.Empty`],
+    importPath: `/`
   };
   const res = `grpcurl -msg-template -plaintext localhost:12201 describe .google.protobuf.Empty`;
-  expect(caller.form(form)).toBe(res);
+  expect(caller.formSource(form)).toBe(res);
 });
 
 test("success", async () => {
