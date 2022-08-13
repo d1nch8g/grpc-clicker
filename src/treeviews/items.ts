@@ -54,7 +54,7 @@ export class TestItem extends ClickerItem {
     super.tooltip = new vscode.MarkdownString(`
 #### Test for ${base.protoName} - ${base.call}
 - Expected code: \`${base.expectedCode}\`
-- Expected time: \`${base.timeout}\`
+- Expected time: \`${base.expectedTime}\`
 - Expected response
 
 ---
@@ -208,7 +208,7 @@ export class CallItem extends ClickerItem {
       hosts: [],
       expectedResponse: "",
       expectedCode: "",
-      timeout: "",
+      expectedTime: "",
       testMdResult: "",
       testPassed: undefined,
     };
