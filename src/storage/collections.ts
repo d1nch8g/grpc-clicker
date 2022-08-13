@@ -55,6 +55,17 @@ export class Collections {
     }
     this.save(collections);
   }
+
+  // TODO add test
+  update(collection: Collection) {
+    const collections = this.list();
+    for (let savedValue of collections) {
+      if (savedValue.name === collection.name) {
+        savedValue = collection;
+      }
+    }
+    this.save(collections);
+  }
 }
 
 export interface Collection {

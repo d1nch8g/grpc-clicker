@@ -360,6 +360,23 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   vscode.commands.registerCommand(
+    "colections.run",
+    async (col: CollectionItem) => {
+      for (const test of col.base.tests) {
+        const result = await grpcurl.test(test);
+        if (result !== ``) {
+          test.testPassed = false;
+          test.testMdResult = result;
+        } else {
+          test.testPassed = true;
+        }
+        storage.collections.update(col.base);
+        treeviews.collections.refresh(storage.collections.list());
+      }
+    }
+  );
+
+  vscode.commands.registerCommand(
     "colections.remove",
     async (col: CollectionItem) => {
       storage.collections.remove(col.base.name);

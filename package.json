@@ -157,7 +157,7 @@
       },
       {
         "category": "gRPC Clicker",
-        "command": "colections.execute",
+        "command": "colections.run",
         "title": "Run collection",
         "icon": "$(testing-run-icon)"
       },
@@ -237,7 +237,7 @@
           "group": "inline"
         },
         {
-          "command": "colections.execute",
+          "command": "colections.run",
           "when": "view == collections && viewItem == collection",
           "group": "inline"
         },
