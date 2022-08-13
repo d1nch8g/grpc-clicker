@@ -62,7 +62,7 @@
     });
   }
 
-  function onEditExpectedResponse() {
+  function onEditResponse() {
     vscode.postMessage({
       command: "expectedResponse",
       text: data.expectedResponse,
@@ -108,11 +108,7 @@
           <Response bind:data />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
-          <Testing
-            bind:data
-            onEdit="{onEditExpectedResponse}"
-            onCreate="{onCreateTest}"
-          />
+          <Testing bind:data edit="{onEditResponse}" craete="{onCreateTest}" />
         </vscode-panel-view>
       </vscode-panels>
     </div>

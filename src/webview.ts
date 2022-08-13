@@ -77,12 +77,6 @@ class GrpcClickerView {
         case "expectedResponse":
           request.expectedResponse = out.text;
           return;
-        case "expectedCode":
-          request.expectedCode = out.text;
-          return;
-        case "expectedTime":
-          request.expectedTime = out.text;
-          return;
       }
     });
 

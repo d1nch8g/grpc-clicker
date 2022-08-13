@@ -1,7 +1,7 @@
 <script>
   export let data;
-  export let onEdit;
-  export let onCreate;
+  export let edit;
+  export let craete;
 
   const timeOptions = [
     `0.1s`,
@@ -103,12 +103,12 @@
       rows="10"
       style="--height: {innerHeight - 300}px"
       bind:value="{data.expectedResponse}"
-      on:input="{onEdit}"></textarea>
+      on:input="{edit}"></textarea>
   </tr>
   <tr>
     <div class="button-padding">
       <center>
-        <button on:click="{onCreate}">Create test</button>
+        <button on:click="{craete}">Create test</button>
       </center>
     </div>
   </tr>
