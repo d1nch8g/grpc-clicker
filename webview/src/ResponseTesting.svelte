@@ -5,9 +5,22 @@
 
 <svelte:window bind:innerHeight />
 
-<textarea name="" id="" cols="1" bind:value="{data.expectedTime}"></textarea>
+<table>
+  <tr>
+    <td>
+      <h3>EXPECTED TIME</h3>
+    </td>
+    <td>
+      <textarea name="" id="" cols="1" bind:value="{data.expectedTime}"
+      ></textarea>
+    </td>
+  </tr>
+</table>
 
 <style>
+  table {
+    width: 100%;
+  }
   textarea {
     height: var(--height);
     resize: none;
@@ -19,6 +32,7 @@
     padding: 6px;
     font-family: var(--vscode-editor-font-family);
     font-size: var(--vscode-editor-font-size);
+    height: 18px;
   }
   textarea:focus {
     outline-color: var(--vscode-focusBorder) !important;
