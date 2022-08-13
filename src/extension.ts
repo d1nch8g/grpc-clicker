@@ -65,6 +65,56 @@ export function activate(context: vscode.ExtensionContext) {
     },
   });
 
+  const webview = new WebViewFactory({
+    uri: context.extensionUri,
+
+    requestCallback: async (request) => {
+      let metadata: string[] = [];
+      const headers = storage.headers.list();
+      for (const header of headers) {
+        if (header.active) {
+          metadata.push(header.value);
+        }
+      }
+      const resp = await grpcurl.send(request);
+      request.code = resp.code;
+      request.response = resp.response;
+      request.time = resp.time;
+      request.date = resp.date;
+      storage.history.add(request);
+      treeviews.history.refresh(storage.history.list());
+      return request;
+    },
+
+    exportCallback: (data: RequestData) => {
+      const command = grpcurl.formCall(data);
+      vscode.env.clipboard.writeText(command);
+      vscode.window.showInformationMessage(
+        `gRPCurl command have been copied to clipboard`
+      );
+    },
+
+    addTestCallback: async (data: RequestData) => {
+      const collections = storage.collections.list();
+      if (collections.length === 0) {
+        vscode.window.showErrorMessage(
+          `You should create collection in side panel, then append this test to collection.`
+        );
+        return;
+      }
+      let collectionNames: string[] = [];
+      for (const collection of collections) {
+        collectionNames.push(collection.name);
+      }
+      const choice = await vscode.window.showQuickPick(collectionNames);
+      if (choice === undefined) {
+        return;
+      }
+      storage.collections.addTest(choice, data);
+      treeviews.collections.refresh(storage.collections.list());
+    },
+  });
+
   vscode.commands.registerCommand("cache.clean", async () => {
     storage.clean();
     treeviews.files.refresh([]);
@@ -232,53 +282,6 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.headers.refresh(storage.headers.list());
   });
 
-  const webviewFactory = new WebViewFactory(
-    context.extensionUri,
-    async (request) => {
-      let metadata: string[] = [];
-      const headers = storage.headers.list();
-      for (const header of headers) {
-        if (header.active) {
-          metadata.push(header.value);
-        }
-      }
-      const resp = await grpcurl.send(request);
-      request.code = resp.code;
-      request.response = resp.response;
-      request.time = resp.time;
-      request.date = resp.date;
-      storage.history.add(request);
-      treeviews.history.refresh(storage.history.list());
-      return request;
-    },
-    (data: RequestData) => {
-      const command = grpcurl.formCall(data);
-      vscode.env.clipboard.writeText(command);
-      vscode.window.showInformationMessage(
-        `gRPCurl command have been copied to clipboard`
-      );
-    },
-    async (data: RequestData) => {
-      const collections = storage.collections.list();
-      if (collections.length === 0) {
-        vscode.window.showErrorMessage(
-          `You should create collection in side panel, then append this test to collection.`
-        );
-        return;
-      }
-      let collectionNames: string[] = [];
-      for (const collection of collections) {
-        collectionNames.push(collection.name);
-      }
-      const choice = await vscode.window.showQuickPick(collectionNames);
-      if (choice === undefined) {
-        return;
-      }
-      storage.collections.addTest(choice, data);
-      treeviews.collections.refresh(storage.collections.list());
-    }
-  );
-
   vscode.commands.registerCommand("webview.open", async (data: RequestData) => {
     data.maxMsgSize = vscode.workspace
       .getConfiguration(`grpc-clicker`)
@@ -311,7 +314,7 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
     data.json = msg.template!;
-    webviewFactory.create(data);
+    webview.create(data);
   });
 
   vscode.commands.registerCommand("history.clean", () => {

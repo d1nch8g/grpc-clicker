@@ -3,12 +3,23 @@ import { Host, RequestData } from "./grpcurl/grpcurl";
 
 export class WebViewFactory {
   private views: GrpcClickerView[] = [];
-  constructor(
-    private uri: vscode.Uri,
-    private requestCallback: (data: RequestData) => Promise<RequestData>,
-    private exportCallback: (data: RequestData) => void,
-    private addTestCallback: (data: RequestData) => void
-  ) {}
+
+  private uri: vscode.Uri;
+  private requestCallback: (data: RequestData) => Promise<RequestData>;
+  private exportCallback: (data: RequestData) => void;
+  private addTestCallback: (data: RequestData) => void;
+
+  constructor(input: {
+    uri: vscode.Uri;
+    requestCallback: (data: RequestData) => Promise<RequestData>;
+    exportCallback: (data: RequestData) => void;
+    addTestCallback: (data: RequestData) => void;
+  }) {
+    this.uri = input.uri;
+    this.requestCallback = input.requestCallback;
+    this.exportCallback = input.exportCallback;
+    this.addTestCallback = input.addTestCallback;
+  }
 
   create(data: RequestData) {
     this.removeClosedPanels();
