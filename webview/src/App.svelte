@@ -36,7 +36,7 @@
   });
 
   function onSend() {
-    data.response = "...";
+    data.response = "... processing";
     vscode.postMessage({
       command: "send",
     });

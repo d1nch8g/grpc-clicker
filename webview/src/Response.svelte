@@ -14,18 +14,18 @@
     <vscode-data-grid aria-label="Basic">
       <vscode-data-grid-row>
         <vscode-data-grid-cell grid-column="1">
-          <div>Response code</div>
+          {#if data.code !== ``}
+            <div>{data.code}</div>
+          {:else}
+            <div>Not executed</div>
+          {/if}
         </vscode-data-grid-cell>
         <vscode-data-grid-cell grid-column="2">
-          <div>{data.code}</div>
-        </vscode-data-grid-cell>
-      </vscode-data-grid-row>
-      <vscode-data-grid-row>
-        <vscode-data-grid-cell grid-column="1">
-          <div>Time</div>
-        </vscode-data-grid-cell>
-        <vscode-data-grid-cell grid-column="2">
-          <div>{data.time} seconds</div>
+          {#if data.time !== ``}
+            <div>{data.time} seconds</div>
+          {:else}
+            <div>0 seconds</div>
+          {/if}
         </vscode-data-grid-cell>
       </vscode-data-grid-row>
     </vscode-data-grid>
@@ -42,7 +42,7 @@
       id=""
       cols="30"
       rows="10"
-      style="--height: {innerHeight - 250}px"
+      style="--height: {innerHeight - 220}px"
       bind:value="{data.response}"
       readonly></textarea>
   </tr>
@@ -54,6 +54,10 @@
   }
   tr {
     width: 100%;
+  }
+  center {
+    padding-top: 10px;
+    padding-bottom: 5px;
   }
   textarea {
     height: var(--height);
@@ -69,9 +73,5 @@
   }
   textarea:focus {
     outline-color: var(--vscode-focusBorder) !important;
-  }
-  center {
-    padding-top: 10px;
-    padding-bottom: 5px;
   }
 </style>
