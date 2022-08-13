@@ -1,4 +1,5 @@
 import { Memento } from "vscode";
+import { RequestData } from "../grpcurl/grpcurl";
 import { Collection, Collections } from "./collections";
 
 class MockMemento implements Memento {
@@ -47,4 +48,83 @@ test(`remove`, () => {
   memento.values = [`{"name": "testcol", "tests": []}`];
   collections.remove(`testcol`);
   expect(memento.values).toStrictEqual([]);
+});
+
+test(`add test`, () => {
+  const memento = new MockMemento();
+  const collections = new Collections(memento);
+  const collection: Collection = {
+    name: "testcol",
+    tests: [],
+  };
+  memento.values = [JSON.stringify(collection)];
+  collections.addTest(`testcol`, {
+    service: "",
+    call: "",
+    inputMessageTag: "",
+    inputMessageName: "",
+    outputMessageName: "",
+    protoName: "",
+    hosts: [],
+    expectedResponse: "",
+    expectedCode: "",
+    timeout: "",
+    testPassed: undefined,
+    testMdResult: "",
+    path: "",
+    json: "",
+    host: {
+      adress: ``,
+      plaintext: true,
+    },
+    callTag: "",
+    metadata: [],
+    maxMsgSize: 0,
+    code: "",
+    response: "",
+    time: "",
+    date: "",
+  });
+  expect(collections.list()[0].tests.length).toBe(1);
+});
+
+test(`update`, () => {
+  const memento = new MockMemento();
+  const collections = new Collections(memento);
+  const collection: Collection = {
+    name: "testcol",
+    tests: [],
+  };
+  memento.values = [JSON.stringify(collection)];
+  collection.tests = [
+    {
+      service: "",
+      call: "",
+      inputMessageTag: "",
+      inputMessageName: "",
+      outputMessageName: "",
+      protoName: "",
+      hosts: [],
+      expectedResponse: "",
+      expectedCode: "",
+      timeout: "",
+      testPassed: undefined,
+      testMdResult: "",
+      path: "",
+      json: "",
+      host: {
+        adress: ``,
+        plaintext: true,
+      },
+      callTag: "",
+      metadata: [],
+      maxMsgSize: 0,
+      code: "",
+      response: "",
+      time: "",
+      date: "",
+    },
+  ];
+  collections.update(collection);
+  expect(collections.list()[0].tests.length).toBe(1);
 });

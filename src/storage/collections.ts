@@ -45,7 +45,6 @@ export class Collections {
     return collections;
   }
 
-  // TODO add test
   addTest(name: string, data: RequestData) {
     const collections = this.list();
     for (const savedValue of collections) {
@@ -56,14 +55,13 @@ export class Collections {
     this.save(collections);
   }
 
-  // TODO add test
   update(collection: Collection) {
     const collections = this.list();
-    for (let savedValue of collections) {
-      if (savedValue.name === collection.name) {
-        savedValue = collection;
+    collections.forEach((col, idx) => {
+      if (col.name === collection.name) {
+        collections[idx] = collection;
       }
-    }
+    });
     this.save(collections);
   }
 }

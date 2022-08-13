@@ -54,12 +54,17 @@ export class TestItem extends ClickerItem {
     super.tooltip = new vscode.MarkdownString(`
 #### Test for ${base.protoName} - ${base.call}
 - Expected code: \`${base.expectedCode}\`
-- Expected time: \`${base.expectedTime}\`
+- Expected time: \`${base.timeout}\`
 - Expected response
+
+---
 
 \`\`\`json
 ${base.json.split(`\n`).slice(0, 40).join(`\n`)}
 \`\`\`
+---
+
+${base.testMdResult}
     `);
     super.collapsibleState = vscode.TreeItemCollapsibleState.None;
     switch (base.testPassed) {
@@ -203,7 +208,7 @@ export class CallItem extends ClickerItem {
       hosts: [],
       expectedResponse: "",
       expectedCode: "",
-      expectedTime: "",
+      timeout: "",
       testMdResult: "",
       testPassed: undefined,
     };
