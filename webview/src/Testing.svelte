@@ -87,13 +87,9 @@
     </vscode-data-grid>
   </tr>
   <tr>
-    <vscode-data-grid aria-label="Basic">
-      <vscode-data-grid-row>
-        <vscode-data-grid-cell grid-column="1" class="ecode">
-          <b><center>Expected response JSON</center></b>
-        </vscode-data-grid-cell>
-      </vscode-data-grid-row>
-    </vscode-data-grid>
+    <center>
+      <b>Expected response JSON</b>
+    </center>
   </tr>
   <tr>
     <textarea
@@ -101,7 +97,7 @@
       id=""
       cols="30"
       rows="10"
-      style="--height: {innerHeight - 300}px"
+      style="--height: {innerHeight - 320}px"
       bind:value="{data.expectedResponse}"
       on:input="{edit}"></textarea>
   </tr>
@@ -159,11 +155,15 @@
     resize: none;
     display: block;
     width: 98%;
+    padding: 6px;
     color: var(--vscode-input-foreground);
     outline-color: var(--vscode-input-border);
     background-color: var(--vscode-input-background);
-    padding: 6px;
     font-family: var(--vscode-editor-font-family);
     font-size: var(--vscode-editor-font-size);
+  }
+  center {
+    padding-top: 10px;
+    padding-bottom: 5px;
   }
 </style>

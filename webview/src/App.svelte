@@ -36,7 +36,7 @@
   });
 
   function onSend() {
-    data.response = "waiter";
+    data.response = "...";
     vscode.postMessage({
       command: "send",
     });
