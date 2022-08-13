@@ -82,6 +82,13 @@
       text: time,
     });
   }
+
+  function onCreateTest() {
+    vscode.postMessage({
+      command: "test",
+      text: JSON.stringify(data),
+    });
+  }
 </script>
 
 <TopPanel
@@ -115,7 +122,13 @@
           <Response bind:data />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
-          <Testing bind:data />
+          <Testing
+            bind:data
+            onEdit="{onEditExpectedResponse}"
+            onCode="{onExpectedCode}"
+            onTime="{onExpectedTime}"
+            onCreate="{onCreateTest}"
+          />
         </vscode-panel-view>
       </vscode-panels>
     </div>
