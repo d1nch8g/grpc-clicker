@@ -44,6 +44,17 @@ export class Collections {
     this.save(collections);
     return collections;
   }
+
+  // TODO add test
+  addTest(name: string, data: RequestData) {
+    const collections = this.list();
+    for (const savedValue of collections) {
+      if (savedValue.name === name) {
+        savedValue.tests.push(data);
+      }
+    }
+    this.save(collections);
+  }
 }
 
 export interface Collection {

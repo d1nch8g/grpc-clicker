@@ -31,7 +31,7 @@ export class CollectionsTreeView
       for (const collection of this.collections) {
         items.push(new CollectionItem(collection));
       }
-      return;
+      return items;
     }
     if (element.type === ItemType.collection) {
       const collection = element as CollectionItem;

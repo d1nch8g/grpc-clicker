@@ -45,7 +45,8 @@ test(`add`, () => {
       expectedResponse: "",
       expectedCode: "",
       expectedTime: "",
-      markdownTestResult: "",
+      testMdResult: "",
+      testPassed: undefined,
     });
   }
   expect(storage.values.length).toBe(100);
@@ -78,7 +79,8 @@ test(`list`, () => {
     expectedResponse: "",
     expectedCode: "",
     expectedTime: "",
-    markdownTestResult: "",
+    testMdResult: "",
+    testPassed: undefined,
   });
 
   let resp = history.list();
@@ -107,7 +109,7 @@ test(`list`, () => {
       expectedResponse: "",
       expectedCode: "",
       expectedTime: "",
-      markdownTestResult: "",
+      testMdResult: "",
     },
   ]);
 });
@@ -139,7 +141,8 @@ test(`clean`, () => {
     expectedResponse: "",
     expectedCode: "",
     expectedTime: "",
-    markdownTestResult: "",
+    testMdResult: "",
+    testPassed: undefined,
   });
 
   history.clean();

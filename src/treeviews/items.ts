@@ -198,7 +198,8 @@ export class CallItem extends ClickerItem {
       expectedResponse: "",
       expectedCode: "",
       expectedTime: "",
-      markdownTestResult: "",
+      testMdResult: "",
+      testPassed: undefined,
     };
     if (parent.parent.type === ItemType.file) {
       const file = parent.parent as FileItem;

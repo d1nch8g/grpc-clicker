@@ -258,8 +258,24 @@ export function activate(context: vscode.ExtensionContext) {
         `gRPCurl command have been copied to clipboard`
       );
     },
-    (data: RequestData) => {
-      // TODO add collection callback
+    async (data: RequestData) => {
+      const collections = storage.collections.list();
+      if (collections.length === 0) {
+        vscode.window.showErrorMessage(
+          `You should create collection in side panel, then append this test to collection.`
+        );
+        return;
+      }
+      let collectionNames: string[] = [];
+      for (const collection of collections) {
+        collectionNames.push(collection.name);
+      }
+      const choice = await vscode.window.showQuickPick(collectionNames);
+      if (choice === undefined) {
+        return;
+      }
+      storage.collections.addTest(choice, data);
+      treeviews.collections.refresh(storage.collections.list());
     }
   );
 
@@ -339,7 +355,8 @@ export function activate(context: vscode.ExtensionContext) {
       name: collectionName,
       tests: [],
     });
-    treeviews.collections.refresh(storage.collections.list());
+    let list = storage.collections.list();
+    treeviews.collections.refresh(list);
   });
 
   vscode.commands.registerCommand(

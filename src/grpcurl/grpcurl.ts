@@ -219,5 +219,6 @@ export interface RequestData extends Request, Response {
   expectedResponse: string;
   expectedCode: string;
   expectedTime: string;
-  markdownTestResult: string;
+  testPassed: boolean | undefined;
+  testMdResult: string;
 }
