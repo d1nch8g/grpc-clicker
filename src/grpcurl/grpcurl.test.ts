@@ -46,8 +46,8 @@ class MockParser implements Parser {
 
 class MockCaller implements Caller {
   caller: Caller = new Caller();
-  form(input: RequestForm): string {
-    return this.caller.form(input);
+  formSource(input: RequestForm): string {
+    return this.caller.formSource(input);
   }
   async execute(command: string): Promise<[string, Error | undefined]> {
     return [command, undefined];
@@ -77,6 +77,7 @@ test(`protoFile`, async () => {
         calls: [],
       },
     ],
+    importPath: "/",
   };
   expect(
     await grpcurl.protoFile({
@@ -87,6 +88,7 @@ test(`protoFile`, async () => {
           plaintext: true,
         },
       ],
+      importPath: `/`,
     })
   ).toStrictEqual(expectedResult);
 });
@@ -124,6 +126,7 @@ test(`message`, async () => {
       server: false,
       plaintext: false,
       tag: `.pb.v1.StringMes`,
+      importPath: "/",
     })
   ).toStrictEqual({
     type: ProtoType.message,
@@ -139,6 +142,7 @@ test(`send`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
   let resp = await grpcurl.send({
     path: "docs/api.proto",
+    importPath: `/`,
     json: "{}",
     host: {
       adress: `localhost:12201`,

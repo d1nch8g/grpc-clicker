@@ -23,6 +23,7 @@ test(`add`, () => {
   for (let i = 0; i < 200; i++) {
     history.add({
       path: "example",
+      importPath: `/`,
       json: "",
       host: {
         adress: ``,
@@ -57,6 +58,7 @@ test(`list`, () => {
   const history = new History(storage);
   history.add({
     path: "example",
+    importPath: `/`,
     json: "",
     host: {
       adress: ``,
@@ -87,6 +89,7 @@ test(`list`, () => {
   expect(resp).toStrictEqual([
     {
       path: "example",
+      importPath: `/`,
       json: "",
       host: {
         adress: ``,
@@ -119,6 +122,7 @@ test(`clean`, () => {
   const history = new History(storage);
   history.add({
     path: "example",
+    importPath: `/`,
     json: "",
     host: {
       adress: ``,

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.1.0]
+
+> August 9, 2022
+
+- Added collections
+- Added anility to specify import path
+
 ## [0.0.19]
 
 > August 9, 2022
