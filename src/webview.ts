@@ -153,3 +153,5 @@ class GrpcClickerView {
     this.panel.webview.postMessage(JSON.stringify(this.request));
   }
 }
+
+// TODO add here an interface for webview management
