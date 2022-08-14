@@ -8,7 +8,7 @@ class MockParser implements Parser {
     return {
       code: `ok`,
       response: input,
-      time: `ok`,
+      time: 0,
       date: ``,
     };
   }

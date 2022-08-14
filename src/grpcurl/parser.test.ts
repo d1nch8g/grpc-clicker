@@ -327,13 +327,13 @@ test(`response`, () => {
   expect(parser.resp(codeErr)).toStrictEqual({
     code: `AlreadyExists`,
     response: `some err msg`,
-    time: "",
+    time: 0,
     date: "",
   });
   expect(parser.resp(connErr)).toStrictEqual({
     code: `ConnectionError`,
     response: `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`,
-    time: "",
+    time: 0,
     date: "",
   });
   expect(parser.resp(goodResp)).toStrictEqual({
@@ -341,7 +341,7 @@ test(`response`, () => {
     response: `{
   "message": "msg"
 }`,
-    time: "",
+    time: 0,
     date: "",
   });
 });

@@ -1,5 +1,5 @@
 import { Memento } from "vscode";
-import { RequestData } from "../grpcurl/grpcurl";
+import { TestData } from "../grpcurl/grpcurl";
 
 export class Collections {
   private readonly key: string = "grpc-clicker-collections";
@@ -45,7 +45,7 @@ export class Collections {
     return collections;
   }
 
-  addTest(name: string, data: RequestData) {
+  addTest(name: string, data: SavedTest) {
     const collections = this.list();
     for (const savedValue of collections) {
       if (savedValue.name === name) {
@@ -68,5 +68,10 @@ export class Collections {
 
 export interface Collection {
   name: string;
-  tests: RequestData[];
+  tests: SavedTest[];
+}
+
+export interface SavedTest extends TestData {
+  passed: boolean | undefined;
+  markdown: string;
 }

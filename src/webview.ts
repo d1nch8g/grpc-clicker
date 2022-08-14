@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { Host, RequestData } from "./grpcurl/grpcurl";
+import { Host, Request, Response } from "./grpcurl/grpcurl";
 
 export class WebViewFactory {
   private views: GrpcClickerView[] = [];
@@ -154,4 +154,17 @@ class GrpcClickerView {
   }
 }
 
-// TODO add here an interface for webview management
+export interface RequestData extends Request, Response {
+  service: string;
+  call: string;
+  inputMessageTag: string;
+  inputMessageName: string;
+  outputMessageName: string;
+  protoName: string;
+  hosts: Host[];
+  expectedResponse: string;
+  expectedCode: string;
+  expectedTime: string;
+  testPassed: boolean | undefined;
+  testMdResult: string;
+}
