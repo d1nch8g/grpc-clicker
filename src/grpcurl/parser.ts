@@ -234,7 +234,7 @@ export class Parser {
     let resp: Response = {
       response: "",
       code: "",
-      time: "",
+      time: 0,
       date: "",
     };
     if (input.includes(`Failed to dial target host `)) {
