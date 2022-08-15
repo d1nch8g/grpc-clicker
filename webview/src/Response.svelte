@@ -8,7 +8,7 @@
 <table>
   <tr>
     <center>
-      {#if data.time === ``}
+      {#if data.time === 0}
         <div>Response: {data.outputMessageName}</div>
       {:else}
         <div>{data.code} - {data.time}</div>

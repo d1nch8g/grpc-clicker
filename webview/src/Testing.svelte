@@ -1,7 +1,7 @@
 <script>
   export let data;
   export let edit;
-  export let craete;
+  export let createTest;
 
   const timeOptions = [
     `0.1s`,
@@ -47,30 +47,34 @@
 
 <table>
   <tr>
-    <vscode-data-grid aria-label="Basic">
-      <vscode-data-grid-row>
-        <vscode-data-grid-cell grid-column="1" class="dropdown">
+    <table>
+      <tr>
+        <td class="expect-text">
           <b>Expected time</b>
-        </vscode-data-grid-cell>
-        <vscode-data-grid-cell grid-column="2">
+        </td>
+        <td class="expect-dropdown">
           <vscode-dropdown position="below">
             {#each timeOptions as time}
               <vscode-option
                 on:click="{() => {
-                  data.expectedTime = time;
+                  if (time.endsWith(`s`)) {
+                    data.expectedTime = time.slice(0, -1);
+                  } else {
+                    data.expectedTime = +time.slice(0, -1) * 60;
+                  }
                 }}"
               >
                 <div>{time}</div>
               </vscode-option>
             {/each}
           </vscode-dropdown>
-        </vscode-data-grid-cell>
-      </vscode-data-grid-row>
-      <vscode-data-grid-row>
-        <vscode-data-grid-cell grid-column="1" class="dropdown">
+        </td>
+      </tr>
+      <tr>
+        <td class="expect-text">
           <b>Expected code</b>
-        </vscode-data-grid-cell>
-        <vscode-data-grid-cell grid-column="2">
+        </td>
+        <td class="expect-dropdown">
           <vscode-dropdown position="below">
             {#each codeOptions as code}
               <vscode-option
@@ -82,9 +86,9 @@
               </vscode-option>
             {/each}
           </vscode-dropdown>
-        </vscode-data-grid-cell>
-      </vscode-data-grid-row>
-    </vscode-data-grid>
+        </td>
+      </tr>
+    </table>
   </tr>
   <tr>
     <center>
@@ -97,14 +101,14 @@
       id=""
       cols="30"
       rows="10"
-      style="--height: {innerHeight - 320}px"
+      style="--height: {innerHeight - 300}px"
       bind:value="{data.expectedResponse}"
       on:input="{edit}"></textarea>
   </tr>
   <tr>
     <div class="button-padding">
       <center>
-        <button on:click="{craete}">Create test</button>
+        <button on:click="{createTest}">Create test</button>
       </center>
     </div>
   </tr>
@@ -116,6 +120,12 @@
   }
   vscode-option {
     width: 100%;
+  }
+  .expect-text {
+    width: 40%;
+  }
+  .expect-dropdown {
+    width: 60%;
   }
   .button-padding {
     padding-top: 10px;
@@ -147,9 +157,7 @@
   tr {
     width: 100%;
   }
-  .dropdown {
-    padding-top: 10px;
-  }
+
   textarea {
     height: var(--height);
     resize: none;

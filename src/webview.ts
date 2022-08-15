@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { Host, RequestData } from "./grpcurl/grpcurl";
+import { Host, Request, Response, TestData } from "./grpcurl/grpcurl";
 
 export class WebViewFactory {
   private views: GrpcClickerView[] = [];
@@ -93,12 +93,6 @@ class GrpcClickerView {
           return;
         case "test":
           const data = JSON.parse(out.text) as RequestData;
-          if (data.expectedTime === ``) {
-            data.expectedTime = `0.1s`;
-          }
-          if (data.expectedCode === ``) {
-            data.expectedCode = `OK`;
-          }
           this.addTestCallback(data);
           return;
       }
@@ -152,4 +146,14 @@ class GrpcClickerView {
   </html>`;
     this.panel.webview.postMessage(JSON.stringify(this.request));
   }
+}
+
+export interface RequestData extends TestData, Response {
+  service: string;
+  call: string;
+  inputMessageTag: string;
+  inputMessageName: string;
+  outputMessageName: string;
+  protoName: string;
+  hosts: Host[];
 }

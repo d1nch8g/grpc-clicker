@@ -4,10 +4,11 @@ import { ProtoFilesView } from "./files";
 import { HistoryTreeView } from "./history";
 import { Message } from "../grpcurl/parser";
 import { Header } from "../storage/headers";
-import { ProtoFile, ProtoServer, RequestData } from "../grpcurl/grpcurl";
+import { ProtoFile, ProtoServer } from "../grpcurl/grpcurl";
 import { ServerTreeView } from "./servers";
 import { CollectionsTreeView } from "./collections";
 import { Collection } from "../storage/collections";
+import { RequestData } from "../webview";
 
 export class TreeViews {
   public readonly files: ProtoFilesView;

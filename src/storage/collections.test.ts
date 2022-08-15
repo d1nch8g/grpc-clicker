@@ -1,5 +1,4 @@
 import { Memento } from "vscode";
-import { RequestData } from "../grpcurl/grpcurl";
 import { Collection, Collections } from "./collections";
 
 class MockMemento implements Memento {
@@ -60,18 +59,8 @@ test(`add test`, () => {
   memento.values = [JSON.stringify(collection)];
   collections.addTest(`testcol`, {
     importPath: `/`,
-    service: "",
-    call: "",
-    inputMessageTag: "",
-    inputMessageName: "",
-    outputMessageName: "",
-    protoName: "",
-    hosts: [],
     expectedResponse: "",
     expectedCode: "",
-    expectedTime: "",
-    testPassed: undefined,
-    testMdResult: "",
     path: "",
     json: "",
     host: {
@@ -81,10 +70,9 @@ test(`add test`, () => {
     callTag: "",
     metadata: [],
     maxMsgSize: 0,
-    code: "",
-    response: "",
-    time: "",
-    date: "",
+    passed: undefined,
+    markdown: "",
+    expectedTime: 0,
   });
   expect(collections.list()[0].tests.length).toBe(1);
 });
@@ -100,18 +88,8 @@ test(`update`, () => {
   collection.tests = [
     {
       importPath: `/`,
-      service: "",
-      call: "",
-      inputMessageTag: "",
-      inputMessageName: "",
-      outputMessageName: "",
-      protoName: "",
-      hosts: [],
       expectedResponse: "",
       expectedCode: "",
-      expectedTime: "",
-      testPassed: undefined,
-      testMdResult: "",
       path: "",
       json: "",
       host: {
@@ -121,10 +99,9 @@ test(`update`, () => {
       callTag: "",
       metadata: [],
       maxMsgSize: 0,
-      code: "",
-      response: "",
-      time: "",
-      date: "",
+      passed: undefined,
+      markdown: "",
+      expectedTime: 0,
     },
   ];
   collections.update(collection);
