@@ -3,13 +3,8 @@ import { Caller } from "./grpcurl/caller";
 import { Message, Parser, ProtoType } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
 import { TreeViews } from "./treeviews/treeviews";
-import { WebViewFactory } from "./webview";
-import {
-  Grpcurl,
-  ProtoFile,
-  ProtoServer,
-  RequestData,
-} from "./grpcurl/grpcurl";
+import { RequestData, WebViewFactory } from "./webview";
+import { Grpcurl, ProtoFile, ProtoServer, TestData } from "./grpcurl/grpcurl";
 import {
   CollectionItem,
   FileItem,
@@ -116,7 +111,21 @@ export function activate(context: vscode.ExtensionContext) {
       if (choice === undefined) {
         return;
       }
-      storage.collections.addTest(choice, data);
+      const newTest: TestData = {
+        expectedCode: data.expectedCode,
+        expectedTime: data.expectedTime,
+        expectedResponse: data.expectedResponse,
+        path: data.path,
+        importPath: data.importPath,
+        json: data.json,
+        host: data.host,
+        callTag: data.callTag,
+        maxMsgSize: data.maxMsgSize,
+        metadata: data.metadata,
+        passed: undefined,
+        markdown: ""
+      };
+      storage.collections.addTest(choice, newTest);
       treeviews.collections.refresh(storage.collections.list());
     },
   });
@@ -384,19 +393,12 @@ export function activate(context: vscode.ExtensionContext) {
     "colections.run",
     async (col: CollectionItem) => {
       for (const test of col.base.tests) {
-        test.testPassed = undefined;
+        test.passed = undefined;
       }
       storage.collections.update(col.base);
       treeviews.collections.refresh(storage.collections.list());
-      for (const test of col.base.tests) {
-        const result = await grpcurl.test(test);
-        if (result !== ``) {
-          test.testPassed = false;
-          test.testMdResult = result;
-        } else {
-          test.testPassed = true;
-          test.testMdResult = ``;
-        }
+      for (let test of col.base.tests) {
+        test = await grpcurl.test(test);
         storage.collections.update(col.base);
         treeviews.collections.refresh(storage.collections.list());
       }

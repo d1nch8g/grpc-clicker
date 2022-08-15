@@ -127,13 +127,14 @@ export class Grpcurl {
     return response;
   }
 
-  async test(input: TestData): Promise<string> {
+  // TODO add test
+  async test(input: TestData): Promise<TestData> {
     let result: string = ``;
     const resp = await this.send(input);
     if (resp.code !== input.expectedCode) {
       result = `- Code not matching: ${resp.code} vs ${input.expectedCode}\n`;
     }
-    if (input.expectedTime > resp.time) {
+    if (resp.time > input.expectedTime) {
       result += `- Time exceeded: ${resp.time}s vs ${input.expectedTime}s\n`;
     }
     if (input.expectedResponse !== undefined) {
@@ -167,7 +168,14 @@ ${resp.response}
         }
       }
     }
-    return result;
+    if (result === ``) {
+      input.passed = true;
+      input.markdown = `Test passed`;
+      return input;
+    }
+    input.passed = false;
+    input.markdown = `Test failed"\n\n\n${result}`;
+    return input;
   }
 
   private jsonPreprocess(input: string): string {
@@ -235,4 +243,6 @@ export interface TestData extends Request {
   expectedCode: string;
   expectedTime: number;
   expectedResponse: string | undefined;
+  passed: boolean | undefined;
+  markdown: string;
 }

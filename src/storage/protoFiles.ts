@@ -44,7 +44,6 @@ export class ProtoFiles {
     this.save(protos);
   }
 
-  // TODO add test
   addHost(path: string, host: Host) {
     const protos = this.list();
     for (const savedProtoFile of protos) {
@@ -55,7 +54,6 @@ export class ProtoFiles {
     this.save(protos);
   }
 
-  // TODO add test
   removeHost(path: string, host: Host) {
     const protos = this.list();
     for (const savedProtoFile of protos) {
