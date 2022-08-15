@@ -145,17 +145,17 @@ export class Grpcurl {
           result += `- Response json is not matching:\n\n
 Expects:
 \`\`\`json
-${input.expectedResponse.split(`\n`).slice(0, 40).join(`\n`)}
+${input.expectedResponse.split(`\n`).slice(0, 10).join(`\n`)}
 \`\`\`
 
 Actual:
 \`\`\`json
-${resp.response.split(`\n`).slice(0, 40).join(`\n`)}
+${resp.response.split(`\n`).slice(0, 10).join(`\n`)}
 \`\`\``;
         }
       } catch {
         if (resp.response !== input.expectedResponse) {
-          result += `- Response json is not matching:\n\n
+          result += `- Response is not matching:\n\n
 Expect:
 \`\`\`json
 ${input.expectedResponse}
@@ -174,7 +174,7 @@ ${resp.response}
       return input;
     }
     input.passed = false;
-    input.markdown = `Test failed"\n\n\n${result}`;
+    input.markdown = `#### Test failed:\n\n\n${result}`;
     return input;
   }
 
