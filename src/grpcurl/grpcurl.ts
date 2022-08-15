@@ -97,17 +97,26 @@ export class Grpcurl {
       meta = meta + this.headerPreprocess(metafield);
     }
 
-    const call = this.caller.formSource({
+    if (input.path === ``) {
+      return this.caller.formSource({
+        call: command,
+        source: input.host.adress,
+        server: true,
+        plaintext: input.host.plaintext,
+        docker: this.useDocker,
+        args: [meta, maxMsgSize, formedJson, input.callTag],
+        importPath: ``,
+      });
+    }
+    return this.caller.formSource({
       call: command,
-      source: input.host.adress,
-      server: true,
+      source: `${input.path} ${input.host.adress}`,
+      server: false,
       plaintext: input.host.plaintext,
       docker: this.useDocker,
       args: [meta, maxMsgSize, formedJson, input.callTag],
-      importPath: ``,
+      importPath: input.importPath,
     });
-
-    return call;
   }
 
   async send(input: Request): Promise<Response> {

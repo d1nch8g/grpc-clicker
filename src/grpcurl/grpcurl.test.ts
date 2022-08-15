@@ -154,8 +154,8 @@ test(`send`, async () => {
   });
   expect(resp.code).toBe(`ok`);
 
-  const winExpect = `grpcurl -emit-defaults -H \"username: user\" -H \"passsword: password\"   -d \"{}\" -plaintext localhost:12201 pb.v1.Constructions.EmptyCall`;
-  const linuxExpect = `grpcurl -emit-defaults -H 'username: user' -H 'passsword: password'   -d '{}' -plaintext localhost:12201 pb.v1.Constructions.EmptyCall`;
+  const winExpect = `grpcurl -emit-defaults -H \"username: user\" -H \"passsword: password\"   -d \"{}\" -plaintext -import-path / -proto docs/api.proto localhost:12201 pb.v1.Constructions.EmptyCall`;
+  const linuxExpect = `grpcurl -emit-defaults -H 'username: user' -H 'passsword: password'   -d '{}' -plaintext -import-path / -proto docs/api.proto localhost:12201 pb.v1.Constructions.EmptyCall`;
 
   if (process.platform === "win32") {
     expect(resp.response).toBe(winExpect);

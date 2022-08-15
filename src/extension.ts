@@ -123,7 +123,7 @@ export function activate(context: vscode.ExtensionContext) {
         maxMsgSize: data.maxMsgSize,
         metadata: data.metadata,
         passed: undefined,
-        markdown: ""
+        markdown: "",
       };
       storage.collections.addTest(choice, newTest);
       treeviews.collections.refresh(storage.collections.list());
