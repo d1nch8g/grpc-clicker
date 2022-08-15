@@ -300,7 +300,7 @@ export class HistoryItem extends ClickerItem {
 Response:
 
 \`\`\`json
-${request.response.split(`\n`).slice(0, 40).join(`\n`)}
+${request.response.split(`\n`).slice(0, 14).join(`\n`)}
 \`\`\`
 `);
     super.command = {
