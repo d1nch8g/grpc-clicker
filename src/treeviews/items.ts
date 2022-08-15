@@ -1,10 +1,11 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { Service, Call, Message, Field } from "../grpcurl/parser";
-import { Host, ProtoFile, ProtoServer, RequestData } from "../grpcurl/grpcurl";
+import { Host, ProtoFile, ProtoServer, TestData } from "../grpcurl/grpcurl";
 
 import { Header } from "../storage/headers";
 import { Collection } from "../storage/collections";
+import { RequestData } from "../webview";
 
 export enum ItemType {
   unknown,
@@ -49,30 +50,15 @@ export class CollectionItem extends ClickerItem {
 
 export class TestItem extends ClickerItem {
   constructor(
-    public readonly base: RequestData,
+    public readonly base: TestData,
     public readonly parent: CollectionItem
   ) {
-    super(`${base.call}`);
+    super(`${base.callTag}`);
     super.type = ItemType.test;
     super.contextValue = `test`;
-    super.tooltip = new vscode.MarkdownString(
-      `#### Test for ${base.protoName} - ${base.call}
-- Expected code: \`${base.expectedCode}\`
-- Expected time: \`${base.expectedTime}\`
-- Expected response
-
----
-
-#### Response:
-\`\`\`json
-${base.json.split(`\n`).slice(0, 40).join(`\n`)}
-\`\`\`
----
-
-${base.testMdResult}`
-    );
+    super.tooltip = new vscode.MarkdownString(base.markdown);
     super.collapsibleState = vscode.TreeItemCollapsibleState.None;
-    switch (base.testPassed) {
+    switch (base.passed) {
       case undefined:
         super.iconPath = new vscode.ThemeIcon("testing-unset-icon");
         return;
@@ -208,15 +194,15 @@ export class CallItem extends ClickerItem {
       maxMsgSize: 0,
       code: "",
       response: "",
-      time: "",
+      time: 0,
       date: "",
       metadata: [],
       hosts: [],
       expectedResponse: "",
       expectedCode: "",
-      expectedTime: "",
-      testMdResult: "",
-      testPassed: undefined,
+      expectedTime: 0,
+      passed: undefined,
+      markdown: "",
     };
     if (parent.parent.type === ItemType.file) {
       const file = parent.parent as FileItem;

@@ -35,7 +35,7 @@ test(`add`, () => {
       maxMsgSize: i,
       code: "",
       response: "",
-      time: "",
+      time: 0,
       date: "",
       service: "",
       inputMessageTag: "",
@@ -45,9 +45,9 @@ test(`add`, () => {
       hosts: [],
       expectedResponse: "",
       expectedCode: "",
-      expectedTime: "",
-      testMdResult: "",
-      testPassed: undefined,
+      expectedTime: 0,
+      passed: undefined,
+      markdown: "",
     });
   }
   expect(storage.values.length).toBe(100);
@@ -70,7 +70,7 @@ test(`list`, () => {
     maxMsgSize: 420,
     code: "",
     response: "",
-    time: "",
+    time: 0,
     date: "",
     service: "",
     inputMessageTag: "",
@@ -80,9 +80,9 @@ test(`list`, () => {
     hosts: [],
     expectedResponse: "",
     expectedCode: "",
-    expectedTime: "",
-    testMdResult: "",
-    testPassed: undefined,
+    expectedTime: 0,
+    passed: undefined,
+    markdown: "",
   });
 
   let resp = history.list();
@@ -101,7 +101,7 @@ test(`list`, () => {
       maxMsgSize: 420,
       code: "",
       response: "",
-      time: "",
+      time: 0,
       date: "",
       service: "",
       inputMessageTag: "",
@@ -111,8 +111,8 @@ test(`list`, () => {
       hosts: [],
       expectedResponse: "",
       expectedCode: "",
-      expectedTime: "",
-      testMdResult: "",
+      expectedTime: 0,
+      markdown: "",
     },
   ]);
 });
@@ -134,7 +134,7 @@ test(`clean`, () => {
     maxMsgSize: 420,
     code: "",
     response: "",
-    time: "",
+    time: 0,
     date: "",
     service: "",
     inputMessageTag: "",
@@ -144,9 +144,9 @@ test(`clean`, () => {
     hosts: [],
     expectedResponse: "",
     expectedCode: "",
-    expectedTime: "",
-    testMdResult: "",
-    testPassed: undefined,
+    expectedTime: 0,
+    passed: undefined,
+    markdown: "",
   });
 
   history.clean();

@@ -22,13 +22,13 @@
     maxMsgSize: 0,
     code: "",
     response: "",
-    time: "",
+    time: 0,
     date: "",
     metadata: [],
     hosts: [],
-    expectedResponse: "",
+    expectedResponse: undefined,
     expectedCode: "",
-    expectedTime: "",
+    expectedTime: 0,
   };
 
   window.addEventListener("message", (event) => {
@@ -70,6 +70,15 @@
   }
 
   function onCreateTest() {
+    if (data.expectedCode === ``) {
+      data.expectedCode = `OK`;
+    }
+    if (data.expectedTime === 0) {
+      data.expectedTime = 0.1;
+    }
+    if (data.expectedResponse === undefined || data.expectedResponse === ``) {
+      data.expectedResponse = undefined;
+    }
     vscode.postMessage({
       command: "test",
       text: JSON.stringify(data),
@@ -108,7 +117,11 @@
           <Response bind:data />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
-          <Testing bind:data edit="{onEditResponse}" craete="{onCreateTest}" />
+          <Testing
+            bind:data
+            edit="{onEditResponse}"
+            createTest="{onCreateTest}"
+          />
         </vscode-panel-view>
       </vscode-panels>
     </div>
