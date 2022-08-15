@@ -76,7 +76,9 @@ export class FileItem extends ClickerItem {
   constructor(public readonly base: ProtoFile) {
     super(base.path.replace(/^.*[\\\/]/, ""));
     super.type = ItemType.file;
-    super.tooltip = base.path;
+    super.tooltip = new vscode.MarkdownString(`#### Proto file:
+- File path: ${base.path}
+- Import path: ${base.importPath}`);
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     super.contextValue = `file`;
     const icon = `file.svg`;

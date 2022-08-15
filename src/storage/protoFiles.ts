@@ -67,4 +67,14 @@ export class ProtoFiles {
     }
     this.save(protos);
   }
+
+  updateImportPath(protoPath: string, newImportPath: string) {
+    const protos = this.list();
+    for (const savedProtoFile of protos) {
+      if (savedProtoFile.path === protoPath) {
+        savedProtoFile.importPath = newImportPath;
+      }
+    }
+    this.save(protos);
+  }
 }
