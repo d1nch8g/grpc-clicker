@@ -1,5 +1,5 @@
 import { Memento } from "vscode";
-import { RequestData } from "../grpcurl/grpcurl";
+import { RequestData } from "../webview";
 
 export class History {
   private readonly key: string = "grpc-clicker-history";

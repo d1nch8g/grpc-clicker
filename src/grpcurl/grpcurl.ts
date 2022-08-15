@@ -123,37 +123,59 @@ export class Grpcurl {
     }
 
     response.date = new Date().toUTCString();
-    response.time = `${Math.round(end - start) / 1000}s`;
+    response.time = Math.round(end - start) / 1000;
     return response;
   }
 
-  async test(input: RequestData): Promise<string> {
-    let markdownTestResult: string = ``;
+  // TODO add test
+  async test(input: TestData): Promise<TestData> {
+    let result: string = ``;
     const resp = await this.send(input);
     if (resp.code !== input.expectedCode) {
-      markdownTestResult += `- Code not matches: ${resp.code} vs ${input.expectedCode}\n`;
+      result = `- Code not matching: ${resp.code} vs ${input.expectedCode}\n`;
     }
-    let expectedTime: number;
-    if (input.expectedTime.endsWith(`s`)) {
-      expectedTime = +input.expectedTime.substring(
-        0,
-        input.expectedTime.length - 1
-      );
-    } else {
-      const expectedTimeInminutes = +input.expectedTime.substring(
-        0,
-        input.expectedTime.length - 1
-      );
-      expectedTime = expectedTimeInminutes * 60;
+    if (resp.time > input.expectedTime) {
+      result += `- Time exceeded: ${resp.time}s vs ${input.expectedTime}s\n`;
     }
-    const actualTime: number = +resp.time.substring(0, resp.time.length - 1);
-    if (actualTime > expectedTime) {
-      markdownTestResult += `- Time not matches: ${resp.time} vs ${expectedTime}s\n`;
+    if (input.expectedResponse !== undefined) {
+      try {
+        const expect = JSON.stringify(JSON.parse(resp.response));
+        const actual = JSON.stringify(JSON.parse(input.expectedResponse));
+        if (expect !== actual) {
+          result += `- Response json is not matching:\n\n
+Expects:
+\`\`\`json
+${input.expectedResponse.split(`\n`).slice(0, 40).join(`\n`)}
+\`\`\`
+
+Actual:
+\`\`\`json
+${resp.response.split(`\n`).slice(0, 40).join(`\n`)}
+\`\`\``;
+        }
+      } catch {
+        if (resp.response !== input.expectedResponse) {
+          result += `- Response json is not matching:\n\n
+Expect:
+\`\`\`json
+${input.expectedResponse}
+\`\`\`
+
+Actual:
+\`\`\`json
+${resp.response}
+\`\`\``;
+        }
+      }
     }
-    if (resp.response !== input.expectedResponse) {
-      markdownTestResult += `- Response is not matching`;
+    if (result === ``) {
+      input.passed = true;
+      input.markdown = `Test passed`;
+      return input;
     }
-    return markdownTestResult;
+    input.passed = false;
+    input.markdown = `Test failed"\n\n\n${result}`;
+    return input;
   }
 
   private jsonPreprocess(input: string): string {
@@ -213,21 +235,14 @@ export interface Request {
 export interface Response {
   code: string;
   response: string;
-  time: string;
+  time: number;
   date: string;
 }
 
-export interface RequestData extends Request, Response {
-  service: string;
-  call: string;
-  inputMessageTag: string;
-  inputMessageName: string;
-  outputMessageName: string;
-  protoName: string;
-  hosts: Host[];
-  expectedResponse: string;
+export interface TestData extends Request {
   expectedCode: string;
-  expectedTime: string;
-  testPassed: boolean | undefined;
-  testMdResult: string;
+  expectedTime: number;
+  expectedResponse: string | undefined;
+  passed: boolean | undefined;
+  markdown: string;
 }
