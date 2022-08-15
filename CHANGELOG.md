@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.1.1]
+
+> August 9, 2022
+
+- Bug fixes
+- Ability to specify import path from any proto file
+
 ## [0.1.0]
 
 > August 9, 2022
