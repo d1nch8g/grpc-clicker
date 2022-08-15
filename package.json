@@ -113,6 +113,11 @@
         "icon": "$(settings-add)"
       },
       {
+        "command": "files.import",
+        "title": "Update import path for proto file",
+        "icon": "$(extensions-info-message)"
+      },
+      {
         "command": "files.remove",
         "title": "Remove existing proto file",
         "icon": "$(terminal-kill)"
@@ -230,6 +235,11 @@
         {
           "command": "headers.remove",
           "when": "view == headers && viewItem == header",
+          "group": "inline"
+        },
+        {
+          "command": "files.import",
+          "when": "view == files && viewItem == file",
           "group": "inline"
         },
         {

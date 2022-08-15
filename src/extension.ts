@@ -425,6 +425,19 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.collections.refresh(storage.collections.list());
   });
 
+  vscode.commands.registerCommand("files.import", async (file: FileItem) => {
+    const importPath = await vscode.window.showInputBox({
+      value: `/`,
+      title: `Specify import path for imports.`,
+    });
+    if (importPath === undefined || importPath === ``) {
+      return;
+    }
+    file.base.importPath = importPath;
+    storage.files.updateImportPath(file.base.path, importPath);
+    treeviews.files.refresh(storage.files.list());
+  });
+
   vscode.workspace.onDidChangeConfiguration((event) => {
     if (event.affectsConfiguration(`grpc-clicker.usedocker`)) {
       grpcurl.useDocker = vscode.workspace
