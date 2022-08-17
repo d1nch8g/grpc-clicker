@@ -56,6 +56,10 @@
   .maineditor:focus {
     outline-color: var(--vscode-focusBorder) !important;
   }
+  .maineditor::selection {
+    color: transparent;
+    background: var(--vscode-input-foreground);
+  }
   .redwrapper {
     height: var(--height);
     resize: none;
