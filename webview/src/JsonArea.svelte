@@ -1,14 +1,11 @@
 <script>
   let text = "";
 
-  $: redtext = text;
-
-  let scrollchecker;
-  let scrollPosition = 0;
+  let scrollParent;
+  let firstScrollChild;
 
   function parseScroll() {
-    scrollPosition = scrollchecker.scrollTop;
-    console.log(scrollPosition);
+    firstScrollChild.scrollTop = scrollParent.scrollTop;
   }
 </script>
 
@@ -21,7 +18,7 @@
       cols="30"
       rows="10"
       on:scroll="{parseScroll}"
-      bind:this="{scrollchecker}"
+      bind:this="{scrollParent}"
       bind:value="{text}"></textarea>
   </div>
 
@@ -32,7 +29,8 @@
       id=""
       cols="30"
       rows="10"
-      bind:value="{redtext}"></textarea>
+      bind:this="{firstScrollChild}"
+      bind:value="{text}"></textarea>
   </div>
 </div>
 
