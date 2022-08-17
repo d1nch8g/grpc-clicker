@@ -4,7 +4,7 @@
   import Response from "./Response.svelte";
   import Testing from "./Testing.svelte";
   import Info from "./Info.svelte";
-  import TextArea from "./TextArea.svelte";
+  import JsonArea from "./JsonArea.svelte";
 
   $: data = {
     path: ``,
@@ -108,7 +108,7 @@
           <Info bind:data />
         </vscode-panel-view>
         <vscode-panel-view id="view-3">
-          <TextArea />
+          <JsonArea />
         </vscode-panel-view>
       </vscode-panels>
     </div>
