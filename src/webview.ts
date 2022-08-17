@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { Host, Request, Response, TestData } from "./grpcurl/grpcurl";
+import { Host, Response, TestData } from "./grpcurl/grpcurl";
 
 export class WebViewFactory {
   private views: GrpcClickerView[] = [];
@@ -127,12 +127,6 @@ class GrpcClickerView {
     const toolkitUri = this.panel.webview.asWebviewUri(
       vscode.Uri.joinPath(this.uri, "dist", "tk", "toolkit.js")
     );
-    const highlight = this.panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.uri, "dist", "hl", "lib", "index.js")
-    );
-    const highlightStyles = this.panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.uri, "dist", "hl", "styles", "dark.css")
-    );
 
     this.panel.webview.html = `<!DOCTYPE html>
   <html lang="en">
@@ -141,8 +135,6 @@ class GrpcClickerView {
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <script type="module" src="${toolkitUri}"></script>
       <link href="${stylesMainUri}" rel="stylesheet" />
-      <script type="module" src="${highlight}"></script>
-      <link href="${highlightStyles}" rel="stylesheet" />
     </head>
     <body>      
       <div id="app"></div>
