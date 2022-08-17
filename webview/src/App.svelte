@@ -84,6 +84,8 @@
       text: JSON.stringify(data),
     });
   }
+
+  let stuff = `<p>asdasd</p>`;
 </script>
 
 <TopPanel
@@ -99,11 +101,17 @@
       <vscode-panels>
         <vscode-panel-tab id="tab-1">INPUT</vscode-panel-tab>
         <vscode-panel-tab id="tab-2">INFORMATION</vscode-panel-tab>
+        <vscode-panel-tab id="tab-3">HIGHLIGHT</vscode-panel-tab>
         <vscode-panel-view id="view-1">
           <Request bind:data edit="{onEditRequest}" />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
           <Info bind:data />
+        </vscode-panel-view>
+        <vscode-panel-view id="view-2">
+          <pre>
+            <code class="language-html">{stuff}</code>
+          </pre>
         </vscode-panel-view>
       </vscode-panels>
     </div>
