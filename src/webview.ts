@@ -127,6 +127,9 @@ class GrpcClickerView {
     const toolkitUri = this.panel.webview.asWebviewUri(
       vscode.Uri.joinPath(this.uri, "dist", "tk", "toolkit.js")
     );
+    const highlight = this.panel.webview.asWebviewUri(
+      vscode.Uri.joinPath(this.uri, "dist", "hl", "lib", "index")
+    );
 
     this.panel.webview.html = `<!DOCTYPE html>
   <html lang="en">
@@ -134,6 +137,7 @@ class GrpcClickerView {
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <script type="module" src="${toolkitUri}"></script>
+      <script type="module" src="${highlight}"></script>
       <link href="${stylesMainUri}" rel="stylesheet" />
     </head>
     <body>      
