@@ -1,8 +1,15 @@
 <script>
   let text = "";
 
-  $: redtext = text.replaceAll(`asd`, `   `);
-  $: bluetext = text.replaceAll(`keks`, `    `);
+  $: redtext = text;
+
+  let scrollchecker;
+  let scrollPosition = 0;
+
+  function parseScroll() {
+    scrollPosition = scrollchecker.scrollTop;
+    console.log(scrollPosition);
+  }
 </script>
 
 <div class="containter">
@@ -13,6 +20,8 @@
       id=""
       cols="30"
       rows="10"
+      on:scroll="{parseScroll}"
+      bind:this="{scrollchecker}"
       bind:value="{text}"></textarea>
   </div>
 
@@ -24,16 +33,6 @@
       cols="30"
       rows="10"
       bind:value="{redtext}"></textarea>
-  </div>
-
-  <div class="wrapper">
-    <textarea
-      class="bluetext"
-      name=""
-      id=""
-      cols="30"
-      rows="10"
-      bind:value="{bluetext}"></textarea>
   </div>
 </div>
 
@@ -80,13 +79,6 @@
 
   .redtext {
     color: red;
-    caret-color: transparent;
-    outline-color: transparent;
-    background-color: transparent;
-    border-color: transparent;
-  }
-  .bluetext {
-    color: blue;
     caret-color: transparent;
     outline-color: transparent;
     background-color: transparent;
