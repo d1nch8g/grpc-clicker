@@ -136,7 +136,7 @@ class GrpcClickerView {
       <script type="module" src="${toolkitUri}"></script>
       <link href="${stylesMainUri}" rel="stylesheet" />
     </head>
-    <body>      
+    <body>
       <div id="app"></div>
       <script
         nonce="W3hIwRHaPGdvqvmwfzGey0vuCz2fM6Pn"

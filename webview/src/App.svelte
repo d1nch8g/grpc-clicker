@@ -4,6 +4,7 @@
   import Response from "./Response.svelte";
   import Testing from "./Testing.svelte";
   import Info from "./Info.svelte";
+  import TextArea from "./TextArea.svelte";
 
   $: data = {
     path: ``,
@@ -84,8 +85,6 @@
       text: JSON.stringify(data),
     });
   }
-
-  let stuff = `<p>asdasd</p>`;
 </script>
 
 <TopPanel
@@ -108,8 +107,8 @@
         <vscode-panel-view id="view-2">
           <Info bind:data />
         </vscode-panel-view>
-        <vscode-panel-view id="view-2">
-          <pre><code class="language-html">{stuff}</code></pre>
+        <vscode-panel-view id="view-3">
+          <TextArea />
         </vscode-panel-view>
       </vscode-panels>
     </div>
