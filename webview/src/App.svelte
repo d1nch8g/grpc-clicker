@@ -109,9 +109,7 @@
           <Info bind:data />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
-          <pre>
-            <code class="language-html">{stuff}</code>
-          </pre>
+          <pre><code class="language-html">{stuff}</code></pre>
         </vscode-panel-view>
       </vscode-panels>
     </div>

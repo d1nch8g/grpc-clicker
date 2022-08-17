@@ -140,8 +140,8 @@ class GrpcClickerView {
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <script type="module" src="${toolkitUri}"></script>
-      <script type="module" src="${highlight}"></script>
       <link href="${stylesMainUri}" rel="stylesheet" />
+      <script type="module" src="${highlight}"></script>
       <link href="${highlightStyles}" rel="stylesheet" />
     </head>
     <body>      
@@ -150,6 +150,7 @@ class GrpcClickerView {
         nonce="W3hIwRHaPGdvqvmwfzGey0vuCz2fM6Pn"
         src="${scriptUri}"
       ></script>
+      <script>hljs.highlightAll();</script>
     </body>
   </html>`;
     this.panel.webview.postMessage(JSON.stringify(this.request));
