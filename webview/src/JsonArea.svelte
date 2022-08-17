@@ -1,5 +1,8 @@
 <script>
   let text = "";
+
+  $: redtext = text.replaceAll(`asd`, `   `);
+  $: bluetext = text.replaceAll(`keks`, `    `);
 </script>
 
 <div class="containter">
@@ -20,7 +23,17 @@
       id=""
       cols="30"
       rows="10"
-      bind:value="{text}"></textarea>
+      bind:value="{redtext}"></textarea>
+  </div>
+
+  <div class="wrapper">
+    <textarea
+      class="bluetext"
+      name=""
+      id=""
+      cols="30"
+      rows="10"
+      bind:value="{bluetext}"></textarea>
   </div>
 </div>
 
@@ -67,6 +80,13 @@
 
   .redtext {
     color: red;
+    caret-color: transparent;
+    outline-color: transparent;
+    background-color: transparent;
+    border-color: transparent;
+  }
+  .bluetext {
+    color: blue;
     caret-color: transparent;
     outline-color: transparent;
     background-color: transparent;
