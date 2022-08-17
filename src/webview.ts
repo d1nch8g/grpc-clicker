@@ -127,6 +127,12 @@ class GrpcClickerView {
     const toolkitUri = this.panel.webview.asWebviewUri(
       vscode.Uri.joinPath(this.uri, "dist", "tk", "toolkit.js")
     );
+    const highlight = this.panel.webview.asWebviewUri(
+      vscode.Uri.joinPath(this.uri, "dist", "hl", "lib", "index.js")
+    );
+    const highlightStyles = this.panel.webview.asWebviewUri(
+      vscode.Uri.joinPath(this.uri, "dist", "hl", "styles", "dark.css")
+    );
 
     this.panel.webview.html = `<!DOCTYPE html>
   <html lang="en">
@@ -135,6 +141,8 @@ class GrpcClickerView {
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <script type="module" src="${toolkitUri}"></script>
       <link href="${stylesMainUri}" rel="stylesheet" />
+      <script type="module" src="${highlight}"></script>
+      <link href="${highlightStyles}" rel="stylesheet" />
     </head>
     <body>      
       <div id="app"></div>
@@ -142,6 +150,7 @@ class GrpcClickerView {
         nonce="W3hIwRHaPGdvqvmwfzGey0vuCz2fM6Pn"
         src="${scriptUri}"
       ></script>
+      <script>hljs.highlightAll();</script>
     </body>
   </html>`;
     this.panel.webview.postMessage(JSON.stringify(this.request));
