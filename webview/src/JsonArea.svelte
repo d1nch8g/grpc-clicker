@@ -1,12 +1,63 @@
 <script>
   let text = "";
 
-  let scrollParent;
-  let firstScrollChild;
-
+  let scrollParent = 0;
+  let bracketScrollChild;
   function parseScroll() {
-    firstScrollChild.scrollTop = scrollParent.scrollTop;
+    bracketScrollChild.scrollTop = scrollParent.scrollTop;
   }
+
+  let bracketsText = "";
+  let stringsText = "";
+  let numbersText = "";
+  let boolText = "";
+
+  function parse(text) {
+    let toString = false;
+    bracketsText = "";
+    stringsText = "";
+    numbersText = "";
+    boolText = "";
+    for (var i = 0; i < text.length; i++) {
+      const letter = str.charAt(i);
+      if (toString) {
+        bracketsText += " ";
+        stringsText += letter;
+        numbersText += " ";
+        boolText += " ";
+        continue;
+      }
+      if (`{}[]`.includes(letter)) {
+        bracketsText += letter;
+        stringsText += " ";
+        numbersText += " ";
+        boolText += " ";
+        continue;
+      }
+      if (letter === `"`) {
+        toString = !toString;
+        bracketsText += " ";
+        stringsText += letter;
+        numbersText += " ";
+        boolText += " ";
+        continue;
+      }
+      if (`1234567890.`.includes(letter)) {
+        toString = !toString;
+        bracketsText += " ";
+        stringsText += " ";
+        numbersText += letter;
+        boolText += " ";
+        continue;
+      }
+      bracketsText += " ";
+      stringsText += " ";
+      numbersText += " ";
+      boolText += letter;
+    }
+  }
+
+  $: parse(text);
 </script>
 
 <div class="containter">
@@ -24,13 +75,46 @@
 
   <div class="wrapper">
     <textarea
-      class="redtext"
+      class="bracketcolor"
       name=""
       id=""
       cols="30"
       rows="10"
-      bind:this="{firstScrollChild}"
-      bind:value="{text}"></textarea>
+      bind:this="{bracketScrollChild}"
+      bind:value="{bracketsText}"></textarea>
+  </div>
+
+  <div class="wrapper">
+    <textarea
+      class="stringcolor"
+      name=""
+      id=""
+      cols="30"
+      rows="10"
+      bind:this="{bracketScrollChild}"
+      bind:value="{stringsText}"></textarea>
+  </div>
+
+  <div class="wrapper">
+    <textarea
+      class="numbercolor"
+      name=""
+      id=""
+      cols="30"
+      rows="10"
+      bind:this="{bracketScrollChild}"
+      bind:value="{numbersText}"></textarea>
+  </div>
+
+  <div class="wrapper">
+    <textarea
+      class="boolcolor"
+      name=""
+      id=""
+      cols="30"
+      rows="10"
+      bind:this="{bracketScrollChild}"
+      bind:value="{boolText}"></textarea>
   </div>
 </div>
 
@@ -75,8 +159,32 @@
     background: var(--vscode-input-foreground);
   }
 
-  .redtext {
+  .bracketcolor {
     color: red;
+    caret-color: transparent;
+    outline-color: transparent;
+    background-color: transparent;
+    border-color: transparent;
+  }
+
+  .stringcolor {
+    color: blue;
+    caret-color: transparent;
+    outline-color: transparent;
+    background-color: transparent;
+    border-color: transparent;
+  }
+
+  .numbercolor {
+    color: yellowgreen;
+    caret-color: transparent;
+    outline-color: transparent;
+    background-color: transparent;
+    border-color: transparent;
+  }
+
+  .boolcolor {
+    color: cyan;
     caret-color: transparent;
     outline-color: transparent;
     background-color: transparent;
