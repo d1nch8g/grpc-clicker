@@ -1,0 +1,9 @@
+{
+  "string": "example",
+  "number": 123442,
+  "true": true,
+  "false": false,
+  "null": null,
+  "array": [],
+  "object": {}
+}
