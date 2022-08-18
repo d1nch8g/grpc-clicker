@@ -1,22 +1,28 @@
 <script>
-  let text = "text";
+  let text = `{"asdsad": "asdasd", "asd": true, "asdda": 12311.123}`;
+  let height = 500;
 
   let scrollParent;
   let bracketsScrollChild;
   let stringsScrollChild;
   let numbersScrollChild;
   let boolScrollChild;
+  let markupScrollChild;
   function parseScroll() {
     bracketsScrollChild.scrollTop = scrollParent.scrollTop;
     stringsScrollChild.scrollTop = scrollParent.scrollTop;
     numbersScrollChild.scrollTop = scrollParent.scrollTop;
     boolScrollChild.scrollTop = scrollParent.scrollTop;
+    markupScrollChild.scrollTop = scrollParent.scrollTop;
   }
 
   let bracketsText = "";
   let stringsText = "";
   let numbersText = "";
   let boolText = "";
+  let markupText = "";
+
+  $: parse(text);
 
   function parse(text) {
     let toString = false;
@@ -24,18 +30,26 @@
     stringsText = "";
     numbersText = "";
     boolText = "";
-    for (var i = 0; i < text.length; i++) {
-      const letter = str.charAt(i);
-      if (i % 2 === 0) {
+    markupText = "";
+    for (const letter of text) {
+      if (
+        letter ===
+        `
+`
+      ) {
         bracketsText += letter;
-      } else {
         stringsText += letter;
+        numbersText += letter;
+        boolText += letter;
+        markupText += letter;
+        continue;
       }
-      if (toString) {
+      if (toString && letter !== `"`) {
         bracketsText += " ";
         stringsText += letter;
         numbersText += " ";
         boolText += " ";
+        markupText += " ";
         continue;
       }
       if (`{}[]`.includes(letter)) {
@@ -43,6 +57,7 @@
         stringsText += " ";
         numbersText += " ";
         boolText += " ";
+        markupText += " ";
         continue;
       }
       if (letter === `"`) {
@@ -51,20 +66,30 @@
         stringsText += letter;
         numbersText += " ";
         boolText += " ";
+        markupText += " ";
         continue;
       }
       if (`1234567890.`.includes(letter)) {
-        toString = !toString;
         bracketsText += " ";
         stringsText += " ";
         numbersText += letter;
         boolText += " ";
+        markupText += " ";
+        continue;
+      }
+      if (`truefalsnu`.includes(letter)) {
+        bracketsText += " ";
+        stringsText += " ";
+        numbersText += " ";
+        boolText += letter;
+        markupText += " ";
         continue;
       }
       bracketsText += " ";
       stringsText += " ";
       numbersText += " ";
-      boolText += letter;
+      boolText += " ";
+      markupText += letter;
     }
   }
 </script>
@@ -79,8 +104,7 @@
       rows="10"
       bind:this="{scrollParent}"
       bind:value="{text}"
-      on:scroll="{parseScroll}"
-      on:input="{parse(text)}"></textarea>
+      on:scroll="{parseScroll}"></textarea>
   </div>
 
   <div class="wrapper">
@@ -126,6 +150,17 @@
       bind:this="{boolScrollChild}"
       bind:value="{boolText}"></textarea>
   </div>
+
+  <div class="wrapper">
+    <textarea
+      class="markupcolor"
+      name=""
+      id=""
+      cols="30"
+      rows="10"
+      bind:this="{markupScrollChild}"
+      bind:value="{markupText}"></textarea>
+  </div>
 </div>
 
 <style>
@@ -170,7 +205,7 @@
   }
 
   .bracketcolor {
-    color: red;
+    color: var(--vscode-debugIcon-breakpointCurrentStackframeForeground);
     caret-color: transparent;
     outline-color: transparent;
     background-color: transparent;
@@ -178,7 +213,7 @@
   }
 
   .stringcolor {
-    color: blue;
+    color: var(--vscode-debugTokenExpression-string);
     caret-color: transparent;
     outline-color: transparent;
     background-color: transparent;
@@ -186,7 +221,7 @@
   }
 
   .numbercolor {
-    color: yellowgreen;
+    color: var(--vscode-debugTokenExpression-number);
     caret-color: transparent;
     outline-color: transparent;
     background-color: transparent;
@@ -194,7 +229,15 @@
   }
 
   .boolcolor {
-    color: cyan;
+    color: var(--vscode-debugTokenExpression-boolean);
+    caret-color: transparent;
+    outline-color: transparent;
+    background-color: transparent;
+    border-color: transparent;
+  }
+
+  .markupcolor {
+    color: var(--vscode-foreground);
     caret-color: transparent;
     outline-color: transparent;
     background-color: transparent;
