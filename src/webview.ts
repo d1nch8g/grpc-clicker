@@ -142,7 +142,6 @@ class GrpcClickerView {
         nonce="W3hIwRHaPGdvqvmwfzGey0vuCz2fM6Pn"
         src="${scriptUri}"
       ></script>
-      <script>hljs.highlightAll();</script>
     </body>
   </html>`;
     this.panel.webview.postMessage(JSON.stringify(this.request));
