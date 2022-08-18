@@ -1,10 +1,16 @@
 <script>
-  let text = "";
+  let text = "text";
 
-  let scrollParent = 0;
-  let bracketScrollChild;
+  let scrollParent;
+  let bracketsScrollChild;
+  let stringsScrollChild;
+  let numbersScrollChild;
+  let boolScrollChild;
   function parseScroll() {
-    bracketScrollChild.scrollTop = scrollParent.scrollTop;
+    bracketsScrollChild.scrollTop = scrollParent.scrollTop;
+    stringsScrollChild.scrollTop = scrollParent.scrollTop;
+    numbersScrollChild.scrollTop = scrollParent.scrollTop;
+    boolScrollChild.scrollTop = scrollParent.scrollTop;
   }
 
   let bracketsText = "";
@@ -20,6 +26,11 @@
     boolText = "";
     for (var i = 0; i < text.length; i++) {
       const letter = str.charAt(i);
+      if (i % 2 === 0) {
+        bracketsText += letter;
+      } else {
+        stringsText += letter;
+      }
       if (toString) {
         bracketsText += " ";
         stringsText += letter;
@@ -56,8 +67,6 @@
       boolText += letter;
     }
   }
-
-  $: parse(text);
 </script>
 
 <div class="containter">
@@ -68,9 +77,10 @@
       id=""
       cols="30"
       rows="10"
-      on:scroll="{parseScroll}"
       bind:this="{scrollParent}"
-      bind:value="{text}"></textarea>
+      bind:value="{text}"
+      on:scroll="{parseScroll}"
+      on:input="{parse(text)}"></textarea>
   </div>
 
   <div class="wrapper">
@@ -80,8 +90,8 @@
       id=""
       cols="30"
       rows="10"
-      bind:this="{bracketScrollChild}"
-      bind:value="{bracketsText}"></textarea>
+      bind:this="{bracketsScrollChild}"
+      value="{bracketsText}"></textarea>
   </div>
 
   <div class="wrapper">
@@ -91,7 +101,7 @@
       id=""
       cols="30"
       rows="10"
-      bind:this="{bracketScrollChild}"
+      bind:this="{stringsScrollChild}"
       bind:value="{stringsText}"></textarea>
   </div>
 
@@ -102,7 +112,7 @@
       id=""
       cols="30"
       rows="10"
-      bind:this="{bracketScrollChild}"
+      bind:this="{numbersScrollChild}"
       bind:value="{numbersText}"></textarea>
   </div>
 
@@ -113,7 +123,7 @@
       id=""
       cols="30"
       rows="10"
-      bind:this="{bracketScrollChild}"
+      bind:this="{boolScrollChild}"
       bind:value="{boolText}"></textarea>
   </div>
 </div>
