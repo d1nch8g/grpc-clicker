@@ -1,4 +1,5 @@
 <script>
+  import JsonArea from "./JsonArea.svelte";
   export let data;
   $: innerHeight = 0;
 </script>
@@ -16,15 +17,15 @@
     </center>
   </tr>
   <tr>
-    <textarea
-      class="code"
-      name=""
-      id=""
-      cols="30"
-      rows="10"
-      style="--height: {innerHeight - 180}px"
-      bind:value="{data.response}"
-      readonly></textarea>
+    {#if data.code !== `OK`}
+      <JsonArea
+        bind:text="{data.response}"
+        height="{innerHeight - 180}"
+        highlight="{false}"
+      />
+    {:else}
+      <JsonArea bind:text="{data.response}" height="{innerHeight - 180}" />
+    {/if}
   </tr>
 </table>
 
@@ -38,20 +39,5 @@
   center {
     padding-top: 2px;
     padding-bottom: 5px;
-  }
-  textarea {
-    height: var(--height);
-    resize: none;
-    display: block;
-    width: 98%;
-    padding: 6px;
-    color: var(--vscode-input-foreground);
-    outline-color: var(--vscode-input-border);
-    background-color: var(--vscode-input-background);
-    font-family: var(--vscode-editor-font-family);
-    font-size: var(--vscode-editor-font-size);
-  }
-  textarea:focus {
-    outline-color: var(--vscode-focusBorder) !important;
   }
 </style>
