@@ -24,6 +24,9 @@
 
   $: parse(text);
 
+  const newline = `
+`;
+
   function parse(text) {
     let toString = false;
     bracketsText = "";
@@ -32,11 +35,7 @@
     boolText = "";
     markupText = "";
     for (const letter of text) {
-      if (
-        letter ===
-        `
-`
-      ) {
+      if (letter === newline) {
         bracketsText += letter;
         stringsText += letter;
         numbersText += letter;
