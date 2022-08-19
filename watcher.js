@@ -89,7 +89,7 @@ let lastrebuild = performance.now();
 fs.watch("webview/src", function (event, filename) {
   count += 1;
   try {
-    if (performance.now() - lastrebuild > 4000) {
+    if (performance.now() - lastrebuild > 300) {
       rebuild();
       console.log("\x1b[32m%s\x1b[0m", "Rebuilt webview for vscode: " + count);
       lastrebuild = performance.now();
