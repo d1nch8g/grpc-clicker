@@ -42,12 +42,13 @@
     });
   }
 
-  function onEditRequest() {
+  function onEditRequest(text) {
     vscode.postMessage({
       command: "edit",
-      text: data.json,
+      text: text,
     });
   }
+  $: onEditRequest(data.json);
 
   function onExport() {
     vscode.postMessage({
@@ -100,7 +101,7 @@
         <vscode-panel-tab id="tab-1">INPUT</vscode-panel-tab>
         <vscode-panel-tab id="tab-2">INFORMATION</vscode-panel-tab>
         <vscode-panel-view id="view-1">
-          <Request bind:data edit="{onEditRequest}" />
+          <Request bind:data />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
           <Info bind:data />
