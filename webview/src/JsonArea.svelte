@@ -55,7 +55,7 @@
         if (letter === `:`) {
           toString = true;
         }
-        if (`[]{},`.includes(letter)) {
+        if (`[]{},`.includes(letter) && !toKey) {
           toString = false;
         }
         if (toKey && letter !== `"`) {
