@@ -26,7 +26,7 @@
     date: "",
     metadata: [],
     hosts: [],
-    expectedResponse: undefined,
+    expectedResponse: "",
     expectedCode: "",
     expectedTime: 0,
   };
@@ -42,12 +42,13 @@
     });
   }
 
-  function onEditRequest() {
+  function onEditRequest(text) {
     vscode.postMessage({
       command: "edit",
-      text: data.json,
+      text: text,
     });
   }
+  $: onEditRequest(data.json);
 
   function onExport() {
     vscode.postMessage({
@@ -62,12 +63,16 @@
     });
   }
 
-  function onEditResponse() {
+  function onEditResponse(text) {
+    if (text === ``) {
+      text = undefined;
+    }
     vscode.postMessage({
       command: "expectedResponse",
-      text: data.expectedResponse,
+      text: text,
     });
   }
+  $: onEditResponse(data.expectedResponse);
 
   function onCreateTest() {
     if (data.expectedCode === ``) {
@@ -100,7 +105,7 @@
         <vscode-panel-tab id="tab-1">INPUT</vscode-panel-tab>
         <vscode-panel-tab id="tab-2">INFORMATION</vscode-panel-tab>
         <vscode-panel-view id="view-1">
-          <Request bind:data edit="{onEditRequest}" />
+          <Request bind:data />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
           <Info bind:data />
@@ -117,11 +122,7 @@
           <Response bind:data />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
-          <Testing
-            bind:data
-            edit="{onEditResponse}"
-            createTest="{onCreateTest}"
-          />
+          <Testing bind:data createTest="{onCreateTest}" />
         </vscode-panel-view>
       </vscode-panels>
     </div>
