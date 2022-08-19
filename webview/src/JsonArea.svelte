@@ -113,7 +113,7 @@
           markupText += noBreakSpace;
           continue;
         }
-        if (`truefalsnu`.includes(letter)) {
+        if (`abcdefghijklmnopqrstuvwxyz`.includes(letter)) {
           bracketsText += noBreakSpace;
           stringsText += noBreakSpace;
           keysText += noBreakSpace;
