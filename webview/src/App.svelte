@@ -26,7 +26,7 @@
     date: "",
     metadata: [],
     hosts: [],
-    expectedResponse: undefined,
+    expectedResponse: "",
     expectedCode: "",
     expectedTime: 0,
   };
@@ -63,12 +63,16 @@
     });
   }
 
-  function onEditResponse() {
+  function onEditResponse(text) {
+    if (text === ``) {
+      text = undefined;
+    }
     vscode.postMessage({
       command: "expectedResponse",
-      text: data.expectedResponse,
+      text: text,
     });
   }
+  $: onEditResponse(data.expectedResponse);
 
   function onCreateTest() {
     if (data.expectedCode === ``) {
@@ -118,11 +122,7 @@
           <Response bind:data />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
-          <Testing
-            bind:data
-            edit="{onEditResponse}"
-            createTest="{onCreateTest}"
-          />
+          <Testing bind:data createTest="{onCreateTest}" />
         </vscode-panel-view>
       </vscode-panels>
     </div>
