@@ -188,12 +188,16 @@ ${resp.response}
   }
 
   private jsonPreprocess(input: string): string {
-    input = JSON.stringify(JSON.parse(input));
-    if (process.platform === "win32") {
-      input = input.replaceAll('"', '\\"');
-      return `"${input}"`;
+    try {
+      input = JSON.stringify(JSON.parse(input));
+      if (process.platform === "win32") {
+        input = input.replaceAll('"', '\\"');
+        return `"${input}"`;
+      }
+      return `'${input}'`;
+    } catch {
+      return `INVALID JSON`;
     }
-    return `'${input}'`;
   }
 
   private headerPreprocess(header: string): string {

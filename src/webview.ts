@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { Host, Request, Response, TestData } from "./grpcurl/grpcurl";
+import { Host, Response, TestData } from "./grpcurl/grpcurl";
 
 export class WebViewFactory {
   private views: GrpcClickerView[] = [];
@@ -136,7 +136,7 @@ class GrpcClickerView {
       <script type="module" src="${toolkitUri}"></script>
       <link href="${stylesMainUri}" rel="stylesheet" />
     </head>
-    <body>      
+    <body>
       <div id="app"></div>
       <script
         nonce="W3hIwRHaPGdvqvmwfzGey0vuCz2fM6Pn"
