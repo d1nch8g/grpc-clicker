@@ -1,53 +1,45 @@
 <script>
-  let text = `[
-  {
-    "id": "0001",
-    "type": "donut",
-    "name": "Cake",
-    "ppu": 0.55,
-    "batters":
-      {
-        "batter":
-          [
-            { "id": "1001", "type": "Regular" },
-            { "id": "1002", "type": "Chocolate" },
-            { "id": "1003", "type": "Blueberry" },
-            { "id": "1004", "type": "Devil's Food" }
-          ]
-      },
-    "topping":
-      [
-        { "id": "5001", "type": "None" },
-        { "id": "5002", "type": "Glazed" },
-        { "id": "5005", "type": "Sugar" },
-        { "id": "5007", "type": "Powdered Sugar" },
-        { "id": "5006", "type": "Chocolate with Sprinkles" },
-        { "id": "5003", "type": "Chocolate" },
-        { "id": "5004", "type": "Maple" }
-      ]
-  }
-]`;
+  let text = `{
+  "id": 123,
+  "type": true,
+  "name": "Cake",
+  "ppu": 0.55,
+  "batters": {
+    "batter": [
+      { "id": "1001", "type": "Regular" },
+      { "id": "1002", "type": "Chocolate" },
+      { "id": "1003", "type": "Blueberry" },
+      { "id": "1004", "type": "Devil's Food" }
+    ]
+  },
+  "topping": [
+    { "id": "5001", "type": "None" },
+    { "id": "5002", "type": "Glazed" },
+    { "id": "5005", "type": "Sugar" },
+    { "id": "5007", "type": "Powdered Sugar" },
+    { "id": "5006", "type": "Chocolate with Sprinkles" },
+    { "id": "5003", "type": "Chocolate" },
+    { "id": "5004", "type": "Maple" }
+  ]
+}
+`;
   let height = 500;
 
-  let scrollParent;
-  let bracketsScrollChild;
-  let stringsScrollChild;
-  let numbersScrollChild;
-  let boolScrollChild;
-  let markupScrollChild;
+  let mainScroll;
+  let bracketScroll;
+  let keysScroll;
+  let stringsScroll;
+  let numbersScroll;
+  let boolsScroll;
+  let markupScroll;
   function parseScroll() {
-    bracketsScrollChild.scrollTop = scrollParent.scrollTop;
-    stringsScrollChild.scrollTop = scrollParent.scrollTop;
-    numbersScrollChild.scrollTop = scrollParent.scrollTop;
-    boolScrollChild.scrollTop = scrollParent.scrollTop;
-    markupScrollChild.scrollTop = scrollParent.scrollTop;
+    bracketScroll.scrollTop = mainScroll.scrollTop;
+    keysScroll.scrollTop = mainScroll.scrollTop;
+    stringsScroll.scrollTop = mainScroll.scrollTop;
+    numbersScroll.scrollTop = mainScroll.scrollTop;
+    boolsScroll.scrollTop = mainScroll.scrollTop;
+    markupScroll.scrollTop = mainScroll.scrollTop;
   }
-
-  let bracketsText = "";
-  let stringsText = "";
-  let numbersText = "";
-  let boolText = "";
-  let markupText = "";
 
   $: parse(text);
 
@@ -56,10 +48,18 @@
   const newline = `
 `;
 
+  let bracketsText = "";
+  let stringsText = "";
+  let keysText = "";
+  let numbersText = "";
+  let boolText = "";
+  let markupText = "";
   function parse(text) {
+    let toKey = false;
     let toString = false;
     bracketsText = "";
     stringsText = "";
+    keysText = "";
     numbersText = "";
     boolText = "";
     markupText = "";
@@ -67,14 +67,50 @@
       if (letter === newline || letter === space) {
         bracketsText += letter;
         stringsText += letter;
+        keysText += letter;
         numbersText += letter;
         boolText += letter;
         markupText += letter;
         continue;
       }
-      if (toString && letter !== `"`) {
+      if (letter === `:`) {
+        toString = true;
+      }
+      if (`[]{},`.includes(letter)) {
+        toString = false;
+      }
+      if (toKey && letter !== `"`) {
+        if (toString) {
+          bracketsText += noBreakSpace;
+          stringsText += letter;
+          keysText += noBreakSpace;
+          numbersText += noBreakSpace;
+          boolText += noBreakSpace;
+          markupText += noBreakSpace;
+          continue;
+        }
         bracketsText += noBreakSpace;
-        stringsText += letter;
+        stringsText += noBreakSpace;
+        keysText += letter;
+        numbersText += noBreakSpace;
+        boolText += noBreakSpace;
+        markupText += noBreakSpace;
+        continue;
+      }
+      if (letter === `"`) {
+        toKey = !toKey;
+        if (toString) {
+          bracketsText += noBreakSpace;
+          stringsText += letter;
+          keysText += noBreakSpace;
+          numbersText += noBreakSpace;
+          boolText += noBreakSpace;
+          markupText += noBreakSpace;
+          continue;
+        }
+        bracketsText += noBreakSpace;
+        stringsText += noBreakSpace;
+        keysText += letter;
         numbersText += noBreakSpace;
         boolText += noBreakSpace;
         markupText += noBreakSpace;
@@ -83,15 +119,7 @@
       if (`{}[]`.includes(letter)) {
         bracketsText += letter;
         stringsText += noBreakSpace;
-        numbersText += noBreakSpace;
-        boolText += noBreakSpace;
-        markupText += noBreakSpace;
-        continue;
-      }
-      if (letter === `"`) {
-        toString = !toString;
-        bracketsText += noBreakSpace;
-        stringsText += letter;
+        keysText += noBreakSpace;
         numbersText += noBreakSpace;
         boolText += noBreakSpace;
         markupText += noBreakSpace;
@@ -100,6 +128,7 @@
       if (`1234567890.`.includes(letter)) {
         bracketsText += noBreakSpace;
         stringsText += noBreakSpace;
+        keysText += noBreakSpace;
         numbersText += letter;
         boolText += noBreakSpace;
         markupText += noBreakSpace;
@@ -108,6 +137,7 @@
       if (`truefalsnu`.includes(letter)) {
         bracketsText += noBreakSpace;
         stringsText += noBreakSpace;
+        keysText += noBreakSpace;
         numbersText += noBreakSpace;
         boolText += letter;
         markupText += noBreakSpace;
@@ -115,6 +145,7 @@
       }
       bracketsText += noBreakSpace;
       stringsText += noBreakSpace;
+      keysText += noBreakSpace;
       numbersText += noBreakSpace;
       boolText += noBreakSpace;
       markupText += letter;
@@ -131,7 +162,7 @@
       cols="30"
       rows="10"
       style="--height: {height}px"
-      bind:this="{scrollParent}"
+      bind:this="{mainScroll}"
       bind:value="{text}"
       on:scroll="{parseScroll}"></textarea>
   </div>
@@ -144,20 +175,32 @@
       cols="30"
       rows="10"
       style="--height: {height}px"
-      bind:this="{bracketsScrollChild}"
+      bind:this="{bracketScroll}"
       value="{bracketsText}"></textarea>
   </div>
 
   <div class="wrapper">
     <textarea
-      class="stringcolor"
+      class="stringvalues"
       name=""
       id=""
       cols="30"
       rows="10"
       style="--height: {height}px"
-      bind:this="{stringsScrollChild}"
+      bind:this="{stringsScroll}"
       bind:value="{stringsText}"></textarea>
+  </div>
+
+  <div class="wrapper">
+    <textarea
+      class="stringkeys"
+      name=""
+      id=""
+      cols="30"
+      rows="10"
+      style="--height: {height}px"
+      bind:this="{keysScroll}"
+      bind:value="{keysText}"></textarea>
   </div>
 
   <div class="wrapper">
@@ -168,7 +211,7 @@
       cols="30"
       rows="10"
       style="--height: {height}px"
-      bind:this="{numbersScrollChild}"
+      bind:this="{numbersScroll}"
       bind:value="{numbersText}"></textarea>
   </div>
 
@@ -180,7 +223,7 @@
       cols="30"
       rows="10"
       style="--height: {height}px"
-      bind:this="{boolScrollChild}"
+      bind:this="{boolsScroll}"
       bind:value="{boolText}"></textarea>
   </div>
 
@@ -192,7 +235,7 @@
       cols="30"
       rows="10"
       style="--height: {height}px"
-      bind:this="{markupScrollChild}"
+      bind:this="{markupScroll}"
       bind:value="{markupText}"></textarea>
   </div>
 </div>
@@ -246,8 +289,16 @@
     border-color: transparent;
   }
 
-  .stringcolor {
+  .stringvalues {
     color: var(--vscode-debugTokenExpression-string);
+    caret-color: transparent;
+    outline-color: transparent;
+    background-color: transparent;
+    border-color: transparent;
+  }
+
+  .stringkeys {
+    color: var(--vscode-debugIcon-stepOverForeground);
     caret-color: transparent;
     outline-color: transparent;
     background-color: transparent;
