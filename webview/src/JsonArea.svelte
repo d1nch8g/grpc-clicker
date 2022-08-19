@@ -1,6 +1,7 @@
 <script>
   export let text;
   export let height;
+  export let highlight = true;
 
   let mainScroll;
   let bracketScroll;
@@ -40,92 +41,96 @@
     numbersText = "";
     boolText = "";
     markupText = "";
-    for (const letter of text) {
-      if (letter === newline || letter === space) {
-        bracketsText += letter;
-        stringsText += letter;
-        keysText += letter;
-        numbersText += letter;
-        boolText += letter;
+    if (highlight) {
+      for (const letter of text) {
+        if (letter === newline || letter === space) {
+          bracketsText += letter;
+          stringsText += letter;
+          keysText += letter;
+          numbersText += letter;
+          boolText += letter;
+          markupText += letter;
+          continue;
+        }
+        if (letter === `:`) {
+          toString = true;
+        }
+        if (`[]{},`.includes(letter)) {
+          toString = false;
+        }
+        if (toKey && letter !== `"`) {
+          if (toString) {
+            bracketsText += noBreakSpace;
+            stringsText += letter;
+            keysText += noBreakSpace;
+            numbersText += noBreakSpace;
+            boolText += noBreakSpace;
+            markupText += noBreakSpace;
+            continue;
+          }
+          bracketsText += noBreakSpace;
+          stringsText += noBreakSpace;
+          keysText += letter;
+          numbersText += noBreakSpace;
+          boolText += noBreakSpace;
+          markupText += noBreakSpace;
+          continue;
+        }
+        if (letter === `"`) {
+          toKey = !toKey;
+          if (toString) {
+            bracketsText += noBreakSpace;
+            stringsText += letter;
+            keysText += noBreakSpace;
+            numbersText += noBreakSpace;
+            boolText += noBreakSpace;
+            markupText += noBreakSpace;
+            continue;
+          }
+          bracketsText += noBreakSpace;
+          stringsText += noBreakSpace;
+          keysText += letter;
+          numbersText += noBreakSpace;
+          boolText += noBreakSpace;
+          markupText += noBreakSpace;
+          continue;
+        }
+        if (`{}[]`.includes(letter)) {
+          bracketsText += letter;
+          stringsText += noBreakSpace;
+          keysText += noBreakSpace;
+          numbersText += noBreakSpace;
+          boolText += noBreakSpace;
+          markupText += noBreakSpace;
+          continue;
+        }
+        if (`1234567890.`.includes(letter)) {
+          bracketsText += noBreakSpace;
+          stringsText += noBreakSpace;
+          keysText += noBreakSpace;
+          numbersText += letter;
+          boolText += noBreakSpace;
+          markupText += noBreakSpace;
+          continue;
+        }
+        if (`truefalsnu`.includes(letter)) {
+          bracketsText += noBreakSpace;
+          stringsText += noBreakSpace;
+          keysText += noBreakSpace;
+          numbersText += noBreakSpace;
+          boolText += letter;
+          markupText += noBreakSpace;
+          continue;
+        }
+        bracketsText += noBreakSpace;
+        stringsText += noBreakSpace;
+        keysText += noBreakSpace;
+        numbersText += noBreakSpace;
+        boolText += noBreakSpace;
         markupText += letter;
-        continue;
       }
-      if (letter === `:`) {
-        toString = true;
-      }
-      if (`[]{},`.includes(letter)) {
-        toString = false;
-      }
-      if (toKey && letter !== `"`) {
-        if (toString) {
-          bracketsText += noBreakSpace;
-          stringsText += letter;
-          keysText += noBreakSpace;
-          numbersText += noBreakSpace;
-          boolText += noBreakSpace;
-          markupText += noBreakSpace;
-          continue;
-        }
-        bracketsText += noBreakSpace;
-        stringsText += noBreakSpace;
-        keysText += letter;
-        numbersText += noBreakSpace;
-        boolText += noBreakSpace;
-        markupText += noBreakSpace;
-        continue;
-      }
-      if (letter === `"`) {
-        toKey = !toKey;
-        if (toString) {
-          bracketsText += noBreakSpace;
-          stringsText += letter;
-          keysText += noBreakSpace;
-          numbersText += noBreakSpace;
-          boolText += noBreakSpace;
-          markupText += noBreakSpace;
-          continue;
-        }
-        bracketsText += noBreakSpace;
-        stringsText += noBreakSpace;
-        keysText += letter;
-        numbersText += noBreakSpace;
-        boolText += noBreakSpace;
-        markupText += noBreakSpace;
-        continue;
-      }
-      if (`{}[]`.includes(letter)) {
-        bracketsText += letter;
-        stringsText += noBreakSpace;
-        keysText += noBreakSpace;
-        numbersText += noBreakSpace;
-        boolText += noBreakSpace;
-        markupText += noBreakSpace;
-        continue;
-      }
-      if (`1234567890.`.includes(letter)) {
-        bracketsText += noBreakSpace;
-        stringsText += noBreakSpace;
-        keysText += noBreakSpace;
-        numbersText += letter;
-        boolText += noBreakSpace;
-        markupText += noBreakSpace;
-        continue;
-      }
-      if (`truefalsnu`.includes(letter)) {
-        bracketsText += noBreakSpace;
-        stringsText += noBreakSpace;
-        keysText += noBreakSpace;
-        numbersText += noBreakSpace;
-        boolText += letter;
-        markupText += noBreakSpace;
-        continue;
-      }
-      bracketsText += noBreakSpace;
-      stringsText += noBreakSpace;
-      keysText += noBreakSpace;
-      numbersText += noBreakSpace;
-      boolText += noBreakSpace;
-      markupText += letter;
+    } else {
+      markupText = text;
     }
   }
 </script>
