@@ -102,13 +102,13 @@
         <vscode-panel-tab id="tab-2">INFORMATION</vscode-panel-tab>
         <vscode-panel-tab id="tab-3">HIGHLIGHT</vscode-panel-tab>
         <vscode-panel-view id="view-1">
-          <Request bind:data edit="{onEditRequest}" />
+          <JsonArea />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
           <Info bind:data />
         </vscode-panel-view>
         <vscode-panel-view id="view-3">
-          <JsonArea />
+          <Request bind:data edit="{onEditRequest}" />
         </vscode-panel-view>
       </vscode-panels>
     </div>
