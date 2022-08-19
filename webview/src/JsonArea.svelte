@@ -25,48 +25,6 @@
         { "id": "5003", "type": "Chocolate" },
         { "id": "5004", "type": "Maple" }
       ]
-  },
-  {
-    "id": "0002",
-    "type": "donut",
-    "name": "Raised",
-    "ppu": 0.55,
-    "batters":
-      {
-        "batter":
-          [
-            { "id": "1001", "type": "Regular" }
-          ]
-      },
-    "topping":
-      [
-        { "id": "5001", "type": "None" },
-        { "id": "5002", "type": "Glazed" },
-        { "id": "5005", "type": "Sugar" },
-        { "id": "5003", "type": "Chocolate" },
-        { "id": "5004", "type": "Maple" }
-      ]
-  },
-  {
-    "id": "0003",
-    "type": "donut",
-    "name": "Old Fashioned",
-    "ppu": 0.55,
-    "batters":
-      {
-        "batter":
-          [
-            { "id": "1001", "type": "Regular" },
-            { "id": "1002", "type": "Chocolate" }
-          ]
-      },
-    "topping":
-      [
-        { "id": "5001", "type": "None" },
-        { "id": "5002", "type": "Glazed" },
-        { "id": "5003", "type": "Chocolate" },
-        { "id": "5004", "type": "Maple" }
-      ]
   }
 ]`;
   let height = 500;
@@ -94,7 +52,7 @@
   $: parse(text);
 
   const space = ` `;
-  const noBreakSpace = ` `;
+  const noBreakSpace = `\xa0`;
   const newline = `
 `;
 
@@ -115,50 +73,50 @@
         continue;
       }
       if (toString && letter !== `"`) {
-        bracketsText += " ";
+        bracketsText += noBreakSpace;
         stringsText += letter;
-        numbersText += " ";
-        boolText += " ";
-        markupText += " ";
+        numbersText += noBreakSpace;
+        boolText += noBreakSpace;
+        markupText += noBreakSpace;
         continue;
       }
       if (`{}[]`.includes(letter)) {
         bracketsText += letter;
-        stringsText += " ";
-        numbersText += " ";
-        boolText += " ";
-        markupText += " ";
+        stringsText += noBreakSpace;
+        numbersText += noBreakSpace;
+        boolText += noBreakSpace;
+        markupText += noBreakSpace;
         continue;
       }
       if (letter === `"`) {
         toString = !toString;
-        bracketsText += " ";
+        bracketsText += noBreakSpace;
         stringsText += letter;
-        numbersText += " ";
-        boolText += " ";
-        markupText += " ";
+        numbersText += noBreakSpace;
+        boolText += noBreakSpace;
+        markupText += noBreakSpace;
         continue;
       }
       if (`1234567890.`.includes(letter)) {
-        bracketsText += " ";
-        stringsText += " ";
+        bracketsText += noBreakSpace;
+        stringsText += noBreakSpace;
         numbersText += letter;
-        boolText += " ";
-        markupText += " ";
+        boolText += noBreakSpace;
+        markupText += noBreakSpace;
         continue;
       }
       if (`truefalsnu`.includes(letter)) {
-        bracketsText += " ";
-        stringsText += " ";
-        numbersText += " ";
+        bracketsText += noBreakSpace;
+        stringsText += noBreakSpace;
+        numbersText += noBreakSpace;
         boolText += letter;
-        markupText += " ";
+        markupText += noBreakSpace;
         continue;
       }
-      bracketsText += " ";
-      stringsText += " ";
-      numbersText += " ";
-      boolText += " ";
+      bracketsText += noBreakSpace;
+      stringsText += noBreakSpace;
+      numbersText += noBreakSpace;
+      boolText += noBreakSpace;
       markupText += letter;
     }
   }
@@ -172,6 +130,7 @@
       id=""
       cols="30"
       rows="10"
+      style="--height: {height}px"
       bind:this="{scrollParent}"
       bind:value="{text}"
       on:scroll="{parseScroll}"></textarea>
@@ -184,6 +143,7 @@
       id=""
       cols="30"
       rows="10"
+      style="--height: {height}px"
       bind:this="{bracketsScrollChild}"
       value="{bracketsText}"></textarea>
   </div>
@@ -195,6 +155,7 @@
       id=""
       cols="30"
       rows="10"
+      style="--height: {height}px"
       bind:this="{stringsScrollChild}"
       bind:value="{stringsText}"></textarea>
   </div>
@@ -206,6 +167,7 @@
       id=""
       cols="30"
       rows="10"
+      style="--height: {height}px"
       bind:this="{numbersScrollChild}"
       bind:value="{numbersText}"></textarea>
   </div>
@@ -217,6 +179,7 @@
       id=""
       cols="30"
       rows="10"
+      style="--height: {height}px"
       bind:this="{boolScrollChild}"
       bind:value="{boolText}"></textarea>
   </div>
@@ -228,6 +191,7 @@
       id=""
       cols="30"
       rows="10"
+      style="--height: {height}px"
       bind:this="{markupScrollChild}"
       bind:value="{markupText}"></textarea>
   </div>
