@@ -4,7 +4,6 @@
   import Response from "./Response.svelte";
   import Testing from "./Testing.svelte";
   import Info from "./Info.svelte";
-  import JsonArea from "./JsonArea.svelte";
 
   $: data = {
     path: ``,
