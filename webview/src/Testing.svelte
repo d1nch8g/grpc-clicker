@@ -1,6 +1,6 @@
 <script>
+  import JsonArea from "./JsonArea.svelte";
   export let data;
-  export let edit;
   export let createTest;
 
   const timeOptions = [
@@ -96,14 +96,10 @@
     </center>
   </tr>
   <tr>
-    <textarea
-      name=""
-      id=""
-      cols="30"
-      rows="10"
-      style="--height: {innerHeight - 300}px"
-      bind:value="{data.expectedResponse}"
-      on:input="{edit}"></textarea>
+    <JsonArea
+      bind:text="{data.expectedResponse}"
+      height="{innerHeight - 300}"
+    />
   </tr>
   <tr>
     <div class="button-padding">
@@ -158,18 +154,6 @@
     width: 100%;
   }
 
-  textarea {
-    height: var(--height);
-    resize: none;
-    display: block;
-    width: 98%;
-    padding: 6px;
-    color: var(--vscode-input-foreground);
-    outline-color: var(--vscode-input-border);
-    background-color: var(--vscode-input-background);
-    font-family: var(--vscode-editor-font-family);
-    font-size: var(--vscode-editor-font-size);
-  }
   center {
     padding-top: 10px;
     padding-bottom: 5px;
