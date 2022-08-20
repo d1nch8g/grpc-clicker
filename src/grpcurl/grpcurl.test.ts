@@ -1,14 +1,11 @@
-import { Caller, FormCliTemplateParams } from "./caller";
-import { Grpcurl, ProtoFile, ProtoServer } from "./grpcurl";
 import {
-  Call,
-  Field,
-  Message,
-  Parser,
-  Proto,
-  ProtoType,
-  Response,
-} from "./parser";
+  Caller,
+  FileSource,
+  FormCliTemplateParams,
+  ServerSource,
+} from "./caller";
+import { Grpcurl } from "./grpcurl";
+import { Call, Field, Message, Parser, Proto, Response } from "./parser";
 import * as util from "util";
 
 class MockParser implements Parser {
@@ -24,14 +21,14 @@ class MockParser implements Parser {
     return {
       services: [
         {
-          type: ProtoType.service,
+          type: `SERVICE`,
           name: ``,
           tag: ``,
           description: input,
           calls: [],
         },
       ],
-      type: ProtoType.proto,
+      type: `PROTO`,
     };
   }
   rpc(line: string): Call {
@@ -39,7 +36,7 @@ class MockParser implements Parser {
   }
   message(input: string): Message {
     return {
-      type: ProtoType.message,
+      type: `MESSAGE`,
       name: input,
       tag: `tag`,
       description: `dscr`,
@@ -67,49 +64,38 @@ class MockCaller implements Caller {
 
 test(`protoFile`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
-  const expectedResult: ProtoFile = {
-    type: ProtoType.proto,
-    path: "docs/api.proto",
-    hosts: [
-      {
-        adress: `localhost:12201`,
-        plaintext: true,
-      },
-    ],
+
+  const expectedResult: Proto = {
+    type: `PROTO`,
     services: [
       {
-        type: ProtoType.service,
+        type: `SERVICE`,
         name: ``,
         tag: ``,
-        description: "grpcurl -import-path / -proto docs/api.proto describe",
+        description:
+          "grpcurl -max-time 0.5 -import-path / -proto docs/api.proto describe",
         calls: [],
       },
     ],
-    importPath: "/",
   };
-  expect(
-    await grpcurl.proto({
-      path: "docs/api.proto",
-      hosts: [
-        {
-          adress: `localhost:12201`,
-          plaintext: true,
-        },
-      ],
-      importPath: `/`,
-    })
-  ).toStrictEqual(expectedResult);
+
+  const fileSouce: FileSource = {
+    type: `FILE`,
+    filePath: `docs/api.proto`,
+    importPath: `/`,
+  };
+
+  expect(await grpcurl.proto(fileSouce)).toStrictEqual(expectedResult);
 });
 
 test(`protoServer`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
-  const expectedResult: ProtoServer = {
-    type: ProtoType.proto,
-    adress: "localhost:12201",
-    plaintext: true,
+
+  const expectedResult: Proto = {
+    type: `PROTO`,
     services: [
       {
-        type: ProtoType.service,
+        type: `SERVICE`,
         name: ``,
         tag: ``,
         description:
@@ -118,26 +104,32 @@ test(`protoServer`, async () => {
       },
     ],
   };
-  expect(
-    await grpcurl.protoServer({
-      host: `localhost:12201`,
-      plaintext: true,
-    })
-  ).toStrictEqual(expectedResult);
+
+  const serverSource: ServerSource = {
+    type: `SERVER`,
+    host: `localhost:12201`,
+    usePlaintext: true,
+  };
+
+  expect(await grpcurl.proto(serverSource)).toStrictEqual(expectedResult);
 });
 
 test(`message`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
+
+  const fileSouce: FileSource = {
+    type: `FILE`,
+    filePath: `docs/api.proto`,
+    importPath: `/`,
+  };
+
   expect(
     await grpcurl.message({
-      source: `docs/api.proto`,
-      server: false,
-      plaintext: false,
-      tag: `.pb.v1.StringMes`,
-      importPath: "/",
+      source: fileSouce,
+      messageTag: ".pb.v1.StringMes",
     })
   ).toStrictEqual({
-    type: ProtoType.message,
+    type: `MESSAGE`,
     name: `grpcurl -msg-template -import-path / -proto docs/api.proto describe .pb.v1.StringMes`,
     tag: `tag`,
     description: `dscr`,
@@ -148,22 +140,32 @@ test(`message`, async () => {
 
 test(`send`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
-  let resp = await grpcurl.send({
-    path: "docs/api.proto",
+
+  const fileSouce: FileSource = {
+    type: `FILE`,
+    filePath: `docs/api.proto`,
     importPath: `/`,
-    json: "{}",
-    server: {
-      adress: `localhost:12201`,
-      plaintext: true,
-    },
-    callTag: "pb.v1.Constructions.EmptyCall",
-    headers: [`username: user`, `passsword: password`],
-    maxMsgSize: 4,
+  };
+
+  const serverSource: ServerSource = {
+    type: `SERVER`,
+    host: `localhost:12201`,
+    usePlaintext: true,
+  };
+
+  let resp = await grpcurl.send({
+    file: fileSouce,
+    json: `{}`,
+    server: serverSource,
+    callTag: `.pb.v1.Constructions/EmptyCall`,
+    maxMsgSize: 1,
+    headers: [`username: user`, `password: password`],
   });
+
   expect(resp.code).toBe(`ok`);
 
-  const winExpect = `grpcurl -emit-defaults -H \"username: user\" -H \"passsword: password\"   -d \"{}\" -plaintext -import-path / -proto docs/api.proto localhost:12201 pb.v1.Constructions.EmptyCall`;
-  const linuxExpect = `grpcurl -emit-defaults -H 'username: user' -H 'passsword: password'   -d '{}' -plaintext -import-path / -proto docs/api.proto localhost:12201 pb.v1.Constructions.EmptyCall`;
+  const winExpect = `grpcurl -emit-defaults -H \"username: user\" -H \"password: password\"  -max-msg-sz 1048576 -d \"{}\" -import-path / -proto docs/api.proto -plaintext localhost:12201 .pb.v1.Constructions/EmptyCall`;
+  const linuxExpect = `grpcurl -emit-defaults -H 'username: user' -H 'password: password'  -max-msg-sz 1048576 -d '{}' -import-path / -proto docs/api.proto -plaintext localhost:12201 .pb.v1.Constructions/EmptyCall`;
 
   if (process.platform === "win32") {
     expect(resp.response).toBe(winExpect);

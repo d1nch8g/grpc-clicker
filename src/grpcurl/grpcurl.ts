@@ -20,7 +20,7 @@ export interface Request {
   server: ServerSource;
   /**
    * `grpcurl` compatible call tag including proto and service:
-   * - Example - `pb.v1.Constructions/EmptyCall`
+   * - Example - `.pb.v1.Constructions/EmptyCall`
    */
   callTag: string;
   /**
@@ -109,7 +109,7 @@ export class Grpcurl {
    * Describe proto from provided source
    */
   async proto(source: FileSource | ServerSource): Promise<Proto | string> {
-    const command = `grpcurl |SRC| describe`;
+    const command = `grpcurl -max-time 0.5 |SRC| describe`;
     const call = this.caller.buildCliCommand({
       cliCommand: command,
       useDocker: this.useDocker,
