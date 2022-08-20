@@ -241,7 +241,7 @@ export enum GrpcCode {
 /**
  * Parsed proto response
  */
-export interface Response {
+export interface ParsedResponse {
   /**
    * Recived gRPC code of response
    */
@@ -500,8 +500,8 @@ export class Parser {
   /**
    * Parse CLI response of gRPC call execution
    */
-  resp(input: string): Response {
-    let resp: Response = {
+  resp(input: string): ParsedResponse {
+    let resp: ParsedResponse = {
       code: GrpcCode.ok,
       response: "",
     };

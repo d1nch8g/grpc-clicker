@@ -1,4 +1,4 @@
-import { Message, Parser, Proto, Response } from "./parser";
+import { GrpcCode, Message, ParsedResponse, Parser, Proto } from "./parser";
 import { Caller, FileSource, ServerSource } from "./caller";
 import { performance } from "perf_hooks";
 
@@ -82,6 +82,17 @@ export interface DescribeMessageParams {
    * `grpcurl` compatible message tag
    */
   messageTag: string;
+}
+
+export interface Response extends ParsedResponse {
+  /**
+   * Date converted to a string using Universal Coordinated Time (UTC).
+   */
+  date: string;
+  /**
+   * Time of request execution in seconds.
+   */
+  time: number;
 }
 
 /**
@@ -179,7 +190,7 @@ export class Grpcurl {
     const [resp, err] = await this.caller.execute(this.formCall(input));
     const end = performance.now();
 
-    let response: Response;
+    let response: par;
     if (err !== undefined) {
       response = this.parser.resp(err.message);
     } else {

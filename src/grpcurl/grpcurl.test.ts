@@ -5,11 +5,11 @@ import {
   ServerSource,
 } from "./caller";
 import { Grpcurl } from "./grpcurl";
-import { Call, Field, Message, Parser, Proto, Response } from "./parser";
+import { Call, Field, Message, Parser, Proto, ParsedResponse } from "./parser";
 import * as util from "util";
 
 class MockParser implements Parser {
-  resp(input: string): Response {
+  resp(input: string): ParsedResponse {
     return {
       code: `ok`,
       response: input,
