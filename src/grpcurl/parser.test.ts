@@ -1,4 +1,4 @@
-import { Field, GrpcCode, Message, Parser, ParsedResponse } from "./parser";
+import { Field, Message, Parser, ParsedResponse } from "./parser";
 
 const protoInput = `pb.v1.Streams is a service:
 service Streams {
@@ -326,20 +326,20 @@ test(`response`, () => {
   const parser = new Parser();
 
   const firstExpectedResponse: ParsedResponse = {
-    code: GrpcCode.alreadyExists,
-    response: "some err msg",
+    code: `AlreadyExists`,
+    content: "some err msg",
   };
   expect(parser.resp(codeErr)).toStrictEqual(firstExpectedResponse);
 
   const secondExpectedResponse: ParsedResponse = {
-    code: GrpcCode.unavailable,
-    response: `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`,
+    code: `Unavailable`,
+    content: `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`,
   };
   expect(parser.resp(connErr)).toStrictEqual(secondExpectedResponse);
 
   const thirdExpectedResponse: ParsedResponse = {
-    code: GrpcCode.ok,
-    response: `{\n  "message": "msg"\n}`,
+    code: `OK`,
+    content: `{\n  "message": "msg"\n}`,
   };
   expect(parser.resp(goodResp)).toStrictEqual(thirdExpectedResponse);
 });

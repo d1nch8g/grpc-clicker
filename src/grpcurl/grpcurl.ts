@@ -35,37 +35,32 @@ export interface Request {
 }
 
 /**
- * Parameters that will be used testing of request
+ * Parameters that will be used for comparison in test
  */
-export interface TestRequest extends Request {
+export interface Expectations {
   /**
    * Expected gRPC response code
    */
-  expectedCode: GrpcCode;
+  code: GrpcCode;
   /**
    * Max amount of time that response can take to pass test
    */
-  expectedTime: number;
+  time: number;
   /**
-   * Expected response message, should be JSON string or error message.
+   * Optional expected response message, should be JSON string or error message.
+   *
+   * If not provided, response would not be used in test.
+   *
    * Comparison is strict, wether response is fully matching actual result.
    */
-  expectedResponse: string;
-}
-
-/**
- * Interface that is used to describe test result.
- */
-export interface TestError {
-  codeError: Matcher | undefined;
-  timeError: Matcher | undefined;
-  responseError: Matcher | undefined;
+  content: string | undefined;
 }
 
 /**
  * Unified property to describe errors in tests
  */
 export interface Matcher {
+  description: string;
   actual: string;
   expected: string;
 }
@@ -190,74 +185,55 @@ export class Grpcurl {
     const [resp, err] = await this.caller.execute(this.formCall(input));
     const end = performance.now();
 
-    let response: par;
+    let response: ParsedResponse;
     if (err !== undefined) {
       response = this.parser.resp(err.message);
     } else {
       response = this.parser.resp(resp);
     }
 
-    response.date = new Date().toUTCString();
-    response.time = Math.round(end - start) / 1000;
-    return response;
+    return {
+      code: response.code,
+      content: response.content,
+      date: new Date().toUTCString(),
+      time: Math.round(end - start) / 1000,
+    };
   }
 
-  // TODO add test
-  // TODO return response as descriptive interface instead of md string
   /**
    * Command to test gRPC call
    */
-  async test(input: TestRequest): Promise<TestError | undefined> {
-    let result: TestError = {
-      codeError: undefined,
-      timeError: undefined,
-      responseError: undefined,
-    };
-    const resp = await this.send(input);
-    if (resp.code !== input.expectedCode) {
-      const codeErrMatcher: Matcher = {
+  async test(
+    request: Request,
+    expects: Expectations
+  ): Promise<Matcher[] | undefined> {
+    let result: Matcher[] = [];
+    const resp = await this.send(request);
+    if (resp.code !== expects.code) {
+      result.push({
+        description: "Code is not matching",
         actual: resp.code,
-        expected: input.expectedCode,
-      };
+        expected: "",
+      });
     }
-    if (resp.time > input.expectedTime) {
-      result += `- Time exceeded: ${resp.time}s vs ${input.expectedTime}s\n`;
+    if (resp.time > expects.time) {
+      result.push({
+        description: "Time not matching",
+        actual: `${resp.time}s`,
+        expected: `${expects.time}s`,
+      });
     }
-    if (input.expectedResponse !== ``) {
-      try {
-        const expect = JSON.stringify(JSON.parse(resp.response));
-        const actual = JSON.stringify(JSON.parse(input.expectedResponse));
-        if (expect !== actual) {
-          result += `- Response json is not matching:\n\n
-Expects:
-\`\`\`json
-${input.expectedResponse.split(`\n`).slice(0, 10).join(`\n`)}
-\`\`\`
-
-Actual:
-\`\`\`json
-${resp.response.split(`\n`).slice(0, 10).join(`\n`)}
-\`\`\``;
-        }
-      } catch {
-        if (resp.response !== input.expectedResponse) {
-          result += `- Response is not matching:\n\n
-Expect:
-\`\`\`json
-${input.expectedResponse}
-\`\`\`
-
-Actual:
-\`\`\`json
-${resp.response}
-\`\`\``;
-        }
-      }
+    if (resp.content !== undefined && expects.content !== resp.content) {
+      result.push({
+        description: "Time not matching",
+        actual: `${resp.content}s`,
+        expected: `${expects.content}s`,
+      });
     }
-    if (result === ``) {
-      return { passed: true, markdown: `Test passed` };
+    if (result.length === 0) {
+      return undefined;
     }
-    return { passed: false, markdown: `#### Test failed:\n\n\n${result}` };
+    return result;
   }
 
   private jsonPreprocess(input: string): string {
