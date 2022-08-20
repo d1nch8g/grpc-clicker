@@ -87,6 +87,9 @@ export interface DescribeMessageParams {
   messageTag: string;
 }
 
+/**
+ * Response of `grpcurl` gRPC call
+ */
 export interface Response extends ParsedResponse {
   /**
    * Date converted to a string using Universal Coordinated Time (UTC).
