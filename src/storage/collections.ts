@@ -72,7 +72,6 @@ export interface Collection {
 }
 
 export interface SavedTest extends TestRequest {
-  
   passed: boolean | undefined;
   markdown: string;
 }
