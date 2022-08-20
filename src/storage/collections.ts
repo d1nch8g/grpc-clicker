@@ -54,13 +54,26 @@ export class Collections {
             return `test with that name already exists`;
           }
         }
+        collection.tests.push(test);
       }
     }
     this.save(collections);
     return undefined;
   }
 
-  removeTest(collectionName: string, testName: string) {}
+  removeTest(collectionName: string, testName: string) {
+    const collections = this.list();
+    for (const collection of collections) {
+      if (collection.name === collectionName) {
+        for (let i = 0; i < collection.tests.length; i++) {
+          if (collection.tests[i].name === testName) {
+            collection.tests.splice(i, 1);
+          }
+        }
+      }
+    }
+    this.save(collections);
+  }
 
   updateCollection(collection: Collection) {
     const collections = this.list();
