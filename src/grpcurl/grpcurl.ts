@@ -84,7 +84,7 @@ export interface TestResult {
 /**
  * Input parameters for message description
  */
-export interface DescribeMessage {
+export interface DescribeMessageParams {
   /**
    * Source that will be used for message description
    */
@@ -95,6 +95,9 @@ export interface DescribeMessage {
   messageTag: string;
 }
 
+/**
+ * Instance that is interacting with `grpcurl` via CLI
+ */
 export class Grpcurl {
   constructor(
     private parser: Parser,
@@ -102,6 +105,9 @@ export class Grpcurl {
     public useDocker: boolean
   ) {}
 
+  /**
+   * Describe proto from provided source
+   */
   async proto(source: FileSource | ServerSource): Promise<Proto | string> {
     const command = `grpcurl |SRC| describe`;
     const call = this.caller.buildCliCommand({
@@ -118,17 +124,17 @@ export class Grpcurl {
     return parsedProto;
   }
 
-  async message(): Promise<Message | string> {
-    let command = `grpcurl -msg-template |SRC| describe %s`;
+  /**
+   * Describe message from provided parameters
+   */
+  async message(params: DescribeMessageParams): Promise<Message | string> {
+    const command = `grpcurl -msg-template |SRC| describe %s`;
 
     const call = this.caller.buildCliCommand({
       cliCommand: command,
-      source: input.source,
-      server: input.server,
-      plaintext: input.plaintext,
       useDocker: this.useDocker,
-      args: [input.tag],
-      importPath: input.importPath,
+      source: params.source,
+      args: [params.messageTag],
     });
 
     const [resp, err] = await this.caller.execute(call);
@@ -139,40 +145,46 @@ export class Grpcurl {
     return msg;
   }
 
+  /**
+   * Command to build `grpcurl` CLI request
+   */
   formCall(input: Request): string {
     const command = `grpcurl -emit-defaults %s %s -d %s |SRC| %s`;
     const formedJson = this.jsonPreprocess(input.json);
-    let maxMsgSize = ``;
+    let maxMsgSizeTemplate = ``;
     if (input.maxMsgSize !== 4) {
-      maxMsgSize = `-max-msg-sz ${input.maxMsgSize * 1048576}`;
+      maxMsgSizeTemplate = `-max-msg-sz ${input.maxMsgSize * 1048576}`;
     }
-    let meta = ``;
-    for (const metafield of input.headers) {
-      meta = meta + this.headerPreprocess(metafield);
+    let headersTemplate = ``;
+    for (const header of input.headers) {
+      headersTemplate = headersTemplate + this.headerPreprocess(header);
     }
 
-    if (input.path === ``) {
+    if (input.file !== undefined) {
       return this.caller.buildCliCommand({
         cliCommand: command,
-        source: input.server.adress,
-        server: true,
-        plaintext: input.server.plaintext,
         useDocker: this.useDocker,
-        args: [meta, maxMsgSize, formedJson, input.callTag],
-        importPath: ``,
+        source: {
+          type: `MULTI`,
+          host: input.server.host,
+          usePlaintext: input.server.usePlaintext,
+          filePath: input.file.filePath,
+          importPath: input.file.importPath,
+        },
+        args: [headersTemplate, maxMsgSizeTemplate, formedJson, input.callTag],
       });
     }
     return this.caller.buildCliCommand({
       cliCommand: command,
-      source: `${input.path} ${input.server.adress}`,
-      server: false,
-      plaintext: input.server.plaintext,
       useDocker: this.useDocker,
-      args: [meta, maxMsgSize, formedJson, input.callTag],
-      importPath: input.importPath,
+      source: input.server,
+      args: [headersTemplate, maxMsgSizeTemplate, formedJson, input.callTag],
     });
   }
 
+  /**
+   * Command to execute gRPC call on server
+   */
   async send(input: Request): Promise<Response> {
     const start = performance.now();
     const [resp, err] = await this.caller.execute(this.formCall(input));
@@ -190,7 +202,9 @@ export class Grpcurl {
     return response;
   }
 
-  // TODO add test
+  /**
+   * Command to test gRPC call
+   */
   async test(input: TestRequest): Promise<TestResult> {
     let result: string = ``;
     const resp = await this.send(input);
