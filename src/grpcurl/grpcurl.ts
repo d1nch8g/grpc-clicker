@@ -59,10 +59,18 @@ export interface Expectations {
 /**
  * Unified property to describe errors in tests
  */
-export interface Matcher {
+export interface TestMistake {
   description: string;
   actual: string;
   expected: string;
+}
+
+/**
+ * Result of test execution
+ */
+export interface TestResult {
+  passed: boolean;
+  mistakes: TestMistake[];
 }
 
 /**
@@ -203,37 +211,31 @@ export class Grpcurl {
   /**
    * Command to test gRPC call
    */
-  async test(
-    request: Request,
-    expects: Expectations
-  ): Promise<Matcher[] | undefined> {
-    let result: Matcher[] = [];
+  async test(request: Request, expects: Expectations): Promise<TestResult> {
+    let mistakes: TestMistake[] = [];
     const resp = await this.send(request);
     if (resp.code !== expects.code) {
-      result.push({
+      mistakes.push({
         description: "Code is not matching",
         actual: resp.code,
-        expected: "",
+        expected: expects.code,
       });
     }
     if (resp.time > expects.time) {
-      result.push({
-        description: "Time not matching",
+      mistakes.push({
+        description: "Time exceeded",
         actual: `${resp.time}s`,
         expected: `${expects.time}s`,
       });
     }
     if (resp.content !== undefined && expects.content !== resp.content) {
-      result.push({
-        description: "Time not matching",
-        actual: `${resp.content}s`,
-        expected: `${expects.content}s`,
+      mistakes.push({
+        description: "Response not matching",
+        actual: `${resp.content}`,
+        expected: `${expects.content}`,
       });
     }
-    if (result.length === 0) {
-      return undefined;
-    }
-    return result;
+    return { passed: mistakes.length === 0, mistakes: mistakes };
   }
 
   private jsonPreprocess(input: string): string {
