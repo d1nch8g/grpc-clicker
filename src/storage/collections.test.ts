@@ -29,7 +29,7 @@ test(`add`, () => {
 
   expect(collection.addCollection(header)).toBeUndefined();
   expect(collection.addCollection(header)).toStrictEqual(
-    new Error(`collection with same name exists`)
+    `collection with same name exists`
   );
 });
 
@@ -92,6 +92,7 @@ test(`add test`, () => {
   };
 
   const test: Test = {
+    name: `newtest`,
     request: request,
     expectations: testExpectations,
     passed: undefined,
@@ -99,6 +100,7 @@ test(`add test`, () => {
   };
 
   collections.addTest(`testcol`, test);
+
   expect(collections.list()[0].tests.length).toBe(1);
 });
 
@@ -109,26 +111,84 @@ test(`update`, () => {
     name: "testcol",
     tests: [],
   };
+
   memento.values = [JSON.stringify(collection)];
-  collection.tests = [
-    {
-      importPath: `/`,
-      content: "",
-      code: "",
-      path: "",
-      json: "",
-      server: {
-        adress: ``,
-        plaintext: true,
-      },
-      callTag: "",
-      headers: [],
-      maxMsgSize: 0,
-      passed: undefined,
-      markdown: "",
-      time: 0,
-    },
-  ];
+
+  const serverSource: ServerSource = {
+    type: "SERVER",
+    host: "",
+    usePlaintext: false,
+  };
+
+  const request: Request = {
+    file: undefined,
+    json: "",
+    server: serverSource,
+    callTag: "",
+    maxMsgSize: 0,
+    headers: [],
+  };
+
+  const testExpectations: Expectations = {
+    code: "OK",
+    time: 0,
+    content: undefined,
+  };
+
+  const test: Test = {
+    name: `newtest`,
+    request: request,
+    expectations: testExpectations,
+    passed: undefined,
+    markdown: "",
+  };
+
+  collection.tests.push(test);
+
   collections.updateCollection(collection);
   expect(collections.list()[0].tests.length).toBe(1);
+});
+
+test(`remove test`, () => {
+  const memento = new MockMemento();
+  const collections = new Collections(memento);
+
+  const serverSource: ServerSource = {
+    type: "SERVER",
+    host: "",
+    usePlaintext: false,
+  };
+
+  const request: Request = {
+    file: undefined,
+    json: "",
+    server: serverSource,
+    callTag: "",
+    maxMsgSize: 0,
+    headers: [],
+  };
+
+  const testExpectations: Expectations = {
+    code: "OK",
+    time: 0,
+    content: undefined,
+  };
+
+  const test: Test = {
+    name: `newtest`,
+    request: request,
+    expectations: testExpectations,
+    passed: undefined,
+    markdown: "",
+  };
+
+  const collection: Collection = {
+    name: "testcol",
+    tests: [test],
+  };
+
+  collections.addCollection(collection);
+  collections.removeTest(`testcol`, `newtest`);
+  const cols = collections.list();
+  expect(cols[0].tests.length).toBe(0);
 });
