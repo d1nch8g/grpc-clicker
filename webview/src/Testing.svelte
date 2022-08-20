@@ -3,6 +3,14 @@
   export let data;
   export let createTest;
 
+  function onTimeChanged(time) {
+    if (time.endsWith(`s`)) {
+      data.expectedTime = time.slice(0, -1);
+    } else {
+      data.expectedTime = +time.slice(0, -1) * 60;
+    }
+  }
+
   const timeOptions = [
     `0.1s`,
     `0.25s`,
@@ -19,6 +27,10 @@
     `3m`,
     `5m`,
   ];
+
+  function onCodeChanged(code) {
+    data.expectedCode = code;
+  }
 
   const codeOptions = [
     `OK`,
@@ -55,15 +67,7 @@
         <td class="expect-dropdown">
           <vscode-dropdown position="below">
             {#each timeOptions as time}
-              <vscode-option
-                on:click="{() => {
-                  if (time.endsWith(`s`)) {
-                    data.expectedTime = time.slice(0, -1);
-                  } else {
-                    data.expectedTime = +time.slice(0, -1) * 60;
-                  }
-                }}"
-              >
+              <vscode-option on:click="{onTimeChanged(time)}">
                 <div>{time}</div>
               </vscode-option>
             {/each}
@@ -77,11 +81,7 @@
         <td class="expect-dropdown">
           <vscode-dropdown position="below">
             {#each codeOptions as code}
-              <vscode-option
-                on:click="{() => {
-                  data.expectedCode = code;
-                }}"
-              >
+              <vscode-option on:click="{onCodeChanged(code)}">
                 <div>{code}</div>
               </vscode-option>
             {/each}
