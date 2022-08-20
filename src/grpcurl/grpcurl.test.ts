@@ -1,6 +1,14 @@
 import { Caller, RequestForm } from "./caller";
-import { Grpcurl, ProtoFile, ProtoServer, Response } from "./grpcurl";
-import { Call, Field, Message, Parser, Proto, ProtoType } from "./parser";
+import { Grpcurl, ProtoFile, ProtoServer } from "./grpcurl";
+import {
+  Call,
+  Field,
+  Message,
+  Parser,
+  Proto,
+  ProtoType,
+  Response,
+} from "./parser";
 import * as util from "util";
 
 class MockParser implements Parser {
@@ -149,7 +157,7 @@ test(`send`, async () => {
       plaintext: true,
     },
     callTag: "pb.v1.Constructions.EmptyCall",
-    metadata: [`username: user`, `passsword: password`],
+    headers: [`username: user`, `passsword: password`],
     maxMsgSize: 4,
   });
   expect(resp.code).toBe(`ok`);
