@@ -2,7 +2,6 @@
   export let data = { hosts: [{ adress: ``, plaintext: true }] };
   export let onSend;
   export let onExport;
-  export let onHost;
   data.hosts = { hosts: [{ adress: ``, plaintext: true }] };
 </script>
 
@@ -15,13 +14,21 @@
       <td class="expanded">
         <vscode-dropdown>
           {#each data.hosts as host}
-            <vscode-option on:click="{onHost(host)}"
-              >{host.adress}</vscode-option
+            <vscode-option
+              on:click="{() => {
+                data.host = host;
+              }}"
             >
+              <div>{host.adress}</div>
+            </vscode-option>
           {/each}
         </vscode-dropdown>
       </td>
-      <td><vscode-button on:click="{onExport}" appearance="secondary">Export</vscode-button></td>
+      <td
+        ><vscode-button on:click="{onExport}" appearance="secondary"
+          >Export</vscode-button
+        ></td
+      >
       <td><vscode-button on:click="{onSend}">Send</vscode-button></td>
     </tr>
   </table>
