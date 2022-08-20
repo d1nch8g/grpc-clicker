@@ -198,7 +198,7 @@ export class CallItem extends ClickerItem {
       response: "",
       time: 0,
       date: "",
-      metadata: [],
+      headers: [],
       hosts: [],
       expectedResponse: "",
       expectedCode: "OK",
@@ -270,7 +270,7 @@ export class HeaderItem extends ClickerItem {
   constructor(public readonly header: Header) {
     super(header.value);
     super.type = ItemType.header;
-    super.tooltip = `Header that will be sent with request metadata in context`;
+    super.tooltip = `Header that will be sent with request in context`;
     super.contextValue = "header";
     super.command = {
       command: "headers.switch",

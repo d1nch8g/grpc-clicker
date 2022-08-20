@@ -1,6 +1,6 @@
-import { performance } from "perf_hooks";
+import { Message, Parser, Proto, ProtoType, Response } from "./parser";
 import { Caller } from "./caller";
-import { Message, Parser, Proto, ProtoType } from "./parser";
+import { performance } from "perf_hooks";
 
 export class Grpcurl {
   constructor(
@@ -93,7 +93,7 @@ export class Grpcurl {
       maxMsgSize = `-max-msg-sz ${input.maxMsgSize * 1048576}`;
     }
     let meta = ``;
-    for (const metafield of input.metadata) {
+    for (const metafield of input.headers) {
       meta = meta + this.headerPreprocess(metafield);
     }
 
@@ -242,14 +242,7 @@ export interface Request {
   host: Host;
   callTag: string;
   maxMsgSize: number;
-  metadata: string[];
-}
-
-export interface Response {
-  code: string;
-  response: string;
-  time: number;
-  date: string;
+  headers: string[];
 }
 
 export interface TestData extends Request {

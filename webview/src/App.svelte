@@ -4,6 +4,7 @@
   import Response from "./Response.svelte";
   import Testing from "./Testing.svelte";
   import Info from "./Info.svelte";
+  import Headers from "./Headers.svelte";
 
   $: data = {
     path: ``,
@@ -24,7 +25,7 @@
     response: "",
     time: 0,
     date: "",
-    metadata: [],
+    headers: [],
     hosts: [],
     expectedResponse: "",
     expectedCode: "",
@@ -75,11 +76,15 @@
     <div>
       <vscode-panels>
         <vscode-panel-tab id="tab-1">INPUT</vscode-panel-tab>
-        <vscode-panel-tab id="tab-2">INFORMATION</vscode-panel-tab>
+        <vscode-panel-tab id="tab-2">HEADERS</vscode-panel-tab>
+        <vscode-panel-tab id="tab-3">INFORMATION</vscode-panel-tab>
         <vscode-panel-view id="view-1">
-          <Request bind:data />
+          <Headers bind:data />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
+          <Request bind:data />
+        </vscode-panel-view>
+        <vscode-panel-view id="view-3">
           <Info bind:data />
         </vscode-panel-view>
       </vscode-panels>

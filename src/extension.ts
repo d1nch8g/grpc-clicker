@@ -70,13 +70,6 @@ export function activate(context: vscode.ExtensionContext) {
     uri: context.extensionUri,
 
     requestCallback: async (request) => {
-      let metadata: string[] = [];
-      const headers = storage.headers.list();
-      for (const header of headers) {
-        if (header.active) {
-          metadata.push(header.value);
-        }
-      }
       const resp = await grpcurl.send(request);
       request.code = resp.code;
       request.response = resp.response;
@@ -121,7 +114,7 @@ export function activate(context: vscode.ExtensionContext) {
         host: data.host,
         callTag: data.callTag,
         maxMsgSize: data.maxMsgSize,
-        metadata: data.metadata,
+        headers: data.headers,
         passed: undefined,
         markdown: "",
       };
@@ -314,7 +307,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     for (const header of storage.headers.list()) {
       if (header.active) {
-        data.metadata.push(header.value);
+        data.headers.push(header.value);
       }
     }
     let msg: Message | string;

@@ -1,5 +1,3 @@
-import { Response } from "./grpcurl";
-
 export class Parser {
   proto(input: string): Proto {
     const splittedInput = input.split("\n");
@@ -312,4 +310,11 @@ export interface Field {
   description: string | undefined;
   innerMessageTag: string | undefined;
   fields: Field[] | undefined;
+}
+
+export interface Response {
+  code: string;
+  response: string;
+  time: number;
+  date: string;
 }

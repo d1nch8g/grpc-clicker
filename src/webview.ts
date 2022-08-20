@@ -137,6 +137,8 @@ class GrpcClickerView {
       ></script>
     </body>
   </html>`;
+
+      
     this.panel.webview.postMessage(JSON.stringify(this.request));
   }
 }
