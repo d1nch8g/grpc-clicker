@@ -4,7 +4,12 @@ import { Message, Parser, ProtoType } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
 import { TreeViews } from "./treeviews/treeviews";
 import { RequestData, WebViewFactory } from "./webview";
-import { Grpcurl, ProtoFile, ProtoServer, TestData } from "./grpcurl/grpcurl";
+import {
+  Grpcurl,
+  ProtoFile,
+  ProtoServer,
+  TestRequest,
+} from "./grpcurl/grpcurl";
 import {
   CollectionItem,
   FileItem,
@@ -104,7 +109,7 @@ export function activate(context: vscode.ExtensionContext) {
       if (choice === undefined) {
         return;
       }
-      const newTest: TestData = {
+      const newTest: TestRequest = {
         expectedCode: data.expectedCode,
         expectedTime: data.expectedTime,
         expectedResponse: data.expectedResponse,

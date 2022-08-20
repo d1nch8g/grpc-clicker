@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { Service, Call, Message, Field } from "../grpcurl/parser";
-import { Host, ProtoFile, ProtoServer, TestData } from "../grpcurl/grpcurl";
+import { Host, ProtoFile, ProtoServer, TestRequest } from "../grpcurl/grpcurl";
 
 import { Header } from "../storage/headers";
 import { Collection } from "../storage/collections";
@@ -50,7 +50,7 @@ export class CollectionItem extends ClickerItem {
 
 export class TestItem extends ClickerItem {
   constructor(
-    public readonly base: TestData,
+    public readonly base: TestRequest,
     public readonly parent: CollectionItem
   ) {
     super(`${base.callTag}`);

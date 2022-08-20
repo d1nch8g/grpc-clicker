@@ -1,19 +1,24 @@
 import * as util from "util";
 
 export class Caller {
-  formSource(input: RequestForm): string {
-    let source = input.source;
-    if (!input.server) {
-      source = `-import-path ${input.importPath} -proto ${source}`;
+  formSource(input: FormCliTemplateParams): string {
+    let source: string;
+    if (input.source.type === `SERVER`) {
+      if (input.source.plaintext) {
+        source = `-plaintext ${input.source.host}`;
+      } else {
+        source = `${input.source.host}`;
+      }
     }
-    if (input.plaintext) {
-      source = `-plaintext ${source}`;
+    if (input.source.type === `FILE`) {
+      source = `-import-path ${input.source.importPath} -proto ${input.source.filePath}`;
     }
-    input.call = input.call.replace(`|SRC|`, source);
 
-    let command = util.format(input.call, ...input.args);
+    input.cliCommand = input.cliCommand.replace(`|SRC|`, source!);
 
-    if (input.docker) {
+    let command = util.format(input.cliCommand, ...input.args);
+
+    if (input.useDocker) {
       command = this.dockerize(command);
     }
     return command;
@@ -59,12 +64,45 @@ export class Caller {
   }
 }
 
-export interface RequestForm {
-  call: string;
-  source: string;
-  server: boolean;
+/**
+ * Description of server source for CLI command
+ */
+export interface ServerSource {
+  type: `SERVER`;
+  host: string;
   plaintext: boolean;
-  docker: boolean;
+}
+
+/**
+ * Description of file source for CLI command
+ */
+export interface FileSource {
+  type: `FILE`;
+  filePath: string;
   importPath: string;
+}
+
+/**
+ * Entity used to form cli template for other gRPCurl parameters
+ */
+export interface FormCliTemplateParams {
+  /**
+   * CLI command that will be transformed:
+   * - Example: `grpcurl -emit-defaults %s %s -d %s |SRC| %s`
+   * - `|SRC|` will be automatically replaced with proper source wether it's file
+   * or server command
+   */
+  cliCommand: string;
+  /**
+   * Wether docker should be used for call execution
+   */
+  useDocker: boolean;
+  /**
+   * Specify source of execution, that might be server of file
+   */
+  source: ServerSource | FileSource;
+  /**
+   * Arguements that will be included in final version CLI command
+   */
   args: string[];
 }

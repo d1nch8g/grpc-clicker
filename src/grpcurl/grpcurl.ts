@@ -12,11 +12,11 @@ export class Grpcurl {
   async protoFile(input: ProtoFileInput): Promise<ProtoFile | string> {
     const command = `grpcurl |SRC| describe`;
     const call = this.caller.formSource({
-      call: command,
+      cliCommand: command,
       source: input.path,
       server: false,
       plaintext: false,
-      docker: this.useDocker,
+      useDocker: this.useDocker,
       args: [],
       importPath: input.importPath,
     });
@@ -37,11 +37,11 @@ export class Grpcurl {
   async protoServer(input: ProtoServerInput): Promise<ProtoServer | string> {
     const command = `grpcurl -max-time 0.5 |SRC| describe`;
     const call = this.caller.formSource({
-      call: command,
+      cliCommand: command,
       source: input.host,
       server: true,
       plaintext: input.plaintext,
-      docker: this.useDocker,
+      useDocker: this.useDocker,
       args: [],
       importPath: ``,
     });
@@ -68,11 +68,11 @@ export class Grpcurl {
     let command = `grpcurl -msg-template |SRC| describe %s`;
 
     const call = this.caller.formSource({
-      call: command,
+      cliCommand: command,
       source: input.source,
       server: input.server,
       plaintext: input.plaintext,
-      docker: this.useDocker,
+      useDocker: this.useDocker,
       args: [input.tag],
       importPath: input.importPath,
     });
@@ -99,21 +99,21 @@ export class Grpcurl {
 
     if (input.path === ``) {
       return this.caller.formSource({
-        call: command,
+        cliCommand: command,
         source: input.host.adress,
         server: true,
         plaintext: input.host.plaintext,
-        docker: this.useDocker,
+        useDocker: this.useDocker,
         args: [meta, maxMsgSize, formedJson, input.callTag],
         importPath: ``,
       });
     }
     return this.caller.formSource({
-      call: command,
+      cliCommand: command,
       source: `${input.path} ${input.host.adress}`,
       server: false,
       plaintext: input.host.plaintext,
-      docker: this.useDocker,
+      useDocker: this.useDocker,
       args: [meta, maxMsgSize, formedJson, input.callTag],
       importPath: input.importPath,
     });
@@ -137,7 +137,7 @@ export class Grpcurl {
   }
 
   // TODO add test
-  async test(input: TestData): Promise<TestData> {
+  async test(input: TestRequest): Promise<TestResult> {
     let result: string = ``;
     const resp = await this.send(input);
     if (resp.code !== input.expectedCode) {
@@ -178,13 +178,9 @@ ${resp.response}
       }
     }
     if (result === ``) {
-      input.passed = true;
-      input.markdown = `Test passed`;
-      return input;
+      return { passed: true, markdown: `Test passed` };
     }
-    input.passed = false;
-    input.markdown = `#### Test failed:\n\n\n${result}`;
-    return input;
+    return { passed: false, markdown: `#### Test failed:\n\n\n${result}` };
   }
 
   private jsonPreprocess(input: string): string {
@@ -208,47 +204,38 @@ ${resp.response}
   }
 }
 
-export interface ProtoFileInput {
-  path: string;
-  importPath: string;
-  hosts: Host[];
-}
-
-export interface Host {
-  adress: string;
-  plaintext: boolean;
-}
-
+// Parameters required to parse schema from proto file
 export interface ProtoFile extends Proto {
   path: string;
   importPath: string;
-  hosts: Host[];
 }
 
-export interface ProtoServerInput {
-  host: string;
-  plaintext: boolean;
-}
-
+// Parameters required to parse schema from remote source
 export interface ProtoServer extends Proto {
   adress: string;
   plaintext: boolean;
 }
 
+// Parameters required to execute gRPC call
 export interface Request {
-  path: string;
-  importPath: string;
+  // Optional parameter that will be used to form message if provided
+  file: ProtoFile | undefined;
+  // Optional parameter that will be used to form message if provided
   json: string;
-  host: Host;
+  host: string;
+  plaintext: string;
   callTag: string;
   maxMsgSize: number;
   headers: string[];
 }
 
-export interface TestData extends Request {
+export interface TestRequest extends Request {
   expectedCode: string;
   expectedTime: number;
   expectedResponse: string;
-  passed: boolean | undefined;
+}
+
+export interface TestResult {
+  passed: boolean;
   markdown: string;
 }
