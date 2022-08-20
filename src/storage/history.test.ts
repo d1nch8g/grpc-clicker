@@ -1,5 +1,7 @@
 import { Memento } from "vscode";
-import { History } from "./history";
+import { ServerSource } from "../grpcurl/caller";
+import { Request, Response } from "../grpcurl/grpcurl";
+import { History, HistoryValue } from "./history";
 
 class MockMemento implements Memento {
   values: string[] = [];
@@ -21,34 +23,34 @@ test(`add`, () => {
   const storage = new MockMemento();
   const history = new History(storage);
   for (let i = 0; i < 200; i++) {
-    history.add({
-      path: "example",
-      importPath: `/`,
+    const serverSource: ServerSource = {
+      type: "SERVER",
+      host: "",
+      usePlaintext: false,
+    };
+
+    const request: Request = {
+      file: undefined,
       json: "",
-      server: {
-        adress: ``,
-        plaintext: true,
-      },
-      call: "",
+      server: serverSource,
       callTag: "",
+      maxMsgSize: 0,
       headers: [],
-      maxMsgSize: i,
-      code: "",
-      content: "",
-      time: 0,
+    };
+
+    const response: Response = {
       date: "",
-      service: "",
-      inputMessageTag: "",
-      inputMessageName: "",
-      outputMessageName: "",
-      protoName: "",
-      hosts: [],
-      content: "",
-      code: "",
       time: 0,
-      passed: undefined,
-      markdown: "",
-    });
+      code: "OK",
+      content: "",
+    };
+
+    const value: HistoryValue = {
+      request: request,
+      response: response,
+    };
+
+    history.add(value);
   }
   expect(storage.values.length).toBe(100);
 });
@@ -56,34 +58,35 @@ test(`add`, () => {
 test(`list`, () => {
   const storage = new MockMemento();
   const history = new History(storage);
-  history.add({
-    path: "example",
-    importPath: `/`,
+
+  const serverSource: ServerSource = {
+    type: "SERVER",
+    host: "",
+    usePlaintext: false,
+  };
+
+  const request: Request = {
+    file: undefined,
     json: "",
-    server: {
-      adress: ``,
-      plaintext: true,
-    },
-    call: "",
+    server: serverSource,
     callTag: "",
+    maxMsgSize: 0,
     headers: [],
-    maxMsgSize: 420,
-    code: "",
-    content: "",
-    time: 0,
+  };
+
+  const response: Response = {
     date: "",
-    service: "",
-    inputMessageTag: "",
-    inputMessageName: "",
-    outputMessageName: "",
-    protoName: "",
-    hosts: [],
-    content: "",
-    code: "",
     time: 0,
-    passed: undefined,
-    markdown: "",
-  });
+    code: "OK",
+    content: "",
+  };
+
+  const value: HistoryValue = {
+    request: request,
+    response: response,
+  };
+
+  history.add(value);
 
   let resp = history.list();
   expect(resp).toStrictEqual([
