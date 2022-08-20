@@ -1,5 +1,6 @@
 import { Memento } from "vscode";
-import { Host, ProtoFile } from "../grpcurl/grpcurl";
+import { FileSource } from "../grpcurl/caller";
+import { Proto } from "../grpcurl/parser";
 
 export class ProtoFiles {
   private readonly key: string = "grpc-clicker-structures";
@@ -25,7 +26,7 @@ export class ProtoFiles {
   add(proto: ProtoFile): Error | undefined {
     const protos = this.list();
     for (const savedProtoFile of protos) {
-      if (savedProtoFile.path === proto.path) {
+      if (savedProtoFile.source.filePath === proto.source.filePath) {
         return new Error(`proto file you are trying to add already exists`);
       }
     }
@@ -37,32 +38,8 @@ export class ProtoFiles {
   remove(path: string) {
     const protos = this.list();
     for (let i = 0; i < protos.length; i++) {
-      if (protos[i].path === path) {
+      if (protos[i].source.filePath === path) {
         protos.splice(i, 1);
-      }
-    }
-    this.save(protos);
-  }
-
-  addHost(path: string, host: Host) {
-    const protos = this.list();
-    for (const savedProtoFile of protos) {
-      if (savedProtoFile.path === path) {
-        savedProtoFile.hosts.push(host);
-      }
-    }
-    this.save(protos);
-  }
-
-  removeHost(path: string, host: Host) {
-    const protos = this.list();
-    for (const savedProtoFile of protos) {
-      if (savedProtoFile.path === path) {
-        for (const [i, savedHost] of savedProtoFile.hosts.entries()) {
-          if (host.adress === savedHost.adress) {
-            savedProtoFile.hosts.splice(i, 1);
-          }
-        }
       }
     }
     this.save(protos);
@@ -71,10 +48,15 @@ export class ProtoFiles {
   updateImportPath(protoPath: string, newImportPath: string) {
     const protos = this.list();
     for (const savedProtoFile of protos) {
-      if (savedProtoFile.path === protoPath) {
-        savedProtoFile.importPath = newImportPath;
+      if (savedProtoFile.source.filePath === protoPath) {
+        savedProtoFile.source.importPath = newImportPath;
       }
     }
     this.save(protos);
   }
+}
+
+export interface ProtoFile {
+  source: FileSource;
+  proto: Proto;
 }
