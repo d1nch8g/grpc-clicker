@@ -1,4 +1,4 @@
-import { Caller, RequestForm } from "./caller";
+import { Caller, FormCliTemplateParams } from "./caller";
 import { Grpcurl, ProtoFile, ProtoServer } from "./grpcurl";
 import {
   Call,
@@ -54,7 +54,7 @@ class MockParser implements Parser {
 
 class MockCaller implements Caller {
   caller: Caller = new Caller();
-  formSource(input: RequestForm): string {
+  formSource(input: FormCliTemplateParams): string {
     return this.caller.formSource(input);
   }
   async execute(command: string): Promise<[string, Error | undefined]> {

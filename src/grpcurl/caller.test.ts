@@ -1,15 +1,16 @@
-import { Caller, RequestForm } from "./caller";
+import { Caller, FormCliTemplateParams } from "./caller";
 
 test(`form`, () => {
   const caller = new Caller();
-  const form: RequestForm = {
-    call: "grpcurl -msg-template |SRC| describe %s",
-    source: "localhost:12201",
-    server: true,
-    plaintext: true,
-    docker: false,
+  const form: FormCliTemplateParams = {
+    cliCommand: `grpcurl -msg-template |SRC| describe %s`,
+    useDocker: false,
+    source: {
+      type: `SERVER`,
+      host: `localhost:12201`,
+      plaintext: true,
+    },
     args: [`.google.protobuf.Empty`],
-    importPath: `/`
   };
   const res = `grpcurl -msg-template -plaintext localhost:12201 describe .google.protobuf.Empty`;
   expect(caller.formSource(form)).toBe(res);

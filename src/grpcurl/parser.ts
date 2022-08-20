@@ -263,6 +263,7 @@ export class Parser {
   }
 }
 
+// This enum represents inner gRPCurl parser enity type
 export enum ProtoType {
   proto,
   service,
@@ -271,11 +272,13 @@ export enum ProtoType {
   field,
 }
 
+// Parsed proto file
 export interface Proto {
   type: ProtoType;
   services: Service[];
 }
 
+// Parsed proto service
 export interface Service {
   type: ProtoType;
   name: string;
@@ -284,6 +287,7 @@ export interface Service {
   calls: Call[];
 }
 
+// Parsed proto rpc call
 export interface Call {
   type: ProtoType;
   name: string;
@@ -294,6 +298,7 @@ export interface Call {
   outputMessageTag: string;
 }
 
+// Parsed proto message
 export interface Message {
   type: ProtoType;
   name: string;
@@ -303,6 +308,7 @@ export interface Message {
   fields: Field[];
 }
 
+// Parsed proto field
 export interface Field {
   type: ProtoType;
   name: string;
@@ -312,6 +318,7 @@ export interface Field {
   fields: Field[] | undefined;
 }
 
+// Parsed proto response
 export interface Response {
   code: string;
   response: string;
