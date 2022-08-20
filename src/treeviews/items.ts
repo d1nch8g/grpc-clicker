@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { Service, Call, Message, Field } from "../grpcurl/parser";
-import { Host, ProtoFile, ProtoServer, TestRequest } from "../grpcurl/grpcurl";
+import { Host, ProtoFile, ProtoServer, Expectations } from "../grpcurl/grpcurl";
 
 import { Header } from "../storage/headers";
 import { Collection } from "../storage/collections";
@@ -50,7 +50,7 @@ export class CollectionItem extends ClickerItem {
 
 export class TestItem extends ClickerItem {
   constructor(
-    public readonly base: TestRequest,
+    public readonly base: Expectations,
     public readonly parent: CollectionItem
   ) {
     super(`${base.callTag}`);
@@ -195,14 +195,14 @@ export class CallItem extends ClickerItem {
       json: "",
       maxMsgSize: 0,
       code: "",
-      response: "",
+      content: "",
       time: 0,
       date: "",
       headers: [],
       hosts: [],
-      expectedResponse: "",
-      expectedCode: "OK",
-      expectedTime: 0.1,
+      content: "",
+      code: "OK",
+      time: 0.1,
       passed: undefined,
       markdown: "",
     };
@@ -302,7 +302,7 @@ export class HistoryItem extends ClickerItem {
 Response:
 
 \`\`\`json
-${request.response.split(`\n`).slice(0, 14).join(`\n`)}
+${request.content.split(`\n`).slice(0, 14).join(`\n`)}
 \`\`\`
 `);
     super.command = {

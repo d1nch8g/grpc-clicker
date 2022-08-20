@@ -59,8 +59,8 @@ test(`add test`, () => {
   memento.values = [JSON.stringify(collection)];
   collections.addTest(`testcol`, {
     importPath: `/`,
-    expectedResponse: "",
-    expectedCode: "",
+    content: "",
+    code: "",
     path: "",
     json: "",
     server: {
@@ -72,7 +72,7 @@ test(`add test`, () => {
     maxMsgSize: 0,
     passed: undefined,
     markdown: "",
-    expectedTime: 0,
+    time: 0,
   });
   expect(collections.list()[0].tests.length).toBe(1);
 });
@@ -88,8 +88,8 @@ test(`update`, () => {
   collection.tests = [
     {
       importPath: `/`,
-      expectedResponse: "",
-      expectedCode: "",
+      content: "",
+      code: "",
       path: "",
       json: "",
       server: {
@@ -101,7 +101,7 @@ test(`update`, () => {
       maxMsgSize: 0,
       passed: undefined,
       markdown: "",
-      expectedTime: 0,
+      time: 0,
     },
   ];
   collections.update(collection);

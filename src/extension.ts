@@ -8,7 +8,7 @@ import {
   Grpcurl,
   ProtoFile,
   ProtoServer,
-  TestRequest,
+  Expectations,
 } from "./grpcurl/grpcurl";
 import {
   CollectionItem,
@@ -77,7 +77,7 @@ export function activate(context: vscode.ExtensionContext) {
     requestCallback: async (request) => {
       const resp = await grpcurl.send(request);
       request.code = resp.code;
-      request.response = resp.response;
+      request.content = resp.content;
       request.time = resp.time;
       request.date = resp.date;
       storage.history.add(request);
@@ -109,10 +109,10 @@ export function activate(context: vscode.ExtensionContext) {
       if (choice === undefined) {
         return;
       }
-      const newTest: TestRequest = {
-        expectedCode: data.expectedCode,
-        expectedTime: data.expectedTime,
-        expectedResponse: data.expectedResponse,
+      const newTest: Expectations = {
+        code: data.code,
+        time: data.time,
+        content: data.content,
         path: data.path,
         importPath: data.importPath,
         json: data.json,
