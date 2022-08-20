@@ -33,70 +33,41 @@
 
   window.addEventListener("message", (event) => {
     data = JSON.parse(`${event.data}`);
+    console.log(`Webview created with parameters: `, data);
   });
 
+  function onChange(data) {
+    console.log(`webview data chaged:`, data);
+    vscode.postMessage({
+      command: "change",
+      text: JSON.stringify(data),
+    });
+  }
+  $: onChange(data);
+
   function onSend() {
+    console.log(`Requst sending triggered.`);
     data.response = "... processing";
     vscode.postMessage({
       command: "send",
     });
   }
 
-  function onEditRequest(text) {
-    vscode.postMessage({
-      command: "edit",
-      text: text,
-    });
-  }
-  $: onEditRequest(data.json);
-
   function onExport() {
+    console.log(`Request export triggered.`);
     vscode.postMessage({
       command: "export",
     });
   }
 
-  function onHost(host) {
-    vscode.postMessage({
-      command: "host",
-      text: JSON.stringify(host),
-    });
-  }
-
-  function onEditResponse(text) {
-    if (text === ``) {
-      text = undefined;
-    }
-    vscode.postMessage({
-      command: "expectedResponse",
-      text: text,
-    });
-  }
-  $: onEditResponse(data.expectedResponse);
-
-  function onCreateTest() {
-    if (data.expectedCode === ``) {
-      data.expectedCode = `OK`;
-    }
-    if (data.expectedTime === 0) {
-      data.expectedTime = 0.1;
-    }
-    if (data.expectedResponse === undefined || data.expectedResponse === ``) {
-      data.expectedResponse = undefined;
-    }
+  function onTest() {
     vscode.postMessage({
       command: "test",
-      text: JSON.stringify(data),
     });
   }
 </script>
 
-<TopPanel
-  data="{data}"
-  onSend="{onSend}"
-  onExport="{onExport}"
-  onHost="{onHost}"
-/>
+<TopPanel data="{data}" onSend="{onSend}" onExport="{onExport}" />
 
 <table>
   <td class="left-side">
@@ -122,7 +93,7 @@
           <Response bind:data />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
-          <Testing bind:data createTest="{onCreateTest}" />
+          <Testing bind:data createTest="{onTest}" />
         </vscode-panel-view>
       </vscode-panels>
     </div>

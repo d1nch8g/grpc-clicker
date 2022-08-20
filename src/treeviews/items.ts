@@ -201,8 +201,8 @@ export class CallItem extends ClickerItem {
       metadata: [],
       hosts: [],
       expectedResponse: "",
-      expectedCode: "",
-      expectedTime: 0,
+      expectedCode: "OK",
+      expectedTime: 0.1,
       passed: undefined,
       markdown: "",
     };
