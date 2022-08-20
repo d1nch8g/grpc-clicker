@@ -1,5 +1,8 @@
 <script>
-  export let data = { hosts: [{ adress: ``, plaintext: true }] };
+  export let data = {
+    host: { adress: ``, plaintext: true },
+    hosts: [{ adress: ``, plaintext: true }],
+  };
   export let onSend;
   export let onExport;
 
