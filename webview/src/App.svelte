@@ -68,7 +68,7 @@
   }
 </script>
 
-<TopPanel data="{data}" onSend="{onSend}" onExport="{onExport}" />
+<TopPanel bind:data onSend="{onSend}" onExport="{onExport}" />
 
 <table>
   <td class="left-side">
