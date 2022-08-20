@@ -62,7 +62,6 @@
 
   function onTest() {
     console.log(`Request test triggered.`);
-    
     vscode.postMessage({
       command: "test",
     });
