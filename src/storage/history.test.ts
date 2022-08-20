@@ -25,7 +25,7 @@ test(`add`, () => {
       path: "example",
       importPath: `/`,
       json: "",
-      host: {
+      server: {
         adress: ``,
         plaintext: true,
       },
@@ -60,7 +60,7 @@ test(`list`, () => {
     path: "example",
     importPath: `/`,
     json: "",
-    host: {
+    server: {
       adress: ``,
       plaintext: true,
     },
@@ -124,7 +124,7 @@ test(`clean`, () => {
     path: "example",
     importPath: `/`,
     json: "",
-    host: {
+    server: {
       adress: ``,
       plaintext: true,
     },

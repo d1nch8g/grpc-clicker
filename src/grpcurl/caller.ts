@@ -1,10 +1,53 @@
 import * as util from "util";
 
+/**
+ * Description of server source for CLI command
+ */
+export interface ServerSource {
+  type: `SERVER`;
+  host: string;
+  usePlaintext: boolean;
+}
+
+/**
+ * Description of file source for CLI command
+ */
+export interface FileSource {
+  type: `FILE`;
+  filePath: string;
+  importPath: string;
+}
+
+/**
+ * Entity used to form cli template for other gRPCurl parameters
+ */
+export interface FormCliTemplateParams {
+  /**
+   * CLI command that will be transformed:
+   * - Example: `grpcurl -emit-defaults %s %s -d %s |SRC| %s`
+   * - `|SRC|` will be automatically replaced with proper source wether it's file
+   * or server command
+   */
+  cliCommand: string;
+  /**
+   * Wether docker should be used for call execution
+   */
+  useDocker: boolean;
+  /**
+   * Specify source of execution, that might be server of file
+   */
+  source: ServerSource | FileSource;
+  /**
+   * Arguements that will be included in final version CLI command
+   */
+  args: string[];
+}
+
 export class Caller {
-  formSource(input: FormCliTemplateParams): string {
+  buildCliCommand(input: FormCliTemplateParams): string {
     let source: string;
     if (input.source.type === `SERVER`) {
-      if (input.source.plaintext) {
+      if (input.source.usePlaintext) {
         source = `-plaintext ${input.source.host}`;
       } else {
         source = `${input.source.host}`;
@@ -62,47 +105,4 @@ export class Caller {
       `docker run -v ${path}:${path} fullstorydev/grpcurl `
     );
   }
-}
-
-/**
- * Description of server source for CLI command
- */
-export interface ServerSource {
-  type: `SERVER`;
-  host: string;
-  plaintext: boolean;
-}
-
-/**
- * Description of file source for CLI command
- */
-export interface FileSource {
-  type: `FILE`;
-  filePath: string;
-  importPath: string;
-}
-
-/**
- * Entity used to form cli template for other gRPCurl parameters
- */
-export interface FormCliTemplateParams {
-  /**
-   * CLI command that will be transformed:
-   * - Example: `grpcurl -emit-defaults %s %s -d %s |SRC| %s`
-   * - `|SRC|` will be automatically replaced with proper source wether it's file
-   * or server command
-   */
-  cliCommand: string;
-  /**
-   * Wether docker should be used for call execution
-   */
-  useDocker: boolean;
-  /**
-   * Specify source of execution, that might be server of file
-   */
-  source: ServerSource | FileSource;
-  /**
-   * Arguements that will be included in final version CLI command
-   */
-  args: string[];
 }
