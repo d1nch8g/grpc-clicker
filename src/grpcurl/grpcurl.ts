@@ -39,26 +39,9 @@ export interface Request {
  */
 export interface TestRequest extends Request {
   /**
-   * Expected gRPC response code, available options:
-   * - OK
-   * - Cancelled
-   * - Unknown
-   * - InvalidArgument
-   * - DeadlineExceeded
-   * - NotFound
-   * - AlreadyExists
-   * - PermissionDenied
-   * - ResourceExhausted
-   * - FailedPrecondition
-   * - Aborted
-   * - OutOfRange
-   * - Unimplemented
-   * - Internal
-   * - Unavailable
-   * - DataLoss
-   * - Unauthenticated
+   * Expected gRPC response code
    */
-  expectedCode: string;
+  expectedCode: GrpcCode;
   /**
    * Max amount of time that response can take to pass test
    */
@@ -71,14 +54,20 @@ export interface TestRequest extends Request {
 }
 
 /**
- * Result of text execution
+ * Interface that is used to describe test result.
  */
-export interface TestResult {
-  passed: boolean;
-  /**
-   * Human readable markdown representation of text execution
-   */
-  markdown: string;
+export interface TestError {
+  codeError: Matcher | undefined;
+  timeError: Matcher | undefined;
+  responseError: Matcher | undefined;
+}
+
+/**
+ * Unified property to describe errors in tests
+ */
+export interface Matcher {
+  actual: string;
+  expected: string;
 }
 
 /**
@@ -202,14 +191,23 @@ export class Grpcurl {
     return response;
   }
 
+  // TODO add test
+  // TODO return response as descriptive interface instead of md string
   /**
    * Command to test gRPC call
    */
-  async test(input: TestRequest): Promise<TestResult> {
-    let result: string = ``;
+  async test(input: TestRequest): Promise<TestError | undefined> {
+    let result: TestError = {
+      codeError: undefined,
+      timeError: undefined,
+      responseError: undefined,
+    };
     const resp = await this.send(input);
     if (resp.code !== input.expectedCode) {
-      result = `- Code not matching: ${resp.code} vs ${input.expectedCode}\n`;
+      const codeErrMatcher: Matcher = {
+        actual: resp.code,
+        expected: input.expectedCode,
+      };
     }
     if (resp.time > input.expectedTime) {
       result += `- Time exceeded: ${resp.time}s vs ${input.expectedTime}s\n`;
