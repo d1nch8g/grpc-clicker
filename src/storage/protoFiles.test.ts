@@ -1,7 +1,7 @@
 import { Memento } from "vscode";
-import { ProtoFile } from "../grpcurl/grpcurl";
-import { Proto, ProtoType } from "../grpcurl/parser";
-import { ProtoFiles } from "./protoFiles";
+import { FileSource } from "../grpcurl/caller";
+import { Proto } from "../grpcurl/parser";
+import { ProtoFile, ProtoFiles } from "./protoFiles";
 
 class MockMemento implements Memento {
   values: string[] = [];
@@ -19,18 +19,27 @@ class MockMemento implements Memento {
   }
 }
 
+const source: FileSource = {
+  type: "FILE",
+  filePath: "path",
+  importPath: "",
+};
+
+const proto: Proto = {
+  type: "PROTO",
+  services: [],
+};
+
+const file: ProtoFile = {
+  source: source,
+  proto: proto,
+};
+
 test(`add`, () => {
   const memento = new MockMemento();
   const protos = new ProtoFiles(memento);
-  var proto: ProtoFile = {
-    type: ProtoType.proto,
-    services: [],
-    path: "",
-    hosts: [],
-    importPath: `/`,
-  };
-  expect(protos.add(proto)).toBeUndefined();
-  expect(protos.add(proto)).toStrictEqual(
+  expect(protos.add(file)).toBeUndefined();
+  expect(protos.add(file)).toStrictEqual(
     new Error(`proto file you are trying to add already exists`)
   );
 });
@@ -38,73 +47,14 @@ test(`add`, () => {
 test(`list`, () => {
   const memento = new MockMemento();
   const protos = new ProtoFiles(memento);
-  var proto: ProtoFile = {
-    type: ProtoType.proto,
-    services: [],
-    path: "",
-    hosts: [],
-    importPath: `/`,
-  };
-  memento.values = [JSON.stringify(proto)];
-  expect(protos.list()).toStrictEqual([proto]);
+  memento.values = [JSON.stringify(file)];
+  expect(protos.list()).toStrictEqual([file]);
 });
 
 test(`remove`, () => {
   const memento = new MockMemento();
   const protos = new ProtoFiles(memento);
-  var proto: ProtoFile = {
-    type: ProtoType.proto,
-    services: [],
-    path: "path",
-    hosts: [],
-    importPath: `/`,
-  };
-  memento.values = [JSON.stringify(proto)];
+  memento.values = [JSON.stringify(file)];
   protos.remove(`path`);
   expect(memento.values).toStrictEqual([]);
-});
-
-test(`add host`, () => {
-  const memento = new MockMemento();
-  const protos = new ProtoFiles(memento);
-  var proto: ProtoFile = {
-    type: ProtoType.proto,
-    services: [],
-    path: "path",
-    hosts: [],
-    importPath: `/`,
-  };
-  memento.values = [JSON.stringify(proto)];
-  protos.addHost(`path`, {
-    adress: "testx",
-    plaintext: true,
-  });
-  let host = protos.list()[0].hosts[0];
-  expect(host).toStrictEqual({
-    adress: "testx",
-    plaintext: true,
-  });
-});
-
-test(`remove host`, () => {
-  const memento = new MockMemento();
-  const protos = new ProtoFiles(memento);
-  var proto: ProtoFile = {
-    type: ProtoType.proto,
-    services: [],
-    path: "path",
-    importPath: `/`,
-    hosts: [
-      {
-        adress: "testx",
-        plaintext: true,
-      },
-    ],
-  };
-  memento.values = [JSON.stringify(proto)];
-  protos.removeHost(`path`, {
-    adress: "testx",
-    plaintext: true,
-  });
-  expect(protos.list()[0].hosts.length).toBe(0);
 });
