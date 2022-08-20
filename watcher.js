@@ -22,6 +22,7 @@ var copyRecursiveSync = function (src, dest) {
   }
 };
 
+
 var rebuild = function () {
   const output = execSync("npm run build --prefix webview", {
     encoding: "utf-8",
