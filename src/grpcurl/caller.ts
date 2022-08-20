@@ -19,6 +19,17 @@ export interface FileSource {
 }
 
 /**
+ * Wether command should be formed for multiple sources simultaneously
+ */
+export interface MultiSource {
+  type: `MULTI`;
+  host: string;
+  usePlaintext: boolean;
+  filePath: string;
+  importPath: string;
+}
+
+/**
  * Entity used to form cli template for other gRPCurl parameters
  */
 export interface FormCliTemplateParams {
@@ -36,16 +47,29 @@ export interface FormCliTemplateParams {
   /**
    * Specify source of execution, that might be server of file
    */
-  source: ServerSource | FileSource;
+  source: ServerSource | FileSource | MultiSource;
   /**
    * Arguements that will be included in final version CLI command
    */
   args: string[];
 }
 
+/**
+ * Class that is used for CLI commands building and processing
+ */
 export class Caller {
+  /**
+   * This function is used to build cli command from parameters
+   */
   buildCliCommand(input: FormCliTemplateParams): string {
     let source: string;
+    if (input.source.type === `MULTI`) {
+      if (input.source.usePlaintext) {
+        source = `-import-path ${input.source.importPath} -proto ${input.source.filePath} -plaintext ${input.source.host}`;
+      } else {
+        source = `-import-path ${input.source.importPath} -proto ${input.source.filePath} ${input.source.host}`;
+      }
+    }
     if (input.source.type === `SERVER`) {
       if (input.source.usePlaintext) {
         source = `-plaintext ${input.source.host}`;
@@ -67,6 +91,9 @@ export class Caller {
     return command;
   }
 
+  /**
+   * Class that is used for CLI commands building and processing
+   */
   async execute(command: string): Promise<[string, Error | undefined]> {
     try {
       const exec = util.promisify(require("child_process").exec);
@@ -85,6 +112,10 @@ export class Caller {
     }
   }
 
+  /**
+   * Command that is used to transform prepared command for
+   * execution from docker
+   */
   dockerize(input: string): string {
     if (!input.includes(`-proto `)) {
       return input.replace(`grpcurl `, `docker run fullstorydev/grpcurl `);
