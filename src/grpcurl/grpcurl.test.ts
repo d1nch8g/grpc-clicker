@@ -1,12 +1,12 @@
+import { Expectations, Grpcurl, Request, TestMistake } from "./grpcurl";
+import { Call, Field, Message, Parser, Proto, ParsedResponse } from "./parser";
 import {
   Caller,
   FileSource,
   FormCliTemplateParams,
   ServerSource,
 } from "./caller";
-import { Grpcurl } from "./grpcurl";
-import { Call, Field, Message, Parser, Proto, ParsedResponse } from "./parser";
-import * as util from "util";
+import { time } from "console";
 
 class MockParser implements Parser {
   resp(input: string): ParsedResponse {
@@ -53,6 +53,7 @@ class MockCaller implements Caller {
     return this.caller.buildCliCommand(input);
   }
   async execute(command: string): Promise<[string, Error | undefined]> {
+    await new Promise((resolve) => setTimeout(resolve, 50));
     return [command, undefined];
   }
   dockerize(input: string): string {
@@ -151,14 +152,16 @@ test(`send`, async () => {
     usePlaintext: true,
   };
 
-  let resp = await grpcurl.send({
+  const request: Request = {
     file: fileSouce,
     json: `{}`,
     server: serverSource,
     callTag: `.pb.v1.Constructions/EmptyCall`,
     maxMsgSize: 1,
     headers: [`username: user`, `password: password`],
-  });
+  };
+
+  const resp = await grpcurl.send(request);
 
   expect(resp.code).toBe(`OK`);
 
@@ -170,4 +173,51 @@ test(`send`, async () => {
   } else {
     expect(resp.content).toBe(linuxExpect);
   }
+});
+
+test(`test`, async () => {
+  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
+
+  const fileSouce: FileSource = {
+    type: `FILE`,
+    filePath: `docs/api.proto`,
+    importPath: `/`,
+  };
+
+  const serverSource: ServerSource = {
+    type: `SERVER`,
+    host: `localhost:12201`,
+    usePlaintext: true,
+  };
+
+  const request: Request = {
+    file: fileSouce,
+    json: `{}`,
+    server: serverSource,
+    callTag: `.pb.v1.Constructions/EmptyCall`,
+    maxMsgSize: 1,
+    headers: [`username: user`, `password: password`],
+  };
+
+  const expects: Expectations = {
+    code: "AlreadyExists",
+    time: 0.0001,
+    content: `wtfshere`,
+  };
+
+  const testresult = await grpcurl.test(request, expects);
+
+  const firstMistake: TestMistake = {
+    description: "Code is not matching",
+    actual: "OK",
+    expected: "AlreadyExists",
+  };
+
+  expect(testresult.passed).toBeFalsy();
+  expect(testresult.mistakes.length).toBe(3);
+  expect(testresult.mistakes[0]).toStrictEqual(firstMistake);
+  expect(testresult.mistakes[1].description).toBe(`Time exceeded`);
+  expect(testresult.mistakes[1].expected).toBe(`0.0001s`);
+  expect(testresult.mistakes[2].description).toBe(`Response not matching`);
+  expect(testresult.mistakes[2].expected).toBe(`wtfshere`);
 });

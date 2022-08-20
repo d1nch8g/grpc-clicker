@@ -1,5 +1,5 @@
 import { Memento } from "vscode";
-import { Expectations } from "../grpcurl/grpcurl";
+import { Expectations, Request } from "../grpcurl/grpcurl";
 
 export class Collections {
   private readonly key: string = "grpc-clicker-collections";
@@ -71,7 +71,9 @@ export interface Collection {
   tests: SavedTest[];
 }
 
-export interface SavedTest extends Expectations {
+export interface SavedTest {
+  request: Request;
+  expectations: Expectations;
   passed: boolean | undefined;
   markdown: string;
 }
