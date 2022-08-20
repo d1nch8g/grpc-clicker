@@ -252,7 +252,7 @@
     color: transparent;
     caret-color: var(--vscode-input-foreground);
     outline-color: var(--vscode-input-border);
-    background-color: var(--vscode-input-background);
+    background-color: var(--vscode-sideBar-background);
     pointer-events: auto;
   }
   .maineditor:focus {

@@ -146,7 +146,7 @@ export class Grpcurl {
     if (resp.time > input.expectedTime) {
       result += `- Time exceeded: ${resp.time}s vs ${input.expectedTime}s\n`;
     }
-    if (input.expectedResponse !== undefined) {
+    if (input.expectedResponse !== ``) {
       try {
         const expect = JSON.stringify(JSON.parse(resp.response));
         const actual = JSON.stringify(JSON.parse(input.expectedResponse));
@@ -255,7 +255,7 @@ export interface Response {
 export interface TestData extends Request {
   expectedCode: string;
   expectedTime: number;
-  expectedResponse: string | undefined;
+  expectedResponse: string;
   passed: boolean | undefined;
   markdown: string;
 }
