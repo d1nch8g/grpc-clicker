@@ -75,25 +75,18 @@ class GrpcClickerView {
     this.panel.webview.onDidReceiveMessage(async (out) => {
       switch (out.command) {
         case "send":
-          const updatedRequest = await this.requestCallback(request);
+          const updatedRequest = await this.requestCallback(this.request);
           this.request = updatedRequest;
-          this.panel.webview.postMessage(JSON.stringify(request));
+          this.panel.webview.postMessage(JSON.stringify(this.request));
           return;
-        case "edit":
-          request.json = out.text;
-          return;
-        case "host":
-          request.host = JSON.parse(out.text) as Host;
+        case "change":
+          this.request = JSON.parse(out.text);
           return;
         case "export":
-          this.exportCallback(request);
-          return;
-        case "expectedResponse":
-          request.expectedResponse = out.text;
+          this.exportCallback(this.request);
           return;
         case "test":
-          const data = JSON.parse(out.text) as RequestData;
-          this.addTestCallback(data);
+          this.addTestCallback(this.request);
           return;
       }
     });
