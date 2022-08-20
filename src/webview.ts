@@ -88,7 +88,6 @@ class GrpcClickerView {
         case "test":
           this.addTestCallback(this.request);
           return;
-          
       }
     });
 
