@@ -46,7 +46,7 @@
   $: onChange(data);
 
   function onSend() {
-    console.log(`Requst sending triggered.`);
+    console.log(`Requst send triggered.`);
     data.response = "... processing";
     vscode.postMessage({
       command: "send",
@@ -61,6 +61,7 @@
   }
 
   function onTest() {
+    console.log(`Request test triggered.`);
     vscode.postMessage({
       command: "test",
     });
