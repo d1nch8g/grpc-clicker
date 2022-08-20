@@ -8,12 +8,12 @@ test(`form`, () => {
     source: {
       type: `SERVER`,
       host: `localhost:12201`,
-      plaintext: true,
+      usePlaintext: true,
     },
     args: [`.google.protobuf.Empty`],
   };
   const res = `grpcurl -msg-template -plaintext localhost:12201 describe .google.protobuf.Empty`;
-  expect(caller.formSource(form)).toBe(res);
+  expect(caller.buildCliCommand(form)).toBe(res);
 });
 
 test("success", async () => {

@@ -188,7 +188,7 @@ export class CallItem extends ClickerItem {
       inputMessageTag: base.inputMessageTag,
       inputMessageName: base.inputMessageTag.split(`.`).pop()!,
       outputMessageName: base.outputMessageTag.split(`.`).pop()!,
-      host: {
+      server: {
         adress: ``,
         plaintext: false,
       },
@@ -210,13 +210,13 @@ export class CallItem extends ClickerItem {
       const file = parent.parent as FileItem;
       request.path = file.base.path;
       request.importPath = file.base.importPath;
-      request.host = file.base.hosts[0];
+      request.server = file.base.hosts[0];
       request.hosts = file.base.hosts;
     }
     if (parent.parent.type === ItemType.server) {
       const server = parent.parent as ServerItem;
-      request.host.adress = server.base.adress;
-      request.host.plaintext = server.base.plaintext;
+      request.server.adress = server.base.adress;
+      request.server.plaintext = server.base.plaintext;
       request.hosts = [server.base];
     }
     super.command = {
@@ -293,7 +293,7 @@ export class HistoryItem extends ClickerItem {
     super.description = request.date;
     super.contextValue = "call";
     super.tooltip = new vscode.MarkdownString(`### Request information:
-- host for execution: \`${request.host.adress}\`
+- host for execution: \`${request.server.adress}\`
 - method used in request: \`${request.call}\`
 - response code: \`${request.code}\`
 - time of execution: \`${request.time}\`

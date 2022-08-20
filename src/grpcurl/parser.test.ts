@@ -1,4 +1,4 @@
-import { Field, Message, Parser, ProtoType } from "./parser";
+import { Field, Message, Parser } from "./parser";
 
 const protoInput = `pb.v1.Streams is a service:
 service Streams {
@@ -91,7 +91,7 @@ test(`fields`, () => {
 
   const field1 = `string example = 1;`;
   const expected1: Field = {
-    type: ProtoType.field,
+    type: `FIELD`,
     name: `example`,
     datatype: `string`,
     description: undefined,
@@ -102,7 +102,7 @@ test(`fields`, () => {
 
   const field2 = `optional string example2 = 2;`;
   const expected2: Field = {
-    type: ProtoType.field,
+    type: `FIELD`,
     name: `example2`,
     datatype: `optional string`,
     description: undefined,
@@ -113,7 +113,7 @@ test(`fields`, () => {
 
   const field3 = `repeated string example3 = 3;`;
   const expected3: Field = {
-    type: ProtoType.field,
+    type: `FIELD`,
     name: `example3`,
     datatype: `repeated string`,
     description: undefined,
@@ -124,7 +124,7 @@ test(`fields`, () => {
 
   const field4 = `map<string, string> example4 = 4;`;
   const expected4: Field = {
-    type: ProtoType.field,
+    type: `FIELD`,
     name: `example4`,
     datatype: `map<string, string>`,
     description: undefined,
@@ -135,7 +135,7 @@ test(`fields`, () => {
 
   const field5 = `.pb.v1.NestedMes example5 = 5;`;
   const expected5: Field = {
-    type: ProtoType.field,
+    type: `FIELD`,
     name: `example5`,
     datatype: `.pb.v1.NestedMes`,
     description: undefined,
@@ -146,7 +146,7 @@ test(`fields`, () => {
 
   const field6 = `map<string, .pb.v1.OptionalMes> example4 = 4;`;
   const expected6: Field = {
-    type: ProtoType.field,
+    type: `FIELD`,
     name: "example4",
     datatype: "map<string, .pb.v1.OptionalMes>",
     description: undefined,
@@ -219,14 +219,14 @@ comment`);
 }`);
   const enumParsed = parser.message(enumExample);
   const expectedEnum: Message = {
-    type: ProtoType.message,
+    type: `MESSAGE`,
     name: "Enum",
     tag: "pb.v1.Enum",
     description: "wirdo boo",
     template: undefined,
     fields: [
       {
-        type: ProtoType.field,
+        type: `FIELD`,
         name: "FIRST",
         datatype: "",
         description: "coca cola",
@@ -234,7 +234,7 @@ comment`);
         fields: undefined,
       },
       {
-        type: ProtoType.field,
+        type: `FIELD`,
         name: "SECOND",
         datatype: "",
         description: `keka\npeka`,
@@ -267,7 +267,7 @@ Message template:
 test(`oneof`, () => {
   const parser = new Parser();
   const expectedOneOf: Message = {
-    type: ProtoType.message,
+    type: `MESSAGE`,
     name: "OneofMes",
     tag: "pb.v1.OneofMes",
     description: "example comment",
@@ -276,14 +276,14 @@ test(`oneof`, () => {
 }`,
     fields: [
       {
-        type: ProtoType.field,
+        type: `FIELD`,
         name: "message",
         datatype: "oneof",
         description: "example 2",
         innerMessageTag: undefined,
         fields: [
           {
-            type: ProtoType.field,
+            type: `FIELD`,
             name: "first",
             datatype: "string",
             description: `example field comment\n`,
@@ -291,7 +291,7 @@ test(`oneof`, () => {
             fields: undefined,
           },
           {
-            type: ProtoType.field,
+            type: `FIELD`,
             name: "second",
             datatype: "int32",
             description: undefined,
@@ -301,7 +301,7 @@ test(`oneof`, () => {
         ],
       },
       {
-        type: ProtoType.field,
+        type: `FIELD`,
         name: "name",
         datatype: "int32",
         description: `comcom\n`,

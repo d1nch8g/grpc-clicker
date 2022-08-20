@@ -116,7 +116,7 @@ export function activate(context: vscode.ExtensionContext) {
         path: data.path,
         importPath: data.importPath,
         json: data.json,
-        host: data.host,
+        server: data.server,
         callTag: data.callTag,
         maxMsgSize: data.maxMsgSize,
         headers: data.headers,
@@ -170,7 +170,7 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
     const path = choice[0].fsPath;
-    let proto = await grpcurl.protoFile({
+    let proto = await grpcurl.proto({
       path: path,
       importPath: importPath,
       hosts: [{ adress: defaultHost, plaintext: plaintext === `Yes` }],
@@ -230,7 +230,7 @@ export function activate(context: vscode.ExtensionContext) {
     const olfFiles = storage.files.list();
     let newFiles: ProtoFile[] = [];
     for (const oldFile of olfFiles) {
-      const newProto = await grpcurl.protoFile({
+      const newProto = await grpcurl.proto({
         path: oldFile.path,
         importPath: oldFile.importPath,
         hosts: oldFile.hosts,
@@ -326,9 +326,9 @@ export function activate(context: vscode.ExtensionContext) {
       });
     } else {
       msg = await grpcurl.message({
-        source: data.host.adress,
+        source: data.server.adress,
         server: true,
-        plaintext: data.host.plaintext,
+        plaintext: data.server.plaintext,
         tag: data.inputMessageTag,
         importPath: ``,
       });

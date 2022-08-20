@@ -54,8 +54,8 @@ class MockParser implements Parser {
 
 class MockCaller implements Caller {
   caller: Caller = new Caller();
-  formSource(input: FormCliTemplateParams): string {
-    return this.caller.formSource(input);
+  buildCliCommand(input: FormCliTemplateParams): string {
+    return this.caller.buildCliCommand(input);
   }
   async execute(command: string): Promise<[string, Error | undefined]> {
     return [command, undefined];
@@ -88,7 +88,7 @@ test(`protoFile`, async () => {
     importPath: "/",
   };
   expect(
-    await grpcurl.protoFile({
+    await grpcurl.proto({
       path: "docs/api.proto",
       hosts: [
         {
@@ -152,7 +152,7 @@ test(`send`, async () => {
     path: "docs/api.proto",
     importPath: `/`,
     json: "{}",
-    host: {
+    server: {
       adress: `localhost:12201`,
       plaintext: true,
     },

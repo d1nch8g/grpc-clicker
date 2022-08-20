@@ -1,6 +1,99 @@
-import { Message, Parser, Proto, ProtoType, Response } from "./parser";
-import { Caller } from "./caller";
+import { Message, Parser, Proto, Response } from "./parser";
+import { Caller, FileSource, ServerSource } from "./caller";
 import { performance } from "perf_hooks";
+
+/**
+ * Data required for request execution
+ */
+export interface Request {
+  /**
+   * Optional parameter that will be used to form message if provided
+   */
+  file: FileSource | undefined;
+  /**
+   * Valid JSON string with proto message
+   */
+  json: string;
+  /**
+   * Wether server will be used for exection
+   */
+  server: ServerSource;
+  /**
+   * `grpcurl` compatible call tag including proto and service:
+   * - Example - `pb.v1.Constructions/EmptyCall`
+   */
+  callTag: string;
+  /**
+   * Number representing amount of megabytes, maximum recieved in
+   * response message
+   */
+  maxMsgSize: number;
+  /**
+   * List of request headers that will be used for request execution
+   */
+  headers: string[];
+}
+
+/**
+ * Parameters that will be used testing of request
+ */
+export interface TestRequest extends Request {
+  /**
+   * Expected gRPC response code, available options:
+   * - OK
+   * - Cancelled
+   * - Unknown
+   * - InvalidArgument
+   * - DeadlineExceeded
+   * - NotFound
+   * - AlreadyExists
+   * - PermissionDenied
+   * - ResourceExhausted
+   * - FailedPrecondition
+   * - Aborted
+   * - OutOfRange
+   * - Unimplemented
+   * - Internal
+   * - Unavailable
+   * - DataLoss
+   * - Unauthenticated
+   */
+  expectedCode: string;
+  /**
+   * Max amount of time that response can take to pass test
+   */
+  expectedTime: number;
+  /**
+   * Expected response message, should be JSON string or error message.
+   * Comparison is strict, wether response is fully matching actual result.
+   */
+  expectedResponse: string;
+}
+
+/**
+ * Result of text execution
+ */
+export interface TestResult {
+  passed: boolean;
+  /**
+   * Human readable markdown representation of text execution
+   */
+  markdown: string;
+}
+
+/**
+ * Input parameters for message description
+ */
+export interface DescribeMessage {
+  /**
+   * Source that will be used for message description
+   */
+  source: FileSource | ServerSource;
+  /**
+   * `grpcurl` compatible message tag
+   */
+  messageTag: string;
+}
 
 export class Grpcurl {
   constructor(
@@ -9,65 +102,26 @@ export class Grpcurl {
     public useDocker: boolean
   ) {}
 
-  async protoFile(input: ProtoFileInput): Promise<ProtoFile | string> {
+  async proto(source: FileSource | ServerSource): Promise<Proto | string> {
     const command = `grpcurl |SRC| describe`;
-    const call = this.caller.formSource({
+    const call = this.caller.buildCliCommand({
       cliCommand: command,
-      source: input.path,
-      server: false,
-      plaintext: false,
       useDocker: this.useDocker,
+      source: source,
       args: [],
-      importPath: input.importPath,
     });
     const [output, err] = await this.caller.execute(call);
     if (err !== undefined) {
       return err.message;
     }
     const parsedProto = this.parser.proto(output);
-    return {
-      type: ProtoType.proto,
-      path: input.path,
-      hosts: input.hosts,
-      importPath: input.importPath,
-      services: parsedProto.services,
-    };
+    return parsedProto;
   }
 
-  async protoServer(input: ProtoServerInput): Promise<ProtoServer | string> {
-    const command = `grpcurl -max-time 0.5 |SRC| describe`;
-    const call = this.caller.formSource({
-      cliCommand: command,
-      source: input.host,
-      server: true,
-      plaintext: input.plaintext,
-      useDocker: this.useDocker,
-      args: [],
-      importPath: ``,
-    });
-    const [output, err] = await this.caller.execute(call);
-    if (err !== undefined) {
-      return err.message;
-    }
-    const parsedProto = this.parser.proto(output);
-    return {
-      type: ProtoType.proto,
-      adress: input.host,
-      plaintext: input.plaintext,
-      services: parsedProto.services,
-    };
-  }
-
-  async message(input: {
-    source: string;
-    server: boolean;
-    plaintext: boolean;
-    tag: string;
-    importPath: string;
-  }): Promise<Message | string> {
+  async message(): Promise<Message | string> {
     let command = `grpcurl -msg-template |SRC| describe %s`;
 
-    const call = this.caller.formSource({
+    const call = this.caller.buildCliCommand({
       cliCommand: command,
       source: input.source,
       server: input.server,
@@ -98,21 +152,21 @@ export class Grpcurl {
     }
 
     if (input.path === ``) {
-      return this.caller.formSource({
+      return this.caller.buildCliCommand({
         cliCommand: command,
-        source: input.host.adress,
+        source: input.server.adress,
         server: true,
-        plaintext: input.host.plaintext,
+        plaintext: input.server.plaintext,
         useDocker: this.useDocker,
         args: [meta, maxMsgSize, formedJson, input.callTag],
         importPath: ``,
       });
     }
-    return this.caller.formSource({
+    return this.caller.buildCliCommand({
       cliCommand: command,
-      source: `${input.path} ${input.host.adress}`,
+      source: `${input.path} ${input.server.adress}`,
       server: false,
-      plaintext: input.host.plaintext,
+      plaintext: input.server.plaintext,
       useDocker: this.useDocker,
       args: [meta, maxMsgSize, formedJson, input.callTag],
       importPath: input.importPath,
@@ -202,40 +256,4 @@ ${resp.response}
     }
     return `-H '${header}' `;
   }
-}
-
-// Parameters required to parse schema from proto file
-export interface ProtoFile extends Proto {
-  path: string;
-  importPath: string;
-}
-
-// Parameters required to parse schema from remote source
-export interface ProtoServer extends Proto {
-  adress: string;
-  plaintext: boolean;
-}
-
-// Parameters required to execute gRPC call
-export interface Request {
-  // Optional parameter that will be used to form message if provided
-  file: ProtoFile | undefined;
-  // Optional parameter that will be used to form message if provided
-  json: string;
-  host: string;
-  plaintext: string;
-  callTag: string;
-  maxMsgSize: number;
-  headers: string[];
-}
-
-export interface TestRequest extends Request {
-  expectedCode: string;
-  expectedTime: number;
-  expectedResponse: string;
-}
-
-export interface TestResult {
-  passed: boolean;
-  markdown: string;
 }

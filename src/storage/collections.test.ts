@@ -63,7 +63,7 @@ test(`add test`, () => {
     expectedCode: "",
     path: "",
     json: "",
-    host: {
+    server: {
       adress: ``,
       plaintext: true,
     },
@@ -92,7 +92,7 @@ test(`update`, () => {
       expectedCode: "",
       path: "",
       json: "",
-      host: {
+      server: {
         adress: ``,
         plaintext: true,
       },
