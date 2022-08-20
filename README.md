@@ -20,41 +20,15 @@ Currently in _alpha_ stage, so it might feel a bit buggy. Contributing is highly
 
 Extension provides following functionality:
 
-- execute `gRPC` calls from `VSCode`
-- view comlpete proto definition with field, message and service description
-- use extension as builder for grpcurl commands
-- easily save and switch between proto hosts
-- add metadata to request, enable and disable it with one click
-- use docker version to execute grpcurl calls from grpcurl container
-
----
-
-## Install gRPCurl
-
-You can have full installation guide here [grpcurl](https://github.com/fullstorydev/grpcurl).
-CLI commands to install it via:
-
-- go:
-
-```sh
-go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
-```
-
-- homebrew:
-
-```brew
-brew install grpcurl
-```
-
-- ubuntu
-
-```bash
-curl -sSL "https://github.com/fullstorydev/grpcurl/releases/download/v1.8.6/grpcurl_1.8.6_linux_x86_64.tar.gz" | tar -xz -C /usr/local/bin
-```
-
-- binaries
-
-Also you can find compiled binaries. Download the binary from the [releases page](https://github.com/fullstorydev/grpcurl/releases).
+- Execute `gRPC` calls from `VSCode`
+- View schema of your services and messages as a tree in side bar
+- Export prepared gRPCurl `CLI` request for executiong from coommand prompt
+- Add headers to request
+- View full history of requests in side panel
+- Create collections with tests of your requests and executete them
+- Get generated templates of messages in request tab
+- Use docker for gRPCurl commands execution (enable in options)
+- Json highlighting/formatting/validation for requests
 
 ---
 
@@ -74,6 +48,37 @@ Also you can find compiled binaries. Download the binary from the [releases page
    <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/6.png" height="200px"></p>
 7. Execute call
    <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/7.png" height="200px"></p>
+
+---
+
+## Install gRPCurl
+
+You can have full installation guide here [grpcurl](https://github.com/fullstorydev/grpcurl).
+CLI commands to install it via:
+
+- go:
+
+```sh
+go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
+```
+
+- homebrew:
+
+```sh
+brew install grpcurl
+```
+
+- ubuntu:
+
+```sh
+curl -sSL "https://github.com/fullstorydev/grpcurl/releases/download/v1.8.6/grpcurl_1.8.6_linux_x86_64.tar.gz" | tar -xz -C /usr/local/bin
+```
+
+- binaries:
+
+Also you can get precompiled binaries. Download them from [releases page](https://github.com/fullstorydev/grpcurl/releases).
+
+---
 
 <!--
 https://marketplace.visualstudio.com/manage/publishers/dancheg97
