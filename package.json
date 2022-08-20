@@ -16,7 +16,10 @@
   "publishConfig": {},
   "repository": "https://github.com/Dancheg97/grpclicker_vscode",
   "categories": [
-    "Testing"
+    "Testing",
+    "Visualization",
+    "Other",
+    "Keymaps"
   ],
   "tags": [
     "grpc",

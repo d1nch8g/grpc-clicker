@@ -29,6 +29,7 @@ Extension provides following functionality:
 - Get generated templates of messages in request tab
 - Use docker for gRPCurl commands execution (enable in options)
 - Json highlighting/formatting/validation for requests
+- Restore your requests from history, save parameters such as hosts and headers in local storage
 
 ---
 
@@ -79,6 +80,16 @@ curl -sSL "https://github.com/fullstorydev/grpcurl/releases/download/v1.8.6/grpc
 Also you can get precompiled binaries. Download them from [releases page](https://github.com/fullstorydev/grpcurl/releases).
 
 ---
+
+## Tech stack
+
+This extension is built on top of edge technologies, such as:
+
+- [gRPCurl](https://github.com/fullstorydev/grpcurl) - used for processing of gRPC calls
+- [Svelte](https://svelte.dev/) - used for UI in extension webview
+- [Memento](https://vshaxe.github.io/vscode-extern/vscode/Memento.html) - local storage of extension
+- [JEST](https://jestjs.io/) - used for testing of included parsers
+- [vscode-webview-ui-toolkit](https://github.com/microsoft/vscode-webview-ui-toolkit) - used for several webview components
 
 <!--
 https://marketplace.visualstudio.com/manage/publishers/dancheg97
