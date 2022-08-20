@@ -1,5 +1,7 @@
 import { Memento } from "vscode";
-import { Collection, Collections } from "./collections";
+import { ServerSource } from "../grpcurl/caller";
+import { Expectations, Request } from "../grpcurl/grpcurl";
+import { Collection, Collections, Test } from "./collections";
 
 class MockMemento implements Memento {
   values: string[] = [];
@@ -19,12 +21,14 @@ class MockMemento implements Memento {
 test(`add`, () => {
   const memento = new MockMemento();
   const collection = new Collections(memento);
+
   const header: Collection = {
     name: "testcol",
     tests: [],
   };
-  expect(collection.add(header)).toBeUndefined();
-  expect(collection.add(header)).toStrictEqual(
+
+  expect(collection.addCollection(header)).toBeUndefined();
+  expect(collection.addCollection(header)).toStrictEqual(
     new Error(`collection with same name exists`)
   );
 });
@@ -32,48 +36,69 @@ test(`add`, () => {
 test(`list`, () => {
   const memento = new MockMemento();
   const collections = new Collections(memento);
+
   memento.values = [`{"name": "testcol", "tests": []}`];
-  expect(collections.list()).toStrictEqual([
+
+  const expectValues = [
     {
       name: "testcol",
       tests: [],
     },
-  ]);
+  ];
+
+  expect(collections.list()).toStrictEqual(expectValues);
 });
 
 test(`remove`, () => {
   const memento = new MockMemento();
   const collections = new Collections(memento);
+
   memento.values = [`{"name": "testcol", "tests": []}`];
-  collections.remove(`testcol`);
+
+  collections.removeCollection(`testcol`);
+
   expect(memento.values).toStrictEqual([]);
 });
 
 test(`add test`, () => {
   const memento = new MockMemento();
   const collections = new Collections(memento);
+
   const collection: Collection = {
     name: "testcol",
     tests: [],
   };
   memento.values = [JSON.stringify(collection)];
-  collections.addTest(`testcol`, {
-    importPath: `/`,
-    content: "",
-    code: "",
-    path: "",
+
+  const serverSource: ServerSource = {
+    type: "SERVER",
+    host: "",
+    usePlaintext: false,
+  };
+
+  const request: Request = {
+    file: undefined,
     json: "",
-    server: {
-      adress: ``,
-      plaintext: true,
-    },
+    server: serverSource,
     callTag: "",
-    headers: [],
     maxMsgSize: 0,
+    headers: [],
+  };
+
+  const testExpectations: Expectations = {
+    code: "OK",
+    time: 0,
+    content: undefined,
+  };
+
+  const test: Test = {
+    request: request,
+    expectations: testExpectations,
     passed: undefined,
     markdown: "",
-    time: 0,
-  });
+  };
+
+  collections.addTest(`testcol`, test);
   expect(collections.list()[0].tests.length).toBe(1);
 });
 
@@ -104,6 +129,6 @@ test(`update`, () => {
       time: 0,
     },
   ];
-  collections.update(collection);
+  collections.updateCollection(collection);
   expect(collections.list()[0].tests.length).toBe(1);
 });

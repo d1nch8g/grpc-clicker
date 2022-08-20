@@ -22,11 +22,11 @@ export class Collections {
     return collectionValues;
   }
 
-  add(collection: Collection) {
+  addCollection(collection: Collection): string | undefined {
     let collections = this.list();
     for (const savedValue of collections) {
       if (savedValue.name === collection.name) {
-        return new Error(`collection with same name exists`);
+        return `collection with same name exists`;
       }
     }
     collections.push(collection);
@@ -34,10 +34,10 @@ export class Collections {
     return undefined;
   }
 
-  remove(name: string) {
+  removeCollection(collectionName: string) {
     let collections = this.list();
     for (let i = 0; i < collections.length; i++) {
-      if (collections[i].name === name) {
+      if (collections[i].name === collectionName) {
         collections.splice(i, 1);
       }
     }
@@ -45,17 +45,24 @@ export class Collections {
     return collections;
   }
 
-  addTest(name: string, data: SavedTest) {
+  addTest(collectionName: string, test: Test): string | undefined {
     const collections = this.list();
-    for (const savedValue of collections) {
-      if (savedValue.name === name) {
-        savedValue.tests.push(data);
+    for (const collection of collections) {
+      if (collection.name === collectionName) {
+        for (const savedTest of collection.tests) {
+          if (savedTest.name === test.name) {
+            return `test with that name already exists`;
+          }
+        }
       }
     }
     this.save(collections);
+    return undefined;
   }
 
-  update(collection: Collection) {
+  removeTest(collectionName: string, testName: string) {}
+
+  updateCollection(collection: Collection) {
     const collections = this.list();
     collections.forEach((col, idx) => {
       if (col.name === collection.name) {
@@ -68,10 +75,11 @@ export class Collections {
 
 export interface Collection {
   name: string;
-  tests: SavedTest[];
+  tests: Test[];
 }
 
-export interface SavedTest {
+export interface Test {
+  name: string;
   request: Request;
   expectations: Expectations;
   passed: boolean | undefined;

@@ -379,7 +379,7 @@ export function activate(context: vscode.ExtensionContext) {
     if (collectionName === "" || collectionName === undefined) {
       return;
     }
-    storage.collections.add({
+    storage.collections.addCollection({
       name: collectionName,
       tests: [],
     });
@@ -393,11 +393,11 @@ export function activate(context: vscode.ExtensionContext) {
       for (const test of col.base.tests) {
         test.passed = undefined;
       }
-      storage.collections.update(col.base);
+      storage.collections.updateCollection(col.base);
       treeviews.collections.refresh(storage.collections.list());
       for (let test of col.base.tests) {
         test = await grpcurl.test(test);
-        storage.collections.update(col.base);
+        storage.collections.updateCollection(col.base);
         treeviews.collections.refresh(storage.collections.list());
       }
     }
@@ -406,7 +406,7 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand(
     "colections.remove",
     async (col: CollectionItem) => {
-      storage.collections.remove(col.base.name);
+      storage.collections.removeCollection(col.base.name);
       treeviews.collections.refresh(storage.collections.list());
     }
   );
@@ -419,7 +419,7 @@ export function activate(context: vscode.ExtensionContext) {
         collection.tests.splice(idx, 1);
       }
     });
-    storage.collections.update(collection);
+    storage.collections.updateCollection(collection);
     treeviews.collections.refresh(storage.collections.list());
   });
 
