@@ -61,40 +61,4 @@
       <div>{data.maxMsgSize} mb</div>
     </vscode-data-grid-cell>
   </vscode-data-grid-row>
-  {#each data.metadata as header}
-    <vscode-data-grid-row>
-      <vscode-data-grid-cell grid-column="1">
-        <div>Header</div>
-      </vscode-data-grid-cell>
-      <vscode-data-grid-cell grid-column="2">
-        <div><i>{header}</i></div>
-      </vscode-data-grid-cell>
-    </vscode-data-grid-row>
-  {/each}
-  {#if data.time !== ``}
-    <vscode-data-grid-row>
-      <vscode-data-grid-cell grid-column="1">
-        <div>Response code</div>
-      </vscode-data-grid-cell>
-      <vscode-data-grid-cell grid-column="2">
-        <div>{data.code}</div>
-      </vscode-data-grid-cell>
-    </vscode-data-grid-row>
-    <vscode-data-grid-row>
-      <vscode-data-grid-cell grid-column="1">
-        <div>Time</div>
-      </vscode-data-grid-cell>
-      <vscode-data-grid-cell grid-column="2">
-        <div>{data.time} seconds</div>
-      </vscode-data-grid-cell>
-    </vscode-data-grid-row>
-    <vscode-data-grid-row>
-      <vscode-data-grid-cell grid-column="1">
-        <div>Output message</div>
-      </vscode-data-grid-cell>
-      <vscode-data-grid-cell grid-column="2">
-        <div>{data.outputMessageName}</div>
-      </vscode-data-grid-cell>
-    </vscode-data-grid-row>
-  {/if}
 </vscode-data-grid>
