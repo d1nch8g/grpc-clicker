@@ -1,29 +1,23 @@
 <script>
-  export let data = {
-    host: { adress: ``, plaintext: true },
-    hosts: [{ adress: ``, plaintext: true }],
-  };
+  export let data;
   export let onSend;
   export let onExport;
 
-  data.hosts = { hosts: [{ adress: ``, plaintext: true }] };
-
   function onHostChanged(host) {
-    data.host = host;
+    data.hosts.current = host;
   }
 </script>
 
 <div class="top-container">
   <table>
     <tr>
-      <td><vscode-badge>{data.protoName}</vscode-badge></td>
-      <td><vscode-badge>{data.service}</vscode-badge></td>
-      <td><vscode-badge>{data.call}</vscode-badge></td>
+      <td><vscode-badge>{data.info.service}</vscode-badge></td>
+      <td><vscode-badge>{data.info.call}</vscode-badge></td>
       <td class="expanded">
         <vscode-dropdown>
-          {#each data.hosts as host}
+          {#each data.hosts.hosts as host}
             <vscode-option on:click="{onHostChanged(host)}">
-              <div>{host.adress}</div>
+              <div>{host}</div>
             </vscode-option>
           {/each}
         </vscode-dropdown>
