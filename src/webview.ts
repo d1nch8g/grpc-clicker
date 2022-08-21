@@ -1,5 +1,7 @@
 import * as vscode from "vscode";
-import { Host, Response, Expectations } from "./grpcurl/grpcurl";
+import { Response, Expectations, Request } from "./grpcurl/grpcurl";
+import { Header } from "./storage/headers";
+import { HostsOptions } from "./storage/hosts";
 
 export class WebViewFactory {
   private views: GrpcClickerView[] = [];
@@ -142,12 +144,20 @@ class GrpcClickerView {
   }
 }
 
-export interface RequestData extends Expectations, Response {
+export interface WebViewData {
+  request: Request;
+  response: Response;
+  expect: Expectations;
+  info: AdditionalInfo;
+  headers: Header[];
+  hosts: HostsOptions;
+}
+
+export interface AdditionalInfo {
   service: string;
   call: string;
   inputMessageTag: string;
   inputMessageName: string;
   outputMessageName: string;
   protoName: string;
-  hosts: Host[];
 }

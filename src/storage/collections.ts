@@ -1,6 +1,30 @@
 import { Memento } from "vscode";
 import { Expectations, Request } from "../grpcurl/grpcurl";
 
+/**
+ * Collection containing multiple tests
+ */
+export interface Collection {
+  /**
+   * Public user defined name visible in UI name of collection
+   */
+  name: string;
+  /**
+   * Collection tests with unique tags
+   */
+  tests: Test[];
+}
+/**
+ * Single test that can be executed
+ */
+export interface Test {
+  name: string;
+  request: Request;
+  expectations: Expectations;
+  passed: boolean | undefined;
+  markdown: string;
+}
+
 export class Collections {
   private readonly key: string = "grpc-clicker-collections";
   constructor(private memento: Memento) {}
@@ -84,17 +108,4 @@ export class Collections {
     });
     this.save(collections);
   }
-}
-
-export interface Collection {
-  name: string;
-  tests: Test[];
-}
-
-export interface Test {
-  name: string;
-  request: Request;
-  expectations: Expectations;
-  passed: boolean | undefined;
-  markdown: string;
 }
