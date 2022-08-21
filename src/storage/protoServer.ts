@@ -1,5 +1,6 @@
 import { Memento } from "vscode";
-import { ProtoServer } from "../grpcurl/grpcurl";
+import { ServerSource } from "../grpcurl/caller";
+import { Proto } from "../grpcurl/parser";
 
 export class ProtoServers {
   private readonly key: string = "grpc-clicker-hosts";
@@ -25,7 +26,7 @@ export class ProtoServers {
   add(host: ProtoServer): Error | undefined {
     const hosts = this.list();
     for (const savedProtoServer of hosts) {
-      if (savedProtoServer.adress === host.adress) {
+      if (savedProtoServer.source.host === host.source.host) {
         return new Error(`host you are trying to add already exists`);
       }
     }
@@ -37,10 +38,15 @@ export class ProtoServers {
   remove(hostAdress: string) {
     const hosts = this.list();
     for (let i = 0; i < hosts.length; i++) {
-      if (hosts[i].adress === hostAdress) {
+      if (hosts[i].source.host === hostAdress) {
         hosts.splice(i, 1);
       }
     }
     this.save(hosts);
   }
+}
+
+export interface ProtoServer {
+  source: ServerSource;
+  proto: Proto;
 }
