@@ -1,11 +1,11 @@
 import * as vscode from "vscode";
-import { RequestData } from "../webview";
+import { HistoryValue } from "../storage/history";
 
 import { ClickerItem, HistoryItem } from "./items";
 
 export class HistoryTreeView implements vscode.TreeDataProvider<ClickerItem> {
-  constructor(private requests: RequestData[]) {
-    this.requests = requests;
+  constructor(private historyValues: HistoryValue[]) {
+    this.historyValues = historyValues;
     this.onChange = new vscode.EventEmitter<ClickerItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
   }
@@ -15,8 +15,8 @@ export class HistoryTreeView implements vscode.TreeDataProvider<ClickerItem> {
     void | ClickerItem | ClickerItem[]
   >;
 
-  refresh(requests: RequestData[]): void {
-    this.requests = requests;
+  refresh(requests: HistoryValue[]): void {
+    this.historyValues = requests;
     this.onChange.fire();
   }
 
@@ -26,8 +26,8 @@ export class HistoryTreeView implements vscode.TreeDataProvider<ClickerItem> {
 
   getChildren(element?: ClickerItem): vscode.ProviderResult<ClickerItem[]> {
     let hitoryItems: ClickerItem[] = [];
-    for (const request of this.requests) {
-      hitoryItems.push(new HistoryItem(request));
+    for (const value of this.historyValues) {
+      hitoryItems.push(new HistoryItem(value));
     }
     return hitoryItems;
   }

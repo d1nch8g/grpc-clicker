@@ -10,7 +10,9 @@ export class HeadersTreeView implements vscode.TreeDataProvider<ClickerItem> {
   }
 
   private onChange: vscode.EventEmitter<ClickerItem | undefined | void>;
-  readonly onDidChangeTreeData: vscode.Event<void | ClickerItem | ClickerItem[]>;
+  readonly onDidChangeTreeData: vscode.Event<
+    void | ClickerItem | ClickerItem[]
+  >;
 
   refresh(headers: Header[]): void {
     this.headers = headers;
@@ -41,4 +43,3 @@ export class HeadersTreeView implements vscode.TreeDataProvider<ClickerItem> {
     return element;
   }
 }
-
