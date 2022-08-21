@@ -3,6 +3,12 @@
   export let data;
   export let createTest;
 
+  data.expectations = {
+    code: `OK`,
+    time: 0.1,
+    content: ``,
+  };
+
   function onTimeChanged(time) {
     if (time.endsWith(`s`)) {
       data.expectedTime = time.slice(0, -1);

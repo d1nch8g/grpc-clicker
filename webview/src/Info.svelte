@@ -3,13 +3,13 @@
 </script>
 
 <vscode-data-grid aria-label="Basic" grid-template-columns="40% 60%">
-  {#if data.path !== ``}
+  {#if data.request.file !== undefined}
     <vscode-data-grid-row>
       <vscode-data-grid-cell grid-column="1">
         <div>Proto path</div>
       </vscode-data-grid-cell>
       <vscode-data-grid-cell grid-column="2">
-        <div>{data.path}</div>
+        <div>{data.request.filePath}</div>
       </vscode-data-grid-cell>
     </vscode-data-grid-row>
   {/if}

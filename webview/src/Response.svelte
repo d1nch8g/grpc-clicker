@@ -9,22 +9,28 @@
 <table>
   <tr>
     <center>
-      {#if data.time === 0}
-        <div>Response: {data.outputMessageName}</div>
+      {#if data.response === undefined}
+        <div>Response: {data.info.outputMessageName}</div>
       {:else}
-        <div>{data.code} - {data.time}</div>
+        <div>{data.response.code} - {data.response.time}</div>
       {/if}
     </center>
   </tr>
   <tr>
-    {#if data.code !== `OK`}
+    {#if data.response !== undefined && data.response.code === `OK`}
+      <JsonArea bind:text="{data.response}" height="{innerHeight - 180}" />
+    {:else if data.response !== undefined}
       <JsonArea
-        bind:text="{data.response}"
+        bind:text="{data.response.content}"
         height="{innerHeight - 180}"
         highlight="{false}"
       />
     {:else}
-      <JsonArea bind:text="{data.response}" height="{innerHeight - 180}" />
+      <JsonArea
+        text="waiting for execution"
+        height="{innerHeight - 180}"
+        highlight="{false}"
+      />
     {/if}
   </tr>
 </table>
