@@ -2,7 +2,6 @@
   import TopPanel from "./TopPanel.svelte";
   import Request from "./Request.svelte";
   import Response from "./Response.svelte";
-  import Testing from "./Testing.svelte";
   import Info from "./Info.svelte";
 
   $: data = {
@@ -52,7 +51,6 @@
 
   function onSend() {
     console.log(`Requst send triggered.`);
-    data.response = "... processing";
     vscode.postMessage({
       command: "send",
     });

@@ -245,81 +245,6 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
-  vscode.commands.registerCommand(
-    "webview.open",
-    async (data: GrpcTabParams) => {
-      const maxMsgSize = vscode.workspace
-        .getConfiguration(`grpc-clicker`)
-        .get(`msgsize`, 4);
-
-      const msg = await grpcurl.message({
-        source: data.source,
-        messageTag: data.call.inputMessageTag,
-      });
-      if (typeof msg === `string`) {
-        vscode.window.showErrorMessage(msg);
-        return;
-      }
-
-      let fileSource: FileSource | undefined;
-      let request: Request;
-      if (data.source.type === `FILE`) {
-        fileSource = data.source;
-
-        const hosts = storage.hosts.get();
-
-        const serverSource: ServerSource = {
-          type: "SERVER",
-          host: hosts.current,
-          usePlaintext: hosts.plaintext,
-        };
-
-        request = {
-          file: fileSource,
-          content: msg.template!,
-          server: serverSource,
-          callTag: `${data.service.tag}/${data.call.name}`,
-          maxMsgSize: maxMsgSize,
-          headers: [],
-        };
-      } else {
-        request = {
-          file: fileSource,
-          content: msg.template!,
-          server: data.source,
-          callTag: `${data.service.tag}/${data.call.name}`,
-          maxMsgSize: maxMsgSize,
-          headers: [],
-        };
-      }
-
-      const info: AdditionalInfo = {
-        service: data.service.tag.split(`.`).pop()!,
-        call: data.call.name,
-        inputMessageTag: data.call.inputMessageTag,
-        inputMessageName: msg.name,
-        outputMessageName: data.call.outputMessageTag.split(`.`).pop()!,
-        protoPackage: data.service.package,
-      };
-
-      const headers = storage.headers.list();
-      for (const header of headers) {
-        if (header.active) {
-          request.headers.push(header.value);
-        }
-      }
-
-      webview.createNewTab({
-        request: request,
-        info: info,
-        headers: headers,
-        hosts: storage.hosts.get(),
-        response: undefined,
-        expectations: undefined,
-      });
-    }
-  );
-
   vscode.commands.registerCommand("history.clean", () => {
     storage.history.clean();
     treeviews.history.refresh(storage.history.list());
@@ -396,6 +321,94 @@ export function activate(context: vscode.ExtensionContext) {
         .get(`usedocker`, false);
     }
   });
+
+  vscode.commands.registerCommand(
+    "webview.open",
+    async (data: GrpcTabParams) => {
+      const maxMsgSize = vscode.workspace
+        .getConfiguration(`grpc-clicker`)
+        .get(`msgsize`, 4);
+
+      const msg = await grpcurl.message({
+        source: data.source,
+        messageTag: data.call.inputMessageTag,
+      });
+      if (typeof msg === `string`) {
+        vscode.window.showErrorMessage(msg);
+        return;
+      }
+
+      let fileSource: FileSource | undefined;
+      let request: Request;
+      if (data.source.type === `FILE`) {
+        fileSource = data.source;
+
+        const hosts = storage.hosts.get();
+
+        const serverSource: ServerSource = {
+          type: "SERVER",
+          host: hosts.current,
+          usePlaintext: hosts.plaintext,
+        };
+
+        request = {
+          file: fileSource,
+          content: msg.template!,
+          server: serverSource,
+          callTag: `${data.service.tag}/${data.call.name}`,
+          maxMsgSize: maxMsgSize,
+          headers: [],
+        };
+      } else {
+        request = {
+          file: fileSource,
+          content: msg.template!,
+          server: data.source,
+          callTag: `${data.service.tag}/${data.call.name}`,
+          maxMsgSize: maxMsgSize,
+          headers: [],
+        };
+      }
+
+      const info: AdditionalInfo = {
+        service: data.service.tag.split(`.`).pop()!,
+        call: data.call.name,
+        inputMessageTag: data.call.inputMessageTag,
+        inputMessageName: msg.name,
+        outputMessageName: data.call.outputMessageTag.split(`.`).pop()!,
+        protoPackage: data.service.package,
+      };
+
+      const headers = storage.headers.list();
+      for (const header of headers) {
+        if (header.active) {
+          request.headers.push(header.value);
+        }
+      }
+
+      const respone: Response = {
+        date: "",
+        time: 0,
+        code: "OK",
+        content: "",
+      };
+
+      const expectations: Expectations = {
+        code: "OK",
+        time: 0,
+        content: undefined,
+      };
+
+      webview.createNewTab({
+        request: request,
+        info: info,
+        headers: headers,
+        hosts: storage.hosts.get(),
+        response: respone,
+        expectations: expectations,
+      });
+    }
+  );
 }
 
 export function deactivate() {}

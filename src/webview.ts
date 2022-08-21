@@ -49,11 +49,11 @@ export interface WebViewData {
   /**
    * Response to be visible in webview.
    */
-  response: Response | undefined;
+  response: Response;
   /**
    * Test expectations that could be set in webview.
    */
-  expectations: Expectations | undefined;
+  expectations: Expectations;
 }
 
 /**
