@@ -1,24 +1,11 @@
 import * as vscode from "vscode";
 import { Caller } from "./grpcurl/caller";
-import { Message, Parser, ProtoType } from "./grpcurl/parser";
+import { Message, Parser } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
 import { TreeViews } from "./treeviews/treeviews";
-import { RequestData, WebViewFactory } from "./webview";
-import {
-  Grpcurl,
-  ProtoFile,
-  ProtoServer,
-  Expectations,
-} from "./grpcurl/grpcurl";
-import {
-  CollectionItem,
-  FileItem,
-  HeaderItem,
-  HostItem,
-  HostsItem,
-  ServerItem,
-  TestItem,
-} from "./treeviews/items";
+import { WebViewFactory } from "./webview";
+import { Grpcurl, Expectations } from "./grpcurl/grpcurl";
+import { CollectionItem, HeaderItem, TestItem } from "./treeviews/items";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
@@ -31,38 +18,13 @@ export function activate(context: vscode.ExtensionContext) {
 
   const treeviews = new TreeViews({
     files: storage.files.list(),
-    headers: storage.headers.list(),
     historyValues: storage.history.list(),
     servers: storage.servers.list(),
     collections: storage.collections.list(),
-    describeFileMsg: async (
-      path: string,
-      importPath: string,
-      tag: string
-    ): Promise<Message> => {
+    describeMsg: async (source, tag): Promise<Message> => {
       const msg = await grpcurl.message({
-        source: path,
-        server: false,
-        plaintext: false,
-        tag: tag,
-        importPath: importPath,
-      });
-      if (typeof msg === `string`) {
-        vscode.window.showErrorMessage(msg);
-      }
-      return msg as Message;
-    },
-    describeServerMsg: async (
-      host: string,
-      plaintext: boolean,
-      tag: string
-    ): Promise<Message> => {
-      const msg = await grpcurl.message({
-        source: host,
-        server: true,
-        tag: tag,
-        plaintext: plaintext,
-        importPath: ``,
+        source: source,
+        messageTag: tag,
       });
       if (typeof msg === `string`) {
         vscode.window.showErrorMessage(msg);
@@ -73,58 +35,18 @@ export function activate(context: vscode.ExtensionContext) {
 
   const webview = new WebViewFactory({
     uri: context.extensionUri,
-
-    requestCallback: async (request) => {
-      const resp = await grpcurl.send(request);
-      request.code = resp.code;
-      request.content = resp.content;
-      request.time = resp.time;
-      request.date = resp.date;
-      storage.history.add(request);
-      treeviews.history.refresh(storage.history.list());
-      return request;
+    sendRequest: async (request) => {
+      return await grpcurl.send(request);
     },
-
-    exportCallback: (data: RequestData) => {
-      const command = grpcurl.formCall(data);
-      vscode.env.clipboard.writeText(command);
+    copyCliCommand: async (request) => {
+      const cmd = await grpcurl.formCall(request);
+      vscode.env.clipboard.writeText(cmd);
       vscode.window.showInformationMessage(
-        `gRPCurl command have been copied to clipboard`
+        `gRPCurl command successfully copied to clipboard!`
       );
     },
-
-    addTestCallback: async (data: RequestData) => {
-      const collections = storage.collections.list();
-      if (collections.length === 0) {
-        vscode.window.showErrorMessage(
-          `You should create collection in side panel, then append this test to collection.`
-        );
-        return;
-      }
-      let collectionNames: string[] = [];
-      for (const collection of collections) {
-        collectionNames.push(collection.name);
-      }
-      const choice = await vscode.window.showQuickPick(collectionNames);
-      if (choice === undefined) {
-        return;
-      }
-      const newTest: Expectations = {
-        code: data.code,
-        time: data.time,
-        content: data.content,
-        path: data.path,
-        importPath: data.importPath,
-        json: data.json,
-        server: data.server,
-        callTag: data.callTag,
-        maxMsgSize: data.maxMsgSize,
-        headers: data.headers,
-        passed: undefined,
-        markdown: "",
-      };
-      storage.collections.addTest(choice, newTest);
-      treeviews.collections.refresh(storage.collections.list());
+    createTest: async (request, test) => {
+      
     },
   });
 
