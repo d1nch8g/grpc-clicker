@@ -140,11 +140,12 @@ export class WebViewFactory {
 }
 
 /**
- * Helper method to remove all unused webview panels.
+ * Single tab instance of tag for grpc calls.
  */
 class GrpcClickerTab {
   public readonly panel: vscode.WebviewPanel;
   public closed: boolean = false;
+
   constructor(private params: WebViewParameters, public data: WebViewData) {
     this.panel = vscode.window.createWebviewPanel(
       "callgrpc",
@@ -153,6 +154,7 @@ class GrpcClickerTab {
       { enableScripts: true }
     );
 
+    // Handler for messages coming from webview
     this.panel.webview.onDidReceiveMessage(async (out) => {
       switch (out.command) {
         case "change":
@@ -171,9 +173,10 @@ class GrpcClickerTab {
       }
     });
 
+    // Handler for changes of view state
     this.panel.onDidChangeViewState((e) => {
       if (this.panel.visible) {
-        this.refresh();
+        this.reveal();
       }
     });
 
@@ -182,10 +185,13 @@ class GrpcClickerTab {
       this.closed = true;
     });
 
-    this.refresh();
+    this.reveal();
   }
 
-  refresh() {
+  /**
+   * Method reveal tab with current parameters.
+   */
+  reveal() {
     this.panel.iconPath = {
       light: vscode.Uri.joinPath(this.params.uri, `images`, `unary.svg`),
       dark: vscode.Uri.joinPath(this.params.uri, `images`, `unary.svg`),
