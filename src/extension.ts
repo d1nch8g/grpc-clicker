@@ -339,7 +339,7 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
     data.json = msg.template!;
-    webview.create(data);
+    webview.createNewTab(data);
   });
 
   vscode.commands.registerCommand("history.clean", () => {
