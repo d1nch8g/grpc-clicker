@@ -1,5 +1,13 @@
 import { Memento } from "vscode";
 
+/**
+ * Options for choosing hosts for further gRPC calls
+ */
+export interface HostsOptions {
+  current: string;
+  hosts: string[];
+}
+
 export class Hosts {
   private readonly key: string = "grpc-clicker-hosts";
   private readonly nullhost = `{"current":"localhost:8080","hosts":[]}`;
@@ -13,9 +21,4 @@ export class Hosts {
     const hosts = this.memento.get<string>(this.key, this.nullhost);
     return JSON.parse(hosts);
   }
-}
-
-export interface HostsOptions {
-  current: string;
-  hosts: string[];
 }
