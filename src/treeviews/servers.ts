@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { FileSource, ServerSource } from "../grpcurl/caller";
 import { Message } from "../grpcurl/parser";
 import { ProtoServer } from "../storage/protoServer";
 import {
@@ -15,8 +16,7 @@ export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
   constructor(
     private servers: ProtoServer[],
     private describeMsg: (
-      path: string,
-      plaintext: boolean,
+      source: ServerSource | FileSource,
       tag: string
     ) => Promise<Message>
   ) {
@@ -61,16 +61,14 @@ export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
     }
     if (element.type === ItemType.call) {
       const elem = element as CallItem;
-      const server = elem.parent.parent as ServerItem;
+      const server = elem.parent.parent as ProtoItem;
       const input = await this.describeMsg(
-        server.base.adress,
-        server.base.plaintext,
+        server.proto.source,
         elem.base.inputMessageTag
       );
       const output = await this.describeMsg(
-        server.base.adress,
-        server.base.plaintext,
-        elem.base.outputMessageTag
+        server.proto.source,
+        elem.base.inputMessageTag
       );
       items.push(new MessageItem(input, elem));
       items.push(new MessageItem(output, elem));
@@ -83,7 +81,7 @@ export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
     }
     if (element.type === ItemType.field) {
       const elem = element as FieldItem;
-      const server = elem.parent.parent.parent.parent as ServerItem;
+      const server = elem.parent.parent.parent.parent as ProtoItem;
       if (elem.base.datatype === `oneof`) {
         for (const field of elem.base.fields!) {
           items.push(new FieldItem(field, elem.parent));
@@ -91,8 +89,7 @@ export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
       }
       if (elem.base.innerMessageTag !== undefined) {
         const inner = await this.describeMsg(
-          server.base.adress,
-          server.base.plaintext,
+          server.proto.source,
           elem.base.innerMessageTag
         );
         for (const field of inner.fields) {
