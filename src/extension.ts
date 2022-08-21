@@ -294,7 +294,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       const info: AdditionalInfo = {
-        service: data.service.tag,
+        service: data.service.tag.split(`.`).pop()!,
         call: data.call.name,
         inputMessageTag: data.call.inputMessageTag,
         inputMessageName: msg.name,
