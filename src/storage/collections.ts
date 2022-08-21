@@ -1,5 +1,5 @@
 import { Memento } from "vscode";
-import { Expectations, Request } from "../grpcurl/grpcurl";
+import { Expectations, Request, TestResult } from "../grpcurl/grpcurl";
 
 /**
  * Collection containing multiple tests
@@ -18,13 +18,27 @@ export interface Collection {
  * Single test that can be executed
  */
 export interface Test {
+  /**
+   * Public name of test
+   */
   name: string;
+  /**
+   * Input request parameters that will be executed
+   */
   request: Request;
+  /**
+   * Expected results of test execution
+   */
   expectations: Expectations;
-  passed: boolean | undefined;
-  markdown: string;
+  /**
+   * Result of test execution, undefined if test have not been runned.
+   */
+  result: TestResult | undefined;
 }
 
+/**
+ * Storage for collections with tests
+ */
 export class Collections {
   private readonly key: string = "grpc-clicker-collections";
   constructor(private memento: Memento) {}
@@ -99,6 +113,9 @@ export class Collections {
     this.save(collections);
   }
 
+  /**
+   * Collection will be automatically updated based on it's name.
+   */
   updateCollection(collection: Collection) {
     const collections = this.list();
     collections.forEach((col, idx) => {
