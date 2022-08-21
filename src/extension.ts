@@ -297,7 +297,7 @@ export function activate(context: vscode.ExtensionContext) {
         service: data.service.tag,
         call: data.call.name,
         inputMessageTag: data.call.inputMessageTag,
-        inputMessageName: data.call.outputMessageTag,
+        inputMessageName: msg.name,
         outputMessageName: data.call.outputMessageTag.split(`.`).pop()!,
         protoPackage: data.service.package,
       };

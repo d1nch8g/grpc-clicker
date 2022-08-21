@@ -88,9 +88,15 @@ export class TestItem extends ClickerItem {
 
 export class ProtoItem extends ClickerItem {
   constructor(public readonly proto: ProtoFile | ProtoServer) {
-    super(``);
+    let name = ``;
     if (proto.source.type === `FILE`) {
-      super(proto.source.filePath.replace(/^.*[\\\/]/, ""));
+      name = proto.source.filePath.replace(/^.*[\\\/]/, "");
+    } else {
+      name = proto.source.host;
+    }
+    super(name);
+
+    if (proto.source.type === `FILE`) {
       super.type = ItemType.file;
       super.tooltip = new vscode.MarkdownString(`#### Proto file:
   - File path: ${proto.source.filePath}
@@ -103,7 +109,6 @@ export class ProtoItem extends ClickerItem {
         dark: path.join(__filename, "..", "..", "images", icon),
       };
     } else {
-      super(proto.source.host);
       super.type = ItemType.server;
       super.description = `TLS: on`;
       if (proto.source.usePlaintext) {

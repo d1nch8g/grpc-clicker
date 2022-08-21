@@ -7,29 +7,34 @@
   import Headers from "./Headers.svelte";
 
   $: data = {
-    path: ``,
-    protoName: ``,
-    service: ``,
-    call: ``,
-    callTag: ``,
-    inputMessageTag: ``,
-    inputMessageName: ``,
-    outputMessageName: ``,
-    host: {
-      adress: ``,
-      plaintext: false,
+    request: {
+      file: {
+        type: "FILE",
+        filePath: "server/api.proto",
+        importPath: "/",
+      },
+      content: "{}",
+      server: {
+        type: "SERVER",
+        host: "localhost:8080",
+      },
+      callTag: "pb.v1.Constructions/AnyCall",
+      maxMsgSize: 4,
+      headers: [],
     },
-    json: "",
-    maxMsgSize: 0,
-    code: "",
-    response: "",
-    time: 0,
-    date: "",
+    info: {
+      service: "pb.v1.Constructions",
+      call: "AnyCall",
+      inputMessageTag: ".google.protobuf.Any",
+      inputMessageName: "Any",
+      outputMessageName: "Any",
+      protoPackage: "pb.v1",
+    },
     headers: [],
-    hosts: [],
-    expectedResponse: "",
-    expectedCode: "",
-    expectedTime: 0,
+    hosts: {
+      current: "localhost:8080",
+      hosts: [],
+    },
   };
 
   window.addEventListener("message", (event) => {
@@ -79,10 +84,10 @@
         <vscode-panel-tab id="tab-2">HEADERS</vscode-panel-tab>
         <vscode-panel-tab id="tab-3">INFORMATION</vscode-panel-tab>
         <vscode-panel-view id="view-1">
-          <Headers bind:data />
+          <Request bind:data />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
-          <Request bind:data />
+          <Headers bind:data />
         </vscode-panel-view>
         <vscode-panel-view id="view-3">
           <Info bind:data />

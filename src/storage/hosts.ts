@@ -19,7 +19,7 @@ export interface HostsOptions {
 }
 
 export class Hosts {
-  private readonly key: string = "grpc-clicker-hosts";
+  private readonly key: string = "grpc-clicker-hosts-options";
   private readonly nullhost = `{"current":"localhost:8080","hosts":[]}`;
   constructor(private memento: Memento) {}
 
