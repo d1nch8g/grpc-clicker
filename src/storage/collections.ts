@@ -14,14 +14,11 @@ export interface Collection {
    */
   tests: Test[];
 }
+
 /**
  * Single test that can be executed
  */
 export interface Test {
-  /**
-   * Public name of test
-   */
-  name: string;
   /**
    * Input request parameters that will be executed
    */
@@ -88,8 +85,8 @@ export class Collections {
     for (const collection of collections) {
       if (collection.name === collectionName) {
         for (const savedTest of collection.tests) {
-          if (savedTest.name === test.name) {
-            return `test with that name already exists`;
+          if (this.compareTests(test, savedTest)) {
+            return `test exists`;
           }
         }
         collection.tests.push(test);
@@ -99,18 +96,19 @@ export class Collections {
     return undefined;
   }
 
-  removeTest(collectionName: string, testName: string) {
+  removeTest(collectionName: string, test: Test) {
     const collections = this.list();
     for (const collection of collections) {
       if (collection.name === collectionName) {
         for (let i = 0; i < collection.tests.length; i++) {
-          if (collection.tests[i].name === testName) {
+          if (this.compareTests(collection.tests[i], test)) {
             collection.tests.splice(i, 1);
+            this.save(collections);
+            return;
           }
         }
       }
     }
-    this.save(collections);
   }
 
   /**
@@ -124,5 +122,13 @@ export class Collections {
       }
     });
     this.save(collections);
+  }
+
+  private compareTests(first: Test, second: Test): boolean {
+    return (
+      first.request.callTag === second.request.callTag &&
+      first.request.content === second.request.content &&
+      first.expectations.code === second.expectations.code
+    );
   }
 }

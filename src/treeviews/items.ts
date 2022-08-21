@@ -1,11 +1,11 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Service, Call, Message, Field } from "../grpcurl/parser";
-import { Host, ProtoFile, ProtoServer, Expectations } from "../grpcurl/grpcurl";
+import { Service, Call, Message, Field, Proto } from "../grpcurl/parser";
+import { Expectations, Request, TestResult } from "../grpcurl/grpcurl";
 
 import { Header } from "../storage/headers";
-import { Collection } from "../storage/collections";
-import { RequestData } from "../webview";
+import { Collection, Test } from "../storage/collections";
+import { FileSource, ServerSource } from "../grpcurl/caller";
 
 export enum ItemType {
   unknown,
@@ -50,42 +50,48 @@ export class CollectionItem extends ClickerItem {
 
 export class TestItem extends ClickerItem {
   constructor(
-    public readonly base: Expectations,
+    public readonly base: Test,
     public readonly parent: CollectionItem
   ) {
-    super(`${base.callTag}`);
+    super(`${base.request.callTag}`);
     super.type = ItemType.test;
     super.contextValue = `test`;
-    super.tooltip = new vscode.MarkdownString(base.markdown);
+    super.tooltip = new vscode.MarkdownString(`NOT IMPLEMENTED`);
     super.collapsibleState = vscode.TreeItemCollapsibleState.None;
-    switch (base.passed) {
-      case undefined:
-        super.iconPath = new vscode.ThemeIcon("testing-unset-icon");
-        return;
-      case true:
-        super.iconPath = new vscode.ThemeIcon(`testing-passed-icon`);
-        return;
-      case false:
-        super.iconPath = new vscode.ThemeIcon(`testing-failed-icon`);
-        return;
+    if (base.result === undefined) {
+      super.iconPath = new vscode.ThemeIcon("testing-unset-icon");
+      return;
+    }
+    if (base.result.passed) {
+      super.iconPath = new vscode.ThemeIcon(`testing-passed-icon`);
+    } else {
+      super.iconPath = new vscode.ThemeIcon(`testing-failed-icon`);
     }
   }
 }
 
-export class FileItem extends ClickerItem {
-  constructor(public readonly base: ProtoFile) {
-    super(base.path.replace(/^.*[\\\/]/, ""));
-    super.type = ItemType.file;
-    super.tooltip = new vscode.MarkdownString(`#### Proto file:
-- File path: ${base.path}
-- Import path: ${base.importPath}`);
-    super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
-    super.contextValue = `file`;
-    const icon = `file.svg`;
-    super.iconPath = {
-      light: path.join(__filename, "..", "..", "images", icon),
-      dark: path.join(__filename, "..", "..", "images", icon),
-    };
+export class ProtoItem extends ClickerItem {
+  constructor(
+    public readonly proto: Proto,
+    public readonly source: FileSource | ServerSource
+  ) {
+    super(``);
+    if (source.type === `FILE`) {
+      super(source.filePath.replace(/^.*[\\\/]/, ""));
+      super.type = ItemType.file;
+      super.tooltip = new vscode.MarkdownString(`#### Proto file:
+  - File path: ${source.filePath}
+  - Import path: ${source.importPath}`);
+      super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+      super.contextValue = `file`;
+      const icon = `file.svg`;
+      super.iconPath = {
+        light: path.join(__filename, "..", "..", "images", icon),
+        dark: path.join(__filename, "..", "..", "images", icon),
+      };
+    } else {
+      super(source.host);
+    }
   }
 }
 

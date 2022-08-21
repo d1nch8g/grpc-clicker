@@ -57,7 +57,7 @@ const serverSource: ServerSource = {
 
 const request: Request = {
   file: undefined,
-  json: "",
+  content: "",
   server: serverSource,
   callTag: "",
   maxMsgSize: 0,
@@ -76,7 +76,6 @@ const testResult: TestResult = {
 };
 
 const singleTest: Test = {
-  name: `newtest`,
   request: request,
   expectations: testExpectations,
   result: testResult,
@@ -134,7 +133,7 @@ test(`remove test`, () => {
   };
 
   collections.addCollection(collection);
-  collections.removeTest(`testcol`, `newtest`);
+  collections.removeTest(`testcol`, singleTest);
   const cols = collections.list();
   expect(cols[0].tests.length).toBe(0);
 });

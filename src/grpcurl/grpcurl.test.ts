@@ -157,7 +157,7 @@ test(`send`, async () => {
 
   const request: Request = {
     file: fileSouce,
-    json: `{}`,
+    content: `{}`,
     server: serverSource,
     callTag: `.pb.v1.Constructions/EmptyCall`,
     maxMsgSize: 1,
@@ -195,7 +195,7 @@ test(`test`, async () => {
 
   const request: Request = {
     file: fileSouce,
-    json: `{}`,
+    content: `{}`,
     server: serverSource,
     callTag: `.pb.v1.Constructions/EmptyCall`,
     maxMsgSize: 1,
