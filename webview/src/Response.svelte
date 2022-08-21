@@ -26,11 +26,7 @@
         highlight="{false}"
       />
     {:else}
-      <JsonArea
-        text="waiting for execution"
-        height="{innerHeight - 180}"
-        highlight="{false}"
-      />
+      <JsonArea text="" height="{innerHeight - 180}" highlight="{false}" />
     {/if}
   </tr>
 </table>

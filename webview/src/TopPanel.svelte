@@ -11,6 +11,7 @@
 <div class="top-container">
   <table>
     <tr>
+      <td><vscode-badge>{data.info.protoPackage}</vscode-badge></td>
       <td><vscode-badge>{data.info.service}</vscode-badge></td>
       <td><vscode-badge>{data.info.call}</vscode-badge></td>
       <td class="expanded">

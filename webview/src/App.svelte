@@ -80,13 +80,13 @@
     <div>
       <vscode-panels>
         <vscode-panel-tab id="tab-1">INPUT</vscode-panel-tab>
-        <!-- <vscode-panel-tab id="tab-2">INFORMATION</vscode-panel-tab> -->
+        <vscode-panel-tab id="tab-2">INFORMATION</vscode-panel-tab>
         <vscode-panel-view id="view-1">
           <Request bind:data />
         </vscode-panel-view>
-        <!-- <vscode-panel-view id="view-2">
+        <vscode-panel-view id="view-2">
           <Info bind:data />
-        </vscode-panel-view> -->
+        </vscode-panel-view>
       </vscode-panels>
     </div>
   </td>

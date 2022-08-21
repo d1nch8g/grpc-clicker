@@ -9,16 +9,16 @@
         <div>Proto path</div>
       </vscode-data-grid-cell>
       <vscode-data-grid-cell grid-column="2">
-        <div>{data.request.filePath}</div>
+        <div>{data.request.file.filePath}</div>
       </vscode-data-grid-cell>
     </vscode-data-grid-row>
   {/if}
   <vscode-data-grid-row>
     <vscode-data-grid-cell grid-column="1">
-      <div>Proto</div>
+      <div>Proto package</div>
     </vscode-data-grid-cell>
     <vscode-data-grid-cell grid-column="2">
-      <div>{data.protoName}</div>
+      <div>{data.info.protoPackage}</div>
     </vscode-data-grid-cell>
   </vscode-data-grid-row>
   <vscode-data-grid-row>
@@ -26,7 +26,7 @@
       <div>Service</div>
     </vscode-data-grid-cell>
     <vscode-data-grid-cell grid-column="2">
-      <div>{data.service}</div>
+      <div>{data.info.service}</div>
     </vscode-data-grid-cell>
   </vscode-data-grid-row>
   <vscode-data-grid-row>
