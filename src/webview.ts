@@ -23,7 +23,7 @@ export interface WebViewParameters {
   /**
    * Callback that is adding test to collection.
    */
-  createTest: (request: Request, expect: Expectations) => void;
+  createTest: (request: Request, expect: Expectations | undefined) => void;
 }
 
 /**
@@ -53,7 +53,7 @@ export interface WebViewData {
   /**
    * Test expectations that could be set in webview.
    */
-  expect: Expectations | undefined;
+  expectations: Expectations | undefined;
 }
 
 /**
@@ -139,39 +139,41 @@ export class WebViewFactory {
   }
 }
 
+/**
+ * Helper method to remove all unused webview panels.
+ */
 class GrpcClickerTab {
   public readonly panel: vscode.WebviewPanel;
   public closed: boolean = false;
   constructor(private params: WebViewParameters, public data: WebViewData) {
     this.panel = vscode.window.createWebviewPanel(
       "callgrpc",
-      request.call,
+      data.info.call,
       vscode.ViewColumn.Active,
       { enableScripts: true }
     );
 
     this.panel.webview.onDidReceiveMessage(async (out) => {
       switch (out.command) {
-        case "send":
-          const updatedRequest = await this.requestCallback(this.request);
-          this.request = updatedRequest;
-          this.panel.webview.postMessage(JSON.stringify(this.request));
-          return;
         case "change":
-          this.request = JSON.parse(out.text);
+          this.data = JSON.parse(out.text);
+          return;
+        case "send":
+          this.data.response = await this.params.sendRequest(this.data.request);
+          this.panel.webview.postMessage(JSON.stringify(this.data));
           return;
         case "export":
-          this.exportCallback(this.request);
+          this.params.copyCliCommand(this.data.request);
           return;
         case "test":
-          this.addTestCallback(this.request);
+          this.params.createTest(this.data.request, this.data.expectations);
           return;
       }
     });
 
     this.panel.onDidChangeViewState((e) => {
       if (this.panel.visible) {
-        this.update();
+        this.refresh();
       }
     });
 
@@ -180,23 +182,23 @@ class GrpcClickerTab {
       this.closed = true;
     });
 
-    this.update();
+    this.refresh();
   }
 
-  update() {
+  refresh() {
     this.panel.iconPath = {
-      light: vscode.Uri.joinPath(this.uri, `images`, `unary.svg`),
-      dark: vscode.Uri.joinPath(this.uri, `images`, `unary.svg`),
+      light: vscode.Uri.joinPath(this.params.uri, `images`, `unary.svg`),
+      dark: vscode.Uri.joinPath(this.params.uri, `images`, `unary.svg`),
     };
 
     const scriptUri = this.panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.uri, "dist", "main.js")
+      vscode.Uri.joinPath(this.params.uri, "dist", "main.js")
     );
     const stylesMainUri = this.panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.uri, "dist", "styles.css")
+      vscode.Uri.joinPath(this.params.uri, "dist", "styles.css")
     );
     const toolkitUri = this.panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.uri, "dist", "tk", "toolkit.js")
+      vscode.Uri.joinPath(this.params.uri, "dist", "tk", "toolkit.js")
     );
 
     this.panel.webview.html = `<!DOCTYPE html>
@@ -216,6 +218,6 @@ class GrpcClickerTab {
     </body>
   </html>`;
 
-    this.panel.webview.postMessage(JSON.stringify(this.request));
+    this.panel.webview.postMessage(JSON.stringify(this.data));
   }
 }
