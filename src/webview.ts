@@ -6,7 +6,7 @@ import { HostsOptions } from "./storage/hosts";
 /**
  * Parameters for building all webview tabs.
  */
-export interface SharedWebViewParameters {
+export interface WebViewParameters {
   /**
    * Base uri to eject source files for webview, should be base of extension
    */
@@ -86,65 +86,63 @@ export interface AdditionalInfo {
   protoPackage: string;
 }
 
+/**
+ * Factory managing all grpc clicker request tabs.
+ */
 export class WebViewFactory {
-  private views: GrpcClickerView[] = [];
+  private tabs: GrpcClickerTab[] = [];
 
-  constructor(input: {
-    uri: vscode.Uri;
-    requestCallback: (data: RequestData) => Promise<RequestData>;
-    exportCallback: (data: RequestData) => void;
-    addTestCallback: (data: RequestData) => void;
-  }) {
-    this.uri = input.uri;
-    this.requestCallback = input.requestCallback;
-    this.exportCallback = input.exportCallback;
-    this.addTestCallback = input.addTestCallback;
+  constructor(private params: WebViewParameters) {}
+
+  /**
+   * Operation that will try to reveal existing panel with same params and
+   * create new tab for grpc call if such is not found.
+   */
+  createNewTab(data: WebViewData) {
+    this.removeClosedPanels();
+    if (!this.tryToReveal(data.info)) {
+      this.tabs.push(new GrpcClickerTab(this.params, data));
+    }
   }
 
-  create(data: RequestData) {
-    this.removeClosedPanels();
-    for (const view of this.views) {
-      const panelIsActive =
-        data.path === view.request.path &&
-        data.inputMessageName === view.request.inputMessageName &&
-        data.outputMessageName === view.request.outputMessageName &&
-        data.call === view.request.call;
-      if (panelIsActive) {
-        view.panel.reveal();
-        return;
+  /**
+   * Helper method that checks wether panel similaer request params exists.
+   * Will be used to reveal existing panel if such exists in webviews.
+   * Will return `true` if panel successfully revealed.
+   */
+  private tryToReveal(info: AdditionalInfo): boolean {
+    for (const tab of this.tabs) {
+      if (
+        info.service === tab.data.info.service &&
+        info.call === tab.data.info.call &&
+        info.inputMessageTag === tab.data.info.inputMessageTag &&
+        info.protoPackage === tab.data.info.protoPackage
+      ) {
+        tab.panel.reveal();
+        return true;
       }
     }
-    const view = new GrpcClickerView(
-      this.uri,
-      data,
-      this.requestCallback,
-      this.exportCallback,
-      this.addTestCallback
-    );
-    this.views.push(view);
+    return false;
   }
 
+  /**
+   * Helper method to remove all unused webview panels.
+   */
   private removeClosedPanels() {
-    var i = this.views.length;
+    var i = this.tabs.length;
     while (i--) {
-      if (this.views[i].closed) {
-        this.views.splice(i, 1);
+      if (this.tabs[i].closed) {
+        this.tabs.splice(i, 1);
         continue;
       }
     }
   }
 }
 
-class GrpcClickerView {
+class GrpcClickerTab {
   public readonly panel: vscode.WebviewPanel;
   public closed: boolean = false;
-  constructor(
-    private uri: vscode.Uri,
-    public request: RequestData,
-    private requestCallback: (data: RequestData) => Promise<RequestData>,
-    private exportCallback: (data: RequestData) => void,
-    private addTestCallback: (data: RequestData) => void
-  ) {
+  constructor(private params: WebViewParameters, public data: WebViewData) {
     this.panel = vscode.window.createWebviewPanel(
       "callgrpc",
       request.call,
