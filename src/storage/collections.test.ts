@@ -1,6 +1,6 @@
 import { Memento } from "vscode";
 import { ServerSource } from "../grpcurl/caller";
-import { Expectations, Request } from "../grpcurl/grpcurl";
+import { Expectations, Request, TestResult } from "../grpcurl/grpcurl";
 import { Collection, Collections, Test } from "./collections";
 
 class MockMemento implements Memento {
@@ -49,6 +49,39 @@ test(`list`, () => {
   expect(collections.list()).toStrictEqual(expectValues);
 });
 
+const serverSource: ServerSource = {
+  type: "SERVER",
+  host: "",
+  usePlaintext: false,
+};
+
+const request: Request = {
+  file: undefined,
+  json: "",
+  server: serverSource,
+  callTag: "",
+  maxMsgSize: 0,
+  headers: [],
+};
+
+const testExpectations: Expectations = {
+  code: "OK",
+  time: 0,
+  content: undefined,
+};
+
+const testResult: TestResult = {
+  passed: false,
+  mistakes: [],
+};
+
+const singleTest: Test = {
+  name: `newtest`,
+  request: request,
+  expectations: testExpectations,
+  result: testResult,
+};
+
 test(`remove`, () => {
   const memento = new MockMemento();
   const collections = new Collections(memento);
@@ -70,36 +103,7 @@ test(`add test`, () => {
   };
   memento.values = [JSON.stringify(collection)];
 
-  const serverSource: ServerSource = {
-    type: "SERVER",
-    host: "",
-    usePlaintext: false,
-  };
-
-  const request: Request = {
-    file: undefined,
-    json: "",
-    server: serverSource,
-    callTag: "",
-    maxMsgSize: 0,
-    headers: [],
-  };
-
-  const testExpectations: Expectations = {
-    code: "OK",
-    time: 0,
-    content: undefined,
-  };
-
-  const test: Test = {
-    name: `newtest`,
-    request: request,
-    expectations: testExpectations,
-    passed: undefined,
-    markdown: "",
-  };
-
-  collections.addTest(`testcol`, test);
+  collections.addTest(`testcol`, singleTest);
 
   expect(collections.list()[0].tests.length).toBe(1);
 });
@@ -114,36 +118,7 @@ test(`update`, () => {
 
   memento.values = [JSON.stringify(collection)];
 
-  const serverSource: ServerSource = {
-    type: "SERVER",
-    host: "",
-    usePlaintext: false,
-  };
-
-  const request: Request = {
-    file: undefined,
-    json: "",
-    server: serverSource,
-    callTag: "",
-    maxMsgSize: 0,
-    headers: [],
-  };
-
-  const testExpectations: Expectations = {
-    code: "OK",
-    time: 0,
-    content: undefined,
-  };
-
-  const test: Test = {
-    name: `newtest`,
-    request: request,
-    expectations: testExpectations,
-    passed: undefined,
-    markdown: "",
-  };
-
-  collection.tests.push(test);
+  collection.tests.push(singleTest);
 
   collections.updateCollection(collection);
   expect(collections.list()[0].tests.length).toBe(1);
@@ -153,38 +128,9 @@ test(`remove test`, () => {
   const memento = new MockMemento();
   const collections = new Collections(memento);
 
-  const serverSource: ServerSource = {
-    type: "SERVER",
-    host: "",
-    usePlaintext: false,
-  };
-
-  const request: Request = {
-    file: undefined,
-    json: "",
-    server: serverSource,
-    callTag: "",
-    maxMsgSize: 0,
-    headers: [],
-  };
-
-  const testExpectations: Expectations = {
-    code: "OK",
-    time: 0,
-    content: undefined,
-  };
-
-  const test: Test = {
-    name: `newtest`,
-    request: request,
-    expectations: testExpectations,
-    passed: undefined,
-    markdown: "",
-  };
-
   const collection: Collection = {
     name: "testcol",
-    tests: [test],
+    tests: [singleTest],
   };
 
   collections.addCollection(collection);
