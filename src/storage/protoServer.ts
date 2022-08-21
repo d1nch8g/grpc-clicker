@@ -5,15 +5,11 @@ import { Proto } from "../grpcurl/parser";
 /**
  * Entity representing proto schema and server source
  */
-export interface ProtoServer {
+export interface ProtoServer extends Proto {
   /**
    * Entity representing server source for recieving proto schema
    */
   source: ServerSource;
-  /**
-   * Parsed proto schema with services
-   */
-  proto: Proto;
 }
 
 export class ProtoServers {

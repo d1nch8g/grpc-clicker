@@ -25,14 +25,10 @@ const source: FileSource = {
   importPath: "",
 };
 
-const proto: Proto = {
-  type: "PROTO",
-  services: [],
-};
-
 const file: ProtoFile = {
   source: source,
-  proto: proto,
+  type: "PROTO",
+  services: [],
 };
 
 test(`add`, () => {

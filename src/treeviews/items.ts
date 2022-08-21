@@ -1,11 +1,27 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { Service, Call, Message, Field, Proto } from "../grpcurl/parser";
-import { Expectations, Request, TestResult } from "../grpcurl/grpcurl";
-
 import { Header } from "../storage/headers";
 import { Collection, Test } from "../storage/collections";
 import { FileSource, ServerSource } from "../grpcurl/caller";
+import { HistoryValue } from "../storage/history";
+import { Request, Response } from "../grpcurl/grpcurl";
+import { ProtoFile } from "../storage/protoFiles";
+import { ProtoServer } from "../storage/protoServer";
+
+/**
+ * Params that can be used to create new call from pressed button:
+ * - call
+ * - service
+ * - proto
+ * - source
+ */
+export interface GrpcTabFromScratch {
+  call: Call;
+  service: Service;
+  proto: Proto;
+  source: FileSource | ServerSource;
+}
 
 export enum ItemType {
   unknown,
@@ -71,17 +87,14 @@ export class TestItem extends ClickerItem {
 }
 
 export class ProtoItem extends ClickerItem {
-  constructor(
-    public readonly proto: Proto,
-    public readonly source: FileSource | ServerSource
-  ) {
+  constructor(public readonly proto: ProtoFile | ProtoServer) {
     super(``);
-    if (source.type === `FILE`) {
-      super(source.filePath.replace(/^.*[\\\/]/, ""));
+    if (proto.source.type === `FILE`) {
+      super(proto.source.filePath.replace(/^.*[\\\/]/, ""));
       super.type = ItemType.file;
       super.tooltip = new vscode.MarkdownString(`#### Proto file:
-  - File path: ${source.filePath}
-  - Import path: ${source.importPath}`);
+  - File path: ${proto.source.filePath}
+  - Import path: ${proto.source.importPath}`);
       super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
       super.contextValue = `file`;
       const icon = `file.svg`;
@@ -90,71 +103,31 @@ export class ProtoItem extends ClickerItem {
         dark: path.join(__filename, "..", "..", "images", icon),
       };
     } else {
-      super(source.host);
+      super(proto.source.host);
+      super.type = ItemType.server;
+      super.description = `TLS: on`;
+      if (proto.source.usePlaintext) {
+        super.description = `TLS: off`;
+      }
+      super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+      super.contextValue = `server`;
+      let icon = `host-on.svg`;
+      if (proto.services.length === 0) {
+        super.collapsibleState = vscode.TreeItemCollapsibleState.None;
+        icon = `host-down.svg`;
+      }
+      super.iconPath = {
+        light: path.join(__filename, "..", "..", "images", icon),
+        dark: path.join(__filename, "..", "..", "images", icon),
+      };
     }
-  }
-}
-
-export class ServerItem extends ClickerItem {
-  constructor(public readonly base: ProtoServer) {
-    super(base.adress);
-    super.type = ItemType.server;
-    super.description = `TLS: on`;
-    if (base.plaintext) {
-      super.description = `TLS: off`;
-    }
-    super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
-    super.contextValue = `server`;
-    let icon = `host-on.svg`;
-    if (base.services.length === 0) {
-      super.collapsibleState = vscode.TreeItemCollapsibleState.None;
-      icon = `host-down.svg`;
-    }
-    super.iconPath = {
-      light: path.join(__filename, "..", "..", "images", icon),
-      dark: path.join(__filename, "..", "..", "images", icon),
-    };
-  }
-}
-
-export class HostsItem extends ClickerItem {
-  constructor(public readonly hosts: Host[], public readonly parent: FileItem) {
-    super(`hosts`);
-    super.type = ItemType.hosts;
-    super.tooltip = `Hosts for gRPC calls for current file.`;
-    super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
-    super.contextValue = `hosts`;
-    const icon = `hosts.svg`;
-    super.contextValue = "hosts";
-    super.iconPath = {
-      light: path.join(__filename, "..", "..", "images", icon),
-      dark: path.join(__filename, "..", "..", "images", icon),
-    };
-  }
-}
-
-export class HostItem extends ClickerItem {
-  constructor(public readonly host: Host, public readonly parent: HostsItem) {
-    super(host.adress);
-    super.type = ItemType.host;
-    super.description = `TLS: on`;
-    if (host.plaintext) {
-      super.description = `TLS: off`;
-    }
-    super.contextValue = `host`;
-    const icon = `host-off.svg`;
-    super.iconPath = {
-      light: path.join(__filename, "..", "..", "images", icon),
-      dark: path.join(__filename, "..", "..", "images", icon),
-    };
-    super.collapsibleState = vscode.TreeItemCollapsibleState.None;
   }
 }
 
 export class ServiceItem extends ClickerItem {
   constructor(
     public readonly base: Service,
-    public readonly parent: FileItem | ServerItem
+    public readonly parent: ProtoItem
   ) {
     super(base.name);
     super.type = ItemType.service;
@@ -184,51 +157,18 @@ export class CallItem extends ClickerItem {
     super.tooltip = base.description;
     super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
     super.contextValue = "call";
-    let request: RequestData = {
-      path: ``,
-      importPath: ``,
-      protoName: parent.base.tag.split(`.`).slice(0, -1).join(`.`),
-      service: parent.base.name,
-      call: base.name,
-      callTag: `${parent.base.tag}/${base.name}`,
-      inputMessageTag: base.inputMessageTag,
-      inputMessageName: base.inputMessageTag.split(`.`).pop()!,
-      outputMessageName: base.outputMessageTag.split(`.`).pop()!,
-      server: {
-        adress: ``,
-        plaintext: false,
-      },
-      json: "",
-      maxMsgSize: 0,
-      code: "",
-      content: "",
-      time: 0,
-      date: "",
-      headers: [],
-      hosts: [],
-      content: "",
-      code: "OK",
-      time: 0.1,
-      passed: undefined,
-      markdown: "",
+
+    const callParams: GrpcTabFromScratch = {
+      call: this.base,
+      service: parent.base,
+      proto: parent.parent.proto,
+      source: parent.parent.proto.source,
     };
-    if (parent.parent.type === ItemType.file) {
-      const file = parent.parent as FileItem;
-      request.path = file.base.path;
-      request.importPath = file.base.importPath;
-      request.server = file.base.hosts[0];
-      request.hosts = file.base.hosts;
-    }
-    if (parent.parent.type === ItemType.server) {
-      const server = parent.parent as ServerItem;
-      request.server.adress = server.base.adress;
-      request.server.plaintext = server.base.plaintext;
-      request.hosts = [server.base];
-    }
+
     super.command = {
       command: "webview.open",
       title: "Trigger opening of webview for grpc call",
-      arguments: [request],
+      arguments: [callParams],
     };
   }
 }
@@ -294,30 +234,31 @@ export class HeaderItem extends ClickerItem {
 }
 
 export class HistoryItem extends ClickerItem {
-  constructor(request: RequestData) {
-    super(request.call);
-    super.description = request.date;
+  constructor(value: HistoryValue) {
+    super(value.request.callTag);
+    super.description = value.response.date;
     super.contextValue = "call";
     super.tooltip = new vscode.MarkdownString(`### Request information:
-- host for execution: \`${request.server.adress}\`
-- method used in request: \`${request.call}\`
-- response code: \`${request.code}\`
-- time of execution: \`${request.time}\`
-- date: \`${request.date}\`
+- host for execution: \`${value.request.server.host}\`
+- method used in request: \`${value.request.callTag}\`
+- response code: \`${value.response.code}\`
+- time of execution: \`${value.response.time}\`
+- date: \`${value.response.date}\`
 
 Response:
 
 \`\`\`json
-${request.content.split(`\n`).slice(0, 14).join(`\n`)}
+${value.request.content.split(`\n`).slice(0, 14).join(`\n`)}
 \`\`\`
 `);
+
     super.command = {
       command: "webview.open",
       title: "Trigger opening of webview for grpc call",
-      arguments: [request],
+      arguments: [value],
     };
     super.iconPath = new vscode.ThemeIcon(`testing-passed-icon`);
-    if (request.code !== `OK`) {
+    if (value.response.code !== `OK`) {
       super.iconPath = new vscode.ThemeIcon(`testing-failed-icon`);
     }
   }

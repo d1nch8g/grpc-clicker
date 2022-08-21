@@ -25,14 +25,10 @@ const source: ServerSource = {
   usePlaintext: false,
 };
 
-const proto: Proto = {
-  type: "PROTO",
-  services: [],
-};
-
 const server: ProtoServer = {
   source: source,
-  proto: proto,
+  type: "PROTO",
+  services: [],
 };
 
 test(`add`, () => {

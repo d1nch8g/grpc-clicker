@@ -1,28 +1,46 @@
 import * as vscode from "vscode";
-import { ProtoFile } from "../grpcurl/grpcurl";
+import { FileSource } from "../grpcurl/caller";
 import { Message } from "../grpcurl/parser";
+import { ProtoFile } from "../storage/protoFiles";
 import {
   CallItem,
   ClickerItem,
   FieldItem,
-  FileItem,
-  HostItem,
-  HostsItem,
   ItemType,
   MessageItem,
+  ProtoItem,
   ServiceItem,
 } from "./items";
 
+/**
+ * Entity representing proto schema and server source
+ */
+export interface ProtosTreeViewParams {
+  /**
+   * Proto files that will be displayed in tree view.
+   */
+  files: ProtoFile[];
+  /**
+   * Method that will be called whem message description is required
+   */
+  describeMsg: (
+    /**
+     * Path to proto file
+     */
+    path: string,
+    /**
+     * Import path for additional source files
+     */
+    importPath: string,
+    /**
+     * Message tag in `grpcurl` compatible format
+     */
+    tag: string
+  ) => Promise<Message>;
+}
+
 export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
-  constructor(
-    private files: ProtoFile[],
-    private describeMsg: (
-      path: string,
-      importPath: string,
-      tag: string
-    ) => Promise<Message>
-  ) {
-    this.files = files;
+  constructor(private params: ProtosTreeViewParams) {
     this.onChange = new vscode.EventEmitter<ClickerItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
   }
@@ -32,8 +50,8 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
     void | ClickerItem | ClickerItem[]
   >;
 
-  async refresh(protos: ProtoFile[]) {
-    this.files = protos;
+  async refresh(protoFiles: ProtoFile[]) {
+    this.params.files = protoFiles;
     this.onChange.fire();
   }
 
@@ -44,24 +62,17 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
   async getChildren(element?: ClickerItem): Promise<ClickerItem[]> {
     let items: ClickerItem[] = [];
     if (element === undefined) {
-      for (const file of this.files) {
-        items.push(new FileItem(file));
+      for (const file of this.params.files) {
+        items.push(new ProtoItem(file));
       }
       return items;
     }
     if (element.type === ItemType.file) {
-      const elem = element as FileItem;
-      items.push(new HostsItem(elem.base.hosts, elem));
-      for (const svc of elem.base.services) {
+      const elem = element as ProtoItem;
+      for (const svc of elem.proto.services) {
         items.push(new ServiceItem(svc, elem));
       }
       return items;
-    }
-    if (element.type === ItemType.hosts) {
-      const elem = element as HostsItem;
-      for (const host of elem.hosts) {
-        items.push(new HostItem(host, elem));
-      }
     }
     if (element.type === ItemType.service) {
       const elem = element as ServiceItem;
@@ -71,15 +82,16 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
     }
     if (element.type === ItemType.call) {
       const elem = element as CallItem;
-      const file = elem.parent.parent as FileItem;
-      const input = await this.describeMsg(
-        file.base.path,
-        file.base.importPath,
+      const file = elem.parent.parent as ProtoItem;
+      const source = file.proto.source as FileSource;
+      const input = await this.params.describeMsg(
+        source.filePath,
+        source.importPath,
         elem.base.inputMessageTag
       );
-      const output = await this.describeMsg(
-        file.base.path,
-        file.base.importPath,
+      const output = await this.params.describeMsg(
+        source.filePath,
+        source.importPath,
         elem.base.outputMessageTag
       );
       items.push(new MessageItem(input, elem));
@@ -93,16 +105,17 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
     }
     if (element.type === ItemType.field) {
       const elem = element as FieldItem;
-      const file = elem.parent.parent.parent.parent as FileItem;
+      const file = elem.parent.parent.parent.parent as ProtoItem;
+      const source = file.proto.source as FileSource;
       if (elem.base.datatype === `oneof`) {
         for (const field of elem.base.fields!) {
           items.push(new FieldItem(field, elem.parent));
         }
       }
       if (elem.base.innerMessageTag !== undefined) {
-        const inner = await this.describeMsg(
-          file.base.path,
-          file.base.importPath,
+        const inner = await this.params.describeMsg(
+          source.filePath,
+          source.importPath,
           elem.base.innerMessageTag
         );
         for (const field of inner.fields) {

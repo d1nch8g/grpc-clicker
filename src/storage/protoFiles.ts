@@ -5,16 +5,12 @@ import { Proto } from "../grpcurl/parser";
 /**
  * Entity representing proto wil file with source
  */
-export interface ProtoFile {
+export interface ProtoFile extends Proto {
   /**
    * File in file system and import path for other proto files. File name is
    * checked to be unique in storage.
    */
   source: FileSource;
-  /**
-   * Parsed proto schema containing services
-   */
-  proto: Proto;
 }
 
 export class ProtoFiles {

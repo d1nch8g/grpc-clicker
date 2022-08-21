@@ -1,13 +1,13 @@
 import * as vscode from "vscode";
-import { ProtoServer } from "../grpcurl/grpcurl";
 import { Message } from "../grpcurl/parser";
+import { ProtoServer } from "../storage/protoServer";
 import {
   CallItem,
   ClickerItem,
   FieldItem,
   ItemType,
   MessageItem,
-  ServerItem,
+  ProtoItem,
   ServiceItem,
 } from "./items";
 
@@ -42,13 +42,13 @@ export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
     let items: ClickerItem[] = [];
     if (element === undefined) {
       for (const server of this.servers) {
-        items.push(new ServerItem(server));
+        items.push(new ProtoItem(server));
       }
       return items;
     }
     if (element.type === ItemType.server) {
-      const elem = element as ServerItem;
-      for (const service of elem.base.services) {
+      const elem = element as ProtoItem;
+      for (const service of elem.proto.services) {
         items.push(new ServiceItem(service, elem));
       }
       return items;
