@@ -11,6 +11,10 @@ export interface HostsOptions {
   /**
    * List of available host options
    */
+  plaintext: boolean;
+  /**
+   * List of available host options
+   */
   hosts: string[];
 }
 

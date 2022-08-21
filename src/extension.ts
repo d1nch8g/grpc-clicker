@@ -262,18 +262,36 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       let fileSource: FileSource | undefined;
+      let request: Request;
       if (data.source.type === `FILE`) {
         fileSource = data.source;
-      }
 
-      const request: Request = {
-        file: fileSource,
-        content: msg.template!,
-        server: data.proto,
-        callTag: `${data.service.tag}/${data.call.name}`,
-        maxMsgSize: maxMsgSize,
-        headers: [],
-      };
+        const hosts = storage.hosts.get();
+
+        const serverSource: ServerSource = {
+          type: "SERVER",
+          host: hosts.current,
+          usePlaintext: hosts.plaintext,
+        };
+
+        request = {
+          file: fileSource,
+          content: msg.template!,
+          server: serverSource,
+          callTag: `${data.service.tag}/${data.call.name}`,
+          maxMsgSize: maxMsgSize,
+          headers: [],
+        };
+      } else {
+        request = {
+          file: fileSource,
+          content: msg.template!,
+          server: data.source,
+          callTag: `${data.service.tag}/${data.call.name}`,
+          maxMsgSize: maxMsgSize,
+          headers: [],
+        };
+      }
 
       const info: AdditionalInfo = {
         service: data.service.tag,
