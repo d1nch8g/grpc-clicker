@@ -4,7 +4,13 @@ import { Memento } from "vscode";
  * Options for choosing hosts for further gRPC calls
  */
 export interface HostsOptions {
+  /**
+   * Current host for gRPC calls, example: `localhost:8080`
+   */
   current: string;
+  /**
+   * List of available host options
+   */
   hosts: string[];
 }
 

@@ -2,6 +2,21 @@ import { Memento } from "vscode";
 import { FileSource } from "../grpcurl/caller";
 import { Proto } from "../grpcurl/parser";
 
+/**
+ * Entity representing proto wil file with source
+ */
+export interface ProtoFile {
+  /**
+   * File in file system and import path for other proto files. File name is
+   * checked to be unique in storage.
+   */
+  source: FileSource;
+  /**
+   * Parsed proto schema containing services
+   */
+  proto: Proto;
+}
+
 export class ProtoFiles {
   private readonly key: string = "grpc-clicker-structures";
   constructor(private memento: Memento) {}
@@ -35,6 +50,9 @@ export class ProtoFiles {
     return undefined;
   }
 
+  /**
+   * Remove proto file using unique file name from storage.
+   */
   remove(path: string) {
     const protos = this.list();
     for (let i = 0; i < protos.length; i++) {
@@ -54,9 +72,4 @@ export class ProtoFiles {
     }
     this.save(protos);
   }
-}
-
-export interface ProtoFile {
-  source: FileSource;
-  proto: Proto;
 }

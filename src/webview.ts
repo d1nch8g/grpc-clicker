@@ -3,13 +3,70 @@ import { Response, Expectations, Request } from "./grpcurl/grpcurl";
 import { Header } from "./storage/headers";
 import { HostsOptions } from "./storage/hosts";
 
+/**
+ * Parameters for building all webview tabs.
+ */
+export interface WebViewParameters {
+  /**
+   * Base uri to eject source files for webview, should be base of extension
+   */
+  uri: vscode.Uri;
+  /**
+   * Callback that is sending request and giving back response, should be
+   * executed when `send` button is pressed.
+   */
+  sendRequest: (request: Request) => Promise<Response>;
+  /**
+   * Callback that should copy `grpcurl` command to clipboard from webview.
+   */
+  copyCliCommand: (request: Request) => void;
+  /**
+   * Callback that is adding test to collection.
+   */
+  createTest: (request: Request, expect: Expectations) => void;
+}
+
+/**
+ * Data that is required for building single tab with gRPC call.
+ */
+export interface WebViewData {
+  /**
+   * Request to be operated from within webview tab.
+   */
+  request: Request;
+  /**
+   * Response to be visible in webview.
+   */
+  response: Response;
+  /**
+   * Test expectations that could be set in webview.
+   */
+  expect: Expectations;
+  /**
+   * Aditional information that will be displayed to user in INFO panel.
+   */
+  info: AdditionalInfo;
+  /**
+   * Request headers.
+   */
+  headers: Header[];
+  /**
+   * Host options available for request.
+   */
+  hosts: HostsOptions;
+}
+
+export interface AdditionalInfo {
+  service: string;
+  call: string;
+  inputMessageTag: string;
+  inputMessageName: string;
+  outputMessageName: string;
+  protoName: string;
+}
+
 export class WebViewFactory {
   private views: GrpcClickerView[] = [];
-
-  private uri: vscode.Uri;
-  private requestCallback: (data: RequestData) => Promise<RequestData>;
-  private exportCallback: (data: RequestData) => void;
-  private addTestCallback: (data: RequestData) => void;
 
   constructor(input: {
     uri: vscode.Uri;
@@ -142,22 +199,4 @@ class GrpcClickerView {
 
     this.panel.webview.postMessage(JSON.stringify(this.request));
   }
-}
-
-export interface WebViewData {
-  request: Request;
-  response: Response;
-  expect: Expectations;
-  info: AdditionalInfo;
-  headers: Header[];
-  hosts: HostsOptions;
-}
-
-export interface AdditionalInfo {
-  service: string;
-  call: string;
-  inputMessageTag: string;
-  inputMessageName: string;
-  outputMessageName: string;
-  protoName: string;
 }
