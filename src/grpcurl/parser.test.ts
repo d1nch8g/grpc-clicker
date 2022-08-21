@@ -31,7 +31,7 @@ service Basics {
   rpc Uint32Call ( .pb.v1.Uint32Mes ) returns ( .pb.v1.Uint32Mes );
   rpc Uint64Call ( .pb.v1.Uint64Mes ) returns ( .pb.v1.Uint64Mes );
 }
-pb.v1.Constructions is a service:
+Constructions is a service:
 service Constructions {
   rpc AnyCall ( .google.protobuf.Any ) returns ( .google.protobuf.Any );
   rpc EmptyCall ( .google.protobuf.Empty ) returns ( .google.protobuf.Empty );
@@ -62,6 +62,8 @@ right here`);
   expect(proto.services[0].name).toBe(`Streams`);
   expect(proto.services[1].tag).toBe(`pb.v1.Basics`);
   expect(proto.services[1].name).toBe(`Basics`);
+  expect(proto.services[1].package).toBe(`pb.v1`);
+  expect(proto.services[2].package).toBe(``);
 });
 
 const rpcUnaryLine = `  rpc Sint32Call ( .pb.v1.Sint32Mes ) returns ( .pb.v1.Sint32Mes );`;

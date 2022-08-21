@@ -20,6 +20,7 @@ class MockParser implements Parser {
       services: [
         {
           type: `SERVICE`,
+          package: `stuff`,
           name: ``,
           tag: ``,
           description: input,
@@ -69,6 +70,7 @@ test(`protoFile`, async () => {
     services: [
       {
         type: `SERVICE`,
+        package: `stuff`,
         name: ``,
         tag: ``,
         description:
@@ -95,6 +97,7 @@ test(`protoServer`, async () => {
     services: [
       {
         type: `SERVICE`,
+        package: `stuff`,
         name: ``,
         tag: ``,
         description:
