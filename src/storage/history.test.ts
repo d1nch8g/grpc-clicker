@@ -33,7 +33,7 @@ const fileSource: FileSource = {
 
 const request: Request = {
   file: fileSource,
-  json: "",
+  content: "",
   server: serverSource,
   callTag: "",
   maxMsgSize: 0,

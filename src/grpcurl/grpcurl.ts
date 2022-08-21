@@ -13,7 +13,7 @@ export interface Request {
   /**
    * Valid JSON string with proto message
    */
-  json: string;
+  content: string;
   /**
    * Wether server will be used for exection
    */
@@ -156,7 +156,7 @@ export class Grpcurl {
    */
   formCall(input: Request): string {
     const command = `grpcurl -emit-defaults %s %s -d %s |SRC| %s`;
-    const formedJson = this.jsonPreprocess(input.json);
+    const formedJson = this.jsonPreprocess(input.content);
     let maxMsgSizeTemplate = ``;
     if (input.maxMsgSize !== 4) {
       maxMsgSizeTemplate = `-max-msg-sz ${input.maxMsgSize * 1048576}`;
