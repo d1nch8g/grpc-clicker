@@ -1,5 +1,21 @@
 import { Memento } from "vscode";
 
+/**
+ * Single header that can be used to
+ */
+export interface Header {
+  /**
+   * Actual header value in `grpcurl` compatible format:
+   * - Example: `username: user`
+   * - Example: `password: pass`
+   */
+  value: string;
+  /**
+   * Wether header is active and should be sent with request
+   */
+  active: boolean;
+}
+
 export class Headers {
   private readonly key: string = "grpc-clicker-headers";
   constructor(private memento: Memento) {}
@@ -43,9 +59,4 @@ export class Headers {
     this.save(headers);
     return headers;
   }
-}
-
-export interface Header {
-  value: string;
-  active: boolean;
 }

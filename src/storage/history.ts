@@ -1,6 +1,20 @@
 import { Memento } from "vscode";
 import { Request, Response } from "../grpcurl/grpcurl";
 
+/**
+ * History data for request, allowing to restore webview from saved history
+ */
+export interface HistoryValue {
+  /**
+   * Request relevant data
+   */
+  request: Request;
+  /**
+   * Response relevant data
+   */
+  response: Response;
+}
+
 export class History {
   private readonly key: string = "grpc-clicker-history";
   constructor(private memento: Memento) {}
@@ -26,9 +40,4 @@ export class History {
   public clean() {
     this.memento.update(this.key, undefined);
   }
-}
-
-export interface HistoryValue {
-  request: Request;
-  response: Response;
 }
