@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 import { HistoryValue } from "../storage/history";
-
 import { ClickerItem, HistoryItem } from "./items";
 
 export class HistoryTreeView implements vscode.TreeDataProvider<ClickerItem> {

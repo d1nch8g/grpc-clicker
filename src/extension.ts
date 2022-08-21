@@ -32,7 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
   const treeviews = new TreeViews({
     files: storage.files.list(),
     headers: storage.headers.list(),
-    requests: storage.history.list(),
+    historyValues: storage.history.list(),
     servers: storage.servers.list(),
     collections: storage.collections.list(),
     describeFileMsg: async (
