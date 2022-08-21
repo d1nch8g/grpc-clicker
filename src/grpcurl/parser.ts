@@ -15,6 +15,10 @@ export interface Proto {
 export interface Service {
   type: `SERVICE`;
   /**
+   * Package specified in gRPC schema.
+   */
+  package: string;
+  /**
    * Human readable name of service
    */
   name: string;
@@ -167,6 +171,7 @@ export class Parser {
     };
     let currSvc: Service = {
       type: `SERVICE`,
+      package: ``,
       name: ``,
       description: undefined,
       tag: ``,
@@ -184,8 +189,13 @@ export class Parser {
       if (line.trim().endsWith(` is a service:`)) {
         const svcTag = line.replace(` is a service:`, ``);
         const splittedTag = svcTag.split(`.`);
+        let pkg: string = `unknown`;
+        try {
+          pkg = splittedTag.slice(0, -1).join(`.`);
+        } catch {}
         currSvc = {
           type: `SERVICE`,
+          package: pkg,
           name: splittedTag[splittedTag.length - 1],
           tag: svcTag,
           description: undefined,
