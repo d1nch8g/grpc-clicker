@@ -161,7 +161,8 @@ class GrpcClickerTab {
           this.data = JSON.parse(out.text);
           return;
         case "send":
-          this.data.response = await this.params.sendRequest(this.data.request);
+          const response = await this.params.sendRequest(this.data.request);
+          this.data.response = response;
           this.panel.webview.postMessage(JSON.stringify(this.data));
           return;
         case "export":
