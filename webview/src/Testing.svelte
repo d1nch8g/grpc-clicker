@@ -3,17 +3,11 @@
   export let data;
   export let createTest;
 
-  data.expectations = {
-    code: `OK`,
-    time: 0.1,
-    content: ``,
-  };
-
   function onTimeChanged(time) {
     if (time.endsWith(`s`)) {
-      data.expectedTime = time.slice(0, -1);
+      data.expectations.time = +time.slice(0, -1);
     } else {
-      data.expectedTime = +time.slice(0, -1) * 60;
+      data.expectations.time = +time.slice(0, -1) * 60;
     }
   }
 
@@ -35,7 +29,7 @@
   ];
 
   function onCodeChanged(code) {
-    data.expectedCode = code;
+    data.expectations.code = code;
   }
 
   const codeOptions = [
@@ -103,7 +97,7 @@
   </tr>
   <tr>
     <JsonArea
-      bind:text="{data.expectedResponse}"
+      bind:text="{data.expectations.content}"
       height="{innerHeight - 300}"
     />
   </tr>

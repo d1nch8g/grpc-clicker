@@ -78,6 +78,7 @@ export function activate(context: vscode.ExtensionContext) {
         expectations: expectations,
         result: undefined,
       });
+      treeviews.collections.refresh(storage.collections.list());
     },
   });
 
@@ -395,8 +396,8 @@ export function activate(context: vscode.ExtensionContext) {
 
       const expectations: Expectations = {
         code: "OK",
-        time: 0,
-        content: undefined,
+        time: 0.1,
+        content: ``,
       };
 
       webview.createNewTab({

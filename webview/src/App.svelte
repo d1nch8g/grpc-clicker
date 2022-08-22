@@ -3,6 +3,7 @@
   import Request from "./Request.svelte";
   import Response from "./Response.svelte";
   import Info from "./Info.svelte";
+  import Testing from "./Testing.svelte";
 
   $: data = {
     request: {
@@ -33,6 +34,17 @@
       current: "localhost:8080",
       hosts: [],
     },
+    response: {
+      date: "",
+      time: 0,
+      code: "OK",
+      content: "",
+    },
+    expectations: {
+      code: "OK",
+      time: 0,
+      content: "",
+    },
   };
 
   window.addEventListener("message", (event) => {
@@ -51,8 +63,16 @@
 
   function onSend() {
     console.log(`Requst send triggered.`);
+    data.response.content = `... processing`;
     vscode.postMessage({
       command: "send",
+    });
+  }
+
+  function onHosts() {
+    console.log(`Requst send triggered.`);
+    vscode.postMessage({
+      command: "hosts",
     });
   }
 
@@ -71,7 +91,12 @@
   }
 </script>
 
-<TopPanel bind:data onSend="{onSend}" onExport="{onExport}" />
+<TopPanel
+  bind:data
+  onSend="{onSend}"
+  onExport="{onExport}"
+  onHosts="{onHosts}"
+/>
 
 <table>
   <td class="left-side">
@@ -92,13 +117,13 @@
     <div>
       <vscode-panels>
         <vscode-panel-tab id="tab-1">OUTPUT</vscode-panel-tab>
-        <!-- <vscode-panel-tab id="tab-2">TESTING</vscode-panel-tab> -->
+        <vscode-panel-tab id="tab-2">TESTING</vscode-panel-tab>
         <vscode-panel-view id="view-1">
           <Response bind:data />
         </vscode-panel-view>
-        <!-- <vscode-panel-view id="view-2">
+        <vscode-panel-view id="view-2">
           <Testing bind:data createTest="{onTest}" />
-        </vscode-panel-view> -->
+        </vscode-panel-view>
       </vscode-panels>
     </div>
   </td>

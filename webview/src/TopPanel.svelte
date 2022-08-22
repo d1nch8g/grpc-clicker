@@ -2,6 +2,7 @@
   export let data;
   export let onSend;
   export let onExport;
+  export let onHosts;
 
   function onHostChanged(host) {
     data.hosts.current = host;
@@ -16,18 +17,31 @@
       <td><vscode-badge>{data.info.call}</vscode-badge></td>
       <td class="expanded">
         <vscode-dropdown>
-          {#each data.hosts.hosts as host}
-            <vscode-option on:click="{onHostChanged(host)}">
-              <div>{host}</div>
+          {#if data.request.file !== undefined}
+            {#each data.hosts.hosts as host}
+              <vscode-option on:click="{onHostChanged(host)}">
+                <div>{host}</div>
+              </vscode-option>
+            {/each}
+          {:else}
+            <vscode-option>
+              <div>{data.request.server.host}</div>
             </vscode-option>
-          {/each}
+          {/if}
         </vscode-dropdown>
       </td>
-      <td
-        ><vscode-button on:click="{onExport}" appearance="secondary"
-          >Export</vscode-button
-        ></td
-      >
+      {#if data.request.file !== undefined}
+        <td>
+          <vscode-button on:click="{onHosts}" appearance="secondary">
+            <div>Hosts</div>
+          </vscode-button>
+        </td>
+      {/if}
+      <td>
+        <vscode-button on:click="{onExport}" appearance="secondary">
+          <div>Export</div>
+        </vscode-button>
+      </td>
       <td><vscode-button on:click="{onSend}">Send</vscode-button></td>
     </tr>
   </table>
