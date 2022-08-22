@@ -28,6 +28,14 @@ export interface WebViewParameters {
    * Callback that is sent to manage hosts for webview.
    */
   manageHosts: () => Promise<HostsOptions>;
+  /**
+   * Callback for adding new header.
+   */
+  addHeader: () => Promise<Header[]>;
+  /**
+   * Callback for removing header header.
+   */
+  removeHeader: () => Promise<Header[]>;
 }
 
 /**
@@ -178,6 +186,14 @@ class GrpcClickerTab {
           return;
         case "test":
           this.params.createTest(this.data.request, this.data.expectations);
+          return;
+        case "addHeader":
+          this.data.headers = await this.params.addHeader();
+          this.panel.webview.postMessage(JSON.stringify(this.data));
+          return;
+        case "removeHeader":
+          this.data.headers = await this.params.removeHeader();
+          this.panel.webview.postMessage(JSON.stringify(this.data));
           return;
       }
     });

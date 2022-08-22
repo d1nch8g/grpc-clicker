@@ -142,6 +142,35 @@ export function activate(context: vscode.ExtensionContext) {
       storage.hosts.save(storageHosts);
       return storageHosts;
     },
+    addHeader: async () => {
+      const header = await vscode.window.showInputBox({
+        title: `Add new header in grpcurl compatible format, example 'username: user'`,
+      });
+      if (header === undefined) {
+        return storage.headers.list();
+      }
+      storage.headers.add({
+        value: header,
+        active: true,
+      });
+      return storage.headers.list();
+    },
+    removeHeader: async () => {
+      let headersValues: string[] = [];
+      for (const header of storage.headers.list()) {
+        headersValues.push(header.value);
+      }
+      const choice = await vscode.window.showQuickPick(headersValues, {
+        title: `Choose header to remove`,
+      });
+      if (choice === undefined) {
+        return storage.headers.list();
+      }
+      storage.headers.save(
+        storage.headers.list().filter((header) => header.value !== choice)
+      );
+      return storage.headers.list();
+    },
   });
 
   vscode.commands.registerCommand("cache.clean", async () => {
