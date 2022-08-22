@@ -92,6 +92,20 @@
       command: "test",
     });
   }
+
+  function onAddHeader() {
+    console.log(`Header adding triggered.`);
+    vscode.postMessage({
+      command: "addHeader",
+    });
+  }
+
+  function onRemoveHeader() {
+    console.log(`Hedaer removal triggered.`);
+    vscode.postMessage({
+      command: "removeHeader",
+    });
+  }
 </script>
 
 <TopPanel
@@ -112,7 +126,11 @@
           <Request bind:data />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
-          <Headers bind:data />
+          <Headers
+            bind:data
+            addHeader="{onAddHeader}"
+            removeHeader="{onRemoveHeader}"
+          />
         </vscode-panel-view>
         <vscode-panel-view id="view-3">
           <Info bind:data />
