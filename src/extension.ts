@@ -80,6 +80,68 @@ export function activate(context: vscode.ExtensionContext) {
       });
       treeviews.collections.refresh(storage.collections.list());
     },
+    manageHosts: async () => {
+      let storageHosts = storage.hosts.get();
+      const choice = await vscode.window.showQuickPick([
+        `Remove existing host`,
+        `Add new host`,
+        `Modify existing host`,
+      ]);
+      if (choice === undefined) {
+        return storageHosts;
+      }
+      if (choice === `Add new host`) {
+        const adress = await vscode.window.showInputBox({
+          title: `Add new host for gRPC calls`,
+          value: `localhost:8080`,
+        });
+        if (adress === undefined) {
+          return storageHosts;
+        }
+        const pick = await vscode.window.showQuickPick([`Yes`, `No`], {
+          title: `You plain text for calls?`,
+        });
+        storageHosts.hosts.push({
+          adress: adress,
+          plaintext: pick === `Yes`,
+        });
+        storage.hosts.save(storageHosts);
+        return storageHosts;
+      }
+      let hosts: string[] = [];
+      for (const host of storageHosts.hosts) {
+        hosts.push(host.adress);
+      }
+      const host = await vscode.window.showQuickPick(hosts);
+      if (host === undefined) {
+        return storageHosts;
+      }
+      if (choice === `Remove existing host`) {
+        storageHosts.hosts = storageHosts.hosts.filter(
+          (filteredHost) => filteredHost.adress !== host
+        );
+        storage.hosts.save(storageHosts);
+        return storageHosts;
+      }
+      if (choice === `Modify existing host`) {
+        const newAdress = await vscode.window.showInputBox({
+          title: `Modify adress`,
+          value: host,
+        });
+        if (newAdress !== undefined) {
+          storageHosts.hosts[hosts.indexOf(host)].adress = newAdress;
+          storage.hosts.save(storageHosts);
+        }
+        const pick = await vscode.window.showQuickPick([`Yes`, `No`], {
+          title: `You plain text for calls?`,
+        });
+        if (pick !== undefined) {
+          storageHosts.hosts[hosts.indexOf(host)].plaintext = pick === `Yes`;
+        }
+      }
+      storage.hosts.save(storageHosts);
+      return storageHosts;
+    },
   });
 
   vscode.commands.registerCommand("cache.clean", async () => {
@@ -149,7 +211,7 @@ export function activate(context: vscode.ExtensionContext) {
     const serverSource: ServerSource = {
       type: "SERVER",
       host: host,
-      usePlaintext: plaintext === `Yes`,
+      plaintext: plaintext === `Yes`,
     };
     const proto = await grpcurl.proto(serverSource);
     if (typeof proto === `string`) {
@@ -349,7 +411,7 @@ export function activate(context: vscode.ExtensionContext) {
         const serverSource: ServerSource = {
           type: "SERVER",
           host: hosts.current,
-          usePlaintext: hosts.plaintext,
+          plaintext: hosts.plaintext,
         };
 
         request = {

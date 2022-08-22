@@ -8,7 +8,7 @@ test(`form`, () => {
     source: {
       type: `SERVER`,
       host: `localhost:12201`,
-      usePlaintext: true,
+      plaintext: true,
     },
     args: [`.google.protobuf.Empty`],
   };

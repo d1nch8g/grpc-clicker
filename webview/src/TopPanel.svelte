@@ -4,8 +4,9 @@
   export let onExport;
   export let onHosts;
 
-  function onHostChanged(host) {
-    data.hosts.current = host;
+  function hostPick(host, plaintext) {
+    data.request.server.host = host;
+    data.request.server.plaintext = plaintext;
   }
 </script>
 
@@ -19,8 +20,8 @@
         <vscode-dropdown>
           {#if data.request.file !== undefined}
             {#each data.hosts.hosts as host}
-              <vscode-option on:click="{onHostChanged(host)}">
-                <div>{host}</div>
+              <vscode-option on:click="{hostPick(host.adress, host.plaintext)}">
+                <div>{host.adress}</div>
               </vscode-option>
             {/each}
           {:else}

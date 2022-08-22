@@ -15,12 +15,26 @@ export interface HostsOptions {
   /**
    * List of available host options
    */
-  hosts: string[];
+  hosts: Host[];
+}
+
+/**
+ * Entity representing host and it's options
+ */
+export interface Host {
+  /**
+   * Entity representing host and it's options
+   */
+  adress: string;
+  /**
+   * Entity representing host and it's options
+   */
+  plaintext: boolean;
 }
 
 export class Hosts {
-  private readonly key: string = "grpc-clicker-cfg-hosts";
-  private readonly nullhost = `{"current":"localhost:8080","plaintext":true,"hosts":["localhost:8080"]}`;
+  private readonly key: string = "grpc-clicker-consfig-hosts";
+  private readonly nullhost = `{"current":"localhost:8080","plaintext":true,"hosts":[]}`;
   constructor(private memento: Memento) {}
 
   save(hosts: HostsOptions) {

@@ -22,7 +22,7 @@ class MockMemento implements Memento {
 const source: ServerSource = {
   type: "SERVER",
   host: "localhost:12201",
-  usePlaintext: false,
+  plaintext: false,
 };
 
 const server: ProtoServer = {

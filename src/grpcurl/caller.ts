@@ -6,7 +6,7 @@ import * as util from "util";
 export interface ServerSource {
   type: `SERVER`;
   host: string;
-  usePlaintext: boolean;
+  plaintext: boolean;
 }
 
 /**
@@ -24,7 +24,7 @@ export interface FileSource {
 export interface MultiSource {
   type: `MULTI`;
   host: string;
-  usePlaintext: boolean;
+  plaintext: boolean;
   filePath: string;
   importPath: string;
 }
@@ -64,14 +64,14 @@ export class Caller {
   buildCliCommand(input: FormCliTemplateParams): string {
     let source: string;
     if (input.source.type === `MULTI`) {
-      if (input.source.usePlaintext) {
+      if (input.source.plaintext) {
         source = `-import-path ${input.source.importPath} -proto ${input.source.filePath} -plaintext ${input.source.host}`;
       } else {
         source = `-import-path ${input.source.importPath} -proto ${input.source.filePath} ${input.source.host}`;
       }
     }
     if (input.source.type === `SERVER`) {
-      if (input.source.usePlaintext) {
+      if (input.source.plaintext) {
         source = `-plaintext ${input.source.host}`;
       } else {
         source = `${input.source.host}`;

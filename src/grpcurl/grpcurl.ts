@@ -173,7 +173,7 @@ export class Grpcurl {
         source: {
           type: `MULTI`,
           host: input.server.host,
-          usePlaintext: input.server.usePlaintext,
+          plaintext: input.server.plaintext,
           filePath: input.file.filePath,
           importPath: input.file.importPath,
         },
