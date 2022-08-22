@@ -16,6 +16,7 @@
       server: {
         type: "SERVER",
         host: "localhost:8080",
+        plaintext: true,
       },
       callTag: "pb.v1.Constructions/AnyCall",
       maxMsgSize: 4,
@@ -32,6 +33,7 @@
     headers: [],
     hosts: {
       current: "localhost:8080",
+      plaintext: true,
       hosts: [],
     },
     response: {

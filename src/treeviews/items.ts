@@ -111,7 +111,7 @@ export class ProtoItem extends ClickerItem {
     } else {
       super.type = ItemType.server;
       super.description = `TLS: on`;
-      if (proto.source.usePlaintext) {
+      if (proto.source.plaintext) {
         super.description = `TLS: off`;
       }
       super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;

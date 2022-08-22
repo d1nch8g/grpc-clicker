@@ -52,7 +52,7 @@ test(`list`, () => {
 const serverSource: ServerSource = {
   type: "SERVER",
   host: "",
-  usePlaintext: false,
+  plaintext: false,
 };
 
 const request: Request = {

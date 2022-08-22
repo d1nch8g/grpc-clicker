@@ -110,7 +110,7 @@ test(`protoServer`, async () => {
   const serverSource: ServerSource = {
     type: `SERVER`,
     host: `localhost:12201`,
-    usePlaintext: true,
+    plaintext: true,
   };
 
   expect(await grpcurl.proto(serverSource)).toStrictEqual(expectedResult);
@@ -152,7 +152,7 @@ test(`send`, async () => {
   const serverSource: ServerSource = {
     type: `SERVER`,
     host: `localhost:12201`,
-    usePlaintext: true,
+    plaintext: true,
   };
 
   const request: Request = {
@@ -190,7 +190,7 @@ test(`test`, async () => {
   const serverSource: ServerSource = {
     type: `SERVER`,
     host: `localhost:12201`,
-    usePlaintext: true,
+    plaintext: true,
   };
 
   const request: Request = {

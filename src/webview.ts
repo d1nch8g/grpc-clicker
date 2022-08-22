@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { Response, Expectations, Request } from "./grpcurl/grpcurl";
 import { Header } from "./storage/headers";
-import { HostsOptions } from "./storage/hosts";
+import { Hosts, HostsOptions } from "./storage/hosts";
 
 /**
  * Parameters for building all webview tabs.
@@ -24,6 +24,10 @@ export interface WebViewParameters {
    * Callback that is adding test to collection.
    */
   createTest: (request: Request, expect: Expectations | undefined) => void;
+  /**
+   * Callback that is sent to manage hosts for webview.
+   */
+  manageHosts: () => Promise<HostsOptions>;
 }
 
 /**
@@ -167,6 +171,10 @@ class GrpcClickerTab {
           return;
         case "export":
           this.params.copyCliCommand(this.data.request);
+          return;
+        case "hosts":
+          this.data.hosts = await this.params.manageHosts();
+          this.panel.webview.postMessage(JSON.stringify(this.data));
           return;
         case "test":
           this.params.createTest(this.data.request, this.data.expectations);
