@@ -4,7 +4,7 @@ import { Response, Expectations, Request } from "./grpcurl/grpcurl";
 import { Message, Parser } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
 import { TreeViews } from "./treeviews/treeviews";
-import { AdditionalInfo, WebViewFactory } from "./webview";
+import { WebViewFactory } from "./webview";
 import { Grpcurl } from "./grpcurl/grpcurl";
 import { ProtoFile } from "./storage/protoFiles";
 import {
@@ -15,6 +15,7 @@ import {
   TestItem,
 } from "./treeviews/items";
 import { ProtoServer } from "./storage/protoServer";
+import { AdditionalInfo, HistoryValue } from "./storage/history";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
@@ -44,10 +45,14 @@ export function activate(context: vscode.ExtensionContext) {
 
   const webview = new WebViewFactory({
     uri: context.extensionUri,
-    sendRequest: async (request) => {
+    sendRequest: async (request, info) => {
       const response = await grpcurl.send(request);
-      storage.history.add({ request, response });
+      storage.history.add({ request, response, info });
       treeviews.history.refresh(storage.history.list());
+      const options = storage.hosts.get();
+      options.current = request.server.host;
+      options.plaintext = request.server.plaintext;
+      storage.hosts.save(options);
       return response;
     },
     copyCliCommand: async (request) => {
@@ -412,6 +417,30 @@ export function activate(context: vscode.ExtensionContext) {
         .getConfiguration(`grpc-clicker`)
         .get(`usedocker`, false);
     }
+  });
+
+  vscode.commands.registerCommand(`history.open`, async (val: HistoryValue) => {
+    const expectations: Expectations = {
+      code: "OK",
+      time: 0.1,
+      content: ``,
+    };
+
+    const headers = storage.headers.list();
+    for (const header of headers) {
+      if (header.active) {
+        val.request.headers.push(header.value);
+      }
+    }
+
+    webview.createNewTab({
+      request: val.request,
+      info: val.info,
+      headers: headers,
+      hosts: storage.hosts.get(),
+      response: val.response,
+      expectations: expectations,
+    });
   });
 
   vscode.commands.registerCommand(

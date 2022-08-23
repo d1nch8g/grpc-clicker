@@ -13,6 +13,40 @@ export interface HistoryValue {
    * Response relevant data
    */
   response: Response;
+  /**
+   * Additional information about request
+   */
+  info: AdditionalInfo;
+}
+
+/**
+ * Information about request.
+ */
+export interface AdditionalInfo {
+  /**
+   * Service in which request will be executed.
+   */
+  service: string;
+  /**
+   * Human readable call string, that could be displayed to user.
+   */
+  call: string;
+  /**
+   * `grpcurl` compatible message tag for request message.
+   */
+  inputMessageTag: string;
+  /**
+   * `grpcurl` compatible message tag for response message.
+   */
+  inputMessageName: string;
+  /**
+   * Human readable name of outgoing message.
+   */
+  outputMessageName: string;
+  /**
+   * Package of proto.
+   */
+  protoPackage: string;
 }
 
 export class History {

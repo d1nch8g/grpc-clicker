@@ -1,7 +1,7 @@
 import { Memento } from "vscode";
 import { FileSource, ServerSource } from "../grpcurl/caller";
 import { Request, Response } from "../grpcurl/grpcurl";
-import { History, HistoryValue } from "./history";
+import { AdditionalInfo, History, HistoryValue } from "./history";
 
 class MockMemento implements Memento {
   values: string[] = [];
@@ -47,9 +47,19 @@ const response: Response = {
   content: "",
 };
 
+const info: AdditionalInfo = {
+  service: "",
+  call: "",
+  inputMessageTag: "",
+  inputMessageName: "",
+  outputMessageName: "",
+  protoPackage: "",
+};
+
 const value: HistoryValue = {
   request: request,
   response: response,
+  info: info,
 };
 
 test(`add`, () => {
