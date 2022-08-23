@@ -119,7 +119,11 @@ func (s *server) BoolCall(ctx context.Context, in *pb.BoolMes) (*pb.BoolMes, err
 }
 
 func (s *server) StringCall(ctx context.Context, in *pb.StringMes) (*pb.StringMes, error) {
-	fmt.Println(in)
+	md, ok := metadata.FromIncomingContext(ctx)
+	if ok {
+		fmt.Println(md)
+	}
+	in.Message += fmt.Sprintln(md)
 	return in, nil
 }
 
