@@ -2,6 +2,7 @@
   export let text;
   export let height;
   export let highlight = true;
+  export let editable = true;
 
   let mainScroll;
   let bracketScroll;
@@ -137,16 +138,30 @@
 
 <div class="containter">
   <div class="control">
-    <textarea
-      class="maineditor"
-      name=""
-      id=""
-      cols="30"
-      rows="10"
-      style="--height: {height}px"
-      bind:this="{mainScroll}"
-      bind:value="{text}"
-      on:scroll="{parseScroll}"></textarea>
+    {#if !editable}
+      <textarea
+        class="maineditor"
+        name=""
+        id=""
+        cols="30"
+        rows="10"
+        style="--height: {height}px"
+        readonly
+        bind:this="{mainScroll}"
+        bind:value="{text}"
+        on:scroll="{parseScroll}"></textarea>
+    {:else}
+      <textarea
+        class="maineditor"
+        name=""
+        id=""
+        cols="30"
+        rows="10"
+        style="--height: {height}px"
+        bind:this="{mainScroll}"
+        bind:value="{text}"
+        on:scroll="{parseScroll}"></textarea>
+    {/if}
   </div>
 
   <div class="wrapper">

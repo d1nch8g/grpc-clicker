@@ -1,19 +1,20 @@
 import * as vscode from "vscode";
-import { Caller } from "./grpcurl/caller";
-import { Message, Parser, ProtoType } from "./grpcurl/parser";
+import { Caller, FileSource, ServerSource } from "./grpcurl/caller";
+import { Response, Expectations, Request } from "./grpcurl/grpcurl";
+import { Message, Parser } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
 import { TreeViews } from "./treeviews/treeviews";
-import { RequestData, WebViewFactory } from "./webview";
-import { Grpcurl, ProtoFile, ProtoServer, TestData } from "./grpcurl/grpcurl";
+import { AdditionalInfo, WebViewFactory } from "./webview";
+import { Grpcurl } from "./grpcurl/grpcurl";
+import { ProtoFile } from "./storage/protoFiles";
 import {
   CollectionItem,
-  FileItem,
+  GrpcTabFromScratch as GrpcTabParams,
   HeaderItem,
-  HostItem,
-  HostsItem,
-  ServerItem,
+  ProtoItem,
   TestItem,
 } from "./treeviews/items";
+import { ProtoServer } from "./storage/protoServer";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
@@ -26,38 +27,13 @@ export function activate(context: vscode.ExtensionContext) {
 
   const treeviews = new TreeViews({
     files: storage.files.list(),
-    headers: storage.headers.list(),
-    requests: storage.history.list(),
+    historyValues: storage.history.list(),
     servers: storage.servers.list(),
     collections: storage.collections.list(),
-    describeFileMsg: async (
-      path: string,
-      importPath: string,
-      tag: string
-    ): Promise<Message> => {
+    describeMsg: async (source, tag): Promise<Message> => {
       const msg = await grpcurl.message({
-        source: path,
-        server: false,
-        plaintext: false,
-        tag: tag,
-        importPath: importPath,
-      });
-      if (typeof msg === `string`) {
-        vscode.window.showErrorMessage(msg);
-      }
-      return msg as Message;
-    },
-    describeServerMsg: async (
-      host: string,
-      plaintext: boolean,
-      tag: string
-    ): Promise<Message> => {
-      const msg = await grpcurl.message({
-        source: host,
-        server: true,
-        tag: tag,
-        plaintext: plaintext,
-        importPath: ``,
+        source: source,
+        messageTag: tag,
       });
       if (typeof msg === `string`) {
         vscode.window.showErrorMessage(msg);
@@ -68,72 +44,138 @@ export function activate(context: vscode.ExtensionContext) {
 
   const webview = new WebViewFactory({
     uri: context.extensionUri,
-
-    requestCallback: async (request) => {
-      let metadata: string[] = [];
-      const headers = storage.headers.list();
-      for (const header of headers) {
-        if (header.active) {
-          metadata.push(header.value);
-        }
-      }
-      const resp = await grpcurl.send(request);
-      request.code = resp.code;
-      request.response = resp.response;
-      request.time = resp.time;
-      request.date = resp.date;
-      storage.history.add(request);
+    sendRequest: async (request) => {
+      const response = await grpcurl.send(request);
+      storage.history.add({ request, response });
       treeviews.history.refresh(storage.history.list());
-      return request;
+      return response;
     },
-
-    exportCallback: (data: RequestData) => {
-      const command = grpcurl.formCall(data);
-      vscode.env.clipboard.writeText(command);
+    copyCliCommand: async (request) => {
+      const cmd = await grpcurl.formCall(request);
+      vscode.env.clipboard.writeText(cmd);
       vscode.window.showInformationMessage(
-        `gRPCurl command have been copied to clipboard`
+        `gRPCurl command successfully copied to clipboard!`
       );
     },
-
-    addTestCallback: async (data: RequestData) => {
-      const collections = storage.collections.list();
-      if (collections.length === 0) {
+    createTest: async (request, expectations) => {
+      if (expectations === undefined) {
         vscode.window.showErrorMessage(
-          `You should create collection in side panel, then append this test to collection.`
+          `unable to create test without parameters`
         );
         return;
       }
-      let collectionNames: string[] = [];
-      for (const collection of collections) {
-        collectionNames.push(collection.name);
+      const collections = storage.collections.list();
+      let picks: string[] = [];
+      for (const coll of collections) {
+        picks.push(coll.name);
       }
-      const choice = await vscode.window.showQuickPick(collectionNames);
-      if (choice === undefined) {
+      const collecitonName = await vscode.window.showQuickPick(picks);
+      if (collecitonName === undefined) {
         return;
       }
-      const newTest: TestData = {
-        expectedCode: data.expectedCode,
-        expectedTime: data.expectedTime,
-        expectedResponse: data.expectedResponse,
-        path: data.path,
-        importPath: data.importPath,
-        json: data.json,
-        host: data.host,
-        callTag: data.callTag,
-        maxMsgSize: data.maxMsgSize,
-        metadata: data.metadata,
-        passed: undefined,
-        markdown: "",
-      };
-      storage.collections.addTest(choice, newTest);
+      storage.collections.addTest(collecitonName, {
+        request: request,
+        expectations: expectations,
+        result: undefined,
+      });
       treeviews.collections.refresh(storage.collections.list());
+    },
+    manageHosts: async () => {
+      let storageHosts = storage.hosts.get();
+      const choice = await vscode.window.showQuickPick([
+        `Remove existing host`,
+        `Add new host`,
+        `Modify existing host`,
+      ]);
+      if (choice === undefined) {
+        return storageHosts;
+      }
+      if (choice === `Add new host`) {
+        const adress = await vscode.window.showInputBox({
+          title: `Add new host for gRPC calls`,
+          value: `localhost:8080`,
+        });
+        if (adress === undefined) {
+          return storageHosts;
+        }
+        const pick = await vscode.window.showQuickPick([`Yes`, `No`], {
+          title: `You plain text for calls?`,
+        });
+        storageHosts.hosts.push({
+          adress: adress,
+          plaintext: pick === `Yes`,
+        });
+        storage.hosts.save(storageHosts);
+        return storageHosts;
+      }
+      let hosts: string[] = [];
+      for (const host of storageHosts.hosts) {
+        hosts.push(host.adress);
+      }
+      const host = await vscode.window.showQuickPick(hosts);
+      if (host === undefined) {
+        return storageHosts;
+      }
+      if (choice === `Remove existing host`) {
+        storageHosts.hosts = storageHosts.hosts.filter(
+          (filteredHost) => filteredHost.adress !== host
+        );
+        storage.hosts.save(storageHosts);
+        return storageHosts;
+      }
+      if (choice === `Modify existing host`) {
+        const newAdress = await vscode.window.showInputBox({
+          title: `Modify adress`,
+          value: host,
+        });
+        if (newAdress !== undefined) {
+          storageHosts.hosts[hosts.indexOf(host)].adress = newAdress;
+          storage.hosts.save(storageHosts);
+        }
+        const pick = await vscode.window.showQuickPick([`Yes`, `No`], {
+          title: `You plain text for calls?`,
+        });
+        if (pick !== undefined) {
+          storageHosts.hosts[hosts.indexOf(host)].plaintext = pick === `Yes`;
+        }
+      }
+      storage.hosts.save(storageHosts);
+      return storageHosts;
+    },
+    addHeader: async () => {
+      const header = await vscode.window.showInputBox({
+        title: `Add new header in grpcurl compatible format, example 'username: user'`,
+      });
+      if (header === undefined) {
+        return storage.headers.list();
+      }
+      storage.headers.add({
+        value: header,
+        active: true,
+      });
+      return storage.headers.list();
+    },
+    removeHeader: async () => {
+      let headersValues: string[] = [];
+      for (const header of storage.headers.list()) {
+        headersValues.push(header.value);
+      }
+      const choice = await vscode.window.showQuickPick(headersValues, {
+        title: `Choose header to remove`,
+      });
+      if (choice === undefined) {
+        return storage.headers.list();
+      }
+      storage.headers.save(
+        storage.headers.list().filter((header) => header.value !== choice)
+      );
+      return storage.headers.list();
     },
   });
 
   vscode.commands.registerCommand("cache.clean", async () => {
     storage.clean();
     treeviews.files.refresh([]);
-    treeviews.headers.refresh([]);
     treeviews.servers.refresh([]);
     treeviews.history.refresh([]);
     treeviews.collections.refresh([]);
@@ -152,18 +194,6 @@ export function activate(context: vscode.ExtensionContext) {
     if (choice === undefined) {
       return;
     }
-    const defaultHost = await vscode.window.showInputBox({
-      title: `default host for calls`,
-    });
-    if (defaultHost === undefined || defaultHost === ``) {
-      return;
-    }
-    const plaintext = await vscode.window.showQuickPick([`Yes`, `No`], {
-      title: `Use plain text? (for servers without TLS)`,
-    });
-    if (plaintext === undefined || plaintext === ``) {
-      return;
-    }
     const importPath = await vscode.window.showInputBox({
       value: `/`,
       title: `Specify import path for imports.`,
@@ -172,16 +202,21 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
     const path = choice[0].fsPath;
-    let proto = await grpcurl.protoFile({
-      path: path,
+    const protoSource: FileSource = {
+      type: "FILE",
+      filePath: path,
       importPath: importPath,
-      hosts: [{ adress: defaultHost, plaintext: plaintext === `Yes` }],
-    });
+    };
+    const proto = await grpcurl.proto(protoSource);
     if (typeof proto === `string`) {
       vscode.window.showErrorMessage(proto);
       return;
     }
-    const err = storage.files.add(proto);
+    const err = storage.files.add({
+      type: "PROTO",
+      source: protoSource,
+      services: proto.services,
+    });
     if (err !== undefined) {
       vscode.window.showErrorMessage(err.message);
       return;
@@ -202,15 +237,21 @@ export function activate(context: vscode.ExtensionContext) {
     if (plaintext === undefined || plaintext === ``) {
       return;
     }
-    let proto = await grpcurl.protoServer({
+    const serverSource: ServerSource = {
+      type: "SERVER",
       host: host,
       plaintext: plaintext === `Yes`,
-    });
+    };
+    const proto = await grpcurl.proto(serverSource);
     if (typeof proto === `string`) {
       vscode.window.showErrorMessage(proto);
       return;
     }
-    const err = storage.servers.add(proto);
+    const err = storage.servers.add({
+      type: "PROTO",
+      source: serverSource,
+      services: proto.services,
+    });
     if (err !== undefined) {
       vscode.window.showErrorMessage(err.message);
       return;
@@ -218,29 +259,31 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.servers.refresh(storage.servers.list());
   });
 
-  vscode.commands.registerCommand("files.remove", (item: FileItem) => {
-    storage.files.remove(item.base.path);
+  vscode.commands.registerCommand("files.remove", (item: ProtoItem) => {
+    const source = item.proto.source as FileSource;
+    storage.files.remove(source.filePath);
     treeviews.files.refresh(storage.files.list());
   });
 
-  vscode.commands.registerCommand("servers.remove", (item: ServerItem) => {
-    storage.servers.remove(item.base.adress);
+  vscode.commands.registerCommand("servers.remove", (item: ProtoItem) => {
+    const source = item.proto.source as ServerSource;
+    storage.servers.remove(source.host);
     treeviews.servers.refresh(storage.servers.list());
   });
 
   vscode.commands.registerCommand("files.refresh", async () => {
-    const olfFiles = storage.files.list();
+    const oldProtos = storage.files.list();
     let newFiles: ProtoFile[] = [];
-    for (const oldFile of olfFiles) {
-      const newProto = await grpcurl.protoFile({
-        path: oldFile.path,
-        importPath: oldFile.importPath,
-        hosts: oldFile.hosts,
-      });
+    for (const oldProto of oldProtos) {
+      const newProto = await grpcurl.proto(oldProto.source);
       if (typeof newProto === `string`) {
         vscode.window.showErrorMessage(newProto);
       } else {
-        newFiles.push(newProto);
+        newFiles.push({
+          type: "PROTO",
+          source: oldProto.source,
+          services: newProto.services,
+        });
       }
     }
     storage.files.save(newFiles);
@@ -251,20 +294,20 @@ export function activate(context: vscode.ExtensionContext) {
     const oldServers = storage.servers.list();
     let newServers: ProtoServer[] = [];
     for (const oldServer of oldServers) {
-      const newProto = await grpcurl.protoServer({
-        host: oldServer.adress,
-        plaintext: true,
-      });
+      const newProto = await grpcurl.proto(oldServer.source);
       if (typeof newProto === `string`) {
         vscode.window.showErrorMessage(newProto);
         newServers.push({
-          adress: oldServer.adress,
-          plaintext: true,
-          type: ProtoType.proto,
+          type: "PROTO",
+          source: oldServer.source,
           services: [],
         });
       } else {
-        newServers.push(newProto);
+        newServers.push({
+          type: "PROTO",
+          source: oldServer.source,
+          services: newProto.services,
+        });
       }
     }
     storage.servers.save(newServers);
@@ -285,93 +328,18 @@ export function activate(context: vscode.ExtensionContext) {
     if (err !== undefined) {
       vscode.window.showErrorMessage(err.message);
     }
-    treeviews.headers.refresh(storage.headers.list());
   });
 
   vscode.commands.registerCommand(
     "headers.remove",
     async (header: HeaderItem) => {
       storage.headers.remove(header.header.value);
-      treeviews.headers.refresh(storage.headers.list());
     }
   );
-
-  vscode.commands.registerCommand("headers.switch", async (header: string) => {
-    let headers = storage.headers.list();
-    for (var i = 0; i < headers.length; i++) {
-      if (headers[i].value === header) {
-        headers[i].active = !headers[i].active;
-      }
-    }
-    storage.headers.save(headers);
-    treeviews.headers.refresh(storage.headers.list());
-  });
-
-  vscode.commands.registerCommand("webview.open", async (data: RequestData) => {
-    data.maxMsgSize = vscode.workspace
-      .getConfiguration(`grpc-clicker`)
-      .get(`msgsize`, 4);
-
-    for (const header of storage.headers.list()) {
-      if (header.active) {
-        data.metadata.push(header.value);
-      }
-    }
-    let msg: Message | string;
-    if (data.path !== ``) {
-      msg = await grpcurl.message({
-        source: data.path,
-        server: false,
-        plaintext: false,
-        tag: data.inputMessageTag,
-        importPath: data.importPath,
-      });
-    } else {
-      msg = await grpcurl.message({
-        source: data.host.adress,
-        server: true,
-        plaintext: data.host.plaintext,
-        tag: data.inputMessageTag,
-        importPath: ``,
-      });
-    }
-
-    if (typeof msg === `string`) {
-      vscode.window.showErrorMessage(msg);
-      return;
-    }
-    data.json = msg.template!;
-    webview.create(data);
-  });
 
   vscode.commands.registerCommand("history.clean", () => {
     storage.history.clean();
     treeviews.history.refresh(storage.history.list());
-  });
-
-  vscode.commands.registerCommand("hosts.add", async (host: HostsItem) => {
-    const newHost = await vscode.window.showInputBox({
-      title: `host for calls`,
-    });
-    if (newHost === undefined || newHost === ``) {
-      return;
-    }
-    const plaintext = await vscode.window.showQuickPick([`Yes`, `No`], {
-      title: `Use plain text? (for servers without TLS)`,
-    });
-    if (plaintext === undefined || plaintext === ``) {
-      return;
-    }
-    storage.files.addHost(host.parent.base.path, {
-      adress: newHost,
-      plaintext: plaintext === `Yes`,
-    });
-    treeviews.files.refresh(storage.files.list());
-  });
-
-  vscode.commands.registerCommand("hosts.remove", (host: HostItem) => {
-    storage.files.removeHost(host.parent.parent.base.path, host.host);
-    treeviews.files.refresh(storage.files.list());
   });
 
   vscode.commands.registerCommand("collections.create", async () => {
@@ -381,7 +349,7 @@ export function activate(context: vscode.ExtensionContext) {
     if (collectionName === "" || collectionName === undefined) {
       return;
     }
-    storage.collections.add({
+    storage.collections.addCollection({
       name: collectionName,
       tests: [],
     });
@@ -393,13 +361,13 @@ export function activate(context: vscode.ExtensionContext) {
     "colections.run",
     async (col: CollectionItem) => {
       for (const test of col.base.tests) {
-        test.passed = undefined;
+        test.result = undefined;
       }
-      storage.collections.update(col.base);
+      storage.collections.updateCollection(col.base);
       treeviews.collections.refresh(storage.collections.list());
       for (let test of col.base.tests) {
-        test = await grpcurl.test(test);
-        storage.collections.update(col.base);
+        test.result = await grpcurl.test(test.request, test.expectations);
+        storage.collections.updateCollection(col.base);
         treeviews.collections.refresh(storage.collections.list());
       }
     }
@@ -408,7 +376,7 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand(
     "colections.remove",
     async (col: CollectionItem) => {
-      storage.collections.remove(col.base.name);
+      storage.collections.removeCollection(col.base.name);
       treeviews.collections.refresh(storage.collections.list());
     }
   );
@@ -421,11 +389,11 @@ export function activate(context: vscode.ExtensionContext) {
         collection.tests.splice(idx, 1);
       }
     });
-    storage.collections.update(collection);
+    storage.collections.updateCollection(collection);
     treeviews.collections.refresh(storage.collections.list());
   });
 
-  vscode.commands.registerCommand("files.import", async (file: FileItem) => {
+  vscode.commands.registerCommand("files.import", async (file: ProtoItem) => {
     const importPath = await vscode.window.showInputBox({
       value: `/`,
       title: `Specify import path for imports.`,
@@ -433,8 +401,8 @@ export function activate(context: vscode.ExtensionContext) {
     if (importPath === undefined || importPath === ``) {
       return;
     }
-    file.base.importPath = importPath;
-    storage.files.updateImportPath(file.base.path, importPath);
+    const source = file.proto.source as FileSource;
+    storage.files.updateImportPath(source.filePath, importPath);
     treeviews.files.refresh(storage.files.list());
   });
 
@@ -445,6 +413,94 @@ export function activate(context: vscode.ExtensionContext) {
         .get(`usedocker`, false);
     }
   });
+
+  vscode.commands.registerCommand(
+    "webview.open",
+    async (data: GrpcTabParams) => {
+      const maxMsgSize = vscode.workspace
+        .getConfiguration(`grpc-clicker`)
+        .get(`msgsize`, 4);
+
+      const msg = await grpcurl.message({
+        source: data.source,
+        messageTag: data.call.inputMessageTag,
+      });
+      if (typeof msg === `string`) {
+        vscode.window.showErrorMessage(msg);
+        return;
+      }
+
+      let fileSource: FileSource | undefined;
+      let request: Request;
+      if (data.source.type === `FILE`) {
+        fileSource = data.source;
+
+        const hosts = storage.hosts.get();
+
+        const serverSource: ServerSource = {
+          type: "SERVER",
+          host: hosts.current,
+          plaintext: hosts.plaintext,
+        };
+
+        request = {
+          file: fileSource,
+          content: msg.template!,
+          server: serverSource,
+          callTag: `${data.service.tag}/${data.call.name}`,
+          maxMsgSize: maxMsgSize,
+          headers: [],
+        };
+      } else {
+        request = {
+          file: fileSource,
+          content: msg.template!,
+          server: data.source,
+          callTag: `${data.service.tag}/${data.call.name}`,
+          maxMsgSize: maxMsgSize,
+          headers: [],
+        };
+      }
+
+      const info: AdditionalInfo = {
+        service: data.service.tag.split(`.`).pop()!,
+        call: data.call.name,
+        inputMessageTag: data.call.inputMessageTag,
+        inputMessageName: msg.name,
+        outputMessageName: data.call.outputMessageTag.split(`.`).pop()!,
+        protoPackage: data.service.package,
+      };
+
+      const headers = storage.headers.list();
+      for (const header of headers) {
+        if (header.active) {
+          request.headers.push(header.value);
+        }
+      }
+
+      const respone: Response = {
+        date: "",
+        time: 0,
+        code: "OK",
+        content: "",
+      };
+
+      const expectations: Expectations = {
+        code: "OK",
+        time: 0.1,
+        content: ``,
+      };
+
+      webview.createNewTab({
+        request: request,
+        info: info,
+        headers: headers,
+        hosts: storage.hosts.get(),
+        response: respone,
+        expectations: expectations,
+      });
+    }
+  );
 }
 
 export function deactivate() {}

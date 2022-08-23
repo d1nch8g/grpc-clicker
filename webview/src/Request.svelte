@@ -9,11 +9,11 @@
 <table>
   <tr>
     <center>
-      <div>Request type: {data.inputMessageName}</div>
+      <div>Request type: {data.info.inputMessageName}</div>
     </center>
   </tr>
   <tr>
-    <JsonArea bind:text="{data.json}" height="{innerHeight - 180}" />
+    <JsonArea bind:text="{data.request.content}" height="{innerHeight - 180}" />
   </tr>
 </table>
 

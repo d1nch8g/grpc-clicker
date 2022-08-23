@@ -2,33 +2,52 @@
   import TopPanel from "./TopPanel.svelte";
   import Request from "./Request.svelte";
   import Response from "./Response.svelte";
-  import Testing from "./Testing.svelte";
   import Info from "./Info.svelte";
+  import Testing from "./Testing.svelte";
+  import Headers from "./Headers.svelte";
 
   $: data = {
-    path: ``,
-    protoName: ``,
-    service: ``,
-    call: ``,
-    callTag: ``,
-    inputMessageTag: ``,
-    inputMessageName: ``,
-    outputMessageName: ``,
-    host: {
-      adress: ``,
-      plaintext: false,
+    request: {
+      file: {
+        type: "FILE",
+        filePath: "server/api.proto",
+        importPath: "/",
+      },
+      content: "{}",
+      server: {
+        type: "SERVER",
+        host: "localhost:8080",
+        plaintext: true,
+      },
+      callTag: "pb.v1.Constructions/AnyCall",
+      maxMsgSize: 4,
+      headers: [],
     },
-    json: "",
-    maxMsgSize: 0,
-    code: "",
-    response: "",
-    time: 0,
-    date: "",
-    metadata: [],
-    hosts: [],
-    expectedResponse: "",
-    expectedCode: "",
-    expectedTime: 0,
+    info: {
+      service: "pb.v1.Constructions",
+      call: "AnyCall",
+      inputMessageTag: ".google.protobuf.Any",
+      inputMessageName: "Any",
+      outputMessageName: "Any",
+      protoPackage: "pb.v1",
+    },
+    headers: [],
+    hosts: {
+      current: "localhost:8080",
+      plaintext: true,
+      hosts: [],
+    },
+    response: {
+      date: "",
+      time: 0,
+      code: "OK",
+      content: "",
+    },
+    expectations: {
+      code: "OK",
+      time: 0,
+      content: "",
+    },
   };
 
   window.addEventListener("message", (event) => {
@@ -47,9 +66,16 @@
 
   function onSend() {
     console.log(`Requst send triggered.`);
-    data.response = "... processing";
+    data.response.content = `... processing`;
     vscode.postMessage({
       command: "send",
+    });
+  }
+
+  function onHosts() {
+    console.log(`Requst send triggered.`);
+    vscode.postMessage({
+      command: "hosts",
     });
   }
 
@@ -66,20 +92,47 @@
       command: "test",
     });
   }
+
+  function onAddHeader() {
+    console.log(`Header adding triggered.`);
+    vscode.postMessage({
+      command: "addHeader",
+    });
+  }
+
+  function onRemoveHeader() {
+    console.log(`Hedaer removal triggered.`);
+    vscode.postMessage({
+      command: "removeHeader",
+    });
+  }
 </script>
 
-<TopPanel bind:data onSend="{onSend}" onExport="{onExport}" />
+<TopPanel
+  bind:data
+  onSend="{onSend}"
+  onExport="{onExport}"
+  onHosts="{onHosts}"
+/>
 
 <table>
   <td class="left-side">
     <div>
       <vscode-panels>
         <vscode-panel-tab id="tab-1">INPUT</vscode-panel-tab>
-        <vscode-panel-tab id="tab-2">INFORMATION</vscode-panel-tab>
+        <vscode-panel-tab id="tab-2">HEADERS</vscode-panel-tab>
+        <vscode-panel-tab id="tab-3">INFORMATION</vscode-panel-tab>
         <vscode-panel-view id="view-1">
           <Request bind:data />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
+          <Headers
+            bind:data
+            addHeader="{onAddHeader}"
+            removeHeader="{onRemoveHeader}"
+          />
+        </vscode-panel-view>
+        <vscode-panel-view id="view-3">
           <Info bind:data />
         </vscode-panel-view>
       </vscode-panels>

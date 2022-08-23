@@ -1,29 +1,33 @@
-import { Caller, RequestForm } from "./caller";
-import { Grpcurl, ProtoFile, ProtoServer, Response } from "./grpcurl";
-import { Call, Field, Message, Parser, Proto, ProtoType } from "./parser";
-import * as util from "util";
+import { Expectations, Grpcurl, Request, TestMistake } from "./grpcurl";
+import { Call, Field, Message, Parser, Proto, ParsedResponse } from "./parser";
+import {
+  Caller,
+  FileSource,
+  FormCliTemplateParams,
+  ServerSource,
+} from "./caller";
+import { time } from "console";
 
 class MockParser implements Parser {
-  resp(input: string): Response {
+  resp(input: string): ParsedResponse {
     return {
-      code: `ok`,
-      response: input,
-      time: 0,
-      date: ``,
+      code: `OK`,
+      content: input,
     };
   }
   proto(input: string): Proto {
     return {
       services: [
         {
-          type: ProtoType.service,
+          type: `SERVICE`,
+          package: `stuff`,
           name: ``,
           tag: ``,
           description: input,
           calls: [],
         },
       ],
-      type: ProtoType.proto,
+      type: `PROTO`,
     };
   }
   rpc(line: string): Call {
@@ -31,7 +35,7 @@ class MockParser implements Parser {
   }
   message(input: string): Message {
     return {
-      type: ProtoType.message,
+      type: `MESSAGE`,
       name: input,
       tag: `tag`,
       description: `dscr`,
@@ -46,10 +50,11 @@ class MockParser implements Parser {
 
 class MockCaller implements Caller {
   caller: Caller = new Caller();
-  formSource(input: RequestForm): string {
-    return this.caller.formSource(input);
+  buildCliCommand(input: FormCliTemplateParams): string {
+    return this.caller.buildCliCommand(input);
   }
   async execute(command: string): Promise<[string, Error | undefined]> {
+    await new Promise((resolve) => setTimeout(resolve, 50));
     return [command, undefined];
   }
   dockerize(input: string): string {
@@ -59,49 +64,40 @@ class MockCaller implements Caller {
 
 test(`protoFile`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
-  const expectedResult: ProtoFile = {
-    type: ProtoType.proto,
-    path: "docs/api.proto",
-    hosts: [
-      {
-        adress: `localhost:12201`,
-        plaintext: true,
-      },
-    ],
+
+  const expectedResult: Proto = {
+    type: `PROTO`,
     services: [
       {
-        type: ProtoType.service,
+        type: `SERVICE`,
+        package: `stuff`,
         name: ``,
         tag: ``,
-        description: "grpcurl -import-path / -proto docs/api.proto describe",
+        description:
+          "grpcurl -max-time 0.5 -import-path / -proto docs/api.proto describe",
         calls: [],
       },
     ],
-    importPath: "/",
   };
-  expect(
-    await grpcurl.protoFile({
-      path: "docs/api.proto",
-      hosts: [
-        {
-          adress: `localhost:12201`,
-          plaintext: true,
-        },
-      ],
-      importPath: `/`,
-    })
-  ).toStrictEqual(expectedResult);
+
+  const fileSouce: FileSource = {
+    type: `FILE`,
+    filePath: `docs/api.proto`,
+    importPath: `/`,
+  };
+
+  expect(await grpcurl.proto(fileSouce)).toStrictEqual(expectedResult);
 });
 
 test(`protoServer`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
-  const expectedResult: ProtoServer = {
-    type: ProtoType.proto,
-    adress: "localhost:12201",
-    plaintext: true,
+
+  const expectedResult: Proto = {
+    type: `PROTO`,
     services: [
       {
-        type: ProtoType.service,
+        type: `SERVICE`,
+        package: `stuff`,
         name: ``,
         tag: ``,
         description:
@@ -110,26 +106,32 @@ test(`protoServer`, async () => {
       },
     ],
   };
-  expect(
-    await grpcurl.protoServer({
-      host: `localhost:12201`,
-      plaintext: true,
-    })
-  ).toStrictEqual(expectedResult);
+
+  const serverSource: ServerSource = {
+    type: `SERVER`,
+    host: `localhost:12201`,
+    plaintext: true,
+  };
+
+  expect(await grpcurl.proto(serverSource)).toStrictEqual(expectedResult);
 });
 
 test(`message`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
+
+  const fileSouce: FileSource = {
+    type: `FILE`,
+    filePath: `docs/api.proto`,
+    importPath: `/`,
+  };
+
   expect(
     await grpcurl.message({
-      source: `docs/api.proto`,
-      server: false,
-      plaintext: false,
-      tag: `.pb.v1.StringMes`,
-      importPath: "/",
+      source: fileSouce,
+      messageTag: ".pb.v1.StringMes",
     })
   ).toStrictEqual({
-    type: ProtoType.message,
+    type: `MESSAGE`,
     name: `grpcurl -msg-template -import-path / -proto docs/api.proto describe .pb.v1.StringMes`,
     tag: `tag`,
     description: `dscr`,
@@ -140,26 +142,85 @@ test(`message`, async () => {
 
 test(`send`, async () => {
   const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
-  let resp = await grpcurl.send({
-    path: "docs/api.proto",
-    importPath: `/`,
-    json: "{}",
-    host: {
-      adress: `localhost:12201`,
-      plaintext: true,
-    },
-    callTag: "pb.v1.Constructions.EmptyCall",
-    metadata: [`username: user`, `passsword: password`],
-    maxMsgSize: 4,
-  });
-  expect(resp.code).toBe(`ok`);
 
-  const winExpect = `grpcurl -emit-defaults -H \"username: user\" -H \"passsword: password\"   -d \"{}\" -plaintext -import-path / -proto docs/api.proto localhost:12201 pb.v1.Constructions.EmptyCall`;
-  const linuxExpect = `grpcurl -emit-defaults -H 'username: user' -H 'passsword: password'   -d '{}' -plaintext -import-path / -proto docs/api.proto localhost:12201 pb.v1.Constructions.EmptyCall`;
+  const fileSouce: FileSource = {
+    type: `FILE`,
+    filePath: `docs/api.proto`,
+    importPath: `/`,
+  };
+
+  const serverSource: ServerSource = {
+    type: `SERVER`,
+    host: `localhost:12201`,
+    plaintext: true,
+  };
+
+  const request: Request = {
+    file: fileSouce,
+    content: `{}`,
+    server: serverSource,
+    callTag: `.pb.v1.Constructions/EmptyCall`,
+    maxMsgSize: 1,
+    headers: [`username: user`, `password: password`],
+  };
+
+  const resp = await grpcurl.send(request);
+
+  expect(resp.code).toBe(`OK`);
+
+  const winExpect = `grpcurl -emit-defaults -H \"username: user\" -H \"password: password\"  -max-msg-sz 1048576 -d \"{}\" -import-path / -proto docs/api.proto -plaintext localhost:12201 .pb.v1.Constructions/EmptyCall`;
+  const linuxExpect = `grpcurl -emit-defaults -H 'username: user' -H 'password: password'  -max-msg-sz 1048576 -d '{}' -import-path / -proto docs/api.proto -plaintext localhost:12201 .pb.v1.Constructions/EmptyCall`;
 
   if (process.platform === "win32") {
-    expect(resp.response).toBe(winExpect);
+    expect(resp.content).toBe(winExpect);
   } else {
-    expect(resp.response).toBe(linuxExpect);
+    expect(resp.content).toBe(linuxExpect);
   }
+});
+
+test(`test`, async () => {
+  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
+
+  const fileSouce: FileSource = {
+    type: `FILE`,
+    filePath: `docs/api.proto`,
+    importPath: `/`,
+  };
+
+  const serverSource: ServerSource = {
+    type: `SERVER`,
+    host: `localhost:12201`,
+    plaintext: true,
+  };
+
+  const request: Request = {
+    file: fileSouce,
+    content: `{}`,
+    server: serverSource,
+    callTag: `.pb.v1.Constructions/EmptyCall`,
+    maxMsgSize: 1,
+    headers: [`username: user`, `password: password`],
+  };
+
+  const expects: Expectations = {
+    code: "AlreadyExists",
+    time: 0.0001,
+    content: `wtfshere`,
+  };
+
+  const testresult = await grpcurl.test(request, expects);
+
+  const firstMistake: TestMistake = {
+    description: "Code is not matching",
+    actual: "OK",
+    expected: "AlreadyExists",
+  };
+
+  expect(testresult.passed).toBeFalsy();
+  expect(testresult.mistakes.length).toBe(3);
+  expect(testresult.mistakes[0]).toStrictEqual(firstMistake);
+  expect(testresult.mistakes[1].description).toBe(`Time exceeded`);
+  expect(testresult.mistakes[1].expected).toBe(`0.0001s`);
+  expect(testresult.mistakes[2].description).toBe(`Response not matching`);
+  expect(testresult.mistakes[2].expected).toBe(`wtfshere`);
 });

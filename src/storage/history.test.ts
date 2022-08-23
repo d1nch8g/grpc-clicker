@@ -1,5 +1,7 @@
 import { Memento } from "vscode";
-import { History } from "./history";
+import { FileSource, ServerSource } from "../grpcurl/caller";
+import { Request, Response } from "../grpcurl/grpcurl";
+import { History, HistoryValue } from "./history";
 
 class MockMemento implements Memento {
   values: string[] = [];
@@ -17,38 +19,44 @@ class MockMemento implements Memento {
   }
 }
 
+const serverSource: ServerSource = {
+  type: "SERVER",
+  host: "",
+  plaintext: false,
+};
+
+const fileSource: FileSource = {
+  type: "FILE",
+  filePath: "",
+  importPath: "",
+};
+
+const request: Request = {
+  file: fileSource,
+  content: "",
+  server: serverSource,
+  callTag: "",
+  maxMsgSize: 0,
+  headers: [],
+};
+
+const response: Response = {
+  date: "",
+  time: 0,
+  code: "OK",
+  content: "",
+};
+
+const value: HistoryValue = {
+  request: request,
+  response: response,
+};
+
 test(`add`, () => {
   const storage = new MockMemento();
   const history = new History(storage);
   for (let i = 0; i < 200; i++) {
-    history.add({
-      path: "example",
-      importPath: `/`,
-      json: "",
-      host: {
-        adress: ``,
-        plaintext: true,
-      },
-      call: "",
-      callTag: "",
-      metadata: [],
-      maxMsgSize: i,
-      code: "",
-      response: "",
-      time: 0,
-      date: "",
-      service: "",
-      inputMessageTag: "",
-      inputMessageName: "",
-      outputMessageName: "",
-      protoName: "",
-      hosts: [],
-      expectedResponse: "",
-      expectedCode: "",
-      expectedTime: 0,
-      passed: undefined,
-      markdown: "",
-    });
+    history.add(value);
   }
   expect(storage.values.length).toBe(100);
 });
@@ -56,98 +64,19 @@ test(`add`, () => {
 test(`list`, () => {
   const storage = new MockMemento();
   const history = new History(storage);
-  history.add({
-    path: "example",
-    importPath: `/`,
-    json: "",
-    host: {
-      adress: ``,
-      plaintext: true,
-    },
-    call: "",
-    callTag: "",
-    metadata: [],
-    maxMsgSize: 420,
-    code: "",
-    response: "",
-    time: 0,
-    date: "",
-    service: "",
-    inputMessageTag: "",
-    inputMessageName: "",
-    outputMessageName: "",
-    protoName: "",
-    hosts: [],
-    expectedResponse: "",
-    expectedCode: "",
-    expectedTime: 0,
-    passed: undefined,
-    markdown: "",
-  });
+
+  history.add(value);
 
   let resp = history.list();
-  expect(resp).toStrictEqual([
-    {
-      path: "example",
-      importPath: `/`,
-      json: "",
-      host: {
-        adress: ``,
-        plaintext: true,
-      },
-      call: "",
-      callTag: "",
-      metadata: [],
-      maxMsgSize: 420,
-      code: "",
-      response: "",
-      time: 0,
-      date: "",
-      service: "",
-      inputMessageTag: "",
-      inputMessageName: "",
-      outputMessageName: "",
-      protoName: "",
-      hosts: [],
-      expectedResponse: "",
-      expectedCode: "",
-      expectedTime: 0,
-      markdown: "",
-    },
-  ]);
+
+  expect(resp).toStrictEqual([value]);
 });
 
 test(`clean`, () => {
   const storage = new MockMemento();
   const history = new History(storage);
-  history.add({
-    path: "example",
-    importPath: `/`,
-    json: "",
-    host: {
-      adress: ``,
-      plaintext: true,
-    },
-    callTag: "",
-    call: "",
-    metadata: [],
-    maxMsgSize: 420,
-    code: "",
-    response: "",
-    time: 0,
-    date: "",
-    service: "",
-    inputMessageTag: "",
-    inputMessageName: "",
-    outputMessageName: "",
-    protoName: "",
-    hosts: [],
-    expectedResponse: "",
-    expectedCode: "",
-    expectedTime: 0,
-    passed: undefined,
-    markdown: "",
-  });
+
+  history.add(value);
 
   history.clean();
   expect(storage.values).toBeUndefined();

@@ -1,15 +1,14 @@
 import * as vscode from "vscode";
-import { ProtoFile } from "../grpcurl/grpcurl";
+import { FileSource, ServerSource } from "../grpcurl/caller";
 import { Message } from "../grpcurl/parser";
+import { ProtoFile } from "../storage/protoFiles";
 import {
   CallItem,
   ClickerItem,
   FieldItem,
-  FileItem,
-  HostItem,
-  HostsItem,
   ItemType,
   MessageItem,
+  ProtoItem,
   ServiceItem,
 } from "./items";
 
@@ -17,12 +16,10 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
   constructor(
     private files: ProtoFile[],
     private describeMsg: (
-      path: string,
-      importPath: string,
+      source: ServerSource | FileSource,
       tag: string
     ) => Promise<Message>
   ) {
-    this.files = files;
     this.onChange = new vscode.EventEmitter<ClickerItem | undefined | void>();
     this.onDidChangeTreeData = this.onChange.event;
   }
@@ -32,8 +29,8 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
     void | ClickerItem | ClickerItem[]
   >;
 
-  async refresh(protos: ProtoFile[]) {
-    this.files = protos;
+  async refresh(protoFiles: ProtoFile[]) {
+    this.files = protoFiles;
     this.onChange.fire();
   }
 
@@ -45,23 +42,16 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
     let items: ClickerItem[] = [];
     if (element === undefined) {
       for (const file of this.files) {
-        items.push(new FileItem(file));
+        items.push(new ProtoItem(file));
       }
       return items;
     }
     if (element.type === ItemType.file) {
-      const elem = element as FileItem;
-      items.push(new HostsItem(elem.base.hosts, elem));
-      for (const svc of elem.base.services) {
+      const elem = element as ProtoItem;
+      for (const svc of elem.proto.services) {
         items.push(new ServiceItem(svc, elem));
       }
       return items;
-    }
-    if (element.type === ItemType.hosts) {
-      const elem = element as HostsItem;
-      for (const host of elem.hosts) {
-        items.push(new HostItem(host, elem));
-      }
     }
     if (element.type === ItemType.service) {
       const elem = element as ServiceItem;
@@ -71,16 +61,14 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
     }
     if (element.type === ItemType.call) {
       const elem = element as CallItem;
-      const file = elem.parent.parent as FileItem;
+      const file = elem.parent.parent as ProtoItem;
       const input = await this.describeMsg(
-        file.base.path,
-        file.base.importPath,
+        file.proto.source,
         elem.base.inputMessageTag
       );
       const output = await this.describeMsg(
-        file.base.path,
-        file.base.importPath,
-        elem.base.outputMessageTag
+        file.proto.source,
+        elem.base.inputMessageTag
       );
       items.push(new MessageItem(input, elem));
       items.push(new MessageItem(output, elem));
@@ -93,7 +81,7 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
     }
     if (element.type === ItemType.field) {
       const elem = element as FieldItem;
-      const file = elem.parent.parent.parent.parent as FileItem;
+      const file = elem.parent.parent.parent.parent as ProtoItem;
       if (elem.base.datatype === `oneof`) {
         for (const field of elem.base.fields!) {
           items.push(new FieldItem(field, elem.parent));
@@ -101,8 +89,7 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
       }
       if (elem.base.innerMessageTag !== undefined) {
         const inner = await this.describeMsg(
-          file.base.path,
-          file.base.importPath,
+          file.proto.source,
           elem.base.innerMessageTag
         );
         for (const field of inner.fields) {
