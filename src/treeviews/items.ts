@@ -71,7 +71,6 @@ export class TestItem extends ClickerItem {
     super(`${base.request.callTag}`);
     super.type = ItemType.test;
     super.contextValue = `test`;
-    super.tooltip = new vscode.MarkdownString(`NOT IMPLEMENTED`);
     super.collapsibleState = vscode.TreeItemCollapsibleState.None;
     if (base.result === undefined) {
       super.iconPath = new vscode.ThemeIcon("testing-unset-icon");
@@ -79,9 +78,30 @@ export class TestItem extends ClickerItem {
     }
     if (base.result.passed) {
       super.iconPath = new vscode.ThemeIcon(`testing-passed-icon`);
-    } else {
-      super.iconPath = new vscode.ThemeIcon(`testing-failed-icon`);
+      super.tooltip = new vscode.MarkdownString(`Test passed`);
+      return;
     }
+    super.iconPath = new vscode.ThemeIcon(`testing-failed-icon`);
+    let mdtooltip = `## Test errors:\n\n\n`;
+    for (const mistake of base.result.mistakes) {
+      switch (mistake.type) {
+        case `code`:
+          mdtooltip += `- Actual code: ${mistake.actual} vs ${mistake.expected}`;
+        case `time`:
+          mdtooltip += `- Actual time: ${mistake.actual} vs ${mistake.expected}`;
+        case `content`:
+          mdtooltip += `- Actual response:\n\n
+Actual:
+\`\`\`json
+${mistake.actual.split(`\n`).slice(0, 14).join(`\n`)}
+\`\`\`
+Expected:
+\`\`\`json 
+${mistake.expected.split(`\n`).slice(0, 14).join(`\n`)}
+\`\`\`\n\n\n`;
+      }
+    }
+    super.tooltip = new vscode.MarkdownString(mdtooltip);
   }
 }
 
