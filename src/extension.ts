@@ -152,7 +152,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
       storage.headers.add({
         value: header,
-        active: true,
+        active: false,
       });
       return storage.headers.list();
     },
