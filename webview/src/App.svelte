@@ -74,7 +74,7 @@
   }
 
   function onHosts() {
-    console.log(`Requst send triggered.`);
+    console.log(`Host modifications activated.`);
     vscode.postMessage({
       command: "hosts",
     });

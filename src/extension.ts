@@ -49,10 +49,6 @@ export function activate(context: vscode.ExtensionContext) {
       const response = await grpcurl.send(request);
       storage.history.add({ request, response, info });
       treeviews.history.refresh(storage.history.list());
-      const options = storage.hosts.get();
-      options.current = request.server.host;
-      options.plaintext = request.server.plaintext;
-      storage.hosts.save(options);
       return response;
     },
     copyCliCommand: async (request) => {
