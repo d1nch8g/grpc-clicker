@@ -20,7 +20,7 @@ export interface WebViewParameters {
   /**
    * Callback that should copy `grpcurl` command to clipboard from webview.
    */
-  copyCliCommand: (request: Request) => void;
+  createSnippet: (request: Request) => Promise<string>;
   /**
    * Callback that is adding test to collection.
    */
@@ -67,6 +67,10 @@ export interface WebViewData {
    * Test expectations that could be set in webview.
    */
   expectations: Expectations;
+  /**
+   * Test expectations that could be set in webview.
+   */
+  snippet: string;
 }
 
 /**
@@ -151,8 +155,11 @@ class GrpcClickerTab {
           this.data.response = response;
           this.panel.webview.postMessage(JSON.stringify(this.data));
           return;
-        case "export":
-          this.params.copyCliCommand(this.data.request);
+        case "snippet":
+          this.data.snippet = await this.params.createSnippet(
+            this.data.request
+          );
+          this.panel.webview.postMessage(JSON.stringify(this.data));
           return;
         case "hosts":
           this.data.hosts = await this.params.manageHosts();

@@ -35,20 +35,18 @@ Extension provides following functionality:
 
 ## Get started
 
-1. Open extension on side panel activity bar
+1. Add proto files and navigate across the schema.
    <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/1.png" height="200px"></p>
-2. Add `proto` file definition
+2. Add reflect servers and check schema.
    <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/2.png" height="200px"></p>
-3. Add `host` for gRPC calls
+3. Add headers to request metadata in `grpcurl` format.
    <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/3.png" height="200px"></p>
-4. Add request `metadata` if required (enabled is marked with blue)
-   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/4.png" height="200px"></p>
-5. Click on the call you want to execute in `proto` schema explorer
-   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/5.png" height="200px"></p>
-6. Paste message you want to send as json
-   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/6.png" height="200px"></p>
-7. Execute call
-   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/7.png" height="200px"></p>
+4. Restore your requests from history, via single click
+   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/3.png" height="200px"></p>
+5. Create tests with code, time and content conditions
+   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/3.png" height="200px"></p>
+6. Export `grpcurl` CLI command snippet for your friends without `vscode` :)
+   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/3.png" height="200px"></p>
 
 ---
 

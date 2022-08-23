@@ -51,12 +51,8 @@ export function activate(context: vscode.ExtensionContext) {
       treeviews.history.refresh(storage.history.list());
       return response;
     },
-    copyCliCommand: async (request) => {
-      const cmd = await grpcurl.formCall(request);
-      vscode.env.clipboard.writeText(cmd);
-      vscode.window.showInformationMessage(
-        `gRPCurl command successfully copied to clipboard!`
-      );
+    createSnippet: async (request) => {
+      return grpcurl.formCall(request);
     },
     createTest: async (request, expectations) => {
       if (expectations === undefined) {
@@ -195,12 +191,8 @@ export function activate(context: vscode.ExtensionContext) {
     if (choice === undefined) {
       return;
     }
-    const path = choice[0].fsPath;
-    const grpcUrlFilePath = path.replaceAll(`\\`, `/`);
-    const defaultImprt = grpcUrlFilePath.substring(
-      0,
-      grpcUrlFilePath.lastIndexOf(`/`)
-    );
+    const path = choice[0].fsPath.replaceAll(`\\`, `/`);
+    const defaultImprt = path.substring(0, path.lastIndexOf(`/`));
     const importPath = await vscode.window.showInputBox({
       value: defaultImprt,
       title: `Specify import path for imports.`,
@@ -441,6 +433,7 @@ export function activate(context: vscode.ExtensionContext) {
       hosts: storage.hosts.get(),
       response: val.response,
       expectations: expectations,
+      snippet: ``,
     });
   });
 
@@ -528,6 +521,7 @@ export function activate(context: vscode.ExtensionContext) {
         hosts: storage.hosts.get(),
         response: respone,
         expectations: expectations,
+        snippet: ``,
       });
     }
   );

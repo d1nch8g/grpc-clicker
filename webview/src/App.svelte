@@ -6,6 +6,7 @@
   import Info from "./Info.svelte";
   import Testing from "./Testing.svelte";
   import Headers from "./Headers.svelte";
+  import Snippet from "./Snippet.svelte";
 
   $: data = {
     request: {
@@ -76,13 +77,6 @@
     });
   }
 
-  function onExport() {
-    console.log(`Request export triggered.`);
-    vscode.postMessage({
-      command: "export",
-    });
-  }
-
   function onTest() {
     console.log(`Request test triggered.`);
     vscode.postMessage({
@@ -109,6 +103,13 @@
     let asJson = JSON.parse(data.request.content);
     data.request.content = JSON.stringify(asJson, null, 2) + `\n`;
   }
+
+  function onSnippet() {
+    console.log(`Snippet generation activated.`);
+    vscode.postMessage({
+      command: "snippet",
+    });
+  }
 </script>
 
 <svelte:window
@@ -124,12 +125,7 @@
   }}"
 />
 
-<TopPanel
-  bind:data
-  onSend="{onSend}"
-  onExport="{onExport}"
-  onHosts="{onHosts}"
-/>
+<TopPanel bind:data onSend="{onSend}" onHosts="{onHosts}" />
 
 <table>
   <td class="left-side">
@@ -137,7 +133,8 @@
       <vscode-panels>
         <vscode-panel-tab id="tab-1">INPUT</vscode-panel-tab>
         <vscode-panel-tab id="tab-2">HEADERS</vscode-panel-tab>
-        <vscode-panel-tab id="tab-3">INFORMATION</vscode-panel-tab>
+        <vscode-panel-tab id="tab-3">SNIPPET</vscode-panel-tab>
+        <vscode-panel-tab id="tab-4">INFORMATION</vscode-panel-tab>
         <vscode-panel-view id="view-1">
           <Request bind:data />
         </vscode-panel-view>
@@ -149,6 +146,9 @@
           />
         </vscode-panel-view>
         <vscode-panel-view id="view-3">
+          <Snippet bind:data onSnippet="{onSnippet}" />
+        </vscode-panel-view>
+        <vscode-panel-view id="view-4">
           <Info bind:data />
         </vscode-panel-view>
       </vscode-panels>
