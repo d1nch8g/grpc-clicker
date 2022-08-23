@@ -14,7 +14,7 @@ To get extemsion to work, you need to install [`grpcurl`](https://github.com/ful
 
 This extension provides ability to execute gRPC calls from VSCode, using [`grpcurl`](https://github.com/fullstorydev/grpcurl) CLI under the hood.
 
-Currently in _alpha_ stage, so it might feel a bit buggy. Contributing is highly appreciated, any extension improvements will be included as fast as possible.
+Currently in _beta_ stage, so it might feel a bit buggy. Contributing is highly appreciated, any extension improvements will be included as fast as possible.
 
 ## Functionality:
 
