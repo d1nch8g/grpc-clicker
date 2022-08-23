@@ -19,7 +19,7 @@
       <td class="expanded">
         <vscode-dropdown>
           {#if data.request.file !== undefined}
-            {#each data.hosts.hosts as host}
+            {#each data.hosts as host}
               <vscode-option on:click="{hostPick(host.adress, host.plaintext)}">
                 <div>{host.adress}</div>
               </vscode-option>

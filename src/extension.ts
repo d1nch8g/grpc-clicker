@@ -102,7 +102,7 @@ export function activate(context: vscode.ExtensionContext) {
         const pick = await vscode.window.showQuickPick([`Yes`, `No`], {
           title: `You plain text for calls?`,
         });
-        storageHosts.hosts.push({
+        storageHosts.push({
           adress: adress,
           plaintext: pick === `Yes`,
         });
@@ -110,7 +110,7 @@ export function activate(context: vscode.ExtensionContext) {
         return storageHosts;
       }
       let hosts: string[] = [];
-      for (const host of storageHosts.hosts) {
+      for (const host of storageHosts) {
         hosts.push(host.adress);
       }
       const host = await vscode.window.showQuickPick(hosts);
@@ -118,7 +118,7 @@ export function activate(context: vscode.ExtensionContext) {
         return storageHosts;
       }
       if (choice === `Remove existing host`) {
-        storageHosts.hosts = storageHosts.hosts.filter(
+        storageHosts = storageHosts.filter(
           (filteredHost) => filteredHost.adress !== host
         );
         storage.hosts.save(storageHosts);
@@ -130,14 +130,14 @@ export function activate(context: vscode.ExtensionContext) {
           value: host,
         });
         if (newAdress !== undefined) {
-          storageHosts.hosts[hosts.indexOf(host)].adress = newAdress;
+          storageHosts[hosts.indexOf(host)].adress = newAdress;
           storage.hosts.save(storageHosts);
         }
         const pick = await vscode.window.showQuickPick([`Yes`, `No`], {
           title: `You plain text for calls?`,
         });
         if (pick !== undefined) {
-          storageHosts.hosts[hosts.indexOf(host)].plaintext = pick === `Yes`;
+          storageHosts[hosts.indexOf(host)].plaintext = pick === `Yes`;
         }
       }
       storage.hosts.save(storageHosts);
@@ -464,8 +464,8 @@ export function activate(context: vscode.ExtensionContext) {
 
         const serverSource: ServerSource = {
           type: "SERVER",
-          host: hosts.current,
-          plaintext: hosts.plaintext,
+          host: hosts[0].adress,
+          plaintext: hosts[0].plaintext,
         };
 
         request = {

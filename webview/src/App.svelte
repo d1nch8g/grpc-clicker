@@ -33,11 +33,7 @@
       protoPackage: "pb.v1",
     },
     headers: [],
-    hosts: {
-      current: "localhost:8080",
-      plaintext: true,
-      hosts: [],
-    },
+    hosts: [],
     response: {
       date: "",
       time: 0,
