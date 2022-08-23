@@ -1,4 +1,5 @@
 <script>
+  import { shortcut } from "./shortcut.js";
   import TopPanel from "./TopPanel.svelte";
   import Request from "./Request.svelte";
   import Response from "./Response.svelte";
@@ -106,7 +107,26 @@
       command: "removeHeader",
     });
   }
+
+  function onSave() {
+    console.log(`Save triggered`);
+    let asJson = JSON.parse(data.request.content);
+    data.request.content = JSON.stringify(asJson, null, 2) + `\n`;
+  }
 </script>
+
+<svelte:window
+  use:shortcut="{{
+    control: true,
+    code: 'KeyS',
+    callback: onSave,
+  }}"
+  use:shortcut="{{
+    control: true,
+    code: 'Enter',
+    callback: onSend,
+  }}"
+/>
 
 <TopPanel
   bind:data
