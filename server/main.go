@@ -36,7 +36,7 @@ func main() {
 	reflection.Register(s)
 	log.Printf("server listening at %v", lis.Addr())
 	go s.Serve(lis)
-	go s.Serve(lis2)
+	s.Serve(lis2)
 }
 
 type server struct {

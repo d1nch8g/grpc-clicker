@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { Response, Expectations, Request } from "./grpcurl/grpcurl";
 import { Header } from "./storage/headers";
 import { AdditionalInfo } from "./storage/history";
-import { Hosts, HostsOptions } from "./storage/hosts";
+import { Host } from "./storage/hosts";
 
 /**
  * Parameters for building all webview tabs.
@@ -28,7 +28,7 @@ export interface WebViewParameters {
   /**
    * Callback that is sent to manage hosts for webview.
    */
-  manageHosts: () => Promise<HostsOptions>;
+  manageHosts: () => Promise<Host[]>;
   /**
    * Callback for adding new header.
    */
@@ -58,7 +58,7 @@ export interface WebViewData {
   /**
    * Host options available for request.
    */
-  hosts: HostsOptions;
+  hosts: Host[];
   /**
    * Response to be visible in webview.
    */
