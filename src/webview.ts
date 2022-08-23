@@ -169,6 +169,8 @@ class GrpcClickerTab {
           this.data.headers = await this.params.removeHeader();
           this.panel.webview.postMessage(JSON.stringify(this.data));
           return;
+        case "jsonInvalid":
+          return;
       }
     });
 
