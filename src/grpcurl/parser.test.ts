@@ -1,4 +1,4 @@
-import { Field, Message, Parser, ProtoType } from "./parser";
+import { Field, Message, Parser, ParsedResponse } from "./parser";
 
 const protoInput = `pb.v1.Streams is a service:
 service Streams {
@@ -31,7 +31,7 @@ service Basics {
   rpc Uint32Call ( .pb.v1.Uint32Mes ) returns ( .pb.v1.Uint32Mes );
   rpc Uint64Call ( .pb.v1.Uint64Mes ) returns ( .pb.v1.Uint64Mes );
 }
-pb.v1.Constructions is a service:
+Constructions is a service:
 service Constructions {
   rpc AnyCall ( .google.protobuf.Any ) returns ( .google.protobuf.Any );
   rpc EmptyCall ( .google.protobuf.Empty ) returns ( .google.protobuf.Empty );
@@ -62,6 +62,8 @@ right here`);
   expect(proto.services[0].name).toBe(`Streams`);
   expect(proto.services[1].tag).toBe(`pb.v1.Basics`);
   expect(proto.services[1].name).toBe(`Basics`);
+  expect(proto.services[1].package).toBe(`pb.v1`);
+  expect(proto.services[2].package).toBe(``);
 });
 
 const rpcUnaryLine = `  rpc Sint32Call ( .pb.v1.Sint32Mes ) returns ( .pb.v1.Sint32Mes );`;
@@ -91,7 +93,7 @@ test(`fields`, () => {
 
   const field1 = `string example = 1;`;
   const expected1: Field = {
-    type: ProtoType.field,
+    type: `FIELD`,
     name: `example`,
     datatype: `string`,
     description: undefined,
@@ -102,7 +104,7 @@ test(`fields`, () => {
 
   const field2 = `optional string example2 = 2;`;
   const expected2: Field = {
-    type: ProtoType.field,
+    type: `FIELD`,
     name: `example2`,
     datatype: `optional string`,
     description: undefined,
@@ -113,7 +115,7 @@ test(`fields`, () => {
 
   const field3 = `repeated string example3 = 3;`;
   const expected3: Field = {
-    type: ProtoType.field,
+    type: `FIELD`,
     name: `example3`,
     datatype: `repeated string`,
     description: undefined,
@@ -124,7 +126,7 @@ test(`fields`, () => {
 
   const field4 = `map<string, string> example4 = 4;`;
   const expected4: Field = {
-    type: ProtoType.field,
+    type: `FIELD`,
     name: `example4`,
     datatype: `map<string, string>`,
     description: undefined,
@@ -135,7 +137,7 @@ test(`fields`, () => {
 
   const field5 = `.pb.v1.NestedMes example5 = 5;`;
   const expected5: Field = {
-    type: ProtoType.field,
+    type: `FIELD`,
     name: `example5`,
     datatype: `.pb.v1.NestedMes`,
     description: undefined,
@@ -146,7 +148,7 @@ test(`fields`, () => {
 
   const field6 = `map<string, .pb.v1.OptionalMes> example4 = 4;`;
   const expected6: Field = {
-    type: ProtoType.field,
+    type: `FIELD`,
     name: "example4",
     datatype: "map<string, .pb.v1.OptionalMes>",
     description: undefined,
@@ -219,14 +221,14 @@ comment`);
 }`);
   const enumParsed = parser.message(enumExample);
   const expectedEnum: Message = {
-    type: ProtoType.message,
+    type: `MESSAGE`,
     name: "Enum",
     tag: "pb.v1.Enum",
     description: "wirdo boo",
     template: undefined,
     fields: [
       {
-        type: ProtoType.field,
+        type: `FIELD`,
         name: "FIRST",
         datatype: "",
         description: "coca cola",
@@ -234,7 +236,7 @@ comment`);
         fields: undefined,
       },
       {
-        type: ProtoType.field,
+        type: `FIELD`,
         name: "SECOND",
         datatype: "",
         description: `keka\npeka`,
@@ -267,7 +269,7 @@ Message template:
 test(`oneof`, () => {
   const parser = new Parser();
   const expectedOneOf: Message = {
-    type: ProtoType.message,
+    type: `MESSAGE`,
     name: "OneofMes",
     tag: "pb.v1.OneofMes",
     description: "example comment",
@@ -276,14 +278,14 @@ test(`oneof`, () => {
 }`,
     fields: [
       {
-        type: ProtoType.field,
+        type: `FIELD`,
         name: "message",
         datatype: "oneof",
         description: "example 2",
         innerMessageTag: undefined,
         fields: [
           {
-            type: ProtoType.field,
+            type: `FIELD`,
             name: "first",
             datatype: "string",
             description: `example field comment\n`,
@@ -291,7 +293,7 @@ test(`oneof`, () => {
             fields: undefined,
           },
           {
-            type: ProtoType.field,
+            type: `FIELD`,
             name: "second",
             datatype: "int32",
             description: undefined,
@@ -301,7 +303,7 @@ test(`oneof`, () => {
         ],
       },
       {
-        type: ProtoType.field,
+        type: `FIELD`,
         name: "name",
         datatype: "int32",
         description: `comcom\n`,
@@ -324,24 +326,22 @@ const goodResp = `{
 }`;
 test(`response`, () => {
   const parser = new Parser();
-  expect(parser.resp(codeErr)).toStrictEqual({
+
+  const firstExpectedResponse: ParsedResponse = {
     code: `AlreadyExists`,
-    response: `some err msg`,
-    time: 0,
-    date: "",
-  });
-  expect(parser.resp(connErr)).toStrictEqual({
-    code: `ConnectionError`,
-    response: `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`,
-    time: 0,
-    date: "",
-  });
-  expect(parser.resp(goodResp)).toStrictEqual({
+    content: "some err msg",
+  };
+  expect(parser.resp(codeErr)).toStrictEqual(firstExpectedResponse);
+
+  const secondExpectedResponse: ParsedResponse = {
+    code: `Unavailable`,
+    content: `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`,
+  };
+  expect(parser.resp(connErr)).toStrictEqual(secondExpectedResponse);
+
+  const thirdExpectedResponse: ParsedResponse = {
     code: `OK`,
-    response: `{
-  "message": "msg"
-}`,
-    time: 0,
-    date: "",
-  });
+    content: `{\n  "message": "msg"\n}`,
+  };
+  expect(parser.resp(goodResp)).toStrictEqual(thirdExpectedResponse);
 });

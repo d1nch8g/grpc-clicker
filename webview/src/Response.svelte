@@ -2,6 +2,7 @@
   import JsonArea from "./JsonArea.svelte";
   export let data;
   $: innerHeight = 0;
+  console.log(data.response);
 </script>
 
 <svelte:window bind:innerHeight />
@@ -9,22 +10,27 @@
 <table>
   <tr>
     <center>
-      {#if data.time === 0}
-        <div>Response: {data.outputMessageName}</div>
+      {#if data.response.content === ``}
+        <div>Response: {data.info.outputMessageName}</div>
       {:else}
-        <div>{data.code} - {data.time}</div>
+        <div>{data.response.code} - {data.response.time}</div>
       {/if}
     </center>
   </tr>
   <tr>
-    {#if data.code !== `OK`}
+    {#if data.response.code === `OK`}
       <JsonArea
-        bind:text="{data.response}"
+        bind:text="{data.response.content}"
         height="{innerHeight - 180}"
-        highlight="{false}"
+        editable="{false}"
       />
     {:else}
-      <JsonArea bind:text="{data.response}" height="{innerHeight - 180}" />
+      <JsonArea
+        bind:text="{data.response.content}"
+        height="{innerHeight - 180}"
+        highlight="{false}"
+        editable="{false}"
+      />
     {/if}
   </tr>
 </table>

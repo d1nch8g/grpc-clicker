@@ -1,7 +1,109 @@
+import { GrpcCode, Message, ParsedResponse, Parser, Proto } from "./parser";
+import { Caller, FileSource, ServerSource } from "./caller";
 import { performance } from "perf_hooks";
-import { Caller } from "./caller";
-import { Message, Parser, Proto, ProtoType } from "./parser";
 
+/**
+ * Data required for request execution
+ */
+export interface Request {
+  /**
+   * Optional parameter that will be used to form message if provided
+   */
+  file: FileSource | undefined;
+  /**
+   * Valid JSON string with proto message
+   */
+  content: string;
+  /**
+   * Wether server will be used for exection
+   */
+  server: ServerSource;
+  /**
+   * `grpcurl` compatible call tag including proto and service:
+   * - Example - `.pb.v1.Constructions/EmptyCall`
+   */
+  callTag: string;
+  /**
+   * Number representing amount of megabytes, maximum recieved in
+   * response message
+   */
+  maxMsgSize: number;
+  /**
+   * List of request headers that will be used for request execution
+   */
+  headers: string[];
+}
+
+/**
+ * Parameters that will be used for comparison in test
+ */
+export interface Expectations {
+  /**
+   * Expected gRPC response code
+   */
+  code: GrpcCode;
+  /**
+   * Max amount of time that response can take to pass test
+   */
+  time: number;
+  /**
+   * Optional expected response message, should be JSON string or error message.
+   *
+   * If not provided, response would not be used in test.
+   *
+   * Comparison is strict, wether response is fully matching actual result.
+   */
+  content: string | undefined;
+}
+
+/**
+ * Unified property to describe errors in tests
+ */
+export interface TestMistake {
+  description: string;
+  actual: string;
+  expected: string;
+}
+
+/**
+ * Result of test execution
+ */
+export interface TestResult {
+  passed: boolean;
+  mistakes: TestMistake[];
+}
+
+/**
+ * Input parameters for message description
+ */
+export interface DescribeMessageParams {
+  /**
+   * Source that will be used for message description
+   */
+  source: FileSource | ServerSource;
+  /**
+   * `grpcurl` compatible message tag
+   */
+  messageTag: string;
+}
+
+/**
+ * Response of `grpcurl` gRPC call
+ */
+export interface Response extends ParsedResponse {
+  /**
+   * Date converted to a string using Universal Coordinated Time (UTC).
+   */
+  date: string;
+  /**
+   * Time of request execution in seconds.
+   */
+  time: number;
+}
+
+/**
+ * Instance that is interacting with `grpcurl` via CLI
+ */
 export class Grpcurl {
   constructor(
     private parser: Parser,
@@ -9,72 +111,36 @@ export class Grpcurl {
     public useDocker: boolean
   ) {}
 
-  async protoFile(input: ProtoFileInput): Promise<ProtoFile | string> {
-    const command = `grpcurl |SRC| describe`;
-    const call = this.caller.formSource({
-      call: command,
-      source: input.path,
-      server: false,
-      plaintext: false,
-      docker: this.useDocker,
-      args: [],
-      importPath: input.importPath,
-    });
-    const [output, err] = await this.caller.execute(call);
-    if (err !== undefined) {
-      return err.message;
-    }
-    const parsedProto = this.parser.proto(output);
-    return {
-      type: ProtoType.proto,
-      path: input.path,
-      hosts: input.hosts,
-      importPath: input.importPath,
-      services: parsedProto.services,
-    };
-  }
-
-  async protoServer(input: ProtoServerInput): Promise<ProtoServer | string> {
+  /**
+   * Describe proto from provided source
+   */
+  async proto(source: FileSource | ServerSource): Promise<Proto | string> {
     const command = `grpcurl -max-time 0.5 |SRC| describe`;
-    const call = this.caller.formSource({
-      call: command,
-      source: input.host,
-      server: true,
-      plaintext: input.plaintext,
-      docker: this.useDocker,
+    const call = this.caller.buildCliCommand({
+      cliCommand: command,
+      useDocker: this.useDocker,
+      source: source,
       args: [],
-      importPath: ``,
     });
     const [output, err] = await this.caller.execute(call);
     if (err !== undefined) {
       return err.message;
     }
     const parsedProto = this.parser.proto(output);
-    return {
-      type: ProtoType.proto,
-      adress: input.host,
-      plaintext: input.plaintext,
-      services: parsedProto.services,
-    };
+    return parsedProto;
   }
 
-  async message(input: {
-    source: string;
-    server: boolean;
-    plaintext: boolean;
-    tag: string;
-    importPath: string;
-  }): Promise<Message | string> {
-    let command = `grpcurl -msg-template |SRC| describe %s`;
+  /**
+   * Describe message from provided parameters
+   */
+  async message(params: DescribeMessageParams): Promise<Message | string> {
+    const command = `grpcurl -msg-template |SRC| describe %s`;
 
-    const call = this.caller.formSource({
-      call: command,
-      source: input.source,
-      server: input.server,
-      plaintext: input.plaintext,
-      docker: this.useDocker,
-      args: [input.tag],
-      importPath: input.importPath,
+    const call = this.caller.buildCliCommand({
+      cliCommand: command,
+      useDocker: this.useDocker,
+      source: params.source,
+      args: [params.messageTag],
     });
 
     const [resp, err] = await this.caller.execute(call);
@@ -85,106 +151,94 @@ export class Grpcurl {
     return msg;
   }
 
+  /**
+   * Command to build `grpcurl` CLI request
+   */
   formCall(input: Request): string {
     const command = `grpcurl -emit-defaults %s %s -d %s |SRC| %s`;
-    const formedJson = this.jsonPreprocess(input.json);
-    let maxMsgSize = ``;
+    const formedJson = this.jsonPreprocess(input.content);
+    let maxMsgSizeTemplate = ``;
     if (input.maxMsgSize !== 4) {
-      maxMsgSize = `-max-msg-sz ${input.maxMsgSize * 1048576}`;
+      maxMsgSizeTemplate = `-max-msg-sz ${input.maxMsgSize * 1048576}`;
     }
-    let meta = ``;
-    for (const metafield of input.metadata) {
-      meta = meta + this.headerPreprocess(metafield);
+    let headersTemplate = ``;
+    for (const header of input.headers) {
+      headersTemplate = headersTemplate + this.headerPreprocess(header);
     }
 
-    if (input.path === ``) {
-      return this.caller.formSource({
-        call: command,
-        source: input.host.adress,
-        server: true,
-        plaintext: input.host.plaintext,
-        docker: this.useDocker,
-        args: [meta, maxMsgSize, formedJson, input.callTag],
-        importPath: ``,
+    if (input.file !== undefined) {
+      return this.caller.buildCliCommand({
+        cliCommand: command,
+        useDocker: this.useDocker,
+        source: {
+          type: `MULTI`,
+          host: input.server.host,
+          plaintext: input.server.plaintext,
+          filePath: input.file.filePath,
+          importPath: input.file.importPath,
+        },
+        args: [headersTemplate, maxMsgSizeTemplate, formedJson, input.callTag],
       });
     }
-    return this.caller.formSource({
-      call: command,
-      source: `${input.path} ${input.host.adress}`,
-      server: false,
-      plaintext: input.host.plaintext,
-      docker: this.useDocker,
-      args: [meta, maxMsgSize, formedJson, input.callTag],
-      importPath: input.importPath,
+    return this.caller.buildCliCommand({
+      cliCommand: command,
+      useDocker: this.useDocker,
+      source: input.server,
+      args: [headersTemplate, maxMsgSizeTemplate, formedJson, input.callTag],
     });
   }
 
+  /**
+   * Command to execute gRPC call on server
+   */
   async send(input: Request): Promise<Response> {
     const start = performance.now();
     const [resp, err] = await this.caller.execute(this.formCall(input));
     const end = performance.now();
 
-    let response: Response;
+    let response: ParsedResponse;
     if (err !== undefined) {
       response = this.parser.resp(err.message);
     } else {
       response = this.parser.resp(resp);
     }
 
-    response.date = new Date().toUTCString();
-    response.time = Math.round(end - start) / 1000;
-    return response;
+    return {
+      code: response.code,
+      content: response.content,
+      date: new Date().toUTCString(),
+      time: Math.round(end - start) / 1000,
+    };
   }
 
-  // TODO add test
-  async test(input: TestData): Promise<TestData> {
-    let result: string = ``;
-    const resp = await this.send(input);
-    if (resp.code !== input.expectedCode) {
-      result = `- Code not matching: ${resp.code} vs ${input.expectedCode}\n`;
+  /**
+   * Command to test gRPC call
+   */
+  async test(request: Request, expects: Expectations): Promise<TestResult> {
+    let mistakes: TestMistake[] = [];
+    const resp = await this.send(request);
+    if (resp.code !== expects.code) {
+      mistakes.push({
+        description: "Code is not matching",
+        actual: resp.code,
+        expected: expects.code,
+      });
     }
-    if (resp.time > input.expectedTime) {
-      result += `- Time exceeded: ${resp.time}s vs ${input.expectedTime}s\n`;
+    if (resp.time > expects.time) {
+      mistakes.push({
+        description: "Time exceeded",
+        actual: `${resp.time}s`,
+        expected: `${expects.time}s`,
+      });
     }
-    if (input.expectedResponse !== ``) {
-      try {
-        const expect = JSON.stringify(JSON.parse(resp.response));
-        const actual = JSON.stringify(JSON.parse(input.expectedResponse));
-        if (expect !== actual) {
-          result += `- Response json is not matching:\n\n
-Expects:
-\`\`\`json
-${input.expectedResponse.split(`\n`).slice(0, 10).join(`\n`)}
-\`\`\`
-
-Actual:
-\`\`\`json
-${resp.response.split(`\n`).slice(0, 10).join(`\n`)}
-\`\`\``;
-        }
-      } catch {
-        if (resp.response !== input.expectedResponse) {
-          result += `- Response is not matching:\n\n
-Expect:
-\`\`\`json
-${input.expectedResponse}
-\`\`\`
-
-Actual:
-\`\`\`json
-${resp.response}
-\`\`\``;
-        }
-      }
+    if (resp.content !== undefined && expects.content !== resp.content) {
+      mistakes.push({
+        description: "Response not matching",
+        actual: `${resp.content}`,
+        expected: `${expects.content}`,
+      });
     }
-    if (result === ``) {
-      input.passed = true;
-      input.markdown = `Test passed`;
-      return input;
-    }
-    input.passed = false;
-    input.markdown = `#### Test failed:\n\n\n${result}`;
-    return input;
+    return { passed: mistakes.length === 0, mistakes: mistakes };
   }
 
   private jsonPreprocess(input: string): string {
@@ -206,56 +260,4 @@ ${resp.response}
     }
     return `-H '${header}' `;
   }
-}
-
-export interface ProtoFileInput {
-  path: string;
-  importPath: string;
-  hosts: Host[];
-}
-
-export interface Host {
-  adress: string;
-  plaintext: boolean;
-}
-
-export interface ProtoFile extends Proto {
-  path: string;
-  importPath: string;
-  hosts: Host[];
-}
-
-export interface ProtoServerInput {
-  host: string;
-  plaintext: boolean;
-}
-
-export interface ProtoServer extends Proto {
-  adress: string;
-  plaintext: boolean;
-}
-
-export interface Request {
-  path: string;
-  importPath: string;
-  json: string;
-  host: Host;
-  callTag: string;
-  maxMsgSize: number;
-  metadata: string[];
-}
-
-export interface Response {
-  code: string;
-  response: string;
-  time: number;
-  date: string;
-}
-
-export interface TestData extends Request {
-  expectedCode: string;
-  expectedTime: number;
-  expectedResponse: string;
-  passed: boolean | undefined;
-  markdown: string;
 }

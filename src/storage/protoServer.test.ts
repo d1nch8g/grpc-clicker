@@ -1,7 +1,7 @@
 import { Memento } from "vscode";
-import { ProtoServer } from "../grpcurl/grpcurl";
-import { ProtoType } from "../grpcurl/parser";
-import { ProtoServers } from "./protoServer";
+import { ServerSource } from "../grpcurl/caller";
+import { Proto } from "../grpcurl/parser";
+import { ProtoServer, ProtoServers } from "./protoServer";
 
 class MockMemento implements Memento {
   values: string[] = [];
@@ -19,17 +19,24 @@ class MockMemento implements Memento {
   }
 }
 
+const source: ServerSource = {
+  type: "SERVER",
+  host: "localhost:12201",
+  plaintext: false,
+};
+
+const server: ProtoServer = {
+  source: source,
+  type: "PROTO",
+  services: [],
+};
+
 test(`add`, () => {
   const memento = new MockMemento();
   const hosts = new ProtoServers(memento);
-  const host: ProtoServer = {
-    type: ProtoType.proto,
-    adress: "localhost:12201",
-    plaintext: true,
-    services: [],
-  };
-  expect(hosts.add(host)).toBeUndefined();
-  expect(hosts.add(host)).toStrictEqual(
+
+  expect(hosts.add(server)).toBeUndefined();
+  expect(hosts.add(server)).toStrictEqual(
     new Error(`host you are trying to add already exists`)
   );
 });
@@ -37,26 +44,16 @@ test(`add`, () => {
 test(`list`, () => {
   const memento = new MockMemento();
   const hosts = new ProtoServers(memento);
-  const host: ProtoServer = {
-    type: ProtoType.proto,
-    adress: "localhost:12201",
-    plaintext: true,
-    services: [],
-  };
-  memento.values = [JSON.stringify(host)];
-  expect(hosts.list()).toStrictEqual([host]);
+
+  memento.values = [JSON.stringify(server)];
+  expect(hosts.list()).toStrictEqual([server]);
 });
 
 test(`remove`, () => {
   const memento = new MockMemento();
   const hosts = new ProtoServers(memento);
-  const host: ProtoServer = {
-    type: ProtoType.proto,
-    adress: "localhost:12201",
-    plaintext: true,
-    services: [],
-  };
-  memento.values = [JSON.stringify(host)];
+
+  memento.values = [JSON.stringify(server)];
   hosts.remove(`localhost:12201`);
   expect(memento.values).toStrictEqual([]);
 });

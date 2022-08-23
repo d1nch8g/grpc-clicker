@@ -35,8 +35,6 @@
     "onView:servers",
     "onCommand:servers.add",
     "onCommand:servers.refresh",
-    "onView:headers",
-    "onCommand:headers.add",
     "onView:history",
     "onCommand:history.clean",
     "onCommand:cache.clean",
@@ -64,10 +62,6 @@
         {
           "id": "files",
           "name": "proto files"
-        },
-        {
-          "id": "headers",
-          "name": "Request headers"
         },
         {
           "id": "collections",

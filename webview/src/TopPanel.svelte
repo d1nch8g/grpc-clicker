@@ -1,38 +1,48 @@
 <script>
-  export let data = {
-    host: { adress: ``, plaintext: true },
-    hosts: [{ adress: ``, plaintext: true }],
-  };
+  export let data;
   export let onSend;
   export let onExport;
+  export let onHosts;
 
-  data.hosts = { hosts: [{ adress: ``, plaintext: true }] };
-
-  function onHostChanged(host) {
-    data.host = host;
+  function hostPick(host, plaintext) {
+    data.request.server.host = host;
+    data.request.server.plaintext = plaintext;
   }
 </script>
 
 <div class="top-container">
   <table>
     <tr>
-      <td><vscode-badge>{data.protoName}</vscode-badge></td>
-      <td><vscode-badge>{data.service}</vscode-badge></td>
-      <td><vscode-badge>{data.call}</vscode-badge></td>
+      <td><vscode-badge>{data.info.protoPackage}</vscode-badge></td>
+      <td><vscode-badge>{data.info.service}</vscode-badge></td>
+      <td><vscode-badge>{data.info.call}</vscode-badge></td>
       <td class="expanded">
         <vscode-dropdown>
-          {#each data.hosts as host}
-            <vscode-option on:click="{onHostChanged(host)}">
-              <div>{host.adress}</div>
+          {#if data.request.file !== undefined}
+            {#each data.hosts.hosts as host}
+              <vscode-option on:click="{hostPick(host.adress, host.plaintext)}">
+                <div>{host.adress}</div>
+              </vscode-option>
+            {/each}
+          {:else}
+            <vscode-option>
+              <div>{data.request.server.host}</div>
             </vscode-option>
-          {/each}
+          {/if}
         </vscode-dropdown>
       </td>
-      <td
-        ><vscode-button on:click="{onExport}" appearance="secondary"
-          >Export</vscode-button
-        ></td
-      >
+      {#if data.request.file !== undefined}
+        <td>
+          <vscode-button on:click="{onHosts}" appearance="secondary">
+            <div>Hosts</div>
+          </vscode-button>
+        </td>
+      {/if}
+      <td>
+        <vscode-button on:click="{onExport}" appearance="secondary">
+          <div>Export</div>
+        </vscode-button>
+      </td>
       <td><vscode-button on:click="{onSend}">Send</vscode-button></td>
     </tr>
   </table>

@@ -3,22 +3,22 @@
 </script>
 
 <vscode-data-grid aria-label="Basic" grid-template-columns="40% 60%">
-  {#if data.path !== ``}
+  {#if data.request.file !== undefined}
     <vscode-data-grid-row>
       <vscode-data-grid-cell grid-column="1">
         <div>Proto path</div>
       </vscode-data-grid-cell>
       <vscode-data-grid-cell grid-column="2">
-        <div>{data.path}</div>
+        <div>{data.request.file.filePath}</div>
       </vscode-data-grid-cell>
     </vscode-data-grid-row>
   {/if}
   <vscode-data-grid-row>
     <vscode-data-grid-cell grid-column="1">
-      <div>Proto</div>
+      <div>Proto package</div>
     </vscode-data-grid-cell>
     <vscode-data-grid-cell grid-column="2">
-      <div>{data.protoName}</div>
+      <div>{data.info.protoPackage}</div>
     </vscode-data-grid-cell>
   </vscode-data-grid-row>
   <vscode-data-grid-row>
@@ -26,7 +26,7 @@
       <div>Service</div>
     </vscode-data-grid-cell>
     <vscode-data-grid-cell grid-column="2">
-      <div>{data.service}</div>
+      <div>{data.info.service}</div>
     </vscode-data-grid-cell>
   </vscode-data-grid-row>
   <vscode-data-grid-row>
@@ -34,7 +34,7 @@
       <div>RPC Call</div>
     </vscode-data-grid-cell>
     <vscode-data-grid-cell grid-column="2">
-      <div>{data.call}</div>
+      <div>{data.info.call}</div>
     </vscode-data-grid-cell>
   </vscode-data-grid-row>
   <vscode-data-grid-row>
@@ -42,7 +42,7 @@
       <div>Input message</div>
     </vscode-data-grid-cell>
     <vscode-data-grid-cell grid-column="2">
-      <div>{data.inputMessageName}</div>
+      <div>{data.info.inputMessageName}</div>
     </vscode-data-grid-cell>
   </vscode-data-grid-row>
   <vscode-data-grid-row>
@@ -50,15 +50,15 @@
       <div>Output message</div>
     </vscode-data-grid-cell>
     <vscode-data-grid-cell grid-column="2">
-      <div>{data.outputMessageName}</div>
+      <div>{data.info.outputMessageName}</div>
     </vscode-data-grid-cell>
   </vscode-data-grid-row>
   <vscode-data-grid-row>
     <vscode-data-grid-cell grid-column="1">
-      <div>Max message size</div>
+      <div>Max response size</div>
     </vscode-data-grid-cell>
     <vscode-data-grid-cell grid-column="2">
-      <div>{data.maxMsgSize} mb</div>
+      <div>{data.request.maxMsgSize} mb</div>
     </vscode-data-grid-cell>
   </vscode-data-grid-row>
 </vscode-data-grid>
