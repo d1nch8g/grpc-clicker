@@ -60,10 +60,24 @@ export interface Expectations {
  * Unified property to describe errors in tests
  */
 export interface TestMistake {
-  description: string;
+  /**
+   * Possible types of mistakes
+   */
+  type: MistakeType;
+  /**
+   * Recieved information
+   */
   actual: string;
+  /**
+   * Matcher
+   */
   expected: string;
 }
+
+/**
+ * Currently checked options of mistakes
+ */
+export type MistakeType = `code` | `time` | `content`;
 
 /**
  * Result of test execution
@@ -219,21 +233,21 @@ export class Grpcurl {
     const resp = await this.send(request);
     if (resp.code !== expects.code) {
       mistakes.push({
-        description: "Code is not matching",
+        type: `code`,
         actual: resp.code,
         expected: expects.code,
       });
     }
     if (resp.time > expects.time) {
       mistakes.push({
-        description: "Time exceeded",
+        type: `time`,
         actual: `${resp.time}s`,
         expected: `${expects.time}s`,
       });
     }
     if (resp.content !== undefined && expects.content !== resp.content) {
       mistakes.push({
-        description: "Response not matching",
+        type: `content`,
         actual: `${resp.content}`,
         expected: `${expects.content}`,
       });

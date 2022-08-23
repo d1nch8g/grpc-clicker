@@ -211,7 +211,7 @@ test(`test`, async () => {
   const testresult = await grpcurl.test(request, expects);
 
   const firstMistake: TestMistake = {
-    description: "Code is not matching",
+    type: `code`,
     actual: "OK",
     expected: "AlreadyExists",
   };
@@ -219,8 +219,8 @@ test(`test`, async () => {
   expect(testresult.passed).toBeFalsy();
   expect(testresult.mistakes.length).toBe(3);
   expect(testresult.mistakes[0]).toStrictEqual(firstMistake);
-  expect(testresult.mistakes[1].description).toBe(`Time exceeded`);
+  expect(testresult.mistakes[1].type).toBe(`time`);
   expect(testresult.mistakes[1].expected).toBe(`0.0001s`);
-  expect(testresult.mistakes[2].description).toBe(`Response not matching`);
+  expect(testresult.mistakes[2].type).toBe(`content`);
   expect(testresult.mistakes[2].expected).toBe(`wtfshere`);
 });
