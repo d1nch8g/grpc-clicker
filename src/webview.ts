@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { Response, Expectations, Request } from "./grpcurl/grpcurl";
 import { Header } from "./storage/headers";
+import { AdditionalInfo } from "./storage/history";
 import { Hosts, HostsOptions } from "./storage/hosts";
 
 /**
@@ -15,7 +16,7 @@ export interface WebViewParameters {
    * Callback that is sending request and giving back response, should be
    * executed when `send` button is pressed.
    */
-  sendRequest: (request: Request) => Promise<Response>;
+  sendRequest: (request: Request, info: AdditionalInfo) => Promise<Response>;
   /**
    * Callback that should copy `grpcurl` command to clipboard from webview.
    */
@@ -66,36 +67,6 @@ export interface WebViewData {
    * Test expectations that could be set in webview.
    */
   expectations: Expectations;
-}
-
-/**
- * Information about request.
- */
-export interface AdditionalInfo {
-  /**
-   * Service in which request will be executed.
-   */
-  service: string;
-  /**
-   * Human readable call string, that could be displayed to user.
-   */
-  call: string;
-  /**
-   * `grpcurl` compatible message tag for request message.
-   */
-  inputMessageTag: string;
-  /**
-   * `grpcurl` compatible message tag for response message.
-   */
-  inputMessageName: string;
-  /**
-   * Human readable name of outgoing message.
-   */
-  outputMessageName: string;
-  /**
-   * Package of proto.
-   */
-  protoPackage: string;
 }
 
 /**
@@ -173,7 +144,10 @@ class GrpcClickerTab {
           this.data = JSON.parse(out.text);
           return;
         case "send":
-          const response = await this.params.sendRequest(this.data.request);
+          const response = await this.params.sendRequest(
+            this.data.request,
+            this.data.info
+          );
           this.data.response = response;
           this.panel.webview.postMessage(JSON.stringify(this.data));
           return;

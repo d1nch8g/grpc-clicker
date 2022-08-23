@@ -258,7 +258,7 @@ ${value.request.content.split(`\n`).slice(0, 14).join(`\n`)}
 `);
 
     super.command = {
-      command: "webview.open",
+      command: "history.open",
       title: "Trigger opening of webview for grpc call",
       arguments: [value],
     };
