@@ -23,6 +23,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
+	lis2, err := net.Listen("tcp", ":8081")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
 	s := grpc.NewServer()
 
 	pb.RegisterBasicsServer(s, &server{})
@@ -31,9 +35,8 @@ func main() {
 
 	reflection.Register(s)
 	log.Printf("server listening at %v", lis.Addr())
-	if err := s.Serve(lis); err != nil {
-		panic(err)
-	}
+	go s.Serve(lis)
+	go s.Serve(lis2)
 }
 
 type server struct {
