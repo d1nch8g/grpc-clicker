@@ -36,17 +36,17 @@ Extension provides following functionality:
 ## Get started
 
 1. Add proto files and navigate across the schema.
-   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/proto.gif" height="200px"></p>
+   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/proto.gif" height="350px"></p>
 2. Add reflect servers and check schema.
-   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/reflect.gif" height="200px"></p>
+   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/reflect.gif" height="350px"></p>
 3. Add headers to request metadata in `grpcurl` format.
-   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/headers.gif" height="200px"></p>
+   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/headers.gif" height="350px"></p>
 4. Restore your requests from history, via single click
-   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/history.gif" height="200px"></p>
+   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/history.gif" height="350px"></p>
 5. Create tests with code, time and content conditions
-   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/test.gif" height="200px"></p>
+   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/test.gif" height="350px"></p>
 6. Export `grpcurl` CLI command snippet for your friends without `vscode` :)
-   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/snippet.gif" height="200px"></p>
+   <p align="left"><img src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/snippet.gif" height="350px"></p>
 
 ---
 
