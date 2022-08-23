@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.1.2]
+
+> August 9, 2022
+
+- Json syntax highlight!!! Made natively in svelte :/ (don't check how it's done
+  if you care about your mental health)
+- Headers moved to webview window
+- Hosts are now easily managed from webview when opened from file
+- History relevant bug fixes
+
 ## [0.1.1]
 
 > August 9, 2022
