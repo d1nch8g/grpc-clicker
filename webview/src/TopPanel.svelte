@@ -1,7 +1,6 @@
 <script>
   export let data;
   export let onSend;
-  export let onExport;
   export let onHosts;
 
   function hostPick(host, plaintext) {
@@ -39,11 +38,8 @@
         </td>
       {/if}
       <td>
-        <vscode-button on:click="{onExport}" appearance="secondary">
-          <div>Export</div>
-        </vscode-button>
+        <vscode-button on:click="{onSend}">Send</vscode-button>
       </td>
-      <td><vscode-button on:click="{onSend}">Send</vscode-button></td>
     </tr>
   </table>
 </div>
