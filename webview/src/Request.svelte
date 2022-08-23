@@ -1,6 +1,7 @@
 <script>
   import JsonArea from "./JsonArea.svelte";
   export let data;
+
   $: innerHeight = 0;
 </script>
 
