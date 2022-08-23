@@ -22,12 +22,14 @@
       <JsonArea
         bind:text="{data.response.content}"
         height="{innerHeight - 180}"
+        editable="{false}"
       />
     {:else}
       <JsonArea
         bind:text="{data.response.content}"
         height="{innerHeight - 180}"
         highlight="{false}"
+        editable="{false}"
       />
     {/if}
   </tr>
