@@ -195,14 +195,19 @@ export function activate(context: vscode.ExtensionContext) {
     if (choice === undefined) {
       return;
     }
+    const path = choice[0].fsPath;
+    const grpcUrlFilePath = path.replaceAll(`\\`, `/`);
+    const defaultImprt = grpcUrlFilePath.substring(
+      0,
+      grpcUrlFilePath.lastIndexOf(`/`)
+    );
     const importPath = await vscode.window.showInputBox({
-      value: `/`,
+      value: defaultImprt,
       title: `Specify import path for imports.`,
     });
     if (importPath === undefined || importPath === ``) {
       return;
     }
-    const path = choice[0].fsPath;
     const protoSource: FileSource = {
       type: "FILE",
       filePath: path,
