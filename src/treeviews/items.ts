@@ -27,7 +27,6 @@ export enum ItemType {
   unknown,
   file,
   server,
-  hosts,
   host,
   service,
   call,
