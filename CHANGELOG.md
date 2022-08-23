@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. Dates are d
 - Headers moved to webview window
 - Hosts are now easily managed from webview when opened from file
 - History relevant bug fixes
+- Changed default option of import path to path to file dir
 
 ## [0.1.1]
 
