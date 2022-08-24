@@ -23,9 +23,7 @@ var copyRecursiveSync = function (src, dest) {
 };
 
 var rebuild = function () {
-  const output = execSync("npm run build --prefix webview", {
-    encoding: "utf-8",
-  });
+  execSync("npm run build --prefix webview", { encoding: "utf-8" });
 
   if (!fs.existsSync(`dist`)) {
     fs.mkdirSync(`dist`);
