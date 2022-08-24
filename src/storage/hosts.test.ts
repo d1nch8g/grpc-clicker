@@ -1,5 +1,6 @@
 import { Memento } from "vscode";
-import { Header, Headers } from "./headers";
+import { Header } from "./headers";
+import { Host, Hosts } from "./hosts";
 
 class MockMemento implements Memento {
   values: string[] = [];
@@ -16,35 +17,14 @@ class MockMemento implements Memento {
   }
 }
 
+const host: Host = {
+  adress: "localhost:8080",
+  plaintext: true,
+};
 test(`add`, () => {
   const memento = new MockMemento();
-  const headers = new Headers(memento);
-  const header: Header = {
-    value: "header",
-    active: false,
-  };
-  expect(headers.add(header)).toBeUndefined();
-  expect(headers.add(header)).toStrictEqual(
-    new Error(`header you are trying to add already exists`)
-  );
-});
-
-test(`list`, () => {
-  const memento = new MockMemento();
-  const headers = new Headers(memento);
-  memento.values = [`{"value": "header", "active": false}`];
-  expect(headers.list()).toStrictEqual([
-    {
-      value: "header",
-      active: false,
-    },
-  ]);
-});
-
-test(`remove`, () => {
-  const memento = new MockMemento();
-  const headers = new Headers(memento);
-  memento.values = [`{"value": "header", "active": false}`];
-  headers.remove(`header`);
-  expect(memento.values).toStrictEqual([]);
+  const hosts = new Hosts(memento);
+  expect(hosts.get()).toStrictEqual([host]);
+  hosts.save([host, host]);
+  expect(hosts.get()).toStrictEqual([host, host]);
 });
