@@ -50,6 +50,15 @@ Extension provides following functionality:
 
 ---
 
+## Troubleshooting
+
+Most of the time, command `gRPC Clicker: clean all extension cache` helps to
+resolve possible issues.
+
+Otherwise feel welcome to write an issue on github.
+
+---
+
 ## Install gRPCurl
 
 You can have full installation guide here [grpcurl](https://github.com/fullstorydev/grpcurl).
