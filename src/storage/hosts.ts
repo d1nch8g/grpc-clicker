@@ -19,14 +19,22 @@ export class Hosts {
   constructor(private memento: Memento) {}
 
   save(hosts: Host[]) {
-    this.memento.update(this.key, JSON.stringify(hosts));
+    let resp: string[] = [];
+    for (const host of hosts) {
+      resp.push(JSON.stringify(host));
+    }
+    this.memento.update(this.key, resp);
   }
 
   get(): Host[] {
-    const hosts = this.memento.get<string>(
-      this.key,
-      `[{"adress":"localhost:8080","plaintext":true}]`
-    );
-    return JSON.parse(hosts);
+    const hosts = this.memento.get<string[]>(this.key, []);
+    if (hosts.length === 0) {
+      return [{ adress: `localhost:8080`, plaintext: true }];
+    }
+    let resp: Host[] = [];
+    for (const host of hosts) {
+      resp.push(JSON.parse(host));
+    }
+    return resp;
   }
 }
