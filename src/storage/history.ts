@@ -51,6 +51,7 @@ export interface AdditionalInfo {
 
 export class History {
   private readonly key: string = "grpc-clicker-history";
+  private readonly countKey: string = "grpc-clicker-history-count";
   constructor(private memento: Memento) {}
 
   public list(): HistoryValue[] {
@@ -62,13 +63,16 @@ export class History {
     return requests;
   }
 
-  public add(request: HistoryValue) {
+  public add(request: HistoryValue): number {
+    const count = this.memento.get<number>(this.countKey, 0);
+    this.memento.update(this.countKey, count + 1);
     let requestStrings = this.memento.get<string[]>(this.key, []);
     if (requestStrings.length >= 100) {
       requestStrings.pop();
     }
     requestStrings = [JSON.stringify(request)].concat(requestStrings);
     this.memento.update(this.key, requestStrings);
+    return count;
   }
 
   public clean() {
