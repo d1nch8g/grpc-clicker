@@ -7,6 +7,8 @@ import { TreeViews } from "./treeviews/treeviews";
 import { WebViewFactory } from "./webview";
 import { Grpcurl } from "./grpcurl/grpcurl";
 import { ProtoFile } from "./storage/protoFiles";
+import { ProtoServer } from "./storage/protoServer";
+import { AdditionalInfo, HistoryValue } from "./storage/history";
 import {
   CollectionItem,
   GrpcTabFromScratch as GrpcTabParams,
@@ -14,8 +16,6 @@ import {
   ProtoItem,
   TestItem,
 } from "./treeviews/items";
-import { ProtoServer } from "./storage/protoServer";
-import { AdditionalInfo, HistoryValue } from "./storage/history";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
