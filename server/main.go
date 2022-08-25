@@ -174,3 +174,11 @@ func (s *server) NestedCall(ctx context.Context, in *pb.NestedMes) (*pb.NestedMe
 	fmt.Println(in)
 	return in, nil
 }
+
+func (s *server) ServerStream(in *pb.StringMes, st pb.Streams_ServerStreamServer) error {
+	for i := 0; i < 3; i++ {
+		st.Send(in)
+		time.Sleep(time.Second)
+	}
+	return nil
+}
