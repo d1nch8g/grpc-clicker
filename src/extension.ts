@@ -7,6 +7,8 @@ import { TreeViews } from "./treeviews/treeviews";
 import { WebViewFactory } from "./webview";
 import { Grpcurl } from "./grpcurl/grpcurl";
 import { ProtoFile } from "./storage/protoFiles";
+import { ProtoServer } from "./storage/protoServer";
+import { AdditionalInfo, HistoryValue } from "./storage/history";
 import {
   CollectionItem,
   GrpcTabFromScratch as GrpcTabParams,
@@ -14,8 +16,6 @@ import {
   ProtoItem,
   TestItem,
 } from "./treeviews/items";
-import { ProtoServer } from "./storage/protoServer";
-import { AdditionalInfo, HistoryValue } from "./storage/history";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
@@ -43,11 +43,31 @@ export function activate(context: vscode.ExtensionContext) {
     },
   });
 
+  async function openLink() {
+    const open = require("open");
+    const choice = await vscode.window.showInformationMessage(
+      `Congratulations! You made thousand requests using gRPC Clicker. ` +
+        `Github star would be highly appreciated.`,
+      `Star on github`,
+      `Open github issue`,
+      `Skip`
+    );
+    switch (choice) {
+      case `Star on github`:
+        open(`https://github.com/Dancheg97/grpclicker_vscode`);
+      case `Open github issue`:
+        open(`https://github.com/Dancheg97/grpclicker_vscode/issues`);
+    }
+  }
+
   const webview = new WebViewFactory({
     uri: context.extensionUri,
     sendRequest: async (request, info) => {
       const response = await grpcurl.send(request);
-      storage.history.add({ request, response, info });
+      const count = storage.history.add({ request, response, info });
+      if (count === 1000) {
+        openLink();
+      }
       treeviews.history.refresh(storage.history.list());
       return response;
     },

@@ -12,9 +12,15 @@ class MockMemento implements Memento {
   get<T>(key: string): T;
   get<T>(key: string, defaultValue: T): T;
   get(key: unknown, defaultValue?: unknown): any {
+    if (key === `grpc-clicker-history-count`) {
+      return;
+    }
     return this.values;
   }
-  update(key: string, value: any): Thenable<void> {
+  async update(key: string, value: any): Promise<void> {
+    if (key === `grpc-clicker-history-count`) {
+      return undefined;
+    }
     return (this.values = value);
   }
 }
