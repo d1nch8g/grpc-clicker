@@ -49,6 +49,16 @@ export class Installer {
     return fs.existsSync(file);
   }
 
+  async unzip(file: string, dir: string): Promise<boolean> {
+    const command = `unzip -d ${dir} ${file}`;
+    const exec = util.promisify(require("child_process").exec);
+    await exec(command);
+    if (process.platform === `win32`) {
+      return fs.existsSync(`${dir}/grpcurl.exe`);
+    }
+    return fs.existsSync(`${dir}/grpcurl`);
+  }
+
   install(path: string): boolean {
     return false;
   }
