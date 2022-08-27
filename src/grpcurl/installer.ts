@@ -40,6 +40,11 @@ export class Installer {
     var unzip = require("unzip-stream");
     var fs = require("fs-extra");
     await fs.createReadStream(file).pipe(unzip.Extract({ path: dir }));
-    return fs.existsSync(`${dir}/LICENSE`);
+    for (let i = 0; i < 1500; i++) {
+      if (fs.existsSync(`${dir}/LICENSE`)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
