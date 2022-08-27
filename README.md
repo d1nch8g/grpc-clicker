@@ -10,7 +10,7 @@
 [![Generic badge](https://img.shields.io/badge/Changelog-v0.1.3-cyan.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/CHANGELOG.md)
 [![Generic badge](https://img.shields.io/badge/Contribute-guide-ff69b4.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/CONTRIBUTE.md)
 
-To get extemsion to work, you need to install [`grpcurl`](https://github.com/fullstorydev/grpcurl), or switch to docker version of application.
+To get extemsion to work, you need to install [`grpcurl`](https://github.com/fullstorydev/grpcurl), it will be installed automatically with extension.
 
 This extension provides ability to execute gRPC calls from VSCode, using [`grpcurl`](https://github.com/fullstorydev/grpcurl) CLI under the hood.
 
@@ -27,7 +27,6 @@ Extension provides following functionality:
 - View full history of requests in side panel
 - Create collections with tests of your requests and executete them
 - Get generated templates of messages in request tab
-- Use docker for gRPCurl commands execution (enable in options)
 - Json highlighting/formatting/validation for requests
 - Restore your requests from history, save parameters such as hosts and headers in local storage
 
