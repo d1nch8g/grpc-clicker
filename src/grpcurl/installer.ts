@@ -55,20 +55,4 @@ export class Installer {
     await exec(command);
     return fs.existsSync(`${dir}/LICENSE`);
   }
-
-  async install(path: string): Promise<string | undefined> {
-    const downloadUrl = this.getDownloadUrl();
-    if (downloadUrl === undefined) {
-      return `Your operating system is not supported by grpcurl, sorry!`;
-    }
-    const downloaded = await this.download(downloadUrl, path + `.zip`);
-    if (!downloaded) {
-      return `Failed to download file, check internet connection`;
-    }
-    const unzipped = await this.unzip(path + `.zip`, path);
-    if (!unzipped) {
-      return `Failed to unzip file gprcurl archive.`;
-    }
-    return undefined;
-  }
 }
