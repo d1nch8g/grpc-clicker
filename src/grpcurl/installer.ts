@@ -5,7 +5,6 @@ const baseLink = `https://github.com/fullstorydev/grpcurl/releases/download/v1.8
 export class Installer {
   getDownloadLink(): string | undefined {
     const os = require("os");
-    let downloadPath: string | undefined;
     switch (process.platform) {
       case `win32`:
         switch (os.arch()) {
@@ -43,8 +42,7 @@ export class Installer {
   }
 
   async download(uri: string, file: string) {
-    const response = await fetch(uri);
-    const data = await response.json();
+    
   }
 
   install(path: string): boolean {
