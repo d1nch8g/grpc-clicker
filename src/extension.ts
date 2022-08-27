@@ -21,7 +21,12 @@ import { Installer } from "./grpcurl/installer";
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
 
-  const grpcurl = new Grpcurl(new Parser(), new Caller(), new Installer());
+  const grpcurl = new Grpcurl(
+    new Parser(),
+    new Caller(),
+    new Installer(),
+    context.extensionPath
+  );
 
   const treeviews = new TreeViews({
     files: storage.files.list(),
