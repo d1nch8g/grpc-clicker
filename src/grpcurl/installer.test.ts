@@ -1,4 +1,5 @@
 import { Installer } from "./installer";
+import * as fs from "fs";
 
 test(`getLink`, () => {
   const installer = new Installer();
@@ -9,8 +10,10 @@ test(`getLink`, () => {
 });
 
 test(`download`, async () => {
+  const testPath = `./src/grpcurl/test_grpcurl.zip`;
   const installer = new Installer();
   const link = installer.getDownloadLink();
-  const res = await installer.download(link!, `grpcurl.exe`);
+  const res = await installer.download(link!, testPath);
   expect(res).toBeTruthy();
+  fs.rm(testPath, () => {});
 });
