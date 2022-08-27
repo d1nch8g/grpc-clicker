@@ -7,4 +7,5 @@ node_modules
 .DS_store
 coverage
 .DS_store
-grpcurl.zip
+*.zip
+
