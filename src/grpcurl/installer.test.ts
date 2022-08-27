@@ -10,18 +10,23 @@ test(`getLink`, () => {
 });
 
 test(`download`, async () => {
-  const testPath = `./src/grpcurl/test_grpcurl.zip`;
+  const loadedFile = `./src/grpcurl/_test.zip`;
   const installer = new Installer();
   const link = installer.getDownloadUrl();
-  const res = await installer.download(link!, testPath);
-  expect(res).toBeTruthy();
-  fs.rm(testPath, () => {});
+  const downloaded = await installer.download(link!, loadedFile);
+  expect(downloaded).toBeTruthy();
+  fs.rmSync(loadedFile);
 });
 
-// test(`unzip`, async () => {
-//   const installer = new Installer();
-//   const testZipfile = `./src/grpcurl/_test.zip`;
-//   const testZipDir = `./src/grpcurl/_test`;
-//   const rez = await installer.unzip(testZipDir, testZipfile);
-//   expect(rez).toBe(true);
-// });
+test(`unzip`, async () => {
+  const loadedFile = `./src/grpcurl/_archive.zip`;
+  const unzippedDir = `./src/grpcurl/_archive`;
+  const installer = new Installer();
+  const link = installer.getDownloadUrl();
+  await installer.download(link!, loadedFile);
+  const unzipped = await installer.unzip(loadedFile, unzippedDir);
+  expect(unzipped).toBeTruthy();
+  fs.rmSync(loadedFile);
+  fs.rmSync(unzippedDir, { recursive: true, force: true });
+  console.log(`test files removed`);
+});

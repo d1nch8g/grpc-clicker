@@ -8,4 +8,7 @@ node_modules
 coverage
 .DS_store
 *.zip
-!_test.zip
+_test.zip
+_archive.zip
+_archive
+test.js

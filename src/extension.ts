@@ -540,6 +540,7 @@ export function activate(context: vscode.ExtensionContext) {
     if (rez !== undefined) {
       vscode.window.showErrorMessage(rez);
     }
+    storage.setGrpcurlInstalled();
   }
 
   if (!storage.grpcurlInstalled()) {
