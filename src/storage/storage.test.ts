@@ -26,12 +26,6 @@ class MockMemento implements Memento {
   }
 }
 
-test(`create`, () => {
-  const memento = new MockMemento();
-  new Storage(memento);
-  expect(memento.triggered).toBeTruthy();
-});
-
 test(`clean`, async () => {
   const memento = new MockMemento();
   const storage = new Storage(memento);

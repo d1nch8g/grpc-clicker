@@ -1,6 +1,7 @@
 import { GrpcCode, Message, ParsedResponse, Parser, Proto } from "./parser";
 import { Caller, FileSource, ServerSource } from "./caller";
 import { performance } from "perf_hooks";
+import { Installer } from "./installer";
 
 /**
  * Data required for request execution
@@ -122,8 +123,30 @@ export class Grpcurl {
   constructor(
     private parser: Parser,
     private caller: Caller,
-    public useDocker: boolean
+    private installer: Installer
   ) {}
+
+  /**
+   * Describe proto from provided source
+   */
+  async install(path: string): Promise<string | undefined> {
+    const downloadUrl = this.installer.getDownloadUrl();
+    if (downloadUrl === undefined) {
+      return `Your operating system is not supported by grpcurl, sorry!`;
+    }
+    const downloaded = await this.installer.download(
+      downloadUrl,
+      path + `.zip`
+    );
+    if (!downloaded) {
+      return `Failed to download file, check internet connection`;
+    }
+    const unzipped = await this.installer.unzip(path + `.zip`, path);
+    if (!unzipped) {
+      return `Failed to unzip file gprcurl archive.`;
+    }
+    return undefined;
+  }
 
   /**
    * Describe proto from provided source
@@ -132,7 +155,6 @@ export class Grpcurl {
     const command = `grpcurl -max-time 0.5 |SRC| describe`;
     const call = this.caller.buildCliCommand({
       cliCommand: command,
-      useDocker: this.useDocker,
       source: source,
       args: [],
     });
@@ -152,7 +174,6 @@ export class Grpcurl {
 
     const call = this.caller.buildCliCommand({
       cliCommand: command,
-      useDocker: this.useDocker,
       source: params.source,
       args: [params.messageTag],
     });
@@ -183,7 +204,6 @@ export class Grpcurl {
     if (input.file !== undefined) {
       return this.caller.buildCliCommand({
         cliCommand: command,
-        useDocker: this.useDocker,
         source: {
           type: `MULTI`,
           host: input.server.host,
@@ -196,7 +216,6 @@ export class Grpcurl {
     }
     return this.caller.buildCliCommand({
       cliCommand: command,
-      useDocker: this.useDocker,
       source: input.server,
       args: [headersTemplate, maxMsgSizeTemplate, formedJson, input.callTag],
     });

@@ -7,6 +7,7 @@ import {
   ServerSource,
 } from "./caller";
 import { time } from "console";
+import { Installer } from "./installer";
 
 class MockParser implements Parser {
   resp(input: string): ParsedResponse {
@@ -57,13 +58,14 @@ class MockCaller implements Caller {
     await new Promise((resolve) => setTimeout(resolve, 50));
     return [command, undefined];
   }
-  dockerize(input: string): string {
-    return this.caller.dockerize(input);
-  }
 }
 
 test(`protoFile`, async () => {
-  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
+  const grpcurl = new Grpcurl(
+    new MockParser(),
+    new MockCaller(),
+    new Installer()
+  );
 
   const expectedResult: Proto = {
     type: `PROTO`,
@@ -90,7 +92,11 @@ test(`protoFile`, async () => {
 });
 
 test(`protoServer`, async () => {
-  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
+  const grpcurl = new Grpcurl(
+    new MockParser(),
+    new MockCaller(),
+    new Installer()
+  );
 
   const expectedResult: Proto = {
     type: `PROTO`,
@@ -117,7 +123,11 @@ test(`protoServer`, async () => {
 });
 
 test(`message`, async () => {
-  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
+  const grpcurl = new Grpcurl(
+    new MockParser(),
+    new MockCaller(),
+    new Installer()
+  );
 
   const fileSouce: FileSource = {
     type: `FILE`,
@@ -141,7 +151,11 @@ test(`message`, async () => {
 });
 
 test(`send`, async () => {
-  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
+  const grpcurl = new Grpcurl(
+    new MockParser(),
+    new MockCaller(),
+    new Installer()
+  );
 
   const fileSouce: FileSource = {
     type: `FILE`,
@@ -179,7 +193,11 @@ test(`send`, async () => {
 });
 
 test(`test`, async () => {
-  const grpcurl = new Grpcurl(new MockParser(), new MockCaller(), false);
+  const grpcurl = new Grpcurl(
+    new MockParser(),
+    new MockCaller(),
+    new Installer()
+  );
 
   const fileSouce: FileSource = {
     type: `FILE`,

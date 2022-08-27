@@ -16,15 +16,12 @@ import {
   ProtoItem,
   TestItem,
 } from "./treeviews/items";
+import { Installer } from "./grpcurl/installer";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
 
-  const grpcurl = new Grpcurl(
-    new Parser(),
-    new Caller(),
-    vscode.workspace.getConfiguration(`grpc-clicker`).get(`usedocker`, false)
-  );
+  const grpcurl = new Grpcurl(new Parser(), new Caller(), new Installer());
 
   const treeviews = new TreeViews({
     files: storage.files.list(),
@@ -424,14 +421,6 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.files.refresh(storage.files.list());
   });
 
-  vscode.workspace.onDidChangeConfiguration((event) => {
-    if (event.affectsConfiguration(`grpc-clicker.usedocker`)) {
-      grpcurl.useDocker = vscode.workspace
-        .getConfiguration(`grpc-clicker`)
-        .get(`usedocker`, false);
-    }
-  });
-
   vscode.commands.registerCommand(`history.open`, async (val: HistoryValue) => {
     const expectations: Expectations = {
       code: "OK",
@@ -545,6 +534,17 @@ export function activate(context: vscode.ExtensionContext) {
       });
     }
   );
+
+  async function installGrpcurl() {
+    const rez = await grpcurl.install(context.extensionPath + `/grpcurl`);
+    if (rez !== undefined) {
+      vscode.window.showErrorMessage(rez);
+    }
+  }
+
+  if (!storage.grpcurlInstalled()) {
+    installGrpcurl();
+  }
 }
 
 export function deactivate() {}

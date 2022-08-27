@@ -41,10 +41,6 @@ export interface FormCliTemplateParams {
    */
   cliCommand: string;
   /**
-   * Wether docker should be used for call execution
-   */
-  useDocker: boolean;
-  /**
    * Specify source of execution, that might be server of file
    */
   source: ServerSource | FileSource | MultiSource;
@@ -85,9 +81,6 @@ export class Caller {
 
     let command = util.format(input.cliCommand, ...input.args);
 
-    if (input.useDocker) {
-      command = this.dockerize(command);
-    }
     return command;
   }
 
@@ -110,30 +103,5 @@ export class Caller {
     } catch (exception) {
       return [``, new Error(`${exception}`)];
     }
-  }
-
-  /**
-   * Command that is used to transform prepared command for
-   * execution from docker
-   */
-  dockerize(input: string): string {
-    if (!input.includes(`-proto `)) {
-      return input.replace(`grpcurl `, `docker run fullstorydev/grpcurl `);
-    }
-    if (process.platform === "win32") {
-      const protoSplitted = input.split(`-proto `)[1];
-      const windowsPath = protoSplitted.split(` `)[0];
-      const linuxPath = windowsPath.split(`:`)[1];
-      input = input.replace(windowsPath, linuxPath);
-      return input.replace(
-        `grpcurl `,
-        `docker run -v ${windowsPath}:${linuxPath} fullstorydev/grpcurl `
-      );
-    }
-    const path = input.split(`-proto `)[1].split(` `)[0];
-    return input.replace(
-      `grpcurl `,
-      `docker run -v ${path}:${path} fullstorydev/grpcurl `
-    );
   }
 }
