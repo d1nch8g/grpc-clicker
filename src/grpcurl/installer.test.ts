@@ -19,14 +19,9 @@ test(`download`, async () => {
 });
 
 test(`unzip`, async () => {
-  const testFile = `./src/grpcurl/unzip.zip`;
-  const testDir = `./src/grpcurl/somedir`;
   const installer = new Installer();
-  const link = installer.getDownloadLink();
-  const dwnld = await installer.download(link!, testFile);
-  const rez = await installer.unzip(testFile, testDir);
+  const testZipfile = `./src/grpcurl/test.zip`;
+  const testZipDir = `./src/grpcurl/unzipped`;
+  const rez = await installer.unzip(testZipfile, testZipDir);
   expect(rez).toBeTruthy();
-  fs.rm(testFile, () => {});
-  fs.rm(testDir + `/grpcurl.exe`, () => {});
-  fs.rm(testDir + `/LICENSE`, () => {});
 });
