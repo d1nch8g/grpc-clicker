@@ -1,4 +1,5 @@
-import fetch from "node-fetch";
+import * as util from "util";
+import * as fs from "fs";
 
 const baseLink = `https://github.com/fullstorydev/grpcurl/releases/download/v1.8.7/`;
 
@@ -41,8 +42,11 @@ export class Installer {
     return undefined;
   }
 
-  async download(uri: string, file: string) {
-    
+  async download(uri: string, file: string): Promise<boolean> {
+    const command = `curl -L ${uri} -o ${file}`;
+    const exec = util.promisify(require("child_process").exec);
+    await exec(command);
+    return fs.existsSync(file);
   }
 
   install(path: string): boolean {
