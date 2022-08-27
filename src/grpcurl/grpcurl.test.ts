@@ -64,7 +64,8 @@ test(`protoFile`, async () => {
   const grpcurl = new Grpcurl(
     new MockParser(),
     new MockCaller(),
-    new Installer()
+    new Installer(),
+    ``
   );
 
   const expectedResult: Proto = {
@@ -95,7 +96,8 @@ test(`protoServer`, async () => {
   const grpcurl = new Grpcurl(
     new MockParser(),
     new MockCaller(),
-    new Installer()
+    new Installer(),
+    ``
   );
 
   const expectedResult: Proto = {
@@ -126,7 +128,8 @@ test(`message`, async () => {
   const grpcurl = new Grpcurl(
     new MockParser(),
     new MockCaller(),
-    new Installer()
+    new Installer(),
+    ``
   );
 
   const fileSouce: FileSource = {
@@ -154,7 +157,8 @@ test(`send`, async () => {
   const grpcurl = new Grpcurl(
     new MockParser(),
     new MockCaller(),
-    new Installer()
+    new Installer(),
+    ``
   );
 
   const fileSouce: FileSource = {
@@ -196,7 +200,8 @@ test(`test`, async () => {
   const grpcurl = new Grpcurl(
     new MockParser(),
     new MockCaller(),
-    new Installer()
+    new Installer(),
+    ``
   );
 
   const fileSouce: FileSource = {

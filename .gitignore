@@ -12,3 +12,6 @@ _test.zip
 _archive.zip
 _archive
 test.js
+grpcurl.exe
+grpcurl
+!src/grpcurl
