@@ -1,5 +1,3 @@
-import path = require("path");
-import fs = require("fs");
 import { Installer } from "./installer";
 
 test(`getLink`, () => {

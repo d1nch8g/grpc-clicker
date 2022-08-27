@@ -68,7 +68,7 @@ export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
       );
       const output = await this.describeMsg(
         server.proto.source,
-        elem.base.inputMessageTag
+        elem.base.outputMessageTag
       );
       items.push(new MessageItem(input, elem));
       items.push(new MessageItem(output, elem));
