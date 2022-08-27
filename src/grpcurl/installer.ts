@@ -4,7 +4,7 @@ import * as fs from "fs";
 const baseLink = `https://github.com/fullstorydev/grpcurl/releases/download/v1.8.7/`;
 
 export class Installer {
-  getDownloadLink(): string | undefined {
+  getDownloadUrl(): string | undefined {
     const os = require("os");
     switch (process.platform) {
       case `win32`:
@@ -42,8 +42,8 @@ export class Installer {
     return undefined;
   }
 
-  async download(uri: string, file: string): Promise<boolean> {
-    const command = `curl -L ${uri} -o ${file}`;
+  async download(url: string, file: string): Promise<boolean> {
+    const command = `curl -L ${url} -o ${file}`;
     const exec = util.promisify(require("child_process").exec);
     await exec(command);
     return fs.existsSync(file);
@@ -56,7 +56,19 @@ export class Installer {
     return fs.existsSync(`${dir}/LICENSE`);
   }
 
-  install(path: string): boolean {
-    return false;
+  async install(path: string): Promise<string | undefined> {
+    const downloadUrl = this.getDownloadUrl();
+    if (downloadUrl === undefined) {
+      return `Your operating system is not supported by grpcurl, sorry!`;
+    }
+    const downloaded = await this.download(downloadUrl, path + `.zip`);
+    if (!downloaded) {
+      return `Failed to download file, check internet connection`;
+    }
+    const unzipped = await this.unzip(path + `.zip`, path);
+    if (!unzipped) {
+      return `Failed to unzip file gprcurl archive.`;
+    }
+    return undefined;
   }
 }
