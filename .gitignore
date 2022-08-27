@@ -7,3 +7,11 @@ node_modules
 .DS_store
 coverage
 .DS_store
+*.zip
+_test.zip
+_archive.zip
+_archive
+test.js
+grpcurl.exe
+grpcurl
+!src/grpcurl

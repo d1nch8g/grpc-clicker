@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.1.4]
+
+> August 9, 2022
+
+- Added automatic grpcurl installation on extension first load
+- Added proper migration mechanism for storage
+- Optimized json parser for webview, using RE
+- Removed ability to use docker
+
 ## [0.1.3]
 
 > August 9, 2022

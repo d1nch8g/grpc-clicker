@@ -1,6 +1,7 @@
 import { GrpcCode, Message, ParsedResponse, Parser, Proto } from "./parser";
 import { Caller, FileSource, ServerSource } from "./caller";
 import { performance } from "perf_hooks";
+import { Installer } from "./installer";
 
 /**
  * Data required for request execution
@@ -19,7 +20,7 @@ export interface Request {
    */
   server: ServerSource;
   /**
-   * `grpcurl` compatible call tag including proto and service:
+   * `${this.executablePath}` compatible call tag including proto and service:
    * - Example - `.pb.v1.Constructions/EmptyCall`
    */
   callTag: string;
@@ -96,13 +97,13 @@ export interface DescribeMessageParams {
    */
   source: FileSource | ServerSource;
   /**
-   * `grpcurl` compatible message tag
+   * `${this.executablePath}` compatible message tag
    */
   messageTag: string;
 }
 
 /**
- * Response of `grpcurl` gRPC call
+ * Response of `${this.executablePath}` gRPC call
  */
 export interface Response extends ParsedResponse {
   /**
@@ -116,23 +117,52 @@ export interface Response extends ParsedResponse {
 }
 
 /**
- * Instance that is interacting with `grpcurl` via CLI
+ * Instance that is interacting with `${this.executablePath}` via CLI
  */
 export class Grpcurl {
+  private executablePath: string;
   constructor(
     private parser: Parser,
     private caller: Caller,
-    public useDocker: boolean
-  ) {}
+    private installer: Installer,
+    private extensionPath: string
+  ) {
+    if (process.platform === `win32`) {
+      this.executablePath = extensionPath + `/grpcurl/grpcurl.exe`;
+      return;
+    }
+    this.executablePath = extensionPath + `/grpcurl/grpcurl`;
+  }
+
+  /**
+   * Describe proto from provided source
+   */
+  async install(path: string): Promise<string | undefined> {
+    const downloadUrl = this.installer.getDownloadUrl();
+    if (downloadUrl === undefined) {
+      return `Your operating system is not supported by grpcurl, sorry!`;
+    }
+    const downloaded = await this.installer.download(
+      downloadUrl,
+      path + `.zip`
+    );
+    if (!downloaded) {
+      return `Failed to download file, check internet connection`;
+    }
+    const unzipped = await this.installer.unzip(path + `.zip`, path);
+    if (!unzipped) {
+      return `Failed to unzip file gprcurl archive.`;
+    }
+    return undefined;
+  }
 
   /**
    * Describe proto from provided source
    */
   async proto(source: FileSource | ServerSource): Promise<Proto | string> {
-    const command = `grpcurl -max-time 0.5 |SRC| describe`;
+    const command = `${this.executablePath} -max-time 0.5 |SRC| describe`;
     const call = this.caller.buildCliCommand({
       cliCommand: command,
-      useDocker: this.useDocker,
       source: source,
       args: [],
     });
@@ -148,11 +178,10 @@ export class Grpcurl {
    * Describe message from provided parameters
    */
   async message(params: DescribeMessageParams): Promise<Message | string> {
-    const command = `grpcurl -msg-template |SRC| describe %s`;
+    const command = `${this.executablePath} -msg-template |SRC| describe %s`;
 
     const call = this.caller.buildCliCommand({
       cliCommand: command,
-      useDocker: this.useDocker,
       source: params.source,
       args: [params.messageTag],
     });
@@ -166,10 +195,10 @@ export class Grpcurl {
   }
 
   /**
-   * Command to build `grpcurl` CLI request
+   * Command to build `${this.executablePath}` CLI request
    */
   formCall(input: Request): string {
-    const command = `grpcurl -emit-defaults %s %s -d %s |SRC| %s`;
+    const command = `${this.executablePath} -emit-defaults %s %s -d %s |SRC| %s`;
     const formedJson = this.jsonPreprocess(input.content);
     let maxMsgSizeTemplate = ``;
     if (input.maxMsgSize !== 4) {
@@ -183,7 +212,6 @@ export class Grpcurl {
     if (input.file !== undefined) {
       return this.caller.buildCliCommand({
         cliCommand: command,
-        useDocker: this.useDocker,
         source: {
           type: `MULTI`,
           host: input.server.host,
@@ -196,7 +224,6 @@ export class Grpcurl {
     }
     return this.caller.buildCliCommand({
       cliCommand: command,
-      useDocker: this.useDocker,
       source: input.server,
       args: [headersTemplate, maxMsgSizeTemplate, formedJson, input.callTag],
     });
