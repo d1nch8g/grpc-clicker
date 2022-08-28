@@ -39,10 +39,14 @@ export class Installer {
   }
 
   async unzip(file: string, dir: string): Promise<boolean> {
-    const zipStream = fse
-      .createReadStream(file)
-      .pipe(unzip.Extract({ path: dir }));
-    await new Promise((fin) => zipStream.on("finish", fin));
+    if (process.platform === `win32`) {
+      const zipStream = fse
+        .createReadStream(file)
+        .pipe(unzip.Extract({ path: dir }));
+      await new Promise((fin) => zipStream.on("finish", fin));
+    } else {
+      
+    }
     fs.rmSync(file);
     return fs.existsSync(`${dir}/LICENSE`);
   }
