@@ -128,10 +128,10 @@ export class Grpcurl {
     private extensionPath: string
   ) {
     if (process.platform === `win32`) {
-      this.executablePath = extensionPath + `/grpcurl/grpcurl.exe`;
+      this.executablePath = extensionPath + `/dist/grpcurl/grpcurl.exe`;
       return;
     }
-    this.executablePath = extensionPath + `/grpcurl/grpcurl`;
+    this.executablePath = extensionPath + `/dist/grpcurl/grpcurl`;
   }
 
   /**

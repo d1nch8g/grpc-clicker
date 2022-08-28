@@ -1,5 +1,7 @@
 import * as util from "util";
 import * as fs from "fs";
+import * as fse from "fs-extra";
+import * as unzip from "unzip-stream";
 
 const baseLink = `https://github.com/fullstorydev/grpcurl/releases/download/v1.8.7/`;
 
@@ -37,14 +39,10 @@ export class Installer {
   }
 
   async unzip(file: string, dir: string): Promise<boolean> {
-    var unzip = require("unzip-stream");
-    var fs = require("fs-extra");
-    await fs.createReadStream(file).pipe(unzip.Extract({ path: dir }));
-    for (let i = 0; i < 1500; i++) {
-      if (fs.existsSync(`${dir}/LICENSE`)) {
-        return true;
-      }
-    }
-    return false;
+    const zipStream = fse
+      .createReadStream(file)
+      .pipe(unzip.Extract({ path: dir }));
+    await new Promise((fin) => zipStream.on("finish", fin));
+    return fs.existsSync(`${dir}/LICENSE`);
   }
 }

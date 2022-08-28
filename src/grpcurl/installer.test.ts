@@ -24,6 +24,7 @@ test(`unzip`, async () => {
   const installer = new Installer();
   const link = installer.getDownloadUrl();
   await installer.download(link!, loadedFile);
+
   const unzipped = await installer.unzip(loadedFile, unzippedDir);
   expect(unzipped).toBeTruthy();
   fs.rmSync(loadedFile);

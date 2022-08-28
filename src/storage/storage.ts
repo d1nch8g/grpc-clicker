@@ -24,14 +24,6 @@ export class Storage {
     this.hosts = new Hosts(memento);
   }
 
-  grpcurlInstalled(): boolean {
-    return this.memento.get(`grpcurl-installed`, false);
-  }
-
-  setGrpcurlInstalled() {
-    this.memento.update(`grpcurl-installed`, true);
-  }
-
   clean() {
     for (const key of this.memento.keys()) {
       this.memento.update(key, undefined);
