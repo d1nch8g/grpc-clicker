@@ -4,6 +4,13 @@
 </script>
 
 <div class="container" style="--height: {height}px;">
+  <table>
+    <tr>
+      <center>
+        <div>Request information</div>
+      </center>
+    </tr>
+  </table>
   <vscode-data-grid aria-label="Basic" grid-template-columns="40% 60%">
     {#if data.request.file !== undefined}
       <vscode-data-grid-row>
@@ -71,5 +78,11 @@
     height: var(--height);
     width: 100%;
     overflow-y: scroll;
+  }
+  table {
+    width: 100%;
+  }
+  tr {
+    width: 100%;
   }
 </style>
