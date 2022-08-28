@@ -206,7 +206,7 @@
           <Snippet
             bind:data
             onSnippet="{onSnippet}"
-            height="{innerHeight / 2 - 184}"
+            height="{innerHeight / 2 - 176}"
           />
         </vscode-panel-view>
         <vscode-panel-view id="view-4">

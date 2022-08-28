@@ -21,7 +21,7 @@
   </tr>
   <tr>
     <div class="button-padding">
-      <center>
+      <center class="button-center">
         <button on:click="{onSnippet}">Generate gRPCurl CLI command</button>
       </center>
     </div>
@@ -58,7 +58,7 @@
   button:focus {
     outline-color: var(--vscode-focusBorder);
   }
-  center {
+  .button-center {
     padding-top: 10px;
     padding-bottom: 5px;
   }
