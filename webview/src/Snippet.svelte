@@ -1,12 +1,9 @@
 <script>
   import JsonArea from "./JsonArea.svelte";
   export let data;
+  export let height;
   export let onSnippet;
-
-  $: innerHeight = 0;
 </script>
-
-<svelte:window bind:innerHeight />
 
 <table>
   <tr>
@@ -17,14 +14,14 @@
   <tr>
     <JsonArea
       bind:text="{data.snippet}"
-      height="{innerHeight - 240}"
       highlight="{false}"
       editable="{false}"
+      height="{height}"
     />
   </tr>
   <tr>
     <div class="button-padding">
-      <center>
+      <center class="button-center">
         <button on:click="{onSnippet}">Generate gRPCurl CLI command</button>
       </center>
     </div>
@@ -61,7 +58,7 @@
   button:focus {
     outline-color: var(--vscode-focusBorder);
   }
-  center {
+  .button-center {
     padding-top: 10px;
     padding-bottom: 5px;
   }
