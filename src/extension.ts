@@ -78,7 +78,7 @@ export function activate(context: vscode.ExtensionContext) {
       const call = grpcurl.formCall(request);
       const splittedCall = call.split(` `);
       splittedCall[0] = `grpcurl`;
-      return splittedCall.join(` `);
+      return splittedCall.join(` `).replace(`-emit-defaults  `, ``);
     },
     createTest: async (request, expectations) => {
       if (expectations === undefined) {
