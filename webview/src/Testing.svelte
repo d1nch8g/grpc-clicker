@@ -51,11 +51,7 @@
     `DataLoss`,
     `Unauthenticated`,
   ];
-
-  $: innerHeight = 0;
 </script>
-
-<svelte:window bind:innerHeight />
 
 <table>
   <tr>
@@ -96,10 +92,7 @@
     </center>
   </tr>
   <tr>
-    <JsonArea
-      bind:text="{data.expectations.content}"
-      height="{innerHeight - 300}"
-    />
+    <JsonArea bind:text="{data.expectations.content}" />
   </tr>
   <tr>
     <div class="button-padding">

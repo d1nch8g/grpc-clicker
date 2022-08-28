@@ -110,6 +110,8 @@
       command: "snippet",
     });
   }
+
+  $: innerHeight = 0;
 </script>
 
 <svelte:window
@@ -123,11 +125,12 @@
     code: 'Enter',
     callback: onSend,
   }}"
+  bind:innerHeight
 />
 
 <TopPanel bind:data onSend="{onSend}" onHosts="{onHosts}" />
 
-<table>
+<table style="--height: {innerHeight - 100}px">
   <td class="left-side">
     <div>
       <vscode-panels>
@@ -173,6 +176,7 @@
 <style>
   table {
     width: 100%;
+    height: var(--height);
   }
   td {
     height: 100%;
