@@ -139,13 +139,14 @@
         <vscode-panel-tab id="tab-3">SNIPPET</vscode-panel-tab>
         <vscode-panel-tab id="tab-4">INFORMATION</vscode-panel-tab>
         <vscode-panel-view id="view-1">
-          <Request bind:data />
+          <Request bind:data height="{innerHeight - 165}" />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
           <Headers
             bind:data
             addHeader="{onAddHeader}"
             removeHeader="{onRemoveHeader}"
+            height="{innerHeight - 135}"
           />
         </vscode-panel-view>
         <vscode-panel-view id="view-3">

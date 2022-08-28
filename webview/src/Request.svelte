@@ -1,5 +1,6 @@
 <script>
   import JsonArea from "./JsonArea.svelte";
+  export let height;
   export let data;
 </script>
 
@@ -10,7 +11,7 @@
     </center>
   </tr>
   <tr>
-    <JsonArea bind:text="{data.request.content}" />
+    <JsonArea bind:text="{data.request.content}" height="{height}" />
   </tr>
 </table>
 
