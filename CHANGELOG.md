@@ -2,9 +2,15 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.1.5]
+
+> August 28, 2022
+
+- Linux&Macos autoinstall of grpcurl bug-fixes
+
 ## [0.1.4]
 
-> August 9, 2022
+> August 14, 2022
 
 - Added automatic grpcurl installation on extension first load
 - Added vertical view to webview when it's too tight
