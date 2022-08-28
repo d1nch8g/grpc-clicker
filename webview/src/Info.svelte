@@ -7,7 +7,7 @@
   <table>
     <tr>
       <center>
-        <div>Request information</div>
+        <div>INFO</div>
       </center>
     </tr>
   </table>
