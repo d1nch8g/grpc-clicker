@@ -7,7 +7,7 @@
 [![Generic badge](https://img.shields.io/badge/LICENSE-MIT-red.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/LICENSE)
 [![Generic badge](https://img.shields.io/badge/VSCode-marketplace-blue.svg)](https://marketplace.visualstudio.com/items?itemName=Dancheg97.grpc-clicker)
 [![Generic badge](https://img.shields.io/badge/GitHub-repo-orange.svg)](https://github.com/Dancheg97/grpclicker_vscode)
-[![Generic badge](https://img.shields.io/badge/Changelog-v0.1.3-cyan.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/CHANGELOG.md)
+[![Generic badge](https://img.shields.io/badge/Changelog-v0.1.4-cyan.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/CHANGELOG.md)
 [![Generic badge](https://img.shields.io/badge/Contribute-guide-ff69b4.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/CONTRIBUTE.md)
 
 To get extemsion to work, you need to install [`grpcurl`](https://github.com/fullstorydev/grpcurl), it will be installed automatically with extension.

@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file. Dates are d
 > August 9, 2022
 
 - Added automatic grpcurl installation on extension first load
-- Added proper migration mechanism for storage
+- Added vertical view to webview when it's too tight
+- Removed cache cleanup on updates
 - Optimized json parser for webview, using RE
 - Removed ability to use docker
 
