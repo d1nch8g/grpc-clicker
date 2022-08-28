@@ -1,5 +1,6 @@
 <script>
   export let text;
+  export let height;
   export let highlight = true;
   export let editable = true;
 
@@ -134,7 +135,7 @@
   }
 </script>
 
-<div class="containter">
+<div class="containter" style="--height: {height}px;">
   <div class="control">
     {#if !editable}
       <textarea
@@ -200,22 +201,26 @@
     width: 100%;
     position: relative;
     pointer-events: none;
+    height: var(--height);
   }
   .wrapper {
     width: 100%;
     position: absolute;
     top: 0;
     left: 0;
+    height: inherit;
   }
   .control {
     width: 100%;
+    height: inherit;
   }
 
   textarea {
     resize: none;
     display: block;
-    width: 98%;
-    padding: 6px;
+    width: 100%;
+    height: inherit;
+    box-sizing: border-box;
     font-family: var(--vscode-editor-font-family);
     font-size: var(--vscode-editor-font-size);
   }
