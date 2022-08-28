@@ -1,6 +1,7 @@
 <script>
   import JsonArea from "./JsonArea.svelte";
   export let data;
+  export let height;
   export let createTest;
 
   function onTimeChanged(time) {
@@ -92,7 +93,7 @@
     </center>
   </tr>
   <tr>
-    <JsonArea bind:text="{data.expectations.content}" />
+    <JsonArea bind:text="{data.expectations.content}" height="{height}" />
   </tr>
   <tr>
     <div class="button-padding">

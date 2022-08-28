@@ -134,7 +134,7 @@
   <td class="left-side">
     <div>
       <vscode-panels>
-        <vscode-panel-tab id="tab-1">INPUT</vscode-panel-tab>
+        <vscode-panel-tab id="tab-1">REQUEST</vscode-panel-tab>
         <vscode-panel-tab id="tab-2">HEADERS</vscode-panel-tab>
         <vscode-panel-tab id="tab-3">SNIPPET</vscode-panel-tab>
         <vscode-panel-tab id="tab-4">INFORMATION</vscode-panel-tab>
@@ -150,7 +150,11 @@
           />
         </vscode-panel-view>
         <vscode-panel-view id="view-3">
-          <Snippet bind:data onSnippet="{onSnippet}" />
+          <Snippet
+            bind:data
+            onSnippet="{onSnippet}"
+            height="{innerHeight - 220}"
+          />
         </vscode-panel-view>
         <vscode-panel-view id="view-4">
           <Info bind:data />
@@ -161,13 +165,17 @@
   <td class="right-side">
     <div>
       <vscode-panels>
-        <vscode-panel-tab id="tab-1">OUTPUT</vscode-panel-tab>
+        <vscode-panel-tab id="tab-1">RESPONSE</vscode-panel-tab>
         <vscode-panel-tab id="tab-2">TESTING</vscode-panel-tab>
         <vscode-panel-view id="view-1">
-          <Response bind:data />
+          <Response bind:data height="{innerHeight - 165}" />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
-          <Testing bind:data createTest="{onTest}" />
+          <Testing
+            bind:data
+            createTest="{onTest}"
+            height="{innerHeight - 285}"
+          />
         </vscode-panel-view>
       </vscode-panels>
     </div>
