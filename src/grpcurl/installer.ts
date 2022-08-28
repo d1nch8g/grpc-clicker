@@ -43,6 +43,7 @@ export class Installer {
       .createReadStream(file)
       .pipe(unzip.Extract({ path: dir }));
     await new Promise((fin) => zipStream.on("finish", fin));
+    fs.rmSync(file);
     return fs.existsSync(`${dir}/LICENSE`);
   }
 }

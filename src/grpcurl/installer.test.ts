@@ -27,7 +27,6 @@ test(`unzip`, async () => {
 
   const unzipped = await installer.unzip(loadedFile, unzippedDir);
   expect(unzipped).toBeTruthy();
-  fs.rmSync(loadedFile);
   fs.rmSync(unzippedDir, { recursive: true, force: true });
   console.log(`test files removed`);
 });
