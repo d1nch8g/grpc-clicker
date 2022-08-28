@@ -14,3 +14,9 @@ vsc-extension-quickstart.md
 webview/**
 server/**
 docs/**
+dist/grpcurl/**
+node_modules
+watcher.js
+go.mod
+go.sum
+jest.config.js

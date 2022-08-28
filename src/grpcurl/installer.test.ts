@@ -4,9 +4,15 @@ import * as fs from "fs";
 test(`getLink`, () => {
   const installer = new Installer();
   const link = installer.getDownloadUrl();
-  expect(link).toBe(
-    `https://github.com/fullstorydev/grpcurl/releases/download/v1.8.7/grpcurl_1.8.7_windows_x86_64.zip`
-  );
+  if (process.platform === `win32`) {
+    expect(link).toBe(
+      `https://github.com/fullstorydev/grpcurl/releases/download/v1.8.7/grpcurl_1.8.7_windows_x86_64.zip`
+    );
+  } else {
+    expect(link).toBe(
+      `https://github.com/fullstorydev/grpcurl/releases/download/v1.8.7/grpcurl_1.8.7_osx_x86_64.tar.gz`
+    );
+  }
 });
 
 test(`download`, async () => {
