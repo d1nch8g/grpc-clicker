@@ -1,6 +1,5 @@
 <script>
   export let text;
-  export let height;
   export let highlight = true;
   export let editable = true;
 
@@ -24,8 +23,7 @@
 
   const space = ` `;
   const noBreakSpace = `\xa0`;
-  const newline = `
-`;
+  const newline = `\n`;
 
   let bracketsText = "";
   let stringsText = "";
@@ -140,24 +138,14 @@
   <div class="control">
     {#if !editable}
       <textarea
-        class="maineditor"
-        name=""
-        id=""
-        cols="30"
-        rows="10"
-        style="--height: {height}px"
         readonly
+        class="maineditor"
         bind:this="{mainScroll}"
         bind:value="{text}"
         on:scroll="{parseScroll}"></textarea>
     {:else}
       <textarea
         class="maineditor"
-        name=""
-        id=""
-        cols="30"
-        rows="10"
-        style="--height: {height}px"
         bind:this="{mainScroll}"
         bind:value="{text}"
         on:scroll="{parseScroll}"></textarea>
@@ -166,72 +154,42 @@
 
   <div class="wrapper">
     <textarea
-      class="bracketcolor"
-      name=""
-      id=""
-      cols="30"
-      rows="10"
-      style="--height: {height}px"
+      class="brackets transparenter"
       bind:this="{bracketScroll}"
       value="{bracketsText}"></textarea>
   </div>
 
   <div class="wrapper">
     <textarea
-      class="stringvalues"
-      name=""
-      id=""
-      cols="30"
-      rows="10"
-      style="--height: {height}px"
+      class="strings transparenter"
       bind:this="{stringsScroll}"
       bind:value="{stringsText}"></textarea>
   </div>
 
   <div class="wrapper">
     <textarea
-      class="stringkeys"
-      name=""
-      id=""
-      cols="30"
-      rows="10"
-      style="--height: {height}px"
+      class="keys transparenter"
       bind:this="{keysScroll}"
       bind:value="{keysText}"></textarea>
   </div>
 
   <div class="wrapper">
     <textarea
-      class="numbercolor"
-      name=""
-      id=""
-      cols="30"
-      rows="10"
-      style="--height: {height}px"
+      class="numbers transparenter"
       bind:this="{numbersScroll}"
       bind:value="{numbersText}"></textarea>
   </div>
 
   <div class="wrapper">
     <textarea
-      class="boolcolor"
-      name=""
-      id=""
-      cols="30"
-      rows="10"
-      style="--height: {height}px"
+      class="booleans transparenter"
       bind:this="{boolsScroll}"
       bind:value="{boolText}"></textarea>
   </div>
 
   <div class="wrapper">
     <textarea
-      class="markupcolor"
-      name=""
-      id=""
-      cols="30"
-      rows="10"
-      style="--height: {height}px"
+      class="punctuation transparenter"
       bind:this="{markupScroll}"
       bind:value="{markupText}"></textarea>
   </div>
@@ -258,7 +216,6 @@
     display: block;
     width: 98%;
     padding: 6px;
-    height: var(--height);
     font-family: var(--vscode-editor-font-family);
     font-size: var(--vscode-editor-font-size);
   }
@@ -278,51 +235,28 @@
     background: var(--vscode-input-foreground);
   }
 
-  .bracketcolor {
+  .transparenter {
+    caret-color: transparent;
+    outline-color: transparent;
+    background-color: transparent;
+    border-color: transparent;
+  }
+  .brackets {
     color: var(--vscode-debugIcon-breakpointCurrentStackframeForeground);
-    caret-color: transparent;
-    outline-color: transparent;
-    background-color: transparent;
-    border-color: transparent;
   }
-
-  .stringvalues {
+  .strings {
     color: var(--vscode-debugTokenExpression-string);
-    caret-color: transparent;
-    outline-color: transparent;
-    background-color: transparent;
-    border-color: transparent;
   }
-
-  .stringkeys {
+  .keys {
     color: var(--vscode-debugIcon-stepOverForeground);
-    caret-color: transparent;
-    outline-color: transparent;
-    background-color: transparent;
-    border-color: transparent;
   }
-
-  .numbercolor {
+  .numbers {
     color: var(--vscode-debugTokenExpression-number);
-    caret-color: transparent;
-    outline-color: transparent;
-    background-color: transparent;
-    border-color: transparent;
   }
-
-  .boolcolor {
+  .booleans {
     color: var(--vscode-debugTokenExpression-boolean);
-    caret-color: transparent;
-    outline-color: transparent;
-    background-color: transparent;
-    border-color: transparent;
   }
-
-  .markupcolor {
+  .punctuation {
     color: var(--vscode-foreground);
-    caret-color: transparent;
-    outline-color: transparent;
-    background-color: transparent;
-    border-color: transparent;
   }
 </style>

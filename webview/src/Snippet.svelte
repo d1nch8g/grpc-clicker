@@ -2,11 +2,7 @@
   import JsonArea from "./JsonArea.svelte";
   export let data;
   export let onSnippet;
-
-  $: innerHeight = 0;
 </script>
-
-<svelte:window bind:innerHeight />
 
 <table>
   <tr>
@@ -17,7 +13,6 @@
   <tr>
     <JsonArea
       bind:text="{data.snippet}"
-      height="{innerHeight - 240}"
       highlight="{false}"
       editable="{false}"
     />
