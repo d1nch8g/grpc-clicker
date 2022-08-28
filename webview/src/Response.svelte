@@ -1,7 +1,7 @@
 <script>
   import JsonArea from "./JsonArea.svelte";
   export let data;
-  console.log(data.response);
+  export let height;
 </script>
 
 <table>
@@ -16,10 +16,15 @@
   </tr>
   <tr>
     {#if data.response.code === `OK`}
-      <JsonArea bind:text="{data.response.content}" editable="{false}" />
+      <JsonArea
+        bind:text="{data.response.content}"
+        height="{height}"
+        editable="{false}"
+      />
     {:else}
       <JsonArea
         bind:text="{data.response.content}"
+        height="{height}"
         highlight="{false}"
         editable="{false}"
       />

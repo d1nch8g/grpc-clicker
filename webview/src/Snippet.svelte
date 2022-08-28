@@ -1,6 +1,7 @@
 <script>
   import JsonArea from "./JsonArea.svelte";
   export let data;
+  export let height;
   export let onSnippet;
 </script>
 
@@ -15,6 +16,7 @@
       bind:text="{data.snippet}"
       highlight="{false}"
       editable="{false}"
+      height="{height}"
     />
   </tr>
   <tr>
