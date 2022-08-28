@@ -110,6 +110,10 @@
       command: "snippet",
     });
   }
+
+  $: innerHeight = 0;
+  $: innerWidth = 0;
+  $: horizontalOrientation = innerHeight < innerWidth;
 </script>
 
 <svelte:window
@@ -123,67 +127,123 @@
     code: 'Enter',
     callback: onSend,
   }}"
+  bind:innerHeight
+  bind:innerWidth
 />
 
 <TopPanel bind:data onSend="{onSend}" onHosts="{onHosts}" />
 
 <table>
-  <td class="left-side">
-    <div>
+  {#if horizontalOrientation}
+    <td class="horizontal">
+      <div>
+        <vscode-panels>
+          <vscode-panel-tab id="tab-1">REQUEST</vscode-panel-tab>
+          <vscode-panel-tab id="tab-2">HEADERS</vscode-panel-tab>
+          <vscode-panel-tab id="tab-3">SNIPPET</vscode-panel-tab>
+          <vscode-panel-tab id="tab-4">INFORMATION</vscode-panel-tab>
+          <vscode-panel-view id="view-1">
+            <Request bind:data height="{innerHeight - 165}" />
+          </vscode-panel-view>
+          <vscode-panel-view id="view-2">
+            <Headers
+              bind:data
+              addHeader="{onAddHeader}"
+              removeHeader="{onRemoveHeader}"
+              height="{innerHeight - 135}"
+            />
+          </vscode-panel-view>
+          <vscode-panel-view id="view-3">
+            <Snippet
+              bind:data
+              onSnippet="{onSnippet}"
+              height="{innerHeight - 220}"
+            />
+          </vscode-panel-view>
+          <vscode-panel-view id="view-4">
+            <Info bind:data height="{innerHeight - 135}" />
+          </vscode-panel-view>
+        </vscode-panels>
+      </div>
+    </td>
+    <td class="horizontal">
+      <div>
+        <vscode-panels>
+          <vscode-panel-tab id="tab-1">RESPONSE</vscode-panel-tab>
+          <vscode-panel-tab id="tab-2">TESTING</vscode-panel-tab>
+          <vscode-panel-view id="view-1">
+            <Response bind:data height="{innerHeight - 165}" />
+          </vscode-panel-view>
+          <vscode-panel-view id="view-2">
+            <Testing
+              bind:data
+              createTest="{onTest}"
+              height="{innerHeight - 285}"
+            />
+          </vscode-panel-view>
+        </vscode-panels>
+      </div>
+    </td>
+  {:else}
+    <tr>
       <vscode-panels>
-        <vscode-panel-tab id="tab-1">INPUT</vscode-panel-tab>
+        <vscode-panel-tab id="tab-1">REQUEST</vscode-panel-tab>
         <vscode-panel-tab id="tab-2">HEADERS</vscode-panel-tab>
         <vscode-panel-tab id="tab-3">SNIPPET</vscode-panel-tab>
         <vscode-panel-tab id="tab-4">INFORMATION</vscode-panel-tab>
         <vscode-panel-view id="view-1">
-          <Request bind:data />
+          <Request bind:data height="{innerHeight / 2 - 122}" />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
           <Headers
             bind:data
             addHeader="{onAddHeader}"
             removeHeader="{onRemoveHeader}"
+            height="{innerHeight / 2 - 92}"
           />
         </vscode-panel-view>
         <vscode-panel-view id="view-3">
-          <Snippet bind:data onSnippet="{onSnippet}" />
+          <Snippet
+            bind:data
+            onSnippet="{onSnippet}"
+            height="{innerHeight / 2 - 176}"
+          />
         </vscode-panel-view>
         <vscode-panel-view id="view-4">
-          <Info bind:data />
+          <Info bind:data height="{innerHeight / 2 - 92}" />
         </vscode-panel-view>
       </vscode-panels>
-    </div>
-  </td>
-  <td class="right-side">
-    <div>
+    </tr>
+    <tr>
       <vscode-panels>
-        <vscode-panel-tab id="tab-1">OUTPUT</vscode-panel-tab>
+        <vscode-panel-tab id="tab-1">RESPONSE</vscode-panel-tab>
         <vscode-panel-tab id="tab-2">TESTING</vscode-panel-tab>
         <vscode-panel-view id="view-1">
-          <Response bind:data />
+          <Response bind:data height="{innerHeight / 2 - 122}" />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
-          <Testing bind:data createTest="{onTest}" />
+          <Testing
+            bind:data
+            createTest="{onTest}"
+            height="{innerHeight / 2 - 252}"
+          />
         </vscode-panel-view>
       </vscode-panels>
-    </div>
-  </td>
+    </tr>
+  {/if}
 </table>
 
 <style>
   table {
     width: 100%;
+    height: var(--height);
   }
   td {
     height: 100%;
     width: 50%;
   }
-  .left-side {
-    padding-left: 3%;
-    padding-right: 1%;
-  }
-  .right-side {
-    padding-right: 3%;
-    padding-left: 1%;
+  .horizontal {
+    padding-left: 1.5%;
+    padding-right: 1.5%;
   }
 </style>

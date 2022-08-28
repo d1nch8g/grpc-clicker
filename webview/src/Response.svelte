@@ -1,11 +1,8 @@
 <script>
   import JsonArea from "./JsonArea.svelte";
   export let data;
-  $: innerHeight = 0;
-  console.log(data.response);
+  export let height;
 </script>
-
-<svelte:window bind:innerHeight />
 
 <table>
   <tr>
@@ -21,13 +18,13 @@
     {#if data.response.code === `OK`}
       <JsonArea
         bind:text="{data.response.content}"
-        height="{innerHeight - 180}"
+        height="{height}"
         editable="{false}"
       />
     {:else}
       <JsonArea
         bind:text="{data.response.content}"
-        height="{innerHeight - 180}"
+        height="{height}"
         highlight="{false}"
         editable="{false}"
       />
