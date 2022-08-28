@@ -112,6 +112,7 @@
   }
 
   $: innerHeight = 0;
+  $: innerWidth = 0;
 </script>
 
 <svelte:window
@@ -126,12 +127,13 @@
     callback: onSend,
   }}"
   bind:innerHeight
+  bind:innerWidth
 />
 
 <TopPanel bind:data onSend="{onSend}" onHosts="{onHosts}" />
 
-<table style="--height: {innerHeight - 100}px">
-  <td class="left-side">
+<table>
+  <td class="horizontal">
     <div>
       <vscode-panels>
         <vscode-panel-tab id="tab-1">REQUEST</vscode-panel-tab>
@@ -157,12 +159,12 @@
           />
         </vscode-panel-view>
         <vscode-panel-view id="view-4">
-          <Info bind:data />
+          <Info bind:data height="{innerHeight - 135}" />
         </vscode-panel-view>
       </vscode-panels>
     </div>
   </td>
-  <td class="right-side">
+  <td class="horizontal">
     <div>
       <vscode-panels>
         <vscode-panel-tab id="tab-1">RESPONSE</vscode-panel-tab>
@@ -191,12 +193,8 @@
     height: 100%;
     width: 50%;
   }
-  .left-side {
-    padding-left: 3%;
-    padding-right: 1%;
-  }
-  .right-side {
-    padding-right: 3%;
-    padding-left: 1%;
+  .horizontal {
+    padding-left: 1.5%;
+    padding-right: 1.5%;
   }
 </style>
