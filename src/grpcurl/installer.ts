@@ -45,7 +45,10 @@ export class Installer {
         .pipe(unzip.Extract({ path: dir }));
       await new Promise((fin) => zipStream.on("finish", fin));
     } else {
-      
+      const command = `tar -xf ${file} -C ${dir}`;
+      fs.mkdirSync(dir, {});
+      const exec = util.promisify(require("child_process").exec);
+      await exec(command);
     }
     fs.rmSync(file);
     return fs.existsSync(`${dir}/LICENSE`);
