@@ -6,8 +6,12 @@ import {
   FormCliTemplateParams,
   ServerSource,
 } from "./caller";
-import { time } from "console";
 import { Installer } from "./installer";
+
+let executablePath = `/dist/grpcurl/grpcurl`;
+if (process.platform === `win32`) {
+  executablePath = `/dist/grpcurl/grpcurl.exe`;
+}
 
 class MockParser implements Parser {
   resp(input: string): ParsedResponse {
@@ -76,8 +80,7 @@ test(`protoFile`, async () => {
         package: `stuff`,
         name: ``,
         tag: ``,
-        description:
-          "grpcurl -max-time 0.5 -import-path / -proto docs/api.proto describe",
+        description: `${executablePath} -max-time 0.5 -import-path / -proto docs/api.proto describe`,
         calls: [],
       },
     ],
@@ -108,8 +111,7 @@ test(`protoServer`, async () => {
         package: `stuff`,
         name: ``,
         tag: ``,
-        description:
-          "grpcurl -max-time 0.5 -plaintext localhost:12201 describe",
+        description: `${executablePath} -max-time 0.5 -plaintext localhost:12201 describe`,
         calls: [],
       },
     ],
@@ -145,7 +147,7 @@ test(`message`, async () => {
     })
   ).toStrictEqual({
     type: `MESSAGE`,
-    name: `grpcurl -msg-template -import-path / -proto docs/api.proto describe .pb.v1.StringMes`,
+    name: `${executablePath} -msg-template -import-path / -proto docs/api.proto describe .pb.v1.StringMes`,
     tag: `tag`,
     description: `dscr`,
     template: `tmplt`,
@@ -186,8 +188,8 @@ test(`send`, async () => {
 
   expect(resp.code).toBe(`OK`);
 
-  const winExpect = `grpcurl -emit-defaults -H \"username: user\" -H \"password: password\"  -max-msg-sz 1048576 -d \"{}\" -import-path / -proto docs/api.proto -plaintext localhost:12201 .pb.v1.Constructions/EmptyCall`;
-  const linuxExpect = `grpcurl -emit-defaults -H 'username: user' -H 'password: password'  -max-msg-sz 1048576 -d '{}' -import-path / -proto docs/api.proto -plaintext localhost:12201 .pb.v1.Constructions/EmptyCall`;
+  const winExpect = `${executablePath} -emit-defaults -H \"username: user\" -H \"password: password\"  -max-msg-sz 1048576 -d \"{}\" -import-path / -proto docs/api.proto -plaintext localhost:12201 .pb.v1.Constructions/EmptyCall`;
+  const linuxExpect = `${executablePath} -emit-defaults -H 'username: user' -H 'password: password'  -max-msg-sz 1048576 -d '{}' -import-path / -proto docs/api.proto -plaintext localhost:12201 .pb.v1.Constructions/EmptyCall`;
 
   if (process.platform === "win32") {
     expect(resp.content).toBe(winExpect);

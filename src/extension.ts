@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import * as fs from "fs";
 import { Caller, FileSource, ServerSource } from "./grpcurl/caller";
 import { Response, Expectations, Request } from "./grpcurl/grpcurl";
 import { Message, Parser } from "./grpcurl/parser";
@@ -74,7 +75,10 @@ export function activate(context: vscode.ExtensionContext) {
       return response;
     },
     createSnippet: async (request) => {
-      return grpcurl.formCall(request);
+      const call = grpcurl.formCall(request);
+      const splittedCall = call.split(` `);
+      splittedCall[0] = `grpcurl`;
+      return splittedCall.join(` `);
     },
     createTest: async (request, expectations) => {
       if (expectations === undefined) {
@@ -540,16 +544,15 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
+  if (!fs.existsSync(context.extensionPath + `/dist/grpcurl/LICENSE`)) {
+    installGrpcurl();
+  }
+
   async function installGrpcurl() {
-    const rez = await grpcurl.install(context.extensionPath + `/grpcurl`);
+    const rez = await grpcurl.install(context.extensionPath + `/dist/grpcurl`);
     if (rez !== undefined) {
       vscode.window.showErrorMessage(rez);
     }
-    storage.setGrpcurlInstalled();
-  }
-
-  if (!storage.grpcurlInstalled()) {
-    installGrpcurl();
   }
 }
 
