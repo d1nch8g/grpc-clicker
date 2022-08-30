@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.1.6]
+
+> August 30, 2022
+
+- Documentation updated
+
 ## [0.1.5]
 
 > August 28, 2022
