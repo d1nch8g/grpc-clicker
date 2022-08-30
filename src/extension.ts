@@ -10,6 +10,7 @@ import { Grpcurl } from "./grpcurl/grpcurl";
 import { ProtoFile } from "./storage/protoFiles";
 import { ProtoServer } from "./storage/protoServer";
 import { AdditionalInfo, HistoryValue } from "./storage/history";
+import { Installer } from "./grpcurl/installer";
 import {
   CollectionItem,
   GrpcTabFromScratch as GrpcTabParams,
@@ -17,7 +18,6 @@ import {
   ProtoItem,
   TestItem,
 } from "./treeviews/items";
-import { Installer } from "./grpcurl/installer";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
@@ -340,7 +340,9 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("headers.add", async () => {
     const header = await vscode.window.showInputBox({
-      title: `header that you can add to gRPC call, in format: "key: value", enable/disable by clicking`,
+      title:
+        `header that you can add to gRPC call, in format: ` +
+        `"key: value", enable/disable by clicking`,
     });
     if (header === "" || header === undefined) {
       return;
