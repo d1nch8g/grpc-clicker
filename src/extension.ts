@@ -167,7 +167,7 @@ export function activate(context: vscode.ExtensionContext) {
     },
     addHeader: async () => {
       const header = await vscode.window.showInputBox({
-        title: `Add new header in grpcurl compatible format, example 'username: user'`,
+        title: `Add new header in grpcurl format, example 'username: user'`,
       });
       if (header === undefined) {
         return storage.headers.list();
@@ -549,9 +549,11 @@ export function activate(context: vscode.ExtensionContext) {
   }
 
   async function installGrpcurl() {
-    const rez = await grpcurl.install(context.extensionPath + `/dist/grpcurl`);
-    if (rez !== undefined) {
-      vscode.window.showErrorMessage(rez);
+    const result = await grpcurl.install(
+      context.extensionPath + `/dist/grpcurl`
+    );
+    if (result !== undefined) {
+      vscode.window.showErrorMessage(result);
     }
   }
 }
