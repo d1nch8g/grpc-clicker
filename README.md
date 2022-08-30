@@ -7,12 +7,12 @@
 [![Generic badge](https://img.shields.io/badge/LICENSE-MIT-red.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/LICENSE)
 [![Generic badge](https://img.shields.io/badge/VSCode-marketplace-blue.svg)](https://marketplace.visualstudio.com/items?itemName=Dancheg97.grpc-clicker)
 [![Generic badge](https://img.shields.io/badge/GitHub-repo-orange.svg)](https://github.com/Dancheg97/grpclicker_vscode)
-[![Generic badge](https://img.shields.io/badge/Changelog-v0.1.5-cyan.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/CHANGELOG.md)
+[![Generic badge](https://img.shields.io/badge/Changelog-v0.1.6-cyan.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/CHANGELOG.md)
 [![Generic badge](https://img.shields.io/badge/Contribute-guide-ff69b4.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/CONTRIBUTE.md)
 
-To get extemsion to work, you need to install [`grpcurl`](https://github.com/fullstorydev/grpcurl), it will be installed automatically with extension.
+Extension uses [`grpcurl`](https://github.com/fullstorydev/grpcurl) under the hood, it will be installed automatically with extension.
 
-This extension provides ability to execute gRPC calls from VSCode, using [`grpcurl`](https://github.com/fullstorydev/grpcurl) CLI under the hood.
+This extension provides ability to execute gRPC calls from VSCode, using [`grpcurl`](https://github.com/fullstorydev/grpcurl) CLI commands (similarly to docker extension).
 
 Currently in _beta_ stage, so it might feel a bit buggy. Contributing is highly appreciated, any extension improvements will be included as fast as possible.
 
@@ -55,35 +55,6 @@ Most of the time, command `gRPC Clicker: clean all extension cache` helps to
 resolve possible issues.
 
 Otherwise feel welcome to write an issue on github.
-
----
-
-## Install gRPCurl
-
-You can have full installation guide here [grpcurl](https://github.com/fullstorydev/grpcurl).
-CLI commands to install it via:
-
-- go:
-
-```sh
-go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
-```
-
-- homebrew:
-
-```sh
-brew install grpcurl
-```
-
-- ubuntu:
-
-```sh
-curl -sSL "https://github.com/fullstorydev/grpcurl/releases/download/v1.8.6/grpcurl_1.8.6_linux_x86_64.tar.gz" | tar -xz -C /usr/local/bin
-```
-
-- binaries:
-
-Also you can get precompiled binaries. Download them from [releases page](https://github.com/fullstorydev/grpcurl/releases).
 
 ---
 
