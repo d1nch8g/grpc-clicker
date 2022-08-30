@@ -549,10 +549,13 @@ export function activate(context: vscode.ExtensionContext) {
   }
 
   async function installGrpcurl() {
+    vscode.window.showInformationMessage(`installing grpcurl`);
     const rez = await grpcurl.install(context.extensionPath + `/dist/grpcurl`);
     if (rez !== undefined) {
       vscode.window.showErrorMessage(rez);
+      return;
     }
+    vscode.window.showInformationMessage(`grpcurl installation complete`);
   }
 }
 
