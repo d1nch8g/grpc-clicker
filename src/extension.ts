@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import { Caller, FileSource, ServerSource } from "./grpcurl/caller";
 import { Response, Expectations, Request } from "./grpcurl/grpcurl";
-import { Message, Parser } from "./grpcurl/parser";
+import { Call, Message, Parser, Proto, Service } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
 import { TreeViews } from "./treeviews/treeviews";
 import { WebViewFactory } from "./webview";
@@ -430,6 +430,89 @@ export function activate(context: vscode.ExtensionContext) {
     const source = file.proto.source as FileSource;
     storage.files.updateImportPath(source.filePath, importPath);
     treeviews.files.refresh(storage.files.list());
+  });
+
+  vscode.commands.registerCommand(`call.execute`, async () => {
+    const files = storage.files.list();
+    const servers = storage.servers.list();
+    let sources: string[] = [];
+    for (const file of files) {
+      sources.push(`File: ${file.source.filePath}`);
+    }
+    for (const server of servers) {
+      sources.push(`Server: ${server.source.host}`);
+    }
+    const sourceChoice = await vscode.window.showQuickPick(sources, {
+      title: `Chose reflect server or proto file.`,
+    });
+    if (sourceChoice === undefined) {
+      return;
+    }
+    let services: Service[] = [];
+    let chosenSource: ServerSource | FileSource;
+    if (sourceChoice.startsWith(`File: `)) {
+      const filePathToExecute = sourceChoice.replace(`File: `, ``);
+      for (const file of files) {
+        if (file.source.filePath === filePathToExecute) {
+          chosenSource = file.source;
+          for (const service of file.services) {
+            services.push(service);
+          }
+        }
+      }
+    }
+    if (sourceChoice.startsWith(`Server: `)) {
+      const serverHostToExecute = sourceChoice.replace(`Server: `, ``);
+      for (const server of servers) {
+        if (server.source.host === serverHostToExecute) {
+          chosenSource = server.source;
+          for (const service of server.services) {
+            services.push(service);
+          }
+        }
+      }
+    }
+    let serviceNames: string[] = [];
+    for (const service of services) {
+      serviceNames.push(`${service.package} - ${service.name}`);
+    }
+    const serviceChoice = await vscode.window.showQuickPick(serviceNames, {
+      title: `Choose service`,
+    });
+    if (serviceChoice === undefined) {
+      return;
+    }
+    let chosenService: Service;
+    for (const service of services) {
+      if (serviceChoice.split(` - `)[1] === service.name) {
+        chosenService = service;
+      }
+    }
+    let callNames: string[] = [];
+    for (const call of chosenService!.calls) {
+      callNames.push(`${call.name}`);
+    }
+    const callChoice = await vscode.window.showQuickPick(callNames);
+    if (callChoice === undefined) {
+      return;
+    }
+    let chosenCall: Call;
+    for (const call of chosenService!.calls) {
+      if (call.name === callChoice) {
+        chosenCall = call;
+      }
+    }
+
+    const params: GrpcTabParams = {
+      call: chosenCall!,
+      service: chosenService!,
+      proto: {
+        type: `PROTO`,
+        services: services,
+      },
+      source: chosenSource!,
+    };
+    vscode.commands.executeCommand(`webview.open`, params);
   });
 
   vscode.commands.registerCommand(`history.open`, async (val: HistoryValue) => {

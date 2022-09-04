@@ -76,6 +76,11 @@
     "commands": [
       {
         "category": "gRPC Clicker",
+        "command": "call.execute",
+        "title": "Execute call from saved schemas"
+      },
+      {
+        "category": "gRPC Clicker",
         "command": "collections.create",
         "title": "Create new collection of tests",
         "icon": "$(settings-add)"
