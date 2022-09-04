@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.1.7]
+
+> August 30, 2022
+
+- Added quick command to trigger grpc calls for command paletter `call.execute`
+
 ## [0.1.6]
 
 > August 30, 2022
