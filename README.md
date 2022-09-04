@@ -56,6 +56,13 @@ resolve possible issues.
 
 Otherwise feel welcome to write an issue on github.
 
+## Quick commands
+
+Also you can use vscode command palette commands, to quicker manipulate
+different extension capabilities:
+
+![](https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/docs/commands.png)
+
 ---
 
 ## Tech stack
