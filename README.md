@@ -71,8 +71,6 @@ This extension is built on top of edge technologies, such as:
 
 - [gRPCurl](https://github.com/fullstorydev/grpcurl) - used for processing of gRPC calls
 - [Svelte](https://svelte.dev/) - used for UI in extension webview
-- [Memento](https://vshaxe.github.io/vscode-extern/vscode/Memento.html) - local storage of extension
-- [JEST](https://jestjs.io/) - used for testing of included parsers
 - [vscode-webview-ui-toolkit](https://github.com/microsoft/vscode-webview-ui-toolkit) - used for several webview components
 
 <!--
