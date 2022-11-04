@@ -29,6 +29,7 @@ const serverSource: ServerSource = {
   type: "SERVER",
   host: "",
   plaintext: false,
+  timeout: 0.5,
 };
 
 const fileSource: FileSource = {

@@ -8,6 +8,7 @@ test(`form`, () => {
       type: `SERVER`,
       host: `localhost:12201`,
       plaintext: true,
+      timeout: 0.5,
     },
     args: [`.google.protobuf.Empty`],
   };

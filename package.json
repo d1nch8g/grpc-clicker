@@ -281,11 +281,11 @@
             "default": 4,
             "markdownDescription": "The maximum encoded size of a *response* message, in bytes, that grpcurl will accept. Default is `4 mb`."
           },
-          "grpc-clicker.usedocker": {
-            "title": "Use docker version of extension",
-            "type": "boolean",
-            "default": false,
-            "markdownDescription": "Switch to use docker version of cli - `fullstorydev/grpcurl`"
+          "grpc-clicker.reflectTimeout": {
+            "title": "Max time to get server description",
+            "type": "number",
+            "default": 0.5,
+            "markdownDescription": "Max time of execution for proto reflect server description calls"
           }
         }
       }
