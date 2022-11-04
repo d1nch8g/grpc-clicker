@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.1.8]
+
+> August 30, 2022
+
+- Added option for timeout of recieving schema from reflect proto servers.
+
 ## [0.1.7]
 
 > August 30, 2022
