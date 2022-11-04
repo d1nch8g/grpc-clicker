@@ -7,6 +7,7 @@ export interface ServerSource {
   type: `SERVER`;
   host: string;
   plaintext: boolean;
+  timeout: number;
 }
 
 /**

@@ -23,6 +23,7 @@ const source: ServerSource = {
   type: "SERVER",
   host: "localhost:12201",
   plaintext: false,
+  timeout: 0.5,
 };
 
 const server: ProtoServer = {

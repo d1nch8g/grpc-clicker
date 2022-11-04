@@ -80,7 +80,7 @@ test(`protoFile`, async () => {
         package: `stuff`,
         name: ``,
         tag: ``,
-        description: `${executablePath} -max-time 0.5 -import-path / -proto docs/api.proto describe`,
+        description: `${executablePath}  -import-path / -proto docs/api.proto describe`,
         calls: [],
       },
     ],
@@ -121,6 +121,7 @@ test(`protoServer`, async () => {
     type: `SERVER`,
     host: `localhost:12201`,
     plaintext: true,
+    timeout: 0.5,
   };
 
   expect(await grpcurl.proto(serverSource)).toStrictEqual(expectedResult);
@@ -173,6 +174,7 @@ test(`send`, async () => {
     type: `SERVER`,
     host: `localhost:12201`,
     plaintext: true,
+    timeout: 0.5,
   };
 
   const request: Request = {
@@ -216,6 +218,7 @@ test(`test`, async () => {
     type: `SERVER`,
     host: `localhost:12201`,
     plaintext: true,
+    timeout: 0.5,
   };
 
   const request: Request = {
