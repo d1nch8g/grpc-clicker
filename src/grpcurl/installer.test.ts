@@ -4,14 +4,22 @@ import * as fs from "fs";
 test(`getLink`, () => {
   const installer = new Installer();
   const link = installer.getDownloadUrl();
-  if (process.platform === `win32`) {
-    expect(link).toBe(
-      `https://github.com/fullstorydev/grpcurl/releases/download/v1.8.7/grpcurl_1.8.7_windows_x86_64.zip`
-    );
-  } else {
-    expect(link).toBe(
-      `https://github.com/fullstorydev/grpcurl/releases/download/v1.8.7/grpcurl_1.8.7_osx_x86_64.tar.gz`
-    );
+  switch (process.platform) {
+    case `win32`:
+      expect(link).toBe(
+        `https://github.com/fullstorydev/grpcurl/releases/download/v1.8.7/grpcurl_1.8.7_windows_x86_64.zip`
+      );
+      return;
+    case `darwin`:
+      expect(link).toBe(
+        `https://github.com/fullstorydev/grpcurl/releases/download/v1.8.7/grpcurl_1.8.7_osx_x86_64.tar.gz`
+      );
+      return;
+    case `linux`:
+      expect(link).toBe(
+        `https://github.com/fullstorydev/grpcurl/releases/download/v1.8.7/grpcurl_1.8.7_linux_x86_64.tar.gz`
+      );
+      return;
   }
 });
 
