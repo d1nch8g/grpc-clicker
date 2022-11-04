@@ -160,7 +160,11 @@ export class Grpcurl {
    * Describe proto from provided source
    */
   async proto(source: FileSource | ServerSource): Promise<Proto | string> {
-    const command = `${this.executablePath} -max-time 0.5 |SRC| describe`;
+    let timeout = ``;
+    if (source.type === "SERVER") {
+      timeout = `-max-time ${source.timeout}`;
+    }
+    const command = `${this.executablePath} ${timeout} |SRC| describe`;
     const call = this.caller.buildCliCommand({
       cliCommand: command,
       source: source,

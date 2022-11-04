@@ -261,10 +261,15 @@ export function activate(context: vscode.ExtensionContext) {
     if (plaintext === undefined || plaintext === ``) {
       return;
     }
+    const reflectTimeout = vscode.workspace
+      .getConfiguration(`grpc-clicker`)
+      .get(`reflectTimeout`, 0.5);
+
     const serverSource: ServerSource = {
       type: "SERVER",
       host: host,
       plaintext: plaintext === `Yes`,
+      timeout: reflectTimeout,
     };
     const proto = await grpcurl.proto(serverSource);
     if (typeof proto === `string`) {
@@ -563,10 +568,15 @@ export function activate(context: vscode.ExtensionContext) {
 
         const hosts = storage.hosts.get();
 
+        const reflectTimeout = vscode.workspace
+          .getConfiguration(`grpc-clicker`)
+          .get(`reflectTimeout`, 0.5);
+
         const serverSource: ServerSource = {
           type: "SERVER",
           host: hosts[0].adress,
           plaintext: hosts[0].plaintext,
+          timeout: reflectTimeout,
         };
 
         request = {
