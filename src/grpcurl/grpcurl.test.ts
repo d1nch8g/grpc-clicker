@@ -80,7 +80,7 @@ test(`protoFile`, async () => {
         package: `stuff`,
         name: ``,
         tag: ``,
-        description: `${executablePath} -max-time 0.5 -import-path / -proto docs/api.proto describe`,
+        description: `${executablePath}  -import-path / -proto docs/api.proto describe`,
         calls: [],
       },
     ],
