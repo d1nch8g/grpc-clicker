@@ -5,7 +5,7 @@ import { Response, Expectations, Request } from "./grpcurl/grpcurl";
 import { Call, Message, Parser, Proto, Service } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
 import { TreeViews } from "./treeviews/treeviews";
-import { WebViewFactory } from "./webviews/call";
+import { CallWebViewFactory } from "./webviews/call";
 import { Grpcurl } from "./grpcurl/grpcurl";
 import { ProtoFile } from "./storage/protoFiles";
 import { ProtoServer } from "./storage/protoServer";
@@ -63,7 +63,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
   }
 
-  const webview = new WebViewFactory({
+  const webview = new CallWebViewFactory({
     uri: context.extensionUri,
     sendRequest: async (request, info) => {
       const response = await grpcurl.send(request);

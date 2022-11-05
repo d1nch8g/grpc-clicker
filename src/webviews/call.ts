@@ -7,7 +7,7 @@ import { Host } from "../storage/hosts";
 /**
  * Parameters for building all webview tabs.
  */
-export interface WebViewParameters {
+export interface CallWebViewParameters {
   /**
    * Base uri to eject source files for webview, should be base of extension
    */
@@ -42,7 +42,7 @@ export interface WebViewParameters {
 /**
  * Data that is required for building single tab with gRPC call.
  */
-export interface WebViewData {
+export interface CallWebViewData {
   /**
    * Request to be operated from within webview tab.
    */
@@ -76,19 +76,18 @@ export interface WebViewData {
 /**
  * Factory managing all grpc clicker request tabs.
  */
-export class WebViewFactory {
-  private tabs: GrpcClickerTab[] = [];
+export class CallWebViewFactory {
+  private tabs: CallWebviewTab[] = [];
 
-  constructor(private params: WebViewParameters) {}
+  constructor(private params: CallWebViewParameters) {}
 
   /**
    * Operation that will try to reveal existing panel with same params and
    * create new tab for grpc call if such is not found.
    */
-  createNewTab(data: WebViewData) {
-    this.removeClosedPanels();
+  createNewTab(data: CallWebViewData) {
     if (!this.tryToReveal(data.info)) {
-      this.tabs.push(new GrpcClickerTab(this.params, data));
+      this.tabs.push(new CallWebviewTab(this.params, data));
     }
   }
 
@@ -111,29 +110,19 @@ export class WebViewFactory {
     }
     return false;
   }
-
-  /**
-   * Helper method to remove all unused webview panels.
-   */
-  private removeClosedPanels() {
-    var i = this.tabs.length;
-    while (i--) {
-      if (this.tabs[i].closed) {
-        this.tabs.splice(i, 1);
-        continue;
-      }
-    }
-  }
 }
 
 /**
  * Single tab instance of tag for grpc calls.
  */
-class GrpcClickerTab {
+class CallWebviewTab {
   public readonly panel: vscode.WebviewPanel;
   public closed: boolean = false;
 
-  constructor(private params: WebViewParameters, public data: WebViewData) {
+  constructor(
+    private params: CallWebViewParameters,
+    public data: CallWebViewData
+  ) {
     this.panel = vscode.window.createWebviewPanel(
       "callgrpc",
       data.info.call,
