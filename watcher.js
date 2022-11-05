@@ -17,8 +17,13 @@ execSync(`npm i`, { encoding: "utf-8" });
 if (!fs.existsSync(distFolder)) {
   fs.mkdirSync(distFolder);
 }
+webviews.forEach((webview) => {
+  execSync(`npm i --prefix ${webviewsFolder}/${webview}`, {
+    encoding: "utf-8",
+  });
+});
 
-// Copy Vscode webview toolkit contents to dist folder
+// Copy vscode-webview-toolkit contents to dist folder
 
 var copyRecursiveSync = function (src, dest) {
   var exists = fs.existsSync(src);
@@ -42,7 +47,7 @@ var copyRecursiveSync = function (src, dest) {
 fs.rmSync(tkDest, { recursive: true, force: true });
 copyRecursiveSync(tkSource, tkDest);
 
-// Start webview watchers for each webview from list:
+// Single operation of webview rebuild process:
 
 var rebuild = async function (webviewFolder) {
   const webviewRoot = `${webviewsFolder}/${webviewFolder}`;
@@ -69,14 +74,14 @@ var rebuild = async function (webviewFolder) {
   fs.close(dump);
 };
 
+// Watch operation for single webview instance
+
+// Launch watchers for all of
+
 let count = 1;
 rebuild();
 console.log("\x1b[32m%s\x1b[0m", "Rebuilt webview for vscode: " + count);
 let lastrebuild = performance.now();
-let waitMsRebuild = 4000;
-if (process.platform === "win32") {
-  waitMsRebuild = 100;
-}
 fs.watch("webview/src", function (event, filename) {
   if (performance.now() - lastrebuild > 300) {
     count += 1;
