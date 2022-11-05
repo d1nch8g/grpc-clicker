@@ -204,10 +204,10 @@ class GrpcClickerTab {
     };
 
     const scriptUri = this.panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.params.uri, "dist", "main.js")
+      vscode.Uri.joinPath(this.params.uri, "dist", "call.js")
     );
     const stylesMainUri = this.panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.params.uri, "dist", "styles.css")
+      vscode.Uri.joinPath(this.params.uri, "dist", "call.css")
     );
     const toolkitUri = this.panel.webview.asWebviewUri(
       vscode.Uri.joinPath(this.params.uri, "dist", "tk", "toolkit.js")
