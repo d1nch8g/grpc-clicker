@@ -9,8 +9,10 @@ const webviews = [`source`, `call`];
 const distFolder = `dist`;
 const tkSource = `node_modules/@vscode/webview-ui-toolkit/dist/`;
 const tkDest = `dist/tk`;
-const npmBuildCommand = `npm run build --prefix ` + webviewsFolder;
+const npmBuildCommand = `npm run build --prefix `;
 const webviewAssets = `dist/assets`;
+const greenColor = "\x1b[32m%s\x1b[0m";
+const redColor = "\x1b[31m%s\x1b[0m";
 
 // Prepare necessary folders and load all packages
 execSync(`npm i`, { encoding: "utf-8" });
@@ -24,7 +26,6 @@ webviews.forEach((webview) => {
 });
 
 // Copy vscode-webview-toolkit contents to dist folder
-
 var copyRecursiveSync = function (src, dest) {
   var exists = fs.existsSync(src);
   var stats = exists && fs.statSync(src);
@@ -48,8 +49,7 @@ fs.rmSync(tkDest, { recursive: true, force: true });
 copyRecursiveSync(tkSource, tkDest);
 
 // Single operation of webview rebuild process:
-
-var rebuild = async function (webviewFolder) {
+var rebuild = function (webviewFolder) {
   const webviewRoot = `${webviewsFolder}/${webviewFolder}`;
   const webviewSrc = `${webviewRoot}/${webviewAssets}/`;
   const webviewDstJs = `${distFolder}/${webviewFolder}.js`;
@@ -75,22 +75,29 @@ var rebuild = async function (webviewFolder) {
 };
 
 // Watch operation for single webview instance
+var watch = async function (webviewFolder) {
+  rebuild(webviewFolder);
+  console.log(greenColor, `Watcher for ${webviewFolder} launched.`);
 
-// Launch watchers for all of
-
-let count = 1;
-rebuild();
-console.log("\x1b[32m%s\x1b[0m", "Rebuilt webview for vscode: " + count);
-let lastrebuild = performance.now();
-fs.watch("webview/src", function (event, filename) {
-  if (performance.now() - lastrebuild > 300) {
-    count += 1;
-    try {
-      rebuild();
-      console.log("\x1b[32m%s\x1b[0m", "Rebuilt webview for vscode: " + count);
-      lastrebuild = performance.now();
-    } catch (e) {
-      console.log("\x1b[31m%s\x1b[0m", "Error rebuilding webview: " + e);
+  let count = 1;
+  let lastrebuild = performance.now();
+  const webviewRoot = `${webviewsFolder}/${webviewFolder}`;
+  fs.watch(`${webviewRoot}/src`, function (event, filename) {
+    if (performance.now() - lastrebuild > 300) {
+      count += 1;
+      try {
+        rebuild(webviewFolder);
+        console.log(greenColor, `Rebuilt webview - ${webviewFolder}: ${count}`);
+        lastrebuild = performance.now();
+      } catch (e) {
+        console.log(redColor, `Error on build - ${webviewFolder}: ${count}`);
+      }
     }
-  }
+  });
+};
+
+// Launch watchers for all webviews
+
+webviews.forEach((webview) => {
+  watch(webview);
 });
