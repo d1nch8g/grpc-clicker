@@ -3,6 +3,23 @@ const fs = require("fs");
 const execSync = require("child_process").execSync;
 const path = require("path");
 
+// Watcher configurations
+const webviewsFolder = `webviews`;
+const webviews = [`source`, `call`];
+const distFolder = `dist`;
+const tkSource = `node_modules/@vscode/webview-ui-toolkit/dist/`;
+const tkDest = `dist/tk`;
+const npmBuildCommand = `npm run build --prefix ` + webviewsFolder;
+const webviewAssets = `dist/assets`;
+
+// Prepare necessary folders and load all packages
+execSync(`npm i`, { encoding: "utf-8" });
+if (!fs.existsSync(distFolder)) {
+  fs.mkdirSync(distFolder);
+}
+
+// Copy Vscode webview toolkit contents to dist folder
+
 var copyRecursiveSync = function (src, dest) {
   var exists = fs.existsSync(src);
   var stats = exists && fs.statSync(src);
@@ -22,62 +39,34 @@ var copyRecursiveSync = function (src, dest) {
   }
 };
 
-var rebuild = function () {
-  execSync("npm run build --prefix webview", { encoding: "utf-8" });
+fs.rmSync(tkDest, { recursive: true, force: true });
+copyRecursiveSync(tkSource, tkDest);
 
-  if (!fs.existsSync(`dist`)) {
-    fs.mkdirSync(`dist`);
-  }
+// Start webview watchers for each webview from list:
 
-  const files = fs.readdirSync(`webview/dist/assets/`);
+var rebuild = async function (webviewFolder) {
+  const webviewRoot = `${webviewsFolder}/${webviewFolder}`;
+  const webviewSrc = `${webviewRoot}/${webviewAssets}/`;
+  const webviewDstJs = `${distFolder}/${webviewFolder}.js`;
+  const webviewDstCss = `${distFolder}/${webviewFolder}.css`;
+
+  execSync(`${npmBuildCommand} ${webviewRoot}`, { encoding: "utf-8" });
+  const files = fs.readdirSync(webviewSrc);
   for (const file of files) {
     if (file.endsWith(`.js`)) {
-      fs.renameSync(
-        "webview/dist/assets/" + file,
-        "dist/main.js",
-        function (err) {
-          if (err) {
-            console.log(err);
-          }
-          console.log("Successfully renamed - AKA moved!");
-        }
-      );
+      fs.renameSync(webviewSrc + file, webviewDstJs);
     }
     if (file.endsWith(`.css`)) {
-      fs.renameSync(
-        "webview/dist/assets/" + file,
-        "dist/styles.css",
-        function (err) {
-          if (err) {
-            console.log(err);
-          }
-          console.log("Successfully renamed - AKA moved!");
-        }
-      );
+      fs.renameSync(webviewSrc + file, webviewDstCss);
     }
   }
 
-  const data = fs.readFileSync("dist/main.js");
-  const fd = fs.openSync("dist/main.js", "w+");
+  const fileBuffer = fs.readFileSync(webviewDstJs);
+  const dump = fs.openSync(webviewDstJs, "w+");
   const insert = Buffer.from("const vscode = acquireVsCodeApi();");
-  fs.writeSync(fd, insert, 0, insert.length, 0);
-  fs.writeSync(fd, data, 0, data.length, insert.length);
-  fs.close(fd, (err) => {
-    if (err) {
-      console.log(err);
-    }
-  });
-
-  fs.rmSync(`dist/tk/`, { recursive: true, force: true });
-
-  try {
-    copyRecursiveSync(
-      `node_modules/@vscode/webview-ui-toolkit/dist/`,
-      `dist/tk/`
-    );
-  } catch (e) {
-    console.log(e);
-  }
+  fs.writeSync(dump, insert, 0, insert.length, 0);
+  fs.writeSync(dump, fileBuffer, 0, fileBuffer.length, insert.length);
+  fs.close(dump);
 };
 
 let count = 1;

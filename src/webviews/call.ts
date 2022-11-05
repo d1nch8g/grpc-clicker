@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
-import { Response, Expectations, Request } from "./grpcurl/grpcurl";
-import { Header } from "./storage/headers";
-import { AdditionalInfo } from "./storage/history";
-import { Host } from "./storage/hosts";
+import { Response, Expectations, Request } from "../grpcurl/grpcurl";
+import { Header } from "../storage/headers";
+import { AdditionalInfo } from "../storage/history";
+import { Host } from "../storage/hosts";
 
 /**
  * Parameters for building all webview tabs.
