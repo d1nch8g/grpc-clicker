@@ -86,6 +86,7 @@ export class CallWebViewFactory {
    * create new tab for grpc call if such is not found.
    */
   createNewTab(data: CallWebViewData) {
+    this.removeClosedPanels();
     if (!this.tryToReveal(data.info)) {
       this.tabs.push(new CallWebviewTab(this.params, data));
     }
@@ -109,6 +110,19 @@ export class CallWebViewFactory {
       }
     }
     return false;
+  }
+
+  /**
+   * Helper method to remove all unused webview panels.
+   */
+  private removeClosedPanels() {
+    var i = this.tabs.length;
+    while (i--) {
+      if (this.tabs[i].closed) {
+        this.tabs.splice(i, 1);
+        continue;
+      }
+    }
   }
 }
 
