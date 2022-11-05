@@ -33,19 +33,51 @@ export interface SourceWebViewData {
  * Factory managing webview creation tabs.
  */
 export class SourceWebViewFactory {
-  private tabs: SourceWebviewTab[] = [];
+  private tabs: GrpcClickerTab[] = [];
 
   constructor(private params: SourceWebViewParameters) {}
 
+  /**
+   * Operation that will try to reveal existing panel with same params and
+   * create new tab for grpc call if such is not found.
+   */
   createNewTab(data: SourceWebViewData) {
-    this.tabs.push(new SourceWebviewTab(this.params, data));
+    this.removeClosedPanels();
+    if (!this.tryToReveal(data.source)) {
+      this.tabs.push(new GrpcClickerTab(this.params, data));
+    }
+  }
+
+  /**
+   * Helper method that checks wether panel similaer request params exists.
+   * Will be used to reveal existing panel if such exists in webviews.
+   * Will return `true` if panel successfully revealed.
+   */
+  private tryToReveal(source: FileSource | ServerSource): boolean {
+    for (const tab of this.tabs) {
+      if (JSON.stringify(source) === JSON.stringify(tab.data.source)) {
+        tab.panel.reveal();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private removeClosedPanels() {
+    var i = this.tabs.length;
+    while (i--) {
+      if (this.tabs[i].closed) {
+        this.tabs.splice(i, 1);
+        continue;
+      }
+    }
   }
 }
 
 /**
  * Single tab instance of tag for grpc calls.
  */
-class SourceWebviewTab {
+class GrpcClickerTab {
   public readonly panel: vscode.WebviewPanel;
   public closed: boolean = false;
 
@@ -55,7 +87,7 @@ class SourceWebviewTab {
   ) {
     this.panel = vscode.window.createWebviewPanel(
       "callgrpc",
-      "gRPC source",
+      `gRPC source`,
       vscode.ViewColumn.Active,
       { enableScripts: true }
     );
