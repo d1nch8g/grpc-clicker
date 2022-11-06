@@ -254,43 +254,44 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   vscode.commands.registerCommand(`servers.add`, async () => {
-    const host = await vscode.window.showInputBox({
-      title: `proto reflect server for calls`,
-    });
-    if (host === undefined || host === ``) {
-      return;
-    }
-    const plaintext = await vscode.window.showQuickPick([`Yes`, `No`], {
-      title: `Use plain text? (for servers without TLS)`,
-    });
-    if (plaintext === undefined || plaintext === ``) {
-      return;
-    }
     const reflectTimeout = vscode.workspace
       .getConfiguration(`grpc-clicker`)
       .get(`reflectTimeout`, 0.5);
-
     const serverSource: ServerSource = {
       type: "SERVER",
-      host: host,
-      plaintext: plaintext === `Yes`,
+      host: `localhost:8080`,
+      plaintext: true,
       timeout: reflectTimeout,
     };
-    const proto = await grpcurl.proto(serverSource);
-    if (typeof proto === `string`) {
-      vscode.window.showErrorMessage(proto);
-      return;
-    }
-    const err = storage.servers.add({
-      type: "PROTO",
-      source: serverSource,
-      services: proto.services,
-    });
-    if (err !== undefined) {
-      vscode.window.showErrorMessage(err.message);
-      return;
-    }
-    treeviews.servers.refresh(storage.servers.list());
+    sourceWebviewFactory.createNewTab({ source: serverSource });
+    // const host = await vscode.window.showInputBox({
+    //   title: `proto reflect server for calls`,
+    // });
+    // if (host === undefined || host === ``) {
+    //   return;
+    // }
+    // const plaintext = await vscode.window.showQuickPick([`Yes`, `No`], {
+    //   title: `Use plain text? (for servers without TLS)`,
+    // });
+    // if (plaintext === undefined || plaintext === ``) {
+    //   return;
+    // }
+
+    // const proto = await grpcurl.proto(serverSource);
+    // if (typeof proto === `string`) {
+    //   vscode.window.showErrorMessage(proto);
+    //   return;
+    // }
+    // const err = storage.servers.add({
+    //   type: "PROTO",
+    //   source: serverSource,
+    //   services: proto.services,
+    // });
+    // if (err !== undefined) {
+    //   vscode.window.showErrorMessage(err.message);
+    //   return;
+    // }
+    // treeviews.servers.refresh(storage.servers.list());
   });
 
   vscode.commands.registerCommand("files.remove", (item: ProtoItem) => {
