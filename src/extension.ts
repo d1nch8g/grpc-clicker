@@ -18,6 +18,7 @@ import {
   ProtoItem,
   TestItem,
 } from "./treeviews/items";
+import { SourceWebViewFactory } from "./webviews/source";
 
 export function activate(context: vscode.ExtensionContext) {
   const storage = new Storage(context.globalState);
@@ -63,7 +64,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
   }
 
-  const webview = new CallWebViewFactory({
+  const callWebviewFactory = new CallWebViewFactory({
     uri: context.extensionUri,
     sendRequest: async (request, info) => {
       const response = await grpcurl.send(request);
@@ -194,6 +195,10 @@ export function activate(context: vscode.ExtensionContext) {
       );
       return storage.headers.list();
     },
+  });
+
+  const sourceWebviewFactory = new SourceWebViewFactory({
+    uri: context.extensionUri,
   });
 
   vscode.commands.registerCommand("cache.clean", async () => {
@@ -534,7 +539,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
 
-    webview.createNewTab({
+    callWebviewFactory.createNewTab({
       request: val.request,
       info: val.info,
       headers: headers,
@@ -627,7 +632,7 @@ export function activate(context: vscode.ExtensionContext) {
         content: ``,
       };
 
-      webview.createNewTab({
+      callWebviewFactory.createNewTab({
         request: request,
         info: info,
         headers: headers,
