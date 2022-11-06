@@ -13,10 +13,6 @@ export interface SourceWebViewParameters {
    * Base uri to eject source files for webview, should be base of extension
    */
   uri: vscode.Uri;
-  /**
-   * Source for building a webview, should be passed with default values.
-   */
-  source: FileSource | ServerSource;
 }
 
 /**
@@ -33,7 +29,7 @@ export interface SourceWebViewData {
  * Factory managing webview creation tabs.
  */
 export class SourceWebViewFactory {
-  private tabs: GrpcClickerTab[] = [];
+  private tabs: SourceWebviewTab[] = [];
 
   constructor(private params: SourceWebViewParameters) {}
 
@@ -44,7 +40,7 @@ export class SourceWebViewFactory {
   createNewTab(data: SourceWebViewData) {
     this.removeClosedPanels();
     if (!this.tryToReveal(data.source)) {
-      this.tabs.push(new GrpcClickerTab(this.params, data));
+      this.tabs.push(new SourceWebviewTab(this.params, data));
     }
   }
 
@@ -77,7 +73,7 @@ export class SourceWebViewFactory {
 /**
  * Single tab instance of tag for grpc calls.
  */
-class GrpcClickerTab {
+class SourceWebviewTab {
   public readonly panel: vscode.WebviewPanel;
   public closed: boolean = false;
 
