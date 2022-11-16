@@ -76,3 +76,5 @@ This extension is built on top of edge technologies, such as:
 <!--
 https://marketplace.visualstudio.com/manage/publishers/dancheg97
 -->
+
+<!-- Test commit for Gitea -->
