@@ -3,7 +3,7 @@ import * as path from "path";
 import { Service, Call, Message, Field, Proto } from "../grpcurl/parser";
 import { Header } from "../storage/headers";
 import { Collection, Test } from "../storage/collections";
-import { FileSource, ServerSource } from "../grpcurl/caller";
+import { FileSource, ProtoSource } from "../grpcurl/caller";
 import { HistoryValue } from "../storage/history";
 import { Request, Response } from "../grpcurl/grpcurl";
 import { ProtoFile } from "../storage/protoFiles";
@@ -20,7 +20,7 @@ export interface GrpcTabFromScratch {
   call: Call;
   service: Service;
   proto: Proto;
-  source: FileSource | ServerSource;
+  source: FileSource | ProtoSource;
 }
 
 export enum ItemType {

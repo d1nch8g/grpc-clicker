@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
-import { Caller, FileSource, ServerSource } from "./grpcurl/caller";
+import { Caller, FileSource, ProtoSource } from "./grpcurl/caller";
 import { Response, Expectations, Request } from "./grpcurl/grpcurl";
 import { Call, Message, Parser, Proto, Service } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
@@ -51,7 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
     const open = require("open");
     const choice = await vscode.window.showInformationMessage(
       `Congratulations! You made thousand requests using gRPC Clicker. ` +
-        `Github star would be highly appreciated.`,
+      `Github star would be highly appreciated.`,
       `Star on github`,
       `Open github issue`,
       `Skip`
@@ -257,7 +257,7 @@ export function activate(context: vscode.ExtensionContext) {
     const reflectTimeout = vscode.workspace
       .getConfiguration(`grpc-clicker`)
       .get(`reflectTimeout`, 0.5);
-    const serverSource: ServerSource = {
+    const serverSource: ProtoSource = {
       type: "SERVER",
       host: `localhost:8080`,
       plaintext: true,
@@ -301,7 +301,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   vscode.commands.registerCommand("servers.remove", (item: ProtoItem) => {
-    const source = item.proto.source as ServerSource;
+    const source = item.proto.source as ProtoSource;
     storage.servers.remove(source.host);
     treeviews.servers.refresh(storage.servers.list());
   });
@@ -460,7 +460,7 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
     let services: Service[] = [];
-    let chosenSource: ServerSource | FileSource;
+    let chosenSource: ProtoSource | FileSource;
     if (sourceChoice.startsWith(`File: `)) {
       const filePathToExecute = sourceChoice.replace(`File: `, ``);
       for (const file of files) {
@@ -578,7 +578,7 @@ export function activate(context: vscode.ExtensionContext) {
           .getConfiguration(`grpc-clicker`)
           .get(`reflectTimeout`, 0.5);
 
-        const serverSource: ServerSource = {
+        const serverSource: ProtoSource = {
           type: "SERVER",
           host: hosts[0].adress,
           plaintext: hosts[0].plaintext,
@@ -660,4 +660,4 @@ export function activate(context: vscode.ExtensionContext) {
   }
 }
 
-export function deactivate() {}
+export function deactivate() { }

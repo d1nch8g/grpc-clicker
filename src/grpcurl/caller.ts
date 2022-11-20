@@ -1,33 +1,16 @@
 import * as util from "util";
 
 /**
- * Description of server source for CLI command
+ * Combined structure containing all required information for proto file.
  */
-export interface ServerSource {
-  type: `SERVER`;
-  host: string;
+export interface ProtoSource {
+  currentHost: string;
+  additionalHosts: string[];
   plaintext: boolean;
   timeout: number;
-}
-
-/**
- * Description of file source for CLI command
- */
-export interface FileSource {
-  type: `FILE`;
-  filePath: string;
-  importPath: string;
-}
-
-/**
- * Wether command should be formed for multiple sources simultaneously
- */
-export interface MultiSource {
-  type: `MULTI`;
-  host: string;
-  plaintext: boolean;
-  filePath: string;
-  importPath: string;
+  filePath: string | undefined;
+  group: string;
+  importPaths: string[];
 }
 
 /**
@@ -44,7 +27,7 @@ export interface FormCliTemplateParams {
   /**
    * Specify source of execution, that might be server of file
    */
-  source: ServerSource | FileSource | MultiSource;
+  source: ProtoSource;
   /**
    * Arguements that will be included in final version CLI command
    */

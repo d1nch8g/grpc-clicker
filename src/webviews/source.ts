@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { FileSource, ServerSource } from "../grpcurl/caller";
+import { FileSource, ProtoSource } from "../grpcurl/caller";
 import { Response, Expectations, Request } from "../grpcurl/grpcurl";
 import { Header } from "../storage/headers";
 import { AdditionalInfo } from "../storage/history";
@@ -22,7 +22,7 @@ export interface SourceWebViewData {
   /**
    * Source for building a webview,
    */
-  source: FileSource | ServerSource;
+  source: FileSource | ProtoSource;
 }
 
 /**
@@ -31,7 +31,7 @@ export interface SourceWebViewData {
 export class SourceWebViewFactory {
   private tabs: SourceWebviewTab[] = [];
 
-  constructor(private params: SourceWebViewParameters) {}
+  constructor(private params: SourceWebViewParameters) { }
 
   /**
    * Operation that will try to reveal existing panel with same params and
@@ -49,7 +49,7 @@ export class SourceWebViewFactory {
    * Will be used to reveal existing panel if such exists in webviews.
    * Will return `true` if panel successfully revealed.
    */
-  private tryToReveal(source: FileSource | ServerSource): boolean {
+  private tryToReveal(source: FileSource | ProtoSource): boolean {
     for (const tab of this.tabs) {
       if (JSON.stringify(source) === JSON.stringify(tab.data.source)) {
         tab.panel.reveal();

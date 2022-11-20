@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { FileSource, ServerSource } from "../grpcurl/caller";
+import { FileSource, ProtoSource } from "../grpcurl/caller";
 import { Message } from "../grpcurl/parser";
 import { ProtoFile } from "../storage/protoFiles";
 import {
@@ -16,7 +16,7 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
   constructor(
     private files: ProtoFile[],
     private describeMsg: (
-      source: ServerSource | FileSource,
+      source: ProtoSource | FileSource,
       tag: string
     ) => Promise<Message>
   ) {

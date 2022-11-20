@@ -1,5 +1,5 @@
 import { Memento } from "vscode";
-import { ServerSource } from "../grpcurl/caller";
+import { ProtoSource } from "../grpcurl/caller";
 import { Expectations, Request, TestResult } from "../grpcurl/grpcurl";
 import { Collection, Collections, Test } from "./collections";
 
@@ -49,7 +49,7 @@ test(`list`, () => {
   expect(collections.list()).toStrictEqual(expectValues);
 });
 
-const serverSource: ServerSource = {
+const serverSource: ProtoSource = {
   type: "SERVER",
   host: "",
   plaintext: false,

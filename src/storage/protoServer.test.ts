@@ -1,5 +1,5 @@
 import { Memento } from "vscode";
-import { ServerSource } from "../grpcurl/caller";
+import { ProtoSource } from "../grpcurl/caller";
 import { Proto } from "../grpcurl/parser";
 import { ProtoServer, ProtoServers } from "./protoServer";
 
@@ -19,7 +19,7 @@ class MockMemento implements Memento {
   }
 }
 
-const source: ServerSource = {
+const source: ProtoSource = {
   type: "SERVER",
   host: "localhost:12201",
   plaintext: false,

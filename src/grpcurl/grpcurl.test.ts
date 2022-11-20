@@ -4,7 +4,7 @@ import {
   Caller,
   FileSource,
   FormCliTemplateParams,
-  ServerSource,
+  ProtoSource,
 } from "./caller";
 import { Installer } from "./installer";
 
@@ -117,7 +117,7 @@ test(`protoServer`, async () => {
     ],
   };
 
-  const serverSource: ServerSource = {
+  const serverSource: ProtoSource = {
     type: `SERVER`,
     host: `localhost:12201`,
     plaintext: true,
@@ -170,7 +170,7 @@ test(`send`, async () => {
     importPath: `/`,
   };
 
-  const serverSource: ServerSource = {
+  const serverSource: ProtoSource = {
     type: `SERVER`,
     host: `localhost:12201`,
     plaintext: true,
@@ -214,7 +214,7 @@ test(`test`, async () => {
     importPath: `/`,
   };
 
-  const serverSource: ServerSource = {
+  const serverSource: ProtoSource = {
     type: `SERVER`,
     host: `localhost:12201`,
     plaintext: true,
