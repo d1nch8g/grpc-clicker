@@ -5,6 +5,10 @@ import * as util from "util";
  */
 export interface ProtoSource {
   /**
+   * Unique identifier for specific source.
+   */
+  uuid: string;
+  /**
    * Current host, which will be used for calls processing (real adress)
    */
   currentHost: string;
@@ -73,7 +77,7 @@ export class Caller {
     let base: string = ``;
     if (input.source.filePath !== undefined) {
       for (const importPath of input.source.importPaths) {
-        base += ` -import-path ${importPath}`
+        base += ` -import-path ${importPath}`;
       }
       base += ` -proto ${input.source.filePath}`;
     } else {
