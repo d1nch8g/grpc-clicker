@@ -1,5 +1,5 @@
 import { Memento } from "vscode";
-import { ServerSource } from "../grpcurl/caller";
+import { ProtoSource } from "../grpcurl/caller";
 import { Proto } from "../grpcurl/parser";
 
 /**
@@ -9,12 +9,12 @@ export interface ProtoServer extends Proto {
   /**
    * Entity representing server source for recieving proto schema
    */
-  source: ServerSource;
+  source: ProtoSource;
 }
 
 export class ProtoServers {
   private readonly key: string = "grpc-clicker-hosts";
-  constructor(private memento: Memento) {}
+  constructor(private memento: Memento) { }
 
   save(hosts: ProtoServer[]) {
     let hostsStrings: string[] = [];

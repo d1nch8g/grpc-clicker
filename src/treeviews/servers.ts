@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { FileSource, ServerSource } from "../grpcurl/caller";
+import { FileSource, ProtoSource } from "../grpcurl/caller";
 import { Message } from "../grpcurl/parser";
 import { ProtoServer } from "../storage/protoServer";
 import {
@@ -16,7 +16,7 @@ export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
   constructor(
     private servers: ProtoServer[],
     private describeMsg: (
-      source: ServerSource | FileSource,
+      source: ProtoSource | FileSource,
       tag: string
     ) => Promise<Message>
   ) {

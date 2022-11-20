@@ -1,5 +1,5 @@
 import { GrpcCode, Message, ParsedResponse, Parser, Proto } from "./parser";
-import { Caller, FileSource, ServerSource } from "./caller";
+import { Caller, FileSource, ProtoSource } from "./caller";
 import { performance } from "perf_hooks";
 import { Installer } from "./installer";
 
@@ -18,7 +18,7 @@ export interface Request {
   /**
    * Wether server will be used for exection
    */
-  server: ServerSource;
+  server: ProtoSource;
   /**
    * `${this.executablePath}` compatible call tag including proto and service:
    * - Example - `.pb.v1.Constructions/EmptyCall`
@@ -95,7 +95,7 @@ export interface DescribeMessageParams {
   /**
    * Source that will be used for message description
    */
-  source: FileSource | ServerSource;
+  source: FileSource | ProtoSource;
   /**
    * `${this.executablePath}` compatible message tag
    */
@@ -159,7 +159,7 @@ export class Grpcurl {
   /**
    * Describe proto from provided source
    */
-  async proto(source: FileSource | ServerSource): Promise<Proto | string> {
+  async proto(source: FileSource | ProtoSource): Promise<Proto | string> {
     let timeout = ``;
     if (source.type === "SERVER") {
       timeout = `-max-time ${source.timeout}`;

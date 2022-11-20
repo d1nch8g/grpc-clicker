@@ -8,7 +8,7 @@ import { Collection } from "../storage/collections";
 import { ProtoFile } from "../storage/protoFiles";
 import { ProtoServer } from "../storage/protoServer";
 import { HistoryValue } from "../storage/history";
-import { FileSource, ServerSource } from "../grpcurl/caller";
+import { FileSource, ProtoSource } from "../grpcurl/caller";
 
 /**
  * Entity representing proto schema and server source
@@ -25,7 +25,7 @@ export interface ProtosTreeViewParams {
     /**
      * Path to proto file
      */
-    source: ServerSource | FileSource,
+    source: ProtoSource | FileSource,
     /**
      * Message tag in `grpcurl` compatible format.
      */

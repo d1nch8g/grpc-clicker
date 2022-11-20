@@ -56,12 +56,8 @@
     "views": {
       "grpc-clicker": [
         {
-          "id": "servers",
-          "name": "reflect servers"
-        },
-        {
-          "id": "files",
-          "name": "proto files"
+          "id": "protos",
+          "name": "proto groups"
         },
         {
           "id": "collections",
@@ -109,12 +105,6 @@
         "icon": "$(settings-add)"
       },
       {
-        "category": "gRPC Clicker",
-        "command": "servers.add",
-        "title": "Add new proto reflect server",
-        "icon": "$(settings-add)"
-      },
-      {
         "command": "files.import",
         "title": "Update import path for proto file",
         "icon": "$(extensions-info-message)"
@@ -146,20 +136,9 @@
         "icon": "$(terminal-kill)"
       },
       {
-        "command": "servers.remove",
-        "title": "Remove server",
-        "icon": "$(terminal-kill)"
-      },
-      {
         "category": "gRPC Clicker",
         "command": "files.refresh",
         "title": "Resresh existing proro schemas",
-        "icon": "$(extensions-refresh)"
-      },
-      {
-        "category": "gRPC Clicker",
-        "command": "servers.refresh",
-        "title": "Resresh existing proro reflect servers",
         "icon": "$(extensions-refresh)"
       },
       {
@@ -191,16 +170,6 @@
         {
           "command": "files.refresh",
           "when": "view == files",
-          "group": "navigation"
-        },
-        {
-          "command": "servers.add",
-          "when": "view == servers",
-          "group": "navigation"
-        },
-        {
-          "command": "servers.refresh",
-          "when": "view == servers",
           "group": "navigation"
         },
         {
@@ -247,11 +216,6 @@
         {
           "command": "files.remove",
           "when": "view == files && viewItem == file",
-          "group": "inline"
-        },
-        {
-          "command": "servers.remove",
-          "when": "view == servers && viewItem == server",
           "group": "inline"
         },
         {
