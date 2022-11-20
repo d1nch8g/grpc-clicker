@@ -53,6 +53,13 @@ export interface FormCliTemplateParams {
    * Arguements that will be included in final version CLI command
    */
   args: string[];
+  /**
+   * Arguements that will be included in final version CLI command
+   */
+  forceMultisource: boolean;
+  /**
+   * Arg, that explictly forces caller to use all provided info about sources.
+   */
 }
 
 /**
@@ -70,6 +77,12 @@ export class Caller {
       }
       base += ` -proto ${input.source.filePath}`;
     } else {
+      if (input.source.plaintext) {
+        base += ` -plaintext`;
+      }
+      base += ` -max-time ${input.source.timeout} ${input.source.currentHost} `;
+    }
+    if (input.forceMultisource) {
       if (input.source.plaintext) {
         base += ` -plaintext`;
       }

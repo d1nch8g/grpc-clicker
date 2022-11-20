@@ -161,6 +161,7 @@ export class Grpcurl {
       cliCommand: command,
       source: source,
       args: [],
+      forceMultisource: false,
     });
     const [output, err] = await this.caller.execute(call);
     if (err !== undefined) {
@@ -180,6 +181,7 @@ export class Grpcurl {
       cliCommand: command,
       source: params.source,
       args: [params.messageTag],
+      forceMultisource: false,
     });
 
     const [resp, err] = await this.caller.execute(call);
@@ -208,6 +210,7 @@ export class Grpcurl {
       cliCommand: command,
       source: input.source,
       args: [headersTemplate, maxMsgSizeTemplate, formedJson, input.callTag],
+      forceMultisource: true,
     });
   }
 

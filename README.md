@@ -76,3 +76,6 @@ This extension is built on top of edge technologies, such as:
 <!--
 https://marketplace.visualstudio.com/manage/publishers/dancheg97
 -->
+
+Expected: "/dist/grpcurl/grpcurl -emit-defaults -H 'username: user' -H 'password: password' -max-msg-sz 1048576 -d '{}' -import-path / -proto server/api.proto -plaintext -max-time 0.5 localhost:8080  .pb.v1.Constructions/EmptyCall"
+Received: "/dist/grpcurl/grpcurl -emit-defaults -H 'username: user' -H 'password: password'  -max-msg-sz 1048576 -d '{}'  -import-path / -proto server/api.proto -plaintext -max-time 0.5 localhost:8080  .pb.v1.Constructions/EmptyCall"
