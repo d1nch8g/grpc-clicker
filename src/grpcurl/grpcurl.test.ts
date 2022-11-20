@@ -79,7 +79,7 @@ test(`protoFile`, async () => {
         package: `stuff`,
         name: ``,
         tag: ``,
-        description: `${executablePath}  -import-path / -proto docs/api.proto describe`,
+        description: `${executablePath}  -import-path / -proto server/api.proto describe`,
         calls: [],
       },
     ],
@@ -90,10 +90,10 @@ test(`protoFile`, async () => {
     additionalHosts: [],
     plaintext: true,
     timeout: 5,
-    filePath: `docs/api.proto`,
+    filePath: `server/api.proto`,
     group: undefined,
     importPaths: [`/`]
-  }
+  };
 
   expect(await grpcurl.proto(src)).toStrictEqual(expectedResult);
 });
@@ -128,7 +128,7 @@ test(`protoServer`, async () => {
     filePath: undefined,
     group: undefined,
     importPaths: []
-  }
+  };
 
   expect(await grpcurl.proto(src)).toStrictEqual(expectedResult);
 });
@@ -146,10 +146,10 @@ test(`message`, async () => {
     additionalHosts: [],
     plaintext: true,
     timeout: 5,
-    filePath: `docs/api.proto`,
+    filePath: `server/api.proto`,
     group: undefined,
     importPaths: [`/`]
-  }
+  };
 
   expect(
     await grpcurl.message({
@@ -158,7 +158,7 @@ test(`message`, async () => {
     })
   ).toStrictEqual({
     type: `MESSAGE`,
-    name: `${executablePath} -msg-template  -import-path / -proto docs/api.proto describe .pb.v1.StringMes`,
+    name: `${executablePath} -msg-template  -import-path / -proto server/api.proto describe .pb.v1.StringMes`,
     tag: `tag`,
     description: `dscr`,
     template: `tmplt`,
@@ -178,11 +178,11 @@ test(`send`, async () => {
     currentHost: "localhost:8080",
     additionalHosts: [],
     plaintext: true,
-    timeout: 5,
-    filePath: undefined,
+    timeout: 0.5,
+    filePath: `server/api.proto`,
     group: undefined,
-    importPaths: []
-  }
+    importPaths: [`/`]
+  };
 
 
   const request: Request = {
@@ -197,8 +197,8 @@ test(`send`, async () => {
 
   expect(resp.code).toBe(`OK`);
 
-  const winExpect = `${executablePath} -emit-defaults -H \"username: user\" -H \"password: password\"  -max-msg-sz 1048576 -d \"{}\" -import-path / -proto docs/api.proto -plaintext localhost:8080 .pb.v1.Constructions/EmptyCall`;
-  const linuxExpect = `${executablePath} -emit-defaults -H 'username: user' -H 'password: password'  -max-msg-sz 1048576 -d '{}' -import-path / -proto docs/api.proto -plaintext localhost:8080 .pb.v1.Constructions/EmptyCall`;
+  const winExpect = `${executablePath} -emit-defaults -H \"username: user\" -H \"password: password\"  -max-msg-sz 1048576 -d \"{}\" -import-path / -proto server/api.proto -plaintext localhost:8080 .pb.v1.Constructions/EmptyCall`;
+  const linuxExpect = `${executablePath} -emit-defaults -H 'username: user' -H 'password: password'  -max-msg-sz 1048576 -d '{}'  -import-path / -proto server/api.proto -plaintext -max-time 0.5 localhost:8080  .pb.v1.Constructions/EmptyCall`;
 
   if (process.platform === "win32") {
     expect(resp.content).toBe(winExpect);
@@ -223,8 +223,7 @@ test(`test`, async () => {
     filePath: undefined,
     group: undefined,
     importPaths: []
-  }
-
+  };
 
   const request: Request = {
     content: `{}`,

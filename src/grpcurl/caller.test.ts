@@ -8,7 +8,7 @@ const src: ProtoSource = {
   filePath: undefined,
   group: undefined,
   importPaths: []
-}
+};
 
 test(`form`, () => {
   const caller = new Caller();
@@ -16,6 +16,7 @@ test(`form`, () => {
     cliCommand: `grpcurl -msg-template |SRC| describe %s`,
     source: src,
     args: [`.google.protobuf.Empty`],
+    forceMultisource: false
   };
   const res = `grpcurl -msg-template  -plaintext -max-time 5 localhost:8080  describe .google.protobuf.Empty`;
   expect(caller.buildCliCommand(form)).toBe(res);
