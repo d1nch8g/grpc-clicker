@@ -92,7 +92,8 @@ test(`protoFile`, async () => {
     timeout: 5,
     filePath: `server/api.proto`,
     group: undefined,
-    importPaths: [`/`]
+    importPaths: [`/`],
+    uuid: ""
   };
 
   expect(await grpcurl.proto(src)).toStrictEqual(expectedResult);
@@ -127,7 +128,8 @@ test(`protoServer`, async () => {
     timeout: 0.5,
     filePath: undefined,
     group: undefined,
-    importPaths: []
+    importPaths: [],
+    uuid: ""
   };
 
   expect(await grpcurl.proto(src)).toStrictEqual(expectedResult);
@@ -148,7 +150,8 @@ test(`message`, async () => {
     timeout: 5,
     filePath: `server/api.proto`,
     group: undefined,
-    importPaths: [`/`]
+    importPaths: [`/`],
+    uuid: ""
   };
 
   expect(
@@ -181,7 +184,8 @@ test(`send`, async () => {
     timeout: 0.5,
     filePath: `server/api.proto`,
     group: undefined,
-    importPaths: [`/`]
+    importPaths: [`/`],
+    uuid: ""
   };
 
 
@@ -222,7 +226,8 @@ test(`test`, async () => {
     timeout: 5,
     filePath: undefined,
     group: undefined,
-    importPaths: []
+    importPaths: [],
+    uuid: ""
   };
 
   const request: Request = {

@@ -1,7 +1,7 @@
 import { Memento } from "vscode";
 import { ProtoSource } from "../grpcurl/caller";
 import { Proto } from "../grpcurl/parser";
-import { ProtoServer, ProtoServers } from "./protoServer";
+import { ProtoSources } from "./protoServer";
 
 class MockMemento implements Memento {
   values: string[] = [];
@@ -19,22 +19,10 @@ class MockMemento implements Memento {
   }
 }
 
-const source: ProtoSource = {
-  type: "SERVER",
-  host: "localhost:8080",
-  plaintext: false,
-  timeout: 0.5,
-};
-
-const server: ProtoServer = {
-  source: source,
-  type: "PROTO",
-  services: [],
-};
 
 test(`add`, () => {
   const memento = new MockMemento();
-  const hosts = new ProtoServers(memento);
+  const hosts = new ProtoSources(memento);
 
   expect(hosts.add(server)).toBeUndefined();
   expect(hosts.add(server)).toStrictEqual(

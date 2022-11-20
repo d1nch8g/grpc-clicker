@@ -1,22 +1,12 @@
 import { Memento } from "vscode";
 import { ProtoSource } from "../grpcurl/caller";
-import { Proto } from "../grpcurl/parser";
 
-/**
- * Entity representing proto schema and server source
- */
-export interface ProtoServer extends Proto {
-  /**
-   * Entity representing server source for recieving proto schema
-   */
-  source: ProtoSource;
-}
 
-export class ProtoServers {
-  private readonly key: string = "grpc-clicker-hosts";
+export class ProtoSources {
+  private readonly key: string = "grpc-clicker-sources";
   constructor(private memento: Memento) { }
 
-  save(hosts: ProtoServer[]) {
+  save(hosts: ProtoSource[]) {
     let hostsStrings: string[] = [];
     for (const host of hosts) {
       hostsStrings.push(JSON.stringify(host));
@@ -24,31 +14,31 @@ export class ProtoServers {
     this.memento.update(this.key, hostsStrings);
   }
 
-  list(): ProtoServer[] {
+  list(): ProtoSource[] {
     let hostsStrings = this.memento.get<string[]>(this.key, []);
-    let hosts: ProtoServer[] = [];
+    let hosts: ProtoSource[] = [];
     for (const hostString of hostsStrings) {
       hosts.push(JSON.parse(hostString));
     }
     return hosts;
   }
 
-  add(host: ProtoServer): Error | undefined {
+  add(source: ProtoSource): Error | undefined {
     const hosts = this.list();
-    for (const savedProtoServer of hosts) {
-      if (savedProtoServer.source.host === host.source.host) {
+    for (const savedSource of hosts) {
+      if (source.uuid === savedSource.uuid) {
         return new Error(`host you are trying to add already exists`);
       }
     }
-    hosts.push(host);
+    hosts.push(source);
     this.save(hosts);
     return undefined;
   }
 
-  remove(hostAdress: string) {
+  remove(uuid: string) {
     const hosts = this.list();
     for (let i = 0; i < hosts.length; i++) {
-      if (hosts[i].source.host === hostAdress) {
+      if (hosts[i].uuid === uuid) {
         hosts.splice(i, 1);
       }
     }

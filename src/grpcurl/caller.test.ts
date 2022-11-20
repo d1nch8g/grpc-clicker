@@ -7,7 +7,8 @@ const src: ProtoSource = {
   timeout: 5,
   filePath: undefined,
   group: undefined,
-  importPaths: []
+  importPaths: [],
+  uuid: ""
 };
 
 test(`form`, () => {
