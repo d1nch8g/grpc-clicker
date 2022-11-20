@@ -588,7 +588,7 @@ export function activate(context: vscode.ExtensionContext) {
         request = {
           file: fileSource,
           content: msg.template!,
-          server: serverSource,
+          source: serverSource,
           callTag: `${data.service.tag}/${data.call.name}`,
           maxMsgSize: maxMsgSize,
           headers: [],
@@ -597,7 +597,7 @@ export function activate(context: vscode.ExtensionContext) {
         request = {
           file: fileSource,
           content: msg.template!,
-          server: data.source,
+          source: data.source,
           callTag: `${data.service.tag}/${data.call.name}`,
           maxMsgSize: maxMsgSize,
           headers: [],

@@ -1,5 +1,5 @@
 import { GrpcCode, Message, ParsedResponse, Parser, Proto } from "./parser";
-import { Caller, FileSource, ProtoSource } from "./caller";
+import { Caller, ProtoSource } from "./caller";
 import { performance } from "perf_hooks";
 import { Installer } from "./installer";
 
@@ -8,17 +8,13 @@ import { Installer } from "./installer";
  */
 export interface Request {
   /**
-   * Optional parameter that will be used to form message if provided
+   * Source for call execution
    */
-  file: FileSource | undefined;
+  source: ProtoSource;
   /**
    * Valid JSON string with proto message
    */
   content: string;
-  /**
-   * Wether server will be used for exection
-   */
-  server: ProtoSource;
   /**
    * `${this.executablePath}` compatible call tag including proto and service:
    * - Example - `.pb.v1.Constructions/EmptyCall`
@@ -95,7 +91,7 @@ export interface DescribeMessageParams {
   /**
    * Source that will be used for message description
    */
-  source: FileSource | ProtoSource;
+  source: ProtoSource;
   /**
    * `${this.executablePath}` compatible message tag
    */
@@ -159,12 +155,8 @@ export class Grpcurl {
   /**
    * Describe proto from provided source
    */
-  async proto(source: FileSource | ProtoSource): Promise<Proto | string> {
-    let timeout = ``;
-    if (source.type === "SERVER") {
-      timeout = `-max-time ${source.timeout}`;
-    }
-    const command = `${this.executablePath} ${timeout} |SRC| describe`;
+  async proto(source: ProtoSource): Promise<Proto | string> {
+    const command = `${this.executablePath} |SRC| describe`;
     const call = this.caller.buildCliCommand({
       cliCommand: command,
       source: source,
@@ -212,23 +204,9 @@ export class Grpcurl {
     for (const header of input.headers) {
       headersTemplate = headersTemplate + this.headerPreprocess(header);
     }
-
-    if (input.file !== undefined) {
-      return this.caller.buildCliCommand({
-        cliCommand: command,
-        source: {
-          type: `MULTI`,
-          host: input.server.host,
-          plaintext: input.server.plaintext,
-          filePath: input.file.filePath,
-          importPath: input.file.importPath,
-        },
-        args: [headersTemplate, maxMsgSizeTemplate, formedJson, input.callTag],
-      });
-    }
     return this.caller.buildCliCommand({
       cliCommand: command,
-      source: input.server,
+      source: input.source,
       args: [headersTemplate, maxMsgSizeTemplate, formedJson, input.callTag],
     });
   }

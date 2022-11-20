@@ -4,12 +4,33 @@ import * as util from "util";
  * Combined structure containing all required information for proto file.
  */
 export interface ProtoSource {
+  /**
+   * Current host, which will be used for calls processing (real adress)
+   */
   currentHost: string;
+  /**
+   * Additional hosts that could be specified for further calls, optional.
+   */
   additionalHosts: string[];
+  /**
+   * Wether to use TLS.
+   */
   plaintext: boolean;
+  /**
+   * Default timeout for call execution.
+   */
   timeout: number;
+  /**
+   * Files that would be used as base in `-proto` arguement
+   */
   filePath: string | undefined;
-  group: string;
+  /**
+   * Group that will be used to store proto information.
+   */
+  group: string | undefined;
+  /**
+   * Paths that needs to be imported for proper proto compilation.
+   */
   importPaths: string[];
 }
 
@@ -42,29 +63,20 @@ export class Caller {
    * This function is used to build cli command from parameters
    */
   buildCliCommand(input: FormCliTemplateParams): string {
-    let source: string;
-    if (input.source.type === `MULTI`) {
-      if (input.source.plaintext) {
-        source = `-import-path ${input.source.importPath} -proto ${input.source.filePath} -plaintext ${input.source.host}`;
-      } else {
-        source = `-import-path ${input.source.importPath} -proto ${input.source.filePath} ${input.source.host}`;
+    let base: string = ``;
+    if (input.source.filePath !== undefined) {
+      for (const importPath of input.source.importPaths) {
+        base += ` -import-path ${importPath}`
       }
-    }
-    if (input.source.type === `SERVER`) {
+      base += ` -proto ${input.source.filePath}`;
+    } else {
       if (input.source.plaintext) {
-        source = `-plaintext ${input.source.host}`;
-      } else {
-        source = `${input.source.host}`;
+        base += ` -plaintext`;
       }
+      base += ` -max-time ${input.source.timeout} ${input.source.currentHost} `;
     }
-    if (input.source.type === `FILE`) {
-      source = `-import-path ${input.source.importPath} -proto ${input.source.filePath}`;
-    }
-
-    input.cliCommand = input.cliCommand.replace(`|SRC|`, source!);
-
+    input.cliCommand = input.cliCommand.replace(`|SRC|`, base);
     let command = util.format(input.cliCommand, ...input.args);
-
     return command;
   }
 

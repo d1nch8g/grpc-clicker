@@ -263,7 +263,7 @@ export class HistoryItem extends ClickerItem {
     super.description = value.response.date;
     super.contextValue = "call";
     super.tooltip = new vscode.MarkdownString(`### Request information:
-- host for execution: \`${value.request.server.host}\`
+- host for execution: \`${value.request.source.host}\`
 - method used in request: \`${value.request.callTag}\`
 - response code: \`${value.response.code}\`
 - time of execution: \`${value.response.time}\`
