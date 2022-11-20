@@ -2,7 +2,6 @@ import { Expectations, Grpcurl, Request, TestMistake } from "./grpcurl";
 import { Call, Field, Message, Parser, Proto, ParsedResponse } from "./parser";
 import {
   Caller,
-  FileSource,
   FormCliTemplateParams,
   ProtoSource,
 } from "./caller";
@@ -86,13 +85,17 @@ test(`protoFile`, async () => {
     ],
   };
 
-  const fileSouce: FileSource = {
-    type: `FILE`,
+  const src: ProtoSource = {
+    currentHost: "localhost:8080",
+    additionalHosts: [],
+    plaintext: true,
+    timeout: 5,
     filePath: `docs/api.proto`,
-    importPath: `/`,
-  };
+    group: undefined,
+    importPaths: [`/`]
+  }
 
-  expect(await grpcurl.proto(fileSouce)).toStrictEqual(expectedResult);
+  expect(await grpcurl.proto(src)).toStrictEqual(expectedResult);
 });
 
 test(`protoServer`, async () => {
@@ -111,20 +114,23 @@ test(`protoServer`, async () => {
         package: `stuff`,
         name: ``,
         tag: ``,
-        description: `${executablePath} -max-time 0.5 -plaintext localhost:12201 describe`,
+        description: `${executablePath}  -plaintext -max-time 0.5 localhost:8080  describe`,
         calls: [],
       },
     ],
   };
 
-  const serverSource: ProtoSource = {
-    type: `SERVER`,
-    host: `localhost:12201`,
+  const src: ProtoSource = {
+    currentHost: "localhost:8080",
+    additionalHosts: [],
     plaintext: true,
     timeout: 0.5,
-  };
+    filePath: undefined,
+    group: undefined,
+    importPaths: []
+  }
 
-  expect(await grpcurl.proto(serverSource)).toStrictEqual(expectedResult);
+  expect(await grpcurl.proto(src)).toStrictEqual(expectedResult);
 });
 
 test(`message`, async () => {
@@ -135,20 +141,24 @@ test(`message`, async () => {
     ``
   );
 
-  const fileSouce: FileSource = {
-    type: `FILE`,
+  const src: ProtoSource = {
+    currentHost: "localhost:8080",
+    additionalHosts: [],
+    plaintext: true,
+    timeout: 5,
     filePath: `docs/api.proto`,
-    importPath: `/`,
-  };
+    group: undefined,
+    importPaths: [`/`]
+  }
 
   expect(
     await grpcurl.message({
-      source: fileSouce,
+      source: src,
       messageTag: ".pb.v1.StringMes",
     })
   ).toStrictEqual({
     type: `MESSAGE`,
-    name: `${executablePath} -msg-template -import-path / -proto docs/api.proto describe .pb.v1.StringMes`,
+    name: `${executablePath} -msg-template  -import-path / -proto docs/api.proto describe .pb.v1.StringMes`,
     tag: `tag`,
     description: `dscr`,
     template: `tmplt`,
@@ -164,23 +174,20 @@ test(`send`, async () => {
     ``
   );
 
-  const fileSouce: FileSource = {
-    type: `FILE`,
-    filePath: `docs/api.proto`,
-    importPath: `/`,
-  };
-
-  const serverSource: ProtoSource = {
-    type: `SERVER`,
-    host: `localhost:12201`,
+  const src: ProtoSource = {
+    currentHost: "localhost:8080",
+    additionalHosts: [],
     plaintext: true,
-    timeout: 0.5,
-  };
+    timeout: 5,
+    filePath: undefined,
+    group: undefined,
+    importPaths: []
+  }
+
 
   const request: Request = {
-    file: fileSouce,
     content: `{}`,
-    server: serverSource,
+    source: src,
     callTag: `.pb.v1.Constructions/EmptyCall`,
     maxMsgSize: 1,
     headers: [`username: user`, `password: password`],
@@ -190,8 +197,8 @@ test(`send`, async () => {
 
   expect(resp.code).toBe(`OK`);
 
-  const winExpect = `${executablePath} -emit-defaults -H \"username: user\" -H \"password: password\"  -max-msg-sz 1048576 -d \"{}\" -import-path / -proto docs/api.proto -plaintext localhost:12201 .pb.v1.Constructions/EmptyCall`;
-  const linuxExpect = `${executablePath} -emit-defaults -H 'username: user' -H 'password: password'  -max-msg-sz 1048576 -d '{}' -import-path / -proto docs/api.proto -plaintext localhost:12201 .pb.v1.Constructions/EmptyCall`;
+  const winExpect = `${executablePath} -emit-defaults -H \"username: user\" -H \"password: password\"  -max-msg-sz 1048576 -d \"{}\" -import-path / -proto docs/api.proto -plaintext localhost:8080 .pb.v1.Constructions/EmptyCall`;
+  const linuxExpect = `${executablePath} -emit-defaults -H 'username: user' -H 'password: password'  -max-msg-sz 1048576 -d '{}' -import-path / -proto docs/api.proto -plaintext localhost:8080 .pb.v1.Constructions/EmptyCall`;
 
   if (process.platform === "win32") {
     expect(resp.content).toBe(winExpect);
@@ -208,23 +215,20 @@ test(`test`, async () => {
     ``
   );
 
-  const fileSouce: FileSource = {
-    type: `FILE`,
-    filePath: `docs/api.proto`,
-    importPath: `/`,
-  };
-
-  const serverSource: ProtoSource = {
-    type: `SERVER`,
-    host: `localhost:12201`,
+  const src: ProtoSource = {
+    currentHost: "localhost:8080",
+    additionalHosts: [],
     plaintext: true,
-    timeout: 0.5,
-  };
+    timeout: 5,
+    filePath: undefined,
+    group: undefined,
+    importPaths: []
+  }
+
 
   const request: Request = {
-    file: fileSouce,
     content: `{}`,
-    server: serverSource,
+    source: src,
     callTag: `.pb.v1.Constructions/EmptyCall`,
     maxMsgSize: 1,
     headers: [`username: user`, `password: password`],

@@ -21,7 +21,7 @@ class MockMemento implements Memento {
 
 const source: ProtoSource = {
   type: "SERVER",
-  host: "localhost:12201",
+  host: "localhost:8080",
   plaintext: false,
   timeout: 0.5,
 };
@@ -55,6 +55,6 @@ test(`remove`, () => {
   const hosts = new ProtoServers(memento);
 
   memento.values = [JSON.stringify(server)];
-  hosts.remove(`localhost:12201`);
+  hosts.remove(`localhost:8080`);
   expect(memento.values).toStrictEqual([]);
 });

@@ -59,7 +59,7 @@ const serverSource: ProtoSource = {
 const request: Request = {
   file: undefined,
   content: "",
-  server: serverSource,
+  source: serverSource,
   callTag: "",
   maxMsgSize: 0,
   headers: [],

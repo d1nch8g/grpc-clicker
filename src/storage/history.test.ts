@@ -41,7 +41,7 @@ const fileSource: FileSource = {
 const request: Request = {
   file: fileSource,
   content: "",
-  server: serverSource,
+  source: serverSource,
   callTag: "",
   maxMsgSize: 0,
   headers: [],
