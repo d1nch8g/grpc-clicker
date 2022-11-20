@@ -380,7 +380,7 @@
   },
   "scripts": {
     "serve-grpc": "go run server/main.go",
-    "watch-webview": "node watcher.js",
+    "watch-webview": "node daemon.js",
     "package-ext": "vsce package",
     "generate-proto": "protoc --go_out=server/ --go-grpc_out=server/ server/api.proto",
     "vscode:prepublish": "npm run package",
