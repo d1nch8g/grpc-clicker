@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { ProtoSource } from "../grpcurl/caller";
+import { Proto } from "../grpcurl/grpcurl";
 import { Message } from "../grpcurl/parser";
-import { Protos } from "../storage/protos";
 import {
   CallItem,
   ClickerItem,
@@ -9,13 +9,12 @@ import {
   ItemType,
   MessageItem,
   ProtoItem,
-  ProtoWithSource,
   ServiceItem,
 } from "./items";
 
 export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
   constructor(
-    private servers: ProtoWithSource[],
+    private servers: Proto[],
     private describeMsg: (
       source: ProtoSource,
       tag: string
@@ -30,7 +29,7 @@ export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
     void | ClickerItem | ClickerItem[]
   >;
 
-  refresh(servers: ProtoWithSource[]): void {
+  refresh(servers: Proto[]): void {
     this.servers = servers;
     this.onChange.fire();
   }

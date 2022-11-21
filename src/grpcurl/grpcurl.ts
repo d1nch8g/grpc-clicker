@@ -1,7 +1,21 @@
-import { GrpcCode, Message, ParsedResponse, Parser, Proto } from "./parser";
+import { GrpcCode, Message, ParsedResponse, Parser, ProtoSchema } from "./parser";
 import { Caller, ProtoSource } from "./caller";
 import { performance } from "perf_hooks";
 import { Installer } from "./installer";
+
+/**
+ * Complex definition for proto related entities.
+ */
+export interface Proto {
+  /**
+   * Source for recieving proto schema and executing calls.
+   */
+  source: ProtoSource;
+  /**
+   * Proto schema containing services and methods.
+   */
+  schema: ProtoSchema;
+}
 
 /**
  * Data required for request execution
@@ -155,7 +169,7 @@ export class Grpcurl {
   /**
    * Describe proto from provided source
    */
-  async proto(source: ProtoSource): Promise<Proto | string> {
+  async proto(source: ProtoSource): Promise<ProtoSchema | string> {
     const command = `${this.executablePath} |SRC| describe`;
     const call = this.caller.buildCliCommand({
       cliCommand: command,

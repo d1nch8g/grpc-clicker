@@ -1,5 +1,5 @@
 import { Expectations, Grpcurl, Request, TestMistake } from "./grpcurl";
-import { Call, Field, Message, Parser, Proto, ParsedResponse } from "./parser";
+import { Call, Field, Message, Parser, ProtoSchema, ParsedResponse } from "./parser";
 import {
   Caller,
   FormCliTemplateParams,
@@ -19,7 +19,7 @@ class MockParser implements Parser {
       content: input,
     };
   }
-  proto(input: string): Proto {
+  proto(input: string): ProtoSchema {
     return {
       services: [
         {
@@ -71,7 +71,7 @@ test(`protoFile`, async () => {
     ``
   );
 
-  const expectedResult: Proto = {
+  const expectedResult: ProtoSchema = {
     type: `PROTO`,
     services: [
       {
@@ -107,7 +107,7 @@ test(`protoServer`, async () => {
     ``
   );
 
-  const expectedResult: Proto = {
+  const expectedResult: ProtoSchema = {
     type: `PROTO`,
     services: [
       {

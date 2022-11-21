@@ -6,14 +6,14 @@ import { CollectionsTreeView } from "./collections";
 import { Collection } from "../storage/collections";
 import { HistoryValue } from "../storage/history";
 import { ProtoSource } from "../grpcurl/caller";
-import { ProtoWithSource } from "./items";
+import { Proto } from "../grpcurl/grpcurl";
 
 /**
  * Entity representing proto schema and server source
  */
 export interface ProtosTreeViewParams {
   historyValues: HistoryValue[];
-  protos: ProtoWithSource[];
+  protos: Proto[];
   collections: Collection[];
   /**
    * Callback that can be used for message description.
