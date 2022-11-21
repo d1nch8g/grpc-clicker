@@ -1,5 +1,5 @@
 import { Memento } from "vscode";
-import { FileSource, ProtoSource } from "../grpcurl/caller";
+import { ProtoSource } from "../grpcurl/caller";
 import { Request, Response } from "../grpcurl/grpcurl";
 import { AdditionalInfo, History, HistoryValue } from "./history";
 
@@ -26,20 +26,18 @@ class MockMemento implements Memento {
 }
 
 const serverSource: ProtoSource = {
-  type: "SERVER",
-  host: "",
+  uuid: "",
+  currentHost: "",
+  additionalHosts: [],
   plaintext: false,
-  timeout: 0.5,
+  timeout: 0,
+  filePath: `value`,
+  group: `value`,
+  importPaths: []
 };
 
-const fileSource: FileSource = {
-  type: "FILE",
-  filePath: "",
-  importPath: "",
-};
 
 const request: Request = {
-  file: fileSource,
   content: "",
   source: serverSource,
   callTag: "",

@@ -1,7 +1,7 @@
 import { Memento } from "vscode";
 import { ProtoSource } from "../grpcurl/caller";
 import { Proto } from "../grpcurl/parser";
-import { ProtoSources } from "./protoServer";
+import { ProtoSources } from "./protos";
 
 class MockMemento implements Memento {
   values: string[] = [];
