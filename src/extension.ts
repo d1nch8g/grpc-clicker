@@ -33,7 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
   const treeviews = new TreeViews({
     files: storage.files.list(),
     historyValues: storage.history.list(),
-    servers: storage.servers.list(),
+    protos: storage.servers.list(),
     collections: storage.collections.list(),
     describeMsg: async (source, tag): Promise<Message> => {
       const msg = await grpcurl.message({

@@ -6,14 +6,14 @@ import { CollectionsTreeView } from "./collections";
 import { Collection } from "../storage/collections";
 import { HistoryValue } from "../storage/history";
 import { ProtoSource } from "../grpcurl/caller";
+import { ProtoWithSource } from "./items";
 
 /**
  * Entity representing proto schema and server source
  */
 export interface ProtosTreeViewParams {
   historyValues: HistoryValue[];
-  files: ProtoFile[];
-  servers: ProtoServer[];
+  protos: ProtoWithSource[];
   collections: Collection[];
   /**
    * Callback that can be used for message description.
@@ -31,13 +31,11 @@ export interface ProtosTreeViewParams {
 }
 
 export class TreeViews {
-  public readonly files: ProtoFilesView;
   public readonly servers: ServerTreeView;
   public readonly history: HistoryTreeView;
   public readonly collections: CollectionsTreeView;
   constructor(params: ProtosTreeViewParams) {
-    this.files = new ProtoFilesView(params.files, params.describeMsg);
-    this.servers = new ServerTreeView(params.servers, params.describeMsg);
+    this.servers = new ServerTreeView(params.protos, params.describeMsg);
     this.history = new HistoryTreeView(params.historyValues);
     this.collections = new CollectionsTreeView(params.collections);
 
