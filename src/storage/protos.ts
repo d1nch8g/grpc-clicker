@@ -2,7 +2,7 @@ import { Memento } from "vscode";
 import { ProtoSource } from "../grpcurl/caller";
 
 
-export class ProtoSources {
+export class Protos {
   private readonly key: string = "grpc-clicker-sources";
   constructor(private memento: Memento) { }
 
