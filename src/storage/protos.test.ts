@@ -1,7 +1,7 @@
 import { Memento } from "vscode";
 import { ProtoSource } from "../grpcurl/caller";
 import { Proto } from "../grpcurl/parser";
-import { ProtoSources } from "./protos";
+import { Protos } from "./protos";
 
 class MockMemento implements Memento {
   values: string[] = [];
@@ -19,30 +19,40 @@ class MockMemento implements Memento {
   }
 }
 
+const src: ProtoSource = {
+  uuid: "uniq",
+  currentHost: "",
+  additionalHosts: [],
+  plaintext: false,
+  timeout: 0,
+  filePath: `value`,
+  group: `value`,
+  importPaths: []
+};
 
 test(`add`, () => {
   const memento = new MockMemento();
-  const hosts = new ProtoSources(memento);
+  const protos = new Protos(memento);
 
-  expect(hosts.add(server)).toBeUndefined();
-  expect(hosts.add(server)).toStrictEqual(
+  expect(protos.add(src)).toBeUndefined();
+  expect(protos.add(src)).toStrictEqual(
     new Error(`host you are trying to add already exists`)
   );
 });
 
 test(`list`, () => {
   const memento = new MockMemento();
-  const hosts = new ProtoServers(memento);
+  const hosts = new Protos(memento);
 
-  memento.values = [JSON.stringify(server)];
-  expect(hosts.list()).toStrictEqual([server]);
+  memento.values = [JSON.stringify(src)];
+  expect(hosts.list()).toStrictEqual([src]);
 });
 
 test(`remove`, () => {
   const memento = new MockMemento();
-  const hosts = new ProtoServers(memento);
+  const hosts = new Protos(memento);
 
-  memento.values = [JSON.stringify(server)];
-  hosts.remove(`localhost:8080`);
+  memento.values = [JSON.stringify(src)];
+  hosts.remove(`uniq`);
   expect(memento.values).toStrictEqual([]);
 });
