@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { FileSource, ProtoSource } from "../grpcurl/caller";
 import { Message } from "../grpcurl/parser";
-import { ProtoServer } from "../storage/protoServer";
+import { ProtoServer } from "../storage/protos";
 import {
   CallItem,
   ClickerItem,

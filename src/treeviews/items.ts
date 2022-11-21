@@ -7,7 +7,7 @@ import { FileSource, ProtoSource } from "../grpcurl/caller";
 import { HistoryValue } from "../storage/history";
 import { Request, Response } from "../grpcurl/grpcurl";
 import { ProtoFile } from "../storage/protoFiles";
-import { ProtoServer } from "../storage/protoServer";
+import { ProtoServer } from "../storage/protos";
 
 /**
  * Params that can be used to create new call from pressed button:

@@ -1,7 +1,7 @@
 import { Memento } from "vscode";
 import { Headers } from "./headers";
 import { History } from "./history";
-import { ProtoServers } from "./protoServer";
+import { ProtoServers } from "./protos";
 import { ProtoFiles } from "./protoFiles";
 import { Collections } from "./collections";
 import { Hosts } from "./hosts";

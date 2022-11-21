@@ -50,14 +50,17 @@ test(`list`, () => {
 });
 
 const serverSource: ProtoSource = {
-  type: "SERVER",
-  host: "",
+  uuid: "",
+  currentHost: "",
+  additionalHosts: [],
   plaintext: false,
-  timeout: 0.5,
+  timeout: 0,
+  filePath: undefined,
+  group: undefined,
+  importPaths: []
 };
 
 const request: Request = {
-  file: undefined,
   content: "",
   source: serverSource,
   callTag: "",

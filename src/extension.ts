@@ -8,7 +8,7 @@ import { TreeViews } from "./treeviews/treeviews";
 import { CallWebViewFactory } from "./webviews/call";
 import { Grpcurl } from "./grpcurl/grpcurl";
 import { ProtoFile } from "./storage/protoFiles";
-import { ProtoServer } from "./storage/protoServer";
+import { ProtoServer } from "./storage/protos";
 import { AdditionalInfo, HistoryValue } from "./storage/history";
 import { Installer } from "./grpcurl/installer";
 import {

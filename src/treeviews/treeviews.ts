@@ -6,7 +6,7 @@ import { ServerTreeView } from "./servers";
 import { CollectionsTreeView } from "./collections";
 import { Collection } from "../storage/collections";
 import { ProtoFile } from "../storage/protoFiles";
-import { ProtoServer } from "../storage/protoServer";
+import { ProtoServer } from "../storage/protos";
 import { HistoryValue } from "../storage/history";
 import { FileSource, ProtoSource } from "../grpcurl/caller";
 
