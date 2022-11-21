@@ -1,6 +1,7 @@
 import { Memento } from "vscode";
 import { ProtoSource } from "../grpcurl/caller";
-import { Proto } from "../grpcurl/parser";
+import { Proto } from "../grpcurl/grpcurl";
+import { ProtoSchema } from "../grpcurl/parser";
 import { Protos } from "./protos";
 
 class MockMemento implements Memento {
@@ -30,12 +31,22 @@ const src: ProtoSource = {
   importPaths: []
 };
 
+const scm: ProtoSchema = {
+  type: "PROTO",
+  services: []
+};
+
+const proto: Proto = {
+  source: src,
+  schema: scm
+};
+
 test(`add`, () => {
   const memento = new MockMemento();
   const protos = new Protos(memento);
 
-  expect(protos.add(src)).toBeUndefined();
-  expect(protos.add(src)).toStrictEqual(
+  expect(protos.add(proto)).toBeUndefined();
+  expect(protos.add(proto)).toStrictEqual(
     new Error(`host you are trying to add already exists`)
   );
 });
@@ -52,7 +63,7 @@ test(`remove`, () => {
   const memento = new MockMemento();
   const hosts = new Protos(memento);
 
-  memento.values = [JSON.stringify(src)];
+  memento.values = [JSON.stringify(proto)];
   hosts.remove(`uniq`);
   expect(memento.values).toStrictEqual([]);
 });

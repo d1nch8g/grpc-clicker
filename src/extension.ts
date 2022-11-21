@@ -1,14 +1,12 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
-import { Caller, FileSource, ProtoSource } from "./grpcurl/caller";
+import { Caller, ProtoSource } from "./grpcurl/caller";
 import { Response, Expectations, Request } from "./grpcurl/grpcurl";
-import { Call, Message, Parser, Proto, Service } from "./grpcurl/parser";
+import { Call, Message, Parser, ProtoSchema, Service } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
 import { TreeViews } from "./treeviews/treeviews";
 import { CallWebViewFactory } from "./webviews/call";
 import { Grpcurl } from "./grpcurl/grpcurl";
-import { ProtoFile } from "./storage/protoFiles";
-import { ProtoServer } from "./storage/protos";
 import { AdditionalInfo, HistoryValue } from "./storage/history";
 import { Installer } from "./grpcurl/installer";
 import {
@@ -31,9 +29,8 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   const treeviews = new TreeViews({
-    files: storage.files.list(),
     historyValues: storage.history.list(),
-    protos: storage.servers.list(),
+    protos: storage.protos.list(),
     collections: storage.collections.list(),
     describeMsg: async (source, tag): Promise<Message> => {
       const msg = await grpcurl.message({

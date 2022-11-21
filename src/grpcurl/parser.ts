@@ -1,7 +1,8 @@
+
 /**
  * Parsed proto containing services
  */
-export interface Proto {
+export interface ProtoSchema {
   type: `PROTO`;
   /**
    * List of services source proto
@@ -161,13 +162,13 @@ export class Parser {
   /**
    * Parse response for proto description
    */
-  proto(input: string): Proto {
+  proto(input: string): ProtoSchema {
     const splittedInput = input.split("\n");
 
     let currComment = undefined;
-    let proto: Proto = {
+    let proto: ProtoSchema = {
       type: `PROTO`,
-      services: [],
+      services: []
     };
     let currSvc: Service = {
       type: `SERVICE`,
@@ -192,7 +193,7 @@ export class Parser {
         let pkg: string = `unknown`;
         try {
           pkg = splittedTag.slice(0, -1).join(`.`);
-        } catch {}
+        } catch { }
         currSvc = {
           type: `SERVICE`,
           package: pkg,

@@ -1,10 +1,10 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Service, Call, Message, Field, Proto as ProtoSchema } from "../grpcurl/parser";
+import { Service, Call, Message, Field, ProtoSchema } from "../grpcurl/parser";
 import { Header } from "../storage/headers";
 import { Collection, Test } from "../storage/collections";
-import { ProtoSource } from "../grpcurl/caller";
 import { HistoryValue } from "../storage/history";
+import { Proto } from "../grpcurl/grpcurl";
 
 /**
  * Params that can be used to create new call from pressed button:
@@ -16,14 +16,9 @@ import { HistoryValue } from "../storage/history";
 export interface GrpcTabFromScratch {
   call: Call;
   service: Service;
-  schema: ProtoSchema;
-  source: ProtoSource;
+  proto: Proto;
 }
 
-export interface ProtoWithSource {
-  source: ProtoSource;
-  schema: ProtoSchema;
-}
 
 export enum ItemType {
   unknown,
@@ -108,7 +103,7 @@ ${mistake.expected.split(`\n`).slice(0, 14).join(`\n`)}
 }
 
 export class ProtoItem extends ClickerItem {
-  constructor(public readonly proto: ProtoWithSource) {
+  constructor(public readonly proto: Proto) {
     let name = ``;
     if (proto.source.filePath !== undefined) {
       name = proto.source.filePath.replace(/^.*[\\\/]/, "");
@@ -187,8 +182,7 @@ export class CallItem extends ClickerItem {
     const callParams: GrpcTabFromScratch = {
       call: this.base,
       service: parent.base,
-      schema: parent.parent.proto.schema,
-      source: parent.parent.proto.source,
+      proto: parent.parent.proto,
     };
 
     super.command = {
