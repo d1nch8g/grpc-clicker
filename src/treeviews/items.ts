@@ -1,13 +1,10 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Service, Call, Message, Field, Proto } from "../grpcurl/parser";
+import { Service, Call, Message, Field, Proto as ProtoSchema } from "../grpcurl/parser";
 import { Header } from "../storage/headers";
 import { Collection, Test } from "../storage/collections";
-import { FileSource, ProtoSource } from "../grpcurl/caller";
+import { ProtoSource } from "../grpcurl/caller";
 import { HistoryValue } from "../storage/history";
-import { Request, Response } from "../grpcurl/grpcurl";
-import { ProtoFile } from "../storage/protoFiles";
-import { ProtoServer } from "../storage/protos";
 
 /**
  * Params that can be used to create new call from pressed button:
@@ -19,8 +16,13 @@ import { ProtoServer } from "../storage/protos";
 export interface GrpcTabFromScratch {
   call: Call;
   service: Service;
-  proto: Proto;
-  source: FileSource | ProtoSource;
+  schema: ProtoSchema;
+  source: ProtoSource;
+}
+
+export interface ProtoWithSource {
+  source: ProtoSource;
+  schema: ProtoSchema;
 }
 
 export enum ItemType {
@@ -106,20 +108,20 @@ ${mistake.expected.split(`\n`).slice(0, 14).join(`\n`)}
 }
 
 export class ProtoItem extends ClickerItem {
-  constructor(public readonly proto: ProtoFile | ProtoServer) {
+  constructor(public readonly proto: ProtoWithSource) {
     let name = ``;
-    if (proto.source.type === `FILE`) {
+    if (proto.source.filePath !== undefined) {
       name = proto.source.filePath.replace(/^.*[\\\/]/, "");
     } else {
-      name = proto.source.host;
+      name = proto.source.currentHost;
     }
     super(name);
 
-    if (proto.source.type === `FILE`) {
+    if (proto.source.filePath !== undefined) {
       super.type = ItemType.file;
       super.tooltip = new vscode.MarkdownString(`#### Proto file:
   - File path: ${proto.source.filePath}
-  - Import path: ${proto.source.importPath}`);
+  - Import paths: ${proto.source.importPaths}`);
       super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
       super.contextValue = `file`;
       const icon = `file.svg`;
@@ -136,7 +138,7 @@ export class ProtoItem extends ClickerItem {
       super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
       super.contextValue = `server`;
       let icon = `host-on.svg`;
-      if (proto.services.length === 0) {
+      if (proto.schema.services.length === 0) {
         super.collapsibleState = vscode.TreeItemCollapsibleState.None;
         icon = `host-down.svg`;
       }
@@ -185,7 +187,7 @@ export class CallItem extends ClickerItem {
     const callParams: GrpcTabFromScratch = {
       call: this.base,
       service: parent.base,
-      proto: parent.parent.proto,
+      schema: parent.parent.proto.schema,
       source: parent.parent.proto.source,
     };
 
@@ -263,7 +265,7 @@ export class HistoryItem extends ClickerItem {
     super.description = value.response.date;
     super.contextValue = "call";
     super.tooltip = new vscode.MarkdownString(`### Request information:
-- host for execution: \`${value.request.source.host}\`
+- host for execution: \`${value.request.source.currentHost}\`
 - method used in request: \`${value.request.callTag}\`
 - response code: \`${value.response.code}\`
 - time of execution: \`${value.response.time}\`

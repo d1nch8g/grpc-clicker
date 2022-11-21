@@ -1,14 +1,11 @@
 import * as vscode from "vscode";
-import { ProtoFilesView } from "./files";
 import { HistoryTreeView } from "./history";
 import { Message } from "../grpcurl/parser";
-import { ServerTreeView } from "./servers";
+import { ServerTreeView } from "./protos";
 import { CollectionsTreeView } from "./collections";
 import { Collection } from "../storage/collections";
-import { ProtoFile } from "../storage/protoFiles";
-import { ProtoServer } from "../storage/protos";
 import { HistoryValue } from "../storage/history";
-import { FileSource, ProtoSource } from "../grpcurl/caller";
+import { ProtoSource } from "../grpcurl/caller";
 
 /**
  * Entity representing proto schema and server source
@@ -25,7 +22,7 @@ export interface ProtosTreeViewParams {
     /**
      * Path to proto file
      */
-    source: ProtoSource | FileSource,
+    source: ProtoSource,
     /**
      * Message tag in `grpcurl` compatible format.
      */
@@ -44,8 +41,7 @@ export class TreeViews {
     this.history = new HistoryTreeView(params.historyValues);
     this.collections = new CollectionsTreeView(params.collections);
 
-    vscode.window.registerTreeDataProvider("files", this.files);
-    vscode.window.registerTreeDataProvider("servers", this.servers);
+    vscode.window.registerTreeDataProvider("protos", this.servers);
     vscode.window.registerTreeDataProvider("history", this.history);
     vscode.window.registerTreeDataProvider("collections", this.collections);
   }

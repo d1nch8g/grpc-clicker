@@ -517,7 +517,7 @@ export function activate(context: vscode.ExtensionContext) {
     const params: GrpcTabParams = {
       call: chosenCall!,
       service: chosenService!,
-      proto: {
+      schema: {
         type: `PROTO`,
         services: services,
       },
