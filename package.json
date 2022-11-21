@@ -29,15 +29,11 @@
     "client"
   ],
   "activationEvents": [
-    "onView:files",
-    "onCommand:files.add",
-    "onCommand:files.refresh",
-    "onView:servers",
-    "onCommand:servers.add",
-    "onCommand:servers.refresh",
+    "onView:protos",
+    "onCommand:protos.add",
+    "onCommand:protos.refresh",
     "onView:history",
     "onCommand:history.clean",
-    "onCommand:cache.clean",
     "onView:collections",
     "onCommand:collections.create",
     "onWebviewPanel:callgrpc"
@@ -100,22 +96,6 @@
       },
       {
         "category": "gRPC Clicker",
-        "command": "files.add",
-        "title": "Add new proto file",
-        "icon": "$(settings-add)"
-      },
-      {
-        "command": "files.import",
-        "title": "Update import path for proto file",
-        "icon": "$(extensions-info-message)"
-      },
-      {
-        "command": "files.remove",
-        "title": "Remove existing proto file",
-        "icon": "$(terminal-kill)"
-      },
-      {
-        "category": "gRPC Clicker",
         "command": "headers.add",
         "title": "Add new metadata to request",
         "icon": "$(settings-add)"
@@ -134,12 +114,6 @@
         "command": "hosts.remove",
         "title": "Remove host",
         "icon": "$(terminal-kill)"
-      },
-      {
-        "category": "gRPC Clicker",
-        "command": "files.refresh",
-        "title": "Resresh existing proro schemas",
-        "icon": "$(extensions-refresh)"
       },
       {
         "category": "gRPC Clicker",
@@ -163,16 +137,6 @@
     "menus": {
       "view/title": [
         {
-          "command": "files.add",
-          "when": "view == files",
-          "group": "navigation"
-        },
-        {
-          "command": "files.refresh",
-          "when": "view == files",
-          "group": "navigation"
-        },
-        {
           "command": "headers.add",
           "when": "view == headers",
           "group": "navigation"
@@ -194,28 +158,8 @@
           "when": "viewItem == header"
         },
         {
-          "command": "hosts.add",
-          "when": "view == files && viewItem == hosts",
-          "group": "inline"
-        },
-        {
-          "command": "hosts.remove",
-          "when": "view == files && viewItem == host",
-          "group": "inline"
-        },
-        {
           "command": "headers.remove",
           "when": "view == headers && viewItem == header",
-          "group": "inline"
-        },
-        {
-          "command": "files.import",
-          "when": "view == files && viewItem == file",
-          "group": "inline"
-        },
-        {
-          "command": "files.remove",
-          "when": "view == files && viewItem == file",
           "group": "inline"
         },
         {
