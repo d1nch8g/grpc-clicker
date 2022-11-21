@@ -1,9 +1,5 @@
 import * as vscode from "vscode";
-import { FileSource, ProtoSource } from "../grpcurl/caller";
-import { Response, Expectations, Request } from "../grpcurl/grpcurl";
-import { Header } from "../storage/headers";
-import { AdditionalInfo } from "../storage/history";
-import { Host } from "../storage/hosts";
+import { ProtoSource } from "../grpcurl/caller";
 
 /**
  * Parameters for building all webview tabs.
@@ -22,7 +18,7 @@ export interface SourceWebViewData {
   /**
    * Source for building a webview,
    */
-  source: FileSource | ProtoSource;
+  source: ProtoSource;
 }
 
 /**
@@ -49,7 +45,7 @@ export class SourceWebViewFactory {
    * Will be used to reveal existing panel if such exists in webviews.
    * Will return `true` if panel successfully revealed.
    */
-  private tryToReveal(source: FileSource | ProtoSource): boolean {
+  private tryToReveal(source: ProtoSource): boolean {
     for (const tab of this.tabs) {
       if (JSON.stringify(source) === JSON.stringify(tab.data.source)) {
         tab.panel.reveal();

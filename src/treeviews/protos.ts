@@ -9,12 +9,13 @@ import {
   ItemType,
   MessageItem,
   ProtoItem,
+  ProtoWithSource,
   ServiceItem,
 } from "./items";
 
 export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
   constructor(
-    private servers: ProtoServer[],
+    private servers: ProtoWithSource[],
     private describeMsg: (
       source: ProtoSource,
       tag: string
@@ -29,7 +30,7 @@ export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
     void | ClickerItem | ClickerItem[]
   >;
 
-  refresh(servers: ProtoServer[]): void {
+  refresh(servers: ProtoWithSource[]): void {
     this.servers = servers;
     this.onChange.fire();
   }
@@ -48,7 +49,7 @@ export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
     }
     if (element.type === ItemType.server) {
       const elem = element as ProtoItem;
-      for (const service of elem.proto.services) {
+      for (const service of elem.proto.schema.services) {
         items.push(new ServiceItem(service, elem));
       }
       return items;

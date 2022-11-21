@@ -2,7 +2,6 @@ import * as vscode from "vscode";
 import { Response, Expectations, Request } from "../grpcurl/grpcurl";
 import { Header } from "../storage/headers";
 import { AdditionalInfo } from "../storage/history";
-import { Host } from "../storage/hosts";
 
 /**
  * Parameters for building all webview tabs.
@@ -25,10 +24,6 @@ export interface CallWebViewParameters {
    * Callback that is adding test to collection.
    */
   createTest: (request: Request, expect: Expectations | undefined) => void;
-  /**
-   * Callback that is sent to manage hosts for webview.
-   */
-  manageHosts: () => Promise<Host[]>;
   /**
    * Callback for adding new header.
    */
@@ -56,10 +51,6 @@ export interface CallWebViewData {
    */
   headers: Header[];
   /**
-   * Host options available for request.
-   */
-  hosts: Host[];
-  /**
    * Response to be visible in webview.
    */
   response: Response;
@@ -79,7 +70,7 @@ export interface CallWebViewData {
 export class CallWebViewFactory {
   private tabs: CallWebviewTab[] = [];
 
-  constructor(private params: CallWebViewParameters) {}
+  constructor(private params: CallWebViewParameters) { }
 
   /**
    * Operation that will try to reveal existing panel with same params and
@@ -162,10 +153,6 @@ class CallWebviewTab {
           this.data.snippet = await this.params.createSnippet(
             this.data.request
           );
-          this.panel.webview.postMessage(JSON.stringify(this.data));
-          return;
-        case "hosts":
-          this.data.hosts = await this.params.manageHosts();
           this.panel.webview.postMessage(JSON.stringify(this.data));
           return;
         case "test":
