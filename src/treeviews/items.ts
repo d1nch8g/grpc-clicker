@@ -1,10 +1,11 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Service, Call, Message, Field, ProtoSchema } from "../grpcurl/parser";
+import { Service, Call, Message, Field } from "../grpcurl/parser";
 import { Header } from "../storage/headers";
 import { Collection, Test } from "../storage/collections";
 import { HistoryValue } from "../storage/history";
 import { Proto } from "../grpcurl/grpcurl";
+import { ProtoSource } from "../grpcurl/caller";
 
 /**
  * Params that can be used to create new call from pressed button:
@@ -182,7 +183,7 @@ export class CallItem extends ClickerItem {
     const callParams: GrpcTabFromScratch = {
       call: this.base,
       service: parent.base,
-      proto: parent.parent.proto,
+      proto: parent.parent.proto
     };
 
     super.command = {
