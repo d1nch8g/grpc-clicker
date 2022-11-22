@@ -61,7 +61,7 @@
         },
         {
           "id": "history",
-          "name": "Request history"
+          "name": "request history"
         }
       ]
     },
@@ -86,28 +86,20 @@
       },
       {
         "category": "gRPC Clicker",
-        "command": "headers.switch",
-        "title": "Turn on/off value of context metadata"
+        "command": "protos.add",
+        "title": "Add new proto source",
+        "icon": "$(settings-add)"
       },
       {
         "category": "gRPC Clicker",
-        "command": "headers.add",
-        "title": "Add new metadata to request",
-        "icon": "$(settings-add)"
+        "command": "protos.refresh",
+        "title": "Refresh schemas",
+        "icon": "$(extensions-refresh)"
       },
       {
-        "command": "headers.remove",
-        "title": "Remove header",
-        "icon": "$(terminal-kill)"
-      },
-      {
-        "command": "hosts.add",
-        "title": "Add new host",
-        "icon": "$(settings-add)"
-      },
-      {
-        "command": "hosts.remove",
-        "title": "Remove host",
+        "category": "gRPC Clicker",
+        "command": "protos.remove",
+        "title": "Remove proto source",
         "icon": "$(terminal-kill)"
       },
       {
@@ -132,8 +124,13 @@
     "menus": {
       "view/title": [
         {
-          "command": "headers.add",
-          "when": "view == headers",
+          "command": "protos.add",
+          "when": "view == protos",
+          "group": "navigation"
+        },
+        {
+          "command": "protos.refresh",
+          "when": "view == protos",
           "group": "navigation"
         },
         {
@@ -148,15 +145,6 @@
         }
       ],
       "view/item/context": [
-        {
-          "command": "headers.switch",
-          "when": "viewItem == header"
-        },
-        {
-          "command": "headers.remove",
-          "when": "view == headers && viewItem == header",
-          "group": "inline"
-        },
         {
           "command": "colections.run",
           "when": "view == collections && viewItem == collection",
