@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import { Caller, ProtoSource } from "./grpcurl/caller";
 import { Response, Expectations, Request, Proto } from "./grpcurl/grpcurl";
-import { Call, Message, Parser, ProtoSchema, Service } from "./grpcurl/parser";
+import { Message, Parser } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
 import { TreeViews } from "./treeviews/treeviews";
 import { CallWebViewFactory } from "./webviews/call";
@@ -13,8 +13,7 @@ import { SourceWebViewFactory } from "./webviews/source";
 import { v4 as uuidv4 } from "uuid";
 import {
   CollectionItem,
-  GrpcTabFromScratch as GrpcTabParams,
-  HeaderItem,
+  GrpcTabFromScratch,
   ProtoItem,
   TestItem,
 } from "./treeviews/items";
@@ -65,13 +64,13 @@ export function activate(context: vscode.ExtensionContext) {
   const callWebviewFactory = new CallWebViewFactory({
     uri: context.extensionUri,
     sendRequest: async (request, info) => {
-      const response = await grpcurl.send(request);
-      const count = storage.history.add({ request, response, info });
+      const resp = await grpcurl.send(request);
+      const count = storage.history.add({ request, response: resp, info });
       if (count === 1000) {
         openLink();
       }
       treeviews.history.refresh(storage.history.list());
-      return response;
+      return resp;
     },
     createSnippet: async (request) => {
       const call = grpcurl.formCall(request);
@@ -160,7 +159,7 @@ export function activate(context: vscode.ExtensionContext) {
     treeviews.collections.refresh([]);
   });
 
-  vscode.commands.registerCommand(`servers.add`, async () => {
+  vscode.commands.registerCommand(`protos.add`, async () => {
     const reflectTimeout = vscode.workspace
       .getConfiguration(`grpc-clicker`)
       .get(`reflectTimeout`, 0.5);
@@ -202,29 +201,6 @@ export function activate(context: vscode.ExtensionContext) {
     storage.protos.save(newProtos);
     treeviews.protos.refresh(newProtos);
   });
-
-  vscode.commands.registerCommand("headers.add", async () => {
-    const header = await vscode.window.showInputBox({
-      title:
-        `header that you can add to gRPC call, in format: ` +
-        `"key: value", enable/disable by clicking`,
-    });
-    if (header === "" || header === undefined) {
-      return;
-    }
-    const err = storage.headers.add({
-      value: header,
-      active: false,
-    });
-    if (err !== undefined) {
-      vscode.window.showErrorMessage(err.message);
-    }
-  });
-
-  vscode.commands.registerCommand("headers.remove", async (header: HeaderItem) => {
-    storage.headers.remove(header.header.value);
-  }
-  );
 
   vscode.commands.registerCommand("history.clean", () => {
     storage.history.clean();
@@ -302,7 +278,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
   });
 
-  vscode.commands.registerCommand("webview.open", async (data: GrpcTabParams) => {
+  vscode.commands.registerCommand("webview.open", async (data: GrpcTabFromScratch) => {
     const maxMsgSize = vscode.workspace.getConfiguration(`grpc-clicker`).get(`msgsize`, 4);
 
     const msg = await grpcurl.message({
