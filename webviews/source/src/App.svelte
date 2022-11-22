@@ -1,15 +1,13 @@
 <script>
   $: data = {
-    source: {
-      type: "FILE",
-      filePath: "server/api.proto",
-      importPath: "/",
-      host: "localhost",
-      plaintext: true,
-      servername: "",
-      timeout: 0.5,
-      unix: false,
-    },
+    uuid: `someuuid`,
+    timeout: 0.5,
+    currentHost: "localhost:8080",
+    additionalHosts: [],
+    plaintext: true,
+    filePath: undefined,
+    group: undefined,
+    importPaths: [],
   };
 
   window.addEventListener("message", (event) => {
@@ -18,155 +16,85 @@
   });
 </script>
 
-{#if data.source.type === `FILE`}
-  <table class="main">
-    <tr>
-      <h1>New proto file source</h1>
-    </tr>
-    <tr>
-      <vscode-divider></vscode-divider>
-    </tr>
-    <tr>
-      <h4>some stuff...</h4>
-    </tr>
-  </table>
-{:else}
-  <table>
-    <tr>
-      <center>
-        <h1>New proto reflect server</h1>
-      </center>
-    </tr>
-    <tr>
-      <vscode-divider></vscode-divider>
-    </tr>
-  </table>
+<center>
+  <h2>gRPC connection assistant</h2>
+</center>
+<hr />
 
-  <table>
+<table>
+  <tr>
     <th class="left">
-      <h4>Server adress</h4>
-      <h5>Connection adress, typically in host:port format.</h5>
+      <h4>Timeout</h4>
+    </th>
+    <th class="middle">
+      <p>Maximum time for request to be executed (seconds)</p>
     </th>
     <th class="right">
-      <textarea
-        bind:value="{data.source.host}"
-        rows="1"
-        oninput="this.value = this.value.replace(/\n/g,'')"></textarea>
+      <textarea rows="1" bind:value="{data.timeout}"></textarea>
     </th>
-  </table>
+  </tr>
+</table>
 
-  <table>
+<table>
+  <tr>
     <th class="left">
-      <h4>Connection timeout (seconds)</h4>
-      <h5>
-        The maximum time, in seconds, to wait for connection to be established.
-        Defaults to 0.5 seconds.
-      </h5>
+      <h4>Connection type</h4>
     </th>
-    <th class="right">
-      <textarea
-        bind:value="{data.source.timeout}"
-        rows="1"
-        oninput="this.value = this.value.replace(/\n/g,'')"></textarea>
-    </th>
-  </table>
-
-  <table>
-    <th class="left">
-      <h4>Server name</h4>
-      <h5>Override server name when validating TLS certificate.</h5>
-    </th>
-    <th class="right">
-      <textarea
-        bind:value="{data.source.servername}"
-        rows="1"
-        oninput="this.value = this.value.replace(/\n/g,'')"></textarea>
-    </th>
-  </table>
-
-  <table>
-    <th class="left">
-      <h4>Use plaintext</h4>
-      <h5>Use plain-text HTTP/2 when connecting to server (no TLS).</h5>
+    <th class="middle">
+      <p>You can get schema from reflect server or local file</p>
     </th>
     <th class="right">
       <vscode-dropdown>
-        <vscode-option on:click="{(data.source.plaintext = true)}">
-          <div>Yes</div>
+        <vscode-option>
+          <div>Reflect server</div>
         </vscode-option>
-        <vscode-option on:click="{(data.source.plaintext = false)}">
-          <div>No</div>
-        </vscode-option>
-      </vscode-dropdown>
-    </th>
-  </table>
-
-  <table>
-    <th class="left">
-      <h4>Unix path</h4>
-      <h5>Unix variants, the address must be the path to the domain socket.</h5>
-    </th>
-    <th class="right">
-      <vscode-dropdown>
-        <vscode-option on:click="{(data.source.plaintext = true)}">
-          <div>No</div>
-        </vscode-option>
-        <vscode-option on:click="{(data.source.plaintext = false)}">
-          <div>Yes (the address must be the path to the domain socket)</div>
+        <vscode-option>
+          <div>Proto file</div>
         </vscode-option>
       </vscode-dropdown>
     </th>
-  </table>
-
-  <table>
-    <th class="left">
-      <h4>Insecure</h4>
-      <h5>
-        Skip server certificate and domain verification. (NOT SECURE!) Not valid
-        with -plaintext option.
-      </h5>
-    </th>
-    <th class="right">
-      <vscode-dropdown>
-        <vscode-option on:click="{(data.source.plaintext = false)}">
-          <div>No</div>
-        </vscode-option>
-        <vscode-option on:click="{(data.source.plaintext = true)}">
-          <div>Yes</div>
-        </vscode-option>
-      </vscode-dropdown>
-    </th>
-  </table>
-{/if}
+  </tr>
+</table>
 
 <style>
-  vscode-dropdown {
-    width: 100%;
-    margin-top: -5px;
+  hr {
+    width: 60%;
   }
   table {
-    padding-left: 15%;
-    padding-right: 15%;
-    width: 100%;
+    padding-left: 20%;
+    padding-right: 20%;
+  }
+  tr {
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
   .left {
-    width: 30%;
+    width: 20%;
+    text-align: left;
+  }
+  .middle {
+    width: 80%;
+    text-align: left;
   }
   .right {
-    width: 70%;
-    margin-top: 100px;
+    width: 20%;
+    text-align: left;
+  }
+  vscode-dropdown {
+    width: 260px;
   }
   textarea {
+    width: 260px;
     resize: none;
-    white-space: nowrap;
-    width: 100%;
+    display: block;
+    height: inherit;
+    box-sizing: border-box;
+    pointer-events: auto;
     font-family: var(--vscode-editor-font-family);
     font-size: var(--vscode-editor-font-size);
     caret-color: var(--vscode-input-foreground);
     outline-color: var(--vscode-input-border);
     background-color: var(--vscode-sideBar-background);
-    pointer-events: auto;
-    outline-color: var(--vscode-focusBorder) !important;
     color: var(--vscode-foreground);
   }
 </style>
