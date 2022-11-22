@@ -9,6 +9,10 @@ export interface SourceWebViewParameters {
    * Base uri to eject source files for webview, should be base of extension
    */
   uri: vscode.Uri;
+  /**
+   * Callback for saving webview to storage and updating trees.
+   */
+  createViewCallback: (source: ProtoSource) => Promise<boolean>;
 }
 
 /**

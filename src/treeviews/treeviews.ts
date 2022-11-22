@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { HistoryTreeView } from "./history";
 import { Message } from "../grpcurl/parser";
-import { ServerTreeView } from "./protos";
+import { ProtosTreeView } from "./protos";
 import { CollectionsTreeView } from "./collections";
 import { Collection } from "../storage/collections";
 import { HistoryValue } from "../storage/history";
@@ -31,15 +31,16 @@ export interface ProtosTreeViewParams {
 }
 
 export class TreeViews {
-  public readonly servers: ServerTreeView;
+  public readonly protos: ProtosTreeView;
   public readonly history: HistoryTreeView;
   public readonly collections: CollectionsTreeView;
+  files: any;
   constructor(params: ProtosTreeViewParams) {
-    this.servers = new ServerTreeView(params.protos, params.describeMsg);
+    this.protos = new ProtosTreeView(params.protos, params.describeMsg);
     this.history = new HistoryTreeView(params.historyValues);
     this.collections = new CollectionsTreeView(params.collections);
 
-    vscode.window.registerTreeDataProvider("protos", this.servers);
+    vscode.window.registerTreeDataProvider("protos", this.protos);
     vscode.window.registerTreeDataProvider("history", this.history);
     vscode.window.registerTreeDataProvider("collections", this.collections);
   }

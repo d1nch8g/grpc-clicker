@@ -12,7 +12,7 @@ import {
   ServiceItem,
 } from "./items";
 
-export class ServerTreeView implements vscode.TreeDataProvider<ClickerItem> {
+export class ProtosTreeView implements vscode.TreeDataProvider<ClickerItem> {
   constructor(
     private servers: Proto[],
     private describeMsg: (

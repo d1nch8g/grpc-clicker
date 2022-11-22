@@ -5,13 +5,16 @@ import { Collections } from "./collections";
 import { Protos } from "./protos";
 
 export class Storage {
-  public readonly key: string = `grpc-clicker-version`;
-  public readonly version: string = `0.1.9`;
+  private readonly key: string = `grpc-clicker-version`;
+  private readonly version: string = `0.1.9`;
 
   public readonly collections: Collections;
   public readonly headers: Headers;
   public readonly history: History;
   public readonly protos: Protos;
+  files: any;
+  servers: any;
+  hosts: any;
 
   constructor(private memento: Memento) {
     this.headers = new Headers(memento);
@@ -27,7 +30,7 @@ export class Storage {
     }
   }
 
-  updateSchema() {
+  private updateSchema() {
     const lastversion = this.memento.get<string>(this.key, `nan`);
     switch (lastversion) {
       case this.version:
