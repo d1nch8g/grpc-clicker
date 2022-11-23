@@ -14,6 +14,16 @@
     data = JSON.parse(`${event.data}`);
     console.log(`Webview created with parameters: `, data);
   });
+
+  let showServerOptions = true;
+
+  function setServerOptions() {
+    showServerOptions = true;
+  }
+
+  function setLocalFileOptions() {
+    showServerOptions = false;
+  }
 </script>
 
 <center>
@@ -22,6 +32,30 @@
 <hr />
 
 <table>
+  <tr>
+    <th class="left">
+      <h4>Name</h4>
+    </th>
+    <th class="middle">
+      <p>Visible string for connection in list</p>
+    </th>
+    <th class="right">
+      <textarea rows="1" bind:value="{data.timeout}"></textarea>
+    </th>
+  </tr>
+
+  <tr>
+    <th class="left">
+      <h4>Group</h4>
+    </th>
+    <th class="middle">
+      <p>Group which connection will belong to, optional</p>
+    </th>
+    <th class="right">
+      <textarea rows="1" bind:value="{data.timeout}"></textarea>
+    </th>
+  </tr>
+
   <tr>
     <th class="left">
       <h4>Timeout</h4>
@@ -33,9 +67,7 @@
       <textarea rows="1" bind:value="{data.timeout}"></textarea>
     </th>
   </tr>
-</table>
 
-<table>
   <tr>
     <th class="left">
       <h4>Connection type</h4>
@@ -45,10 +77,10 @@
     </th>
     <th class="right">
       <vscode-dropdown>
-        <vscode-option>
+        <vscode-option on:click="{setServerOptions}">
           <div>Reflect server</div>
         </vscode-option>
-        <vscode-option>
+        <vscode-option on:click="{setLocalFileOptions}">
           <div>Proto file</div>
         </vscode-option>
       </vscode-dropdown>
