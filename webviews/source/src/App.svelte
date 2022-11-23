@@ -16,7 +16,7 @@
     console.log(`Webview created with parameters: `, connection);
   });
 
-  let showServerOptions = true;
+  $: showServerOptions = true;
 
   function setServerOptions() {
     showServerOptions = true;
@@ -33,20 +33,26 @@
   function disablePlaintext() {
     connection.plaintext = false;
   }
+
+  $: importPathString = `/`;
+  function onImportPathEdit(importPathString) {
+    connection.importPaths = importPathString.split(",");
+    console.log(connection);
+  }
+  $: onImportPathEdit(importPathString);
 </script>
 
 <center>
   <img
     align="center"
-    width="120px"
-    height="120px"
+    height="92px"
     alt="gRPC"
-    src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/images/logo.png"
+    src="https://cncf-branding.netlify.app/img/projects/grpc/icon/color/grpc-icon-color.png"
   />
 </center>
 
 <center>
-  <h2>gRPC connection assistant</h2>
+  <h2>Connection assistant</h2>
 </center>
 
 <hr />
@@ -73,18 +79,6 @@
     </th>
     <th class="right">
       <textarea rows="1" bind:value="{connection.group}"></textarea>
-    </th>
-  </tr>
-
-  <tr>
-    <th class="left">
-      <h4>Timeout</h4>
-    </th>
-    <th class="middle">
-      <i>Maximum time for request to be executed (seconds)</i>
-    </th>
-    <th class="right">
-      <textarea rows="1" bind:value="{connection.timeout}"></textarea>
     </th>
   </tr>
 
@@ -137,6 +131,51 @@
       </vscode-dropdown>
     </th>
   </tr>
+
+  {#if showServerOptions}
+    <tr>
+      <th class="left">
+        <h4>Timeout</h4>
+      </th>
+      <th class="middle">
+        <i>Maximum time to recieve proto schema from server</i>
+      </th>
+      <th class="right">
+        <textarea rows="1" bind:value="{connection.timeout}"></textarea>
+      </th>
+    </tr>
+  {/if}
+
+  {#if !showServerOptions}
+    <tr>
+      <th class="left">
+        <h4>Proto path</h4>
+      </th>
+      <th class="middle">
+        <i>Name of a source proto path for generating schema</i>
+      </th>
+      <th class="right">
+        <textarea rows="1" bind:value="{connection.filePath}"></textarea>
+      </th>
+    </tr>
+  {/if}
+
+  {#if !showServerOptions}
+    <tr>
+      <th class="left">
+        <h4>Import paths</h4>
+      </th>
+      <th class="middle">
+        <i>Additional required import paths(splitte dy comma)</i>
+      </th>
+      <th class="right">
+        <textarea
+          rows="1"
+          bind:value="{importPathString}"
+          on:change="{onImportPathEdit}"></textarea>
+      </th>
+    </tr>
+  {/if}
 </table>
 
 <style>
