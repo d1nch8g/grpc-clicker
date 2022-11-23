@@ -1,6 +1,8 @@
 <script>
-  $: data = {
+  $: connection = {
     uuid: `someuuid`,
+    name: `keks`,
+    group: `feks`,
     timeout: 0.5,
     currentHost: "localhost:8080",
     additionalHosts: [],
@@ -11,8 +13,8 @@
   };
 
   window.addEventListener("message", (event) => {
-    data = JSON.parse(`${event.data}`);
-    console.log(`Webview created with parameters: `, data);
+    connection = JSON.parse(`${event.data}`);
+    console.log(`Webview created with parameters: `, connection);
   });
 
   let showServerOptions = true;
@@ -37,10 +39,10 @@
       <h4>Name</h4>
     </th>
     <th class="middle">
-      <p>Visible string for connection in list</p>
+      <i>Visible string for connection in list</i>
     </th>
     <th class="right">
-      <textarea rows="1" bind:value="{data.timeout}"></textarea>
+      <textarea rows="1" bind:value="{connection.name}"></textarea>
     </th>
   </tr>
 
@@ -49,10 +51,10 @@
       <h4>Group</h4>
     </th>
     <th class="middle">
-      <p>Group which connection will belong to, optional</p>
+      <i>Group which connection will belong to, optional</i>
     </th>
     <th class="right">
-      <textarea rows="1" bind:value="{data.timeout}"></textarea>
+      <textarea rows="1" bind:value="{connection.group}"></textarea>
     </th>
   </tr>
 
@@ -61,10 +63,22 @@
       <h4>Timeout</h4>
     </th>
     <th class="middle">
-      <p>Maximum time for request to be executed (seconds)</p>
+      <i>Maximum time for request to be executed (seconds)</i>
     </th>
     <th class="right">
-      <textarea rows="1" bind:value="{data.timeout}"></textarea>
+      <textarea rows="1" bind:value="{connection.timeout}"></textarea>
+    </th>
+  </tr>
+
+  <tr>
+    <th class="left">
+      <h4>Server</h4>
+    </th>
+    <th class="middle">
+      <i>Destivation server that will be used to execute calls</i>
+    </th>
+    <th class="right">
+      <textarea rows="1" bind:value="{connection.timeout}"></textarea>
     </th>
   </tr>
 
@@ -73,7 +87,7 @@
       <h4>Connection type</h4>
     </th>
     <th class="middle">
-      <p>You can get schema from reflect server or local file</p>
+      <i>You can get schema from reflect server or local file</i>
     </th>
     <th class="right">
       <vscode-dropdown>
@@ -101,22 +115,22 @@
     padding-bottom: 10px;
   }
   .left {
-    width: 20%;
+    width: 25%;
     text-align: left;
   }
   .middle {
-    width: 80%;
+    width: 70%;
     text-align: left;
   }
   .right {
-    width: 20%;
+    width: 25%;
     text-align: left;
   }
   vscode-dropdown {
-    width: 260px;
+    width: 320px;
   }
   textarea {
-    width: 260px;
+    width: 320px;
     resize: none;
     display: block;
     height: inherit;
