@@ -6,9 +6,8 @@
     timeout: 0.5,
     adress: "localhost:8080",
     plaintext: true,
-    filePath: undefined,
-    group: undefined,
-    importPaths: [],
+    filePath: `filepath`,
+    importPaths: `/`,
   };
 
   window.addEventListener("message", (event) => {
@@ -33,13 +32,6 @@
   function disablePlaintext() {
     connection.plaintext = false;
   }
-
-  $: importPathString = `/`;
-  function onImportPathEdit(importPathString) {
-    connection.importPaths = importPathString.split(",");
-    console.log(connection);
-  }
-  $: onImportPathEdit(importPathString);
 </script>
 
 <center>
@@ -166,23 +158,25 @@
         <h4>Import paths</h4>
       </th>
       <th class="middle">
-        <i>Additional required import paths(splitte dy comma)</i>
+        <i>Additional required import paths(splitted dy comma)</i>
       </th>
       <th class="right">
-        <textarea
-          rows="1"
-          bind:value="{importPathString}"
-          on:change="{onImportPathEdit}"></textarea>
+        <textarea rows="1" bind:value="{connection.importPaths}"></textarea>
       </th>
     </tr>
   {/if}
 </table>
+
+<vscode-button class="lbutton" appearance="secondary">Cancel</vscode-button>
+<vscode-button class="rbutton" appearance="primary">Create</vscode-button>
 
 <style>
   hr {
     width: 60%;
   }
   table {
+    padding-top: 20px;
+    padding-bottom: 20px;
     padding-left: 20%;
     padding-right: 20%;
   }
@@ -224,5 +218,11 @@
     outline-color: var(--vscode-input-border);
     background-color: var(--vscode-sideBar-background);
     color: var(--vscode-foreground);
+  }
+  .lbutton {
+    margin-left: 42%;
+  }
+  .rbutton {
+    margin-left: 6%;
   }
 </style>
