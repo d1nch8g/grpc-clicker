@@ -4,8 +4,7 @@
     name: `keks`,
     group: `feks`,
     timeout: 0.5,
-    currentHost: "localhost:8080",
-    additionalHosts: [],
+    adress: "localhost:8080",
     plaintext: true,
     filePath: undefined,
     group: undefined,
@@ -26,11 +25,30 @@
   function setLocalFileOptions() {
     showServerOptions = false;
   }
+
+  function enablePlaintext() {
+    connection.plaintext = true;
+  }
+
+  function disablePlaintext() {
+    connection.plaintext = false;
+  }
 </script>
+
+<center>
+  <img
+    align="center"
+    width="120px"
+    height="120px"
+    alt="gRPC"
+    src="https://raw.githubusercontent.com/Dancheg97/grpclicker_vscode/main/images/logo.png"
+  />
+</center>
 
 <center>
   <h2>gRPC connection assistant</h2>
 </center>
+
 <hr />
 
 <table>
@@ -72,13 +90,32 @@
 
   <tr>
     <th class="left">
-      <h4>Server</h4>
+      <h4>Adress</h4>
     </th>
     <th class="middle">
-      <i>Destivation server that will be used to execute calls</i>
+      <i>Default adress of destination for gRPC calls</i>
     </th>
     <th class="right">
-      <textarea rows="1" bind:value="{connection.timeout}"></textarea>
+      <textarea rows="1" bind:value="{connection.adress}"></textarea>
+    </th>
+  </tr>
+
+  <tr>
+    <th class="left">
+      <h4>Plaintext</h4>
+    </th>
+    <th class="middle">
+      <i>Wether to use plaintext or not (for server with TLS - off)</i>
+    </th>
+    <th class="right">
+      <vscode-dropdown>
+        <vscode-option on:click="{enablePlaintext}">
+          <div>Yes</div>
+        </vscode-option>
+        <vscode-option on:click="{disablePlaintext}">
+          <div>No</div>
+        </vscode-option>
+      </vscode-dropdown>
     </th>
   </tr>
 
@@ -125,6 +162,12 @@
   .right {
     width: 25%;
     text-align: left;
+  }
+  img {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
   }
   vscode-dropdown {
     width: 320px;
