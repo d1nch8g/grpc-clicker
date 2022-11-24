@@ -30,7 +30,7 @@ const src: ProtoSource = {
   importPath: `/`,
   name: "",
   unix: false,
-  customFlags: undefined
+  customFlags: `undefined`
 };
 
 const scm: ProtoSchema = {
