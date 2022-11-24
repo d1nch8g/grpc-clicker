@@ -23,6 +23,7 @@ export interface GrpcTabFromScratch {
 
 export enum ItemType {
   unknown,
+  group,
   file,
   server,
   host,
@@ -37,6 +38,16 @@ export enum ItemType {
 
 export class ClickerItem extends vscode.TreeItem {
   public type: ItemType = ItemType.unknown;
+}
+
+export class GroupItem extends ClickerItem {
+  constructor(public readonly name: string) {
+    super(name);
+    super.type = ItemType.group;
+    super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+    super.contextValue = `collection`;
+    super.iconPath = new vscode.ThemeIcon(`folder-opened`);
+  }
 }
 
 export class CollectionItem extends ClickerItem {
