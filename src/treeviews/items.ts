@@ -24,8 +24,7 @@ export interface GrpcTabFromScratch {
 export enum ItemType {
   unknown,
   group,
-  file,
-  server,
+  proto,
   host,
   service,
   call,
@@ -46,7 +45,7 @@ export class GroupItem extends ClickerItem {
     super.type = ItemType.group;
     super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     super.contextValue = `collection`;
-    super.iconPath = new vscode.ThemeIcon(`folder-opened`);
+    super.iconPath = new vscode.ThemeIcon(`folder`);
   }
 }
 
@@ -116,20 +115,20 @@ ${mistake.expected.split(`\n`).slice(0, 14).join(`\n`)}
 
 export class ProtoItem extends ClickerItem {
   constructor(public readonly proto: Proto) {
-    let name = ``;
+    super(proto.source.name);
     if (proto.source.filePath !== undefined) {
-      name = proto.source.filePath.replace(/^.*[\\\/]/, "");
+      super.description = proto.source.filePath.replace(/^.*[\\\/]/, "");
     } else {
-      name = proto.source.adress;
+      super.description = proto.source.adress;
     }
-    super(name);
 
+    super.type = ItemType.proto;
     if (proto.source.filePath !== undefined) {
-      super.type = ItemType.file;
+
       super.tooltip = new vscode.MarkdownString(`#### Proto file:
   - File path: ${proto.source.filePath}
-  - Import paths: ${proto.source.importPaths}`);
-      super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+  - Import paths: ${proto.source.importPath}`);
+      super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
       super.contextValue = `file`;
       const icon = `file.svg`;
       super.iconPath = {
@@ -137,12 +136,7 @@ export class ProtoItem extends ClickerItem {
         dark: path.join(__filename, "..", "..", "images", icon),
       };
     } else {
-      super.type = ItemType.server;
-      super.description = `TLS: on`;
-      if (proto.source.plaintext) {
-        super.description = `TLS: off`;
-      }
-      super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+      super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
       super.contextValue = `server`;
       let icon = `host-on.svg`;
       if (proto.schema.services.length === 0) {

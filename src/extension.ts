@@ -149,14 +149,14 @@ export function activate(context: vscode.ExtensionContext) {
         unix: source.unix,
         customFlags: undefined,
         filePath: undefined,
-        importPaths: [],
+        importPath: ``,
       };
       if (source.customFlags !== undefined) {
         src.customFlags = source.customFlags;
       }
       if (source.useFile) {
         src.filePath = source.filePath;
-        src.importPaths = source.importPaths.split(`,`);
+        src.importPath = source.importPath;
       }
       const protoResult = await grpcurl.proto(src);
       if (typeof protoResult === `string`) {
@@ -196,7 +196,7 @@ export function activate(context: vscode.ExtensionContext) {
       useFile: false,
       adress: "localhost:8080",
       filePath: "",
-      importPaths: "/",
+      importPath: "/",
       connectStatus: `NOT_EXECUTED`,
       unix: false,
       customFlags: ""

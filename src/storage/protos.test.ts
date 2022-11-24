@@ -27,7 +27,7 @@ const src: ProtoSource = {
   timeout: 0,
   filePath: `value`,
   group: `value`,
-  importPaths: [],
+  importPath: `/`,
   name: "",
   unix: false,
   customFlags: undefined

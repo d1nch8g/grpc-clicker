@@ -74,13 +74,13 @@
 
 <center>
   {#if connection.connectStatus === `NOT_EXECUTED`}
-    <img align="center" alt="gRPC" src={NOT_EXECUTED} />
+    <img align="center" alt="gRPC" src="{NOT_EXECUTED}" />
   {:else if connection.connectStatus === `WAITING`}
-    <div align="center" class="loader" />
+    <div align="center" class="loader"></div>
   {:else if connection.connectStatus === `ERROR`}
-    <img align="center" alt="gRPC" src={ERROR} />
+    <img align="center" alt="gRPC" src="{ERROR}" />
   {:else if connection.connectStatus === `SUCCESS`}
-    <img align="center" alt="gRPC" src={SUCCESS} />
+    <img align="center" alt="gRPC" src="{SUCCESS}" />
   {/if}
 </center>
 
@@ -99,7 +99,7 @@
       <i>Visible string for connection in list</i>
     </th>
     <th class="right">
-      <textarea rows="1" bind:value={connection.name} />
+      <textarea rows="1" bind:value="{connection.name}"></textarea>
     </th>
   </tr>
 
@@ -111,7 +111,7 @@
       <i>Group which connection will belong to, optional</i>
     </th>
     <th class="right">
-      <textarea rows="1" bind:value={connection.group} />
+      <textarea rows="1" bind:value="{connection.group}"></textarea>
     </th>
   </tr>
 
@@ -123,7 +123,7 @@
       <i>Default adress of destination for gRPC calls</i>
     </th>
     <th class="right">
-      <textarea rows="1" bind:value={connection.adress} />
+      <textarea rows="1" bind:value="{connection.adress}"></textarea>
     </th>
   </tr>
 
@@ -136,10 +136,10 @@
     </th>
     <th class="right">
       <vscode-dropdown>
-        <vscode-option on:click={enablePlaintext}>
+        <vscode-option on:click="{enablePlaintext}">
           <div>Yes</div>
         </vscode-option>
-        <vscode-option on:click={disablePlaintext}>
+        <vscode-option on:click="{disablePlaintext}">
           <div>No</div>
         </vscode-option>
       </vscode-dropdown>
@@ -155,10 +155,10 @@
     </th>
     <th class="right">
       <vscode-dropdown>
-        <vscode-option on:click={setServerSource}>
+        <vscode-option on:click="{setServerSource}">
           <div>Reflect server</div>
         </vscode-option>
-        <vscode-option on:click={setFileSource}>
+        <vscode-option on:click="{setFileSource}">
           <div>Proto file</div>
         </vscode-option>
       </vscode-dropdown>
@@ -174,7 +174,7 @@
         <i>Maximum time to recieve proto schema from server</i>
       </th>
       <th class="right">
-        <textarea rows="1" bind:value={connection.timeout} />
+        <textarea rows="1" bind:value="{connection.timeout}"></textarea>
       </th>
     </tr>
   {/if}
@@ -189,10 +189,10 @@
       </th>
       <th class="right">
         <vscode-dropdown>
-          <vscode-option on:click={setUnixFalse}>
+          <vscode-option on:click="{setUnixFalse}">
             <div>No</div>
           </vscode-option>
-          <vscode-option on:click={setUnixTrue}>
+          <vscode-option on:click="{setUnixTrue}">
             <div>Yes</div>
           </vscode-option>
         </vscode-dropdown>
@@ -209,7 +209,7 @@
         <i>Name of a source proto path for generating schema</i>
       </th>
       <th class="right">
-        <textarea rows="1" bind:value={connection.filePath} />
+        <textarea rows="1" bind:value="{connection.filePath}"></textarea>
       </th>
     </tr>
   {/if}
@@ -223,7 +223,7 @@
         <i>Path to directory from which proto sources can be imported</i>
       </th>
       <th class="right">
-        <textarea rows="1" bind:value={connection.importPath} />
+        <textarea rows="1" bind:value="{connection.importPath}"></textarea>
       </th>
     </tr>
   {/if}
@@ -236,14 +236,14 @@
       <i>Additional flags for grpcurl CLI command</i>
     </th>
     <th class="right">
-      <textarea rows="1" bind:value={connection.customFlags} />
+      <textarea rows="1" bind:value="{connection.customFlags}"></textarea>
     </th>
   </tr>
 </table>
 
 <hr />
 
-<button on:click={createConnection}>Create connection</button>
+<button on:click="{createConnection}">Create connection</button>
 
 <style>
   .loader {
