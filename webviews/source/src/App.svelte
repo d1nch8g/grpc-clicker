@@ -1,8 +1,10 @@
 <script>
   const NOT_EXECUTED =
     "https://cncf-branding.netlify.app/img/projects/grpc/icon/color/grpc-icon-color.png";
-  const WAITING =
+  const ERROR =
     "https://cncf-branding.netlify.app/img/projects/grpc/icon/color/grpc-icon-color.png";
+  const SUCCESS =
+    "https://www.veryicon.com/download/png/miscellaneous/monochromatic-surface-icon-library/success-56?s=512";
 
   $: connection = {
     uuid: `someuuid`,
@@ -57,13 +59,13 @@
 
 <center>
   {#if connection.connectStatus === `NOT_EXECUTED`}
-    <img align="center" height="92px" alt="gRPC" src={NOT_EXECUTED} />
+    <img align="center" alt="gRPC" src={NOT_EXECUTED} />
   {:else if connection.connectStatus === `WAITING`}
-    <div align="center" height="92px" class="loader" />
+    <div align="center" class="loader" />
   {:else if connection.connectStatus === `ERROR`}
-    <img align="center" height="92px" alt="gRPC" src={NOT_EXECUTED} />
+    <img align="center" alt="gRPC" src={ERROR} />
   {:else if connection.connectStatus === `SUCCESS`}
-    <img align="center" height="92px" alt="gRPC" src={NOT_EXECUTED} />
+    <img align="center" alt="gRPC" src={SUCCESS} />
   {/if}
 </center>
 
@@ -196,6 +198,28 @@
 <button on:click={createConnection}>Create connection</button>
 
 <style>
+  .loader {
+    border: 16px solid var(--vscode-editor-background);
+    border-top: 16px solid var(--vscode-focusBorder);
+    border-radius: 50%;
+    width: 92px;
+    height: 92px;
+    animation: spin 2s linear infinite;
+  }
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  img {
+    border: 16px solid transparent;
+    border-top: 16px solid transparent;
+    border-radius: 50%;
+    height: 92px;
+  }
   hr {
     width: 60%;
   }
@@ -220,12 +244,6 @@
   .right {
     width: 25%;
     text-align: left;
-  }
-  img {
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 10px;
-    padding-top: 10px;
   }
   vscode-dropdown {
     width: 320px;
@@ -264,21 +282,5 @@
   }
   button:focus {
     outline-color: var(--vscode-focusBorder);
-  }
-  .loader {
-    border: 16px solid var(--vscode-editor-background);
-    border-top: 16px solid var(--vscode-focusBorder);
-    border-radius: 50%;
-    width: 120px;
-    height: 120px;
-    animation: spin 2s linear infinite;
-  }
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
   }
 </style>
