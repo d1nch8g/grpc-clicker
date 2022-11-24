@@ -9,12 +9,22 @@
     plaintext: true,
     filePath: `filepath`,
     importPaths: `/`,
+    connectStatus: `not_connected`,
   };
 
   window.addEventListener("message", (event) => {
     connection = JSON.parse(`${event.data}`);
     console.log(`Webview created with parameters: `, connection);
   });
+
+  function onChange(connection) {
+    console.log(`webview connection chaged:`, connection);
+    vscode.postMessage({
+      command: "change",
+      text: JSON.stringify(connection),
+    });
+  }
+  $: onChange(connection);
 
   function setFileSource() {
     connection.useFile = true;
@@ -32,14 +42,11 @@
     connection.plaintext = false;
   }
 
-  function onChange(connection) {
-    console.log(`webview connection chaged:`, connection);
+  function createConnection() {
     vscode.postMessage({
-      command: "change",
-      text: JSON.stringify(connection),
+      command: "create",
     });
   }
-  $: onChange(connection);
 </script>
 
 <center>
@@ -175,8 +182,9 @@
   {/if}
 </table>
 
-<vscode-button class="lbutton" appearance="secondary">Cancel</vscode-button>
-<vscode-button class="rbutton" appearance="primary">Create</vscode-button>
+<hr />
+
+<button on:click={createConnection}>Create connection</button>
 
 <style>
   hr {
@@ -227,10 +235,25 @@
     background-color: var(--vscode-sideBar-background);
     color: var(--vscode-foreground);
   }
-  .lbutton {
-    margin-left: 42%;
+  button {
+    border: none;
+    padding: var(--input-padding-vertical) var(--input-padding-horizontal);
+    width: 40%;
+    text-align: center;
+    outline: 1px solid transparent;
+    outline-offset: 2px !important;
+    color: var(--vscode-button-foreground);
+    background: var(--vscode-button-background);
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin-top: 10px;
+    margin-left: 30%;
   }
-  .rbutton {
-    margin-left: 6%;
+  button:hover {
+    cursor: pointer;
+    background: var(--vscode-button-hoverBackground);
+  }
+  button:focus {
+    outline-color: var(--vscode-focusBorder);
   }
 </style>
