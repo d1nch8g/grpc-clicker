@@ -4,6 +4,7 @@
     name: `keks`,
     group: `feks`,
     timeout: 0.5,
+    useFile: false,
     adress: "localhost:8080",
     plaintext: true,
     filePath: `filepath`,
@@ -15,14 +16,12 @@
     console.log(`Webview created with parameters: `, connection);
   });
 
-  $: showServerOptions = true;
-
-  function setServerOptions() {
-    showServerOptions = true;
+  function setFileSource() {
+    connection.useFile = true;
   }
 
-  function setLocalFileOptions() {
-    showServerOptions = false;
+  function setServerSource() {
+    connection.useFile = false;
   }
 
   function enablePlaintext() {
@@ -58,7 +57,7 @@
       <i>Visible string for connection in list</i>
     </th>
     <th class="right">
-      <textarea rows="1" bind:value="{connection.name}"></textarea>
+      <textarea rows="1" bind:value={connection.name} />
     </th>
   </tr>
 
@@ -70,7 +69,7 @@
       <i>Group which connection will belong to, optional</i>
     </th>
     <th class="right">
-      <textarea rows="1" bind:value="{connection.group}"></textarea>
+      <textarea rows="1" bind:value={connection.group} />
     </th>
   </tr>
 
@@ -82,7 +81,7 @@
       <i>Default adress of destination for gRPC calls</i>
     </th>
     <th class="right">
-      <textarea rows="1" bind:value="{connection.adress}"></textarea>
+      <textarea rows="1" bind:value={connection.adress} />
     </th>
   </tr>
 
@@ -95,10 +94,10 @@
     </th>
     <th class="right">
       <vscode-dropdown>
-        <vscode-option on:click="{enablePlaintext}">
+        <vscode-option on:click={enablePlaintext}>
           <div>Yes</div>
         </vscode-option>
-        <vscode-option on:click="{disablePlaintext}">
+        <vscode-option on:click={disablePlaintext}>
           <div>No</div>
         </vscode-option>
       </vscode-dropdown>
@@ -114,17 +113,17 @@
     </th>
     <th class="right">
       <vscode-dropdown>
-        <vscode-option on:click="{setServerOptions}">
+        <vscode-option on:click={setServerSource}>
           <div>Reflect server</div>
         </vscode-option>
-        <vscode-option on:click="{setLocalFileOptions}">
+        <vscode-option on:click={setFileSource}>
           <div>Proto file</div>
         </vscode-option>
       </vscode-dropdown>
     </th>
   </tr>
 
-  {#if showServerOptions}
+  {#if !connection.useFile}
     <tr>
       <th class="left">
         <h4>Timeout</h4>
@@ -133,12 +132,12 @@
         <i>Maximum time to recieve proto schema from server</i>
       </th>
       <th class="right">
-        <textarea rows="1" bind:value="{connection.timeout}"></textarea>
+        <textarea rows="1" bind:value={connection.timeout} />
       </th>
     </tr>
   {/if}
 
-  {#if !showServerOptions}
+  {#if connection.useFile}
     <tr>
       <th class="left">
         <h4>Proto path</h4>
@@ -147,12 +146,12 @@
         <i>Name of a source proto path for generating schema</i>
       </th>
       <th class="right">
-        <textarea rows="1" bind:value="{connection.filePath}"></textarea>
+        <textarea rows="1" bind:value={connection.filePath} />
       </th>
     </tr>
   {/if}
 
-  {#if !showServerOptions}
+  {#if connection.useFile}
     <tr>
       <th class="left">
         <h4>Import paths</h4>
@@ -161,7 +160,7 @@
         <i>Additional required import paths(splitted dy comma)</i>
       </th>
       <th class="right">
-        <textarea rows="1" bind:value="{connection.importPaths}"></textarea>
+        <textarea rows="1" bind:value={connection.importPaths} />
       </th>
     </tr>
   {/if}
