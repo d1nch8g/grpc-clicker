@@ -20,3 +20,4 @@ watcher.js
 go.mod
 go.sum
 jest.config.js
+webviews/
