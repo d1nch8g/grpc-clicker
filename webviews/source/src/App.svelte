@@ -16,6 +16,7 @@
     filePath: `filepath`,
     importPath: `/`,
     unix: false,
+    customFlags: ``,
     connectStatus: `NOT_EXECUTED`,
   };
 
@@ -235,7 +236,7 @@
       <i>Additional flags for grpcurl CLI command</i>
     </th>
     <th class="right">
-      <textarea rows="1" bind:value={connection.importPath} />
+      <textarea rows="1" bind:value={connection.customFlags} />
     </th>
   </tr>
 </table>
