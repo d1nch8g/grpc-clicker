@@ -7,7 +7,7 @@
 [![Generic badge](https://img.shields.io/badge/LICENSE-MIT-red.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/LICENSE)
 [![Generic badge](https://img.shields.io/badge/VSCode-marketplace-blue.svg)](https://marketplace.visualstudio.com/items?itemName=Dancheg97.grpc-clicker)
 [![Generic badge](https://img.shields.io/badge/GitHub-repo-orange.svg)](https://github.com/Dancheg97/grpclicker_vscode)
-[![Generic badge](https://img.shields.io/badge/Changelog-v0.1.7-cyan.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/CHANGELOG.md)
+[![Generic badge](https://img.shields.io/badge/Changelog-v0.1.8-cyan.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/CHANGELOG.md)
 [![Generic badge](https://img.shields.io/badge/Contribute-guide-ff69b4.svg)](https://github.com/Dancheg97/grpclicker_vscode/blob/main/CONTRIBUTE.md)
 
 Extension uses [`grpcurl`](https://github.com/fullstorydev/grpcurl) under the hood, it will be installed automatically with extension.
@@ -77,5 +77,4 @@ This extension is built on top of edge technologies, such as:
 https://marketplace.visualstudio.com/manage/publishers/dancheg97
 -->
 
-Expected: "/dist/grpcurl/grpcurl -emit-defaults -H 'username: user' -H 'password: password' -max-msg-sz 1048576 -d '{}' -import-path / -proto server/api.proto -plaintext -max-time 0.5 localhost:8080  .pb.v1.Constructions/EmptyCall"
-Received: "/dist/grpcurl/grpcurl -emit-defaults -H 'username: user' -H 'password: password'  -max-msg-sz 1048576 -d '{}'  -import-path / -proto server/api.proto -plaintext -max-time 0.5 localhost:8080  .pb.v1.Constructions/EmptyCall"
+<!-- Test commit for Gitea -->
