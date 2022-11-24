@@ -166,6 +166,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showErrorMessage(storageResult.message);
         return false;
       }
+      treeviews.protos.refresh(storage.protos.list());
       return true;
     },
   });
