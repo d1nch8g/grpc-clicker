@@ -6,6 +6,7 @@ import {
   CallItem,
   ClickerItem,
   FieldItem,
+  GroupItem,
   ItemType,
   MessageItem,
   ProtoItem,
@@ -14,7 +15,7 @@ import {
 
 export class ProtosTreeView implements vscode.TreeDataProvider<ClickerItem> {
   constructor(
-    private servers: Proto[],
+    private protos: Proto[],
     private describeMsg: (
       source: ProtoSource,
       tag: string
@@ -30,7 +31,7 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ClickerItem> {
   >;
 
   refresh(servers: Proto[]): void {
-    this.servers = servers;
+    this.protos = servers;
     this.onChange.fire();
   }
 
@@ -41,10 +42,32 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ClickerItem> {
   async getChildren(element?: ClickerItem): Promise<ClickerItem[]> {
     let items: ClickerItem[] = [];
     if (element === undefined) {
-      for (const server of this.servers) {
-        items.push(new ProtoItem(server));
+      for (const proto of this.protos) {
+        if (proto.source.group !== undefined) {
+          let duplicate = false;
+          for (const item of items) {
+            const group = item as GroupItem;
+            if (proto.source.group === group.name) {
+              duplicate = true;
+            }
+          }
+          if (duplicate) {
+            continue;
+          }
+          items.push(new GroupItem(proto.source.group));
+        } else {
+          items.push(new ProtoItem(proto));
+        }
       }
       return items;
+    }
+    if (element.type === ItemType.group) {
+      const elem = element as GroupItem;
+      for (const proto of this.protos) {
+        if (proto.source.group === elem.name) {
+          items.push(new ProtoItem(proto));
+        }
+      }
     }
     if (element.type === ItemType.server) {
       const elem = element as ProtoItem;
