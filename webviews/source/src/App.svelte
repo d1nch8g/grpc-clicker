@@ -88,7 +88,7 @@
   <h2>Connection assistant</h2>
 </center>
 
-<hr />
+<vscode-divider></vscode-divider>
 
 <table>
   <tr>
@@ -241,7 +241,7 @@
   </tr>
 </table>
 
-<hr />
+<vscode-divider></vscode-divider>
 
 <button on:click="{createConnection}">Create connection</button>
 
@@ -268,7 +268,8 @@
     border-radius: 50%;
     height: 92px;
   }
-  hr {
+  vscode-divider {
+    margin-left: 20%;
     width: 60%;
   }
   table {

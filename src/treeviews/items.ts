@@ -19,7 +19,6 @@ export interface GrpcTabFromScratch {
   proto: Proto;
 }
 
-
 export enum ItemType {
   unknown,
   group,
