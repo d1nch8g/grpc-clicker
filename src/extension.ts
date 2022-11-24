@@ -64,13 +64,13 @@ export function activate(context: vscode.ExtensionContext) {
   const callWebviewFactory = new CallWebViewFactory({
     uri: context.extensionUri,
     sendRequest: async (request, info) => {
-      const resp = await grpcurl.send(request);
-      const count = storage.history.add({ request, response: resp, info });
+      const response = await grpcurl.send(request);
+      const count = storage.history.add({ request, response: response, info });
       if (count === 1000) {
         openLink();
       }
       treeviews.history.refresh(storage.history.list());
-      return resp;
+      return response;
     },
     createSnippet: async (request) => {
       const call = grpcurl.formCall(request);
