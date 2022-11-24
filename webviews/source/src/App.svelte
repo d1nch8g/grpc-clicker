@@ -85,7 +85,7 @@
 </center>
 
 <center>
-  <h2>Connection assistant</h2>
+  <h2>Proto schema assistant</h2>
 </center>
 
 <vscode-divider></vscode-divider>
@@ -243,7 +243,7 @@
 
 <vscode-divider></vscode-divider>
 
-<button on:click="{createConnection}">Create connection</button>
+<button on:click="{createConnection}">Add schema</button>
 
 <style>
   .loader {
@@ -274,8 +274,6 @@
   }
   table {
     width: 60%;
-    padding-top: 20px;
-    padding-bottom: 20px;
     margin-left: 20%;
   }
   tr {
