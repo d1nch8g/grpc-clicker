@@ -19,10 +19,16 @@ export interface SourceWebViewParameters {
  * Data that is required for building single tab with gRPC call.
  */
 export interface SourceWebViewData {
-  /**
-   * Source for building a webview,
-   */
-  source: ProtoSource;
+  uuid: string,
+  name: string,
+  group: string,
+  timeout: number,
+  useFile: boolean,
+  adress: string,
+  plaintext: boolean,
+  filePath: string,
+  importPaths: string,
+  connectStatus: boolean | undefined,
 }
 
 /**
@@ -39,24 +45,7 @@ export class SourceWebViewFactory {
    */
   createNewTab(data: SourceWebViewData) {
     this.removeClosedPanels();
-    if (!this.tryToReveal(data.source)) {
-      this.tabs.push(new SourceWebviewTab(this.params, data));
-    }
-  }
-
-  /**
-   * Helper method that checks wether panel similaer request params exists.
-   * Will be used to reveal existing panel if such exists in webviews.
-   * Will return `true` if panel successfully revealed.
-   */
-  private tryToReveal(source: ProtoSource): boolean {
-    for (const tab of this.tabs) {
-      if (JSON.stringify(source) === JSON.stringify(tab.data.source)) {
-        tab.panel.reveal();
-        return true;
-      }
-    }
-    return false;
+    this.tabs.push(new SourceWebviewTab(this.params, data));
   }
 
   private removeClosedPanels() {
