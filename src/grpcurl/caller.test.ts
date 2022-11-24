@@ -8,7 +8,9 @@ const src: ProtoSource = {
   group: undefined,
   importPaths: [],
   uuid: "",
-  name: ""
+  name: "",
+  unix: false,
+  customFlags: ""
 };
 
 test(`form`, () => {

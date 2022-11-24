@@ -93,7 +93,9 @@ test(`protoFile`, async () => {
     group: undefined,
     importPaths: [`/`],
     uuid: "",
-    name: ""
+    name: "",
+    unix: false,
+    customFlags: undefined
   };
 
   expect(await grpcurl.proto(src)).toStrictEqual(expectedResult);
@@ -129,7 +131,9 @@ test(`protoServer`, async () => {
     group: undefined,
     importPaths: [],
     uuid: "",
-    name: ""
+    name: "",
+    unix: false,
+    customFlags: undefined
   };
 
   expect(await grpcurl.proto(src)).toStrictEqual(expectedResult);
@@ -151,7 +155,9 @@ test(`message`, async () => {
     group: undefined,
     importPaths: [`/`],
     uuid: "",
-    name: ""
+    name: "",
+    unix: false,
+    customFlags: undefined
   };
 
   expect(
@@ -185,7 +191,9 @@ test(`send`, async () => {
     group: undefined,
     importPaths: [`/`],
     uuid: "",
-    name: ""
+    name: "",
+    unix: false,
+    customFlags: undefined
   };
 
 
@@ -227,7 +235,9 @@ test(`test`, async () => {
     group: undefined,
     importPaths: [],
     uuid: "",
-    name: ""
+    name: "",
+    unix: false,
+    customFlags: undefined
   };
 
   const request: Request = {

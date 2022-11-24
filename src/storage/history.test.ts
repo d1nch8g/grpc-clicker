@@ -33,7 +33,9 @@ const serverSource: ProtoSource = {
   filePath: `value`,
   group: `value`,
   importPaths: [],
-  name: ""
+  name: "",
+  unix: false,
+  customFlags: undefined
 };
 
 
