@@ -14,7 +14,8 @@
     adress: "localhost:8080",
     plaintext: true,
     filePath: `filepath`,
-    importPaths: `/`,
+    importPath: `/`,
+    unix: false,
     connectStatus: `NOT_EXECUTED`,
   };
 
@@ -38,6 +39,14 @@
 
   function setServerSource() {
     connection.useFile = false;
+  }
+
+  function setUnixFalse() {
+    connection.unix = false;
+  }
+
+  function setUnixTrue() {
+    connection.unix = true;
   }
 
   function enablePlaintext() {
@@ -169,6 +178,27 @@
     </tr>
   {/if}
 
+  {#if !connection.useFile}
+    <tr>
+      <th class="left">
+        <h4>Unix</h4>
+      </th>
+      <th class="middle">
+        <i>Indicates that server address is path to Unix domain socket</i>
+      </th>
+      <th class="right">
+        <vscode-dropdown>
+          <vscode-option on:click={setUnixFalse}>
+            <div>No</div>
+          </vscode-option>
+          <vscode-option on:click={setUnixTrue}>
+            <div>Yes</div>
+          </vscode-option>
+        </vscode-dropdown>
+      </th>
+    </tr>
+  {/if}
+
   {#if connection.useFile}
     <tr>
       <th class="left">
@@ -186,16 +216,28 @@
   {#if connection.useFile}
     <tr>
       <th class="left">
-        <h4>Import paths</h4>
+        <h4>Import path</h4>
       </th>
       <th class="middle">
-        <i>Additional required import paths(splitted dy comma)</i>
+        <i>Path to directory from which proto sources can be imported</i>
       </th>
       <th class="right">
-        <textarea rows="1" bind:value={connection.importPaths} />
+        <textarea rows="1" bind:value={connection.importPath} />
       </th>
     </tr>
   {/if}
+
+  <tr>
+    <th class="left">
+      <h4>Custom flags</h4>
+    </th>
+    <th class="middle">
+      <i>Additional flags for grpcurl CLI command</i>
+    </th>
+    <th class="right">
+      <textarea rows="1" bind:value={connection.importPath} />
+    </th>
+  </tr>
 </table>
 
 <hr />
