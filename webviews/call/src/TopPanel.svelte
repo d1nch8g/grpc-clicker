@@ -39,9 +39,6 @@
     border-color: var(--vscode-input-border);
     border-collapse: collapse;
   }
-  vscode-dropdown {
-    width: 100%;
-  }
   .expanded {
     width: 100%;
     padding-left: 8px;
