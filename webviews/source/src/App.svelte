@@ -52,7 +52,13 @@
     vscode.postMessage({
       command: "create",
     });
-    connection.connectStatus = `ERROR`;
+    connection.connectStatus = `WAITING`;
+  }
+
+  function pickProtoFile() {
+    vscode.postMessage({
+      command: "protofile",
+    });
   }
 </script>
 
@@ -223,32 +229,31 @@
     width: 60%;
   }
   table {
+    width: 60%;
     padding-top: 20px;
     padding-bottom: 20px;
-    padding-left: 20%;
-    padding-right: 20%;
+    margin-left: 20%;
   }
   tr {
     padding-top: 10px;
     padding-bottom: 10px;
   }
   .left {
-    width: 25%;
+    width: 15%;
     text-align: left;
   }
   .middle {
-    width: 70%;
+    width: 40%;
     text-align: left;
   }
   .right {
-    width: 25%;
-    text-align: left;
+    width: 100%;
   }
   vscode-dropdown {
-    width: 320px;
+    width: 100%;
   }
   textarea {
-    width: 320px;
+    width: 100%;
     resize: none;
     display: block;
     height: inherit;
