@@ -6,7 +6,7 @@ const src: ProtoSource = {
   timeout: 5,
   filePath: undefined,
   group: undefined,
-  importPaths: [],
+  importPath: ``,
   uuid: "",
   name: "",
   unix: false,

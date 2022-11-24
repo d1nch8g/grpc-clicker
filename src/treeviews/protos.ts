@@ -69,7 +69,7 @@ export class ProtosTreeView implements vscode.TreeDataProvider<ClickerItem> {
         }
       }
     }
-    if (element.type === ItemType.server) {
+    if (element.type === ItemType.proto) {
       const elem = element as ProtoItem;
       for (const service of elem.proto.schema.services) {
         items.push(new ServiceItem(service, elem));

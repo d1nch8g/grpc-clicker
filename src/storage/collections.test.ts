@@ -56,7 +56,7 @@ const serverSource: ProtoSource = {
   timeout: 0,
   filePath: undefined,
   group: undefined,
-  importPaths: [],
+  importPath:`/`,
   name: "",
   unix: false,
   customFlags: undefined

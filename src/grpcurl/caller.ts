@@ -35,7 +35,7 @@ export interface ProtoSource {
   /**
    * Paths that needs to be imported for proper proto compilation
    */
-  importPaths: string[];
+  importPath: string;
   /**
    * Indicates that server address is path to Unix domain socket
    */
@@ -90,7 +90,7 @@ export class Caller {
       base += ` ${input.source.customFlags} `;
     }
     if (input.source.filePath !== undefined) {
-      for (const importPath of input.source.importPaths) {
+      for (const importPath of input.source.importPath) {
         base += ` -import-path ${importPath}`;
       }
       base += ` -proto ${input.source.filePath}`;
