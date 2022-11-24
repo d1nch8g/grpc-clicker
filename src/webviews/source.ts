@@ -12,7 +12,7 @@ export interface SourceWebViewParameters {
   /**
    * Callback for saving webview to storage and updating trees.
    */
-  createViewCallback: (source: ProtoSource) => Promise<boolean>;
+  createViewCallback: (source: SourceWebViewData) => Promise<boolean>;
 }
 
 /**
@@ -91,6 +91,15 @@ class SourceWebviewTab {
       switch (out.command) {
         case "change":
           this.data = JSON.parse(out.text);
+          return;
+        case "create":
+          let result = await this.params.createViewCallback(this.data);
+          if (result) {
+            this.data.connectStatus = `SUCCESS`;
+          } else {
+            this.data.connectStatus = `ERROR`;
+          }
+          this.panel.webview.postMessage(JSON.stringify(this.data));
           return;
       }
     });

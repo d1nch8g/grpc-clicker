@@ -109,7 +109,7 @@ export class ProtoItem extends ClickerItem {
     if (proto.source.filePath !== undefined) {
       name = proto.source.filePath.replace(/^.*[\\\/]/, "");
     } else {
-      name = proto.source.currentHost;
+      name = proto.source.adress;
     }
     super(name);
 
@@ -260,7 +260,7 @@ export class HistoryItem extends ClickerItem {
     super.description = value.response.date;
     super.contextValue = "call";
     super.tooltip = new vscode.MarkdownString(`### Request information:
-- host for execution: \`${value.request.source.currentHost}\`
+- host for execution: \`${value.request.source.adress}\`
 - method used in request: \`${value.request.callTag}\`
 - response code: \`${value.response.code}\`
 - time of execution: \`${value.response.time}\`

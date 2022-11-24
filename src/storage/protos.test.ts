@@ -22,13 +22,13 @@ class MockMemento implements Memento {
 
 const src: ProtoSource = {
   uuid: "uniq",
-  currentHost: "",
-  additionalHosts: [],
+  adress: "",
   plaintext: false,
   timeout: 0,
   filePath: `value`,
   group: `value`,
-  importPaths: []
+  importPaths: [],
+  name: ""
 };
 
 const scm: ProtoSchema = {

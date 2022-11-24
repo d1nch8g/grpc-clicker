@@ -9,13 +9,17 @@ export interface ProtoSource {
    */
   uuid: string;
   /**
-   * Current host, which will be used for calls processing (real adress)
+   * Human readable name for proto source.
    */
-  currentHost: string;
+  name: string;
   /**
-   * Additional hosts that could be specified for further calls, optional.
+   * Group that will be used to store proto information.
    */
-  additionalHosts: string[];
+  group: string | undefined;
+  /**
+   * Current host:port, which will be used for calls processing (real adress)
+   */
+  adress: string;
   /**
    * Wether to use TLS.
    */
@@ -28,10 +32,6 @@ export interface ProtoSource {
    * Files that would be used as base in `-proto` arguement
    */
   filePath: string | undefined;
-  /**
-   * Group that will be used to store proto information.
-   */
-  group: string | undefined;
   /**
    * Paths that needs to be imported for proper proto compilation.
    */
@@ -84,13 +84,13 @@ export class Caller {
       if (input.source.plaintext) {
         base += ` -plaintext`;
       }
-      base += ` -max-time ${input.source.timeout} ${input.source.currentHost} `;
+      base += ` -max-time ${input.source.timeout} ${input.source.adress} `;
     }
     if (input.forceMultisource) {
       if (input.source.plaintext) {
         base += ` -plaintext`;
       }
-      base += ` -max-time ${input.source.timeout} ${input.source.currentHost} `;
+      base += ` -max-time ${input.source.timeout} ${input.source.adress} `;
     }
     input.cliCommand = input.cliCommand.replace(`|SRC|`, base);
     let command = util.format(input.cliCommand, ...input.args);
