@@ -5,7 +5,7 @@ import { Response, Expectations, Request, Proto } from "./grpcurl/grpcurl";
 import { Message, Parser } from "./grpcurl/parser";
 import { Storage } from "./storage/storage";
 import { TreeViews } from "./treeviews/treeviews";
-import { CallWebViewFactory } from "./webviews/call";
+import { CallWebViewData, CallWebViewFactory } from "./webviews/call";
 import { Grpcurl } from "./grpcurl/grpcurl";
 import { AdditionalInfo, HistoryValue } from "./storage/history";
 import { Installer } from "./grpcurl/installer";
@@ -354,14 +354,16 @@ export function activate(context: vscode.ExtensionContext) {
       content: ``,
     };
 
-    callWebviewFactory.createNewTab({
+    const webviewData: CallWebViewData = {
       request: request,
       info: info,
       headers: headers,
       response: respone,
       expectations: expectations,
       snippet: ``,
-    });
+    };
+
+    callWebviewFactory.createNewTab(webviewData);
   }
   );
 
