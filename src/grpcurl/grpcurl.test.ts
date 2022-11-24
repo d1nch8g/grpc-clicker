@@ -86,14 +86,14 @@ test(`protoFile`, async () => {
   };
 
   const src: ProtoSource = {
-    currentHost: "localhost:8080",
-    additionalHosts: [],
+    adress: "localhost:8080",
     plaintext: true,
     timeout: 5,
     filePath: `server/api.proto`,
     group: undefined,
     importPaths: [`/`],
-    uuid: ""
+    uuid: "",
+    name: ""
   };
 
   expect(await grpcurl.proto(src)).toStrictEqual(expectedResult);
@@ -122,14 +122,14 @@ test(`protoServer`, async () => {
   };
 
   const src: ProtoSource = {
-    currentHost: "localhost:8080",
-    additionalHosts: [],
+    adress: "localhost:8080",
     plaintext: true,
     timeout: 0.5,
     filePath: undefined,
     group: undefined,
     importPaths: [],
-    uuid: ""
+    uuid: "",
+    name: ""
   };
 
   expect(await grpcurl.proto(src)).toStrictEqual(expectedResult);
@@ -144,14 +144,14 @@ test(`message`, async () => {
   );
 
   const src: ProtoSource = {
-    currentHost: "localhost:8080",
-    additionalHosts: [],
+    adress: "localhost:8080",
     plaintext: true,
     timeout: 5,
     filePath: `server/api.proto`,
     group: undefined,
     importPaths: [`/`],
-    uuid: ""
+    uuid: "",
+    name: ""
   };
 
   expect(
@@ -178,14 +178,14 @@ test(`send`, async () => {
   );
 
   const src: ProtoSource = {
-    currentHost: "localhost:8080",
-    additionalHosts: [],
+    adress: "localhost:8080",
     plaintext: true,
     timeout: 0.5,
     filePath: `server/api.proto`,
     group: undefined,
     importPaths: [`/`],
-    uuid: ""
+    uuid: "",
+    name: ""
   };
 
 
@@ -220,14 +220,14 @@ test(`test`, async () => {
   );
 
   const src: ProtoSource = {
-    currentHost: "localhost:8080",
-    additionalHosts: [],
+    adress: "localhost:8080",
     plaintext: true,
     timeout: 5,
     filePath: undefined,
     group: undefined,
     importPaths: [],
-    uuid: ""
+    uuid: "",
+    name: ""
   };
 
   const request: Request = {

@@ -51,13 +51,13 @@ test(`list`, () => {
 
 const serverSource: ProtoSource = {
   uuid: "",
-  currentHost: "",
-  additionalHosts: [],
+  adress: "",
   plaintext: false,
   timeout: 0,
   filePath: undefined,
   group: undefined,
-  importPaths: []
+  importPaths: [],
+  name: ""
 };
 
 const request: Request = {

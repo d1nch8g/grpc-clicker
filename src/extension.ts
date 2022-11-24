@@ -134,14 +134,42 @@ export function activate(context: vscode.ExtensionContext) {
 
   const sourceWebviewFactory = new SourceWebViewFactory({
     uri: context.extensionUri,
-    createViewCallback: async (source) => {
-      const protoResult = await grpcurl.proto(source);
+    createViewCallback: async (source: SourceWebViewData) => {
+      let group: string | undefined = undefined;
+      if (source.group !== ``) {
+        group = source.group;
+      }
+      let src: ProtoSource;
+      if (source.useFile) {
+        src = {
+          uuid: source.uuid,
+          adress: source.adress,
+          plaintext: source.plaintext,
+          timeout: source.timeout,
+          filePath: source.filePath,
+          group: group,
+          name: source.name,
+          importPaths: source.importPaths.split(`,`),
+        };
+      } else {
+        src = {
+          uuid: source.uuid,
+          adress: source.adress,
+          plaintext: source.plaintext,
+          timeout: source.timeout,
+          group: group,
+          name: source.name,
+          filePath: undefined,
+          importPaths: [],
+        };
+      }
+      const protoResult = await grpcurl.proto(src);
       if (typeof protoResult === `string`) {
         vscode.window.showErrorMessage(protoResult);
         return false;
       }
       const storageResult = storage.protos.add({
-        source: source,
+        source: src,
         schema: protoResult
       });
       if (storageResult !== undefined) {

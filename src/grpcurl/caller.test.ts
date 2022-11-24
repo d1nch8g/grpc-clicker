@@ -1,14 +1,14 @@
 import { Caller, FormCliTemplateParams, ProtoSource } from "./caller";
 
 const src: ProtoSource = {
-  currentHost: "localhost:8080",
-  additionalHosts: [],
+  adress: "localhost:8080",
   plaintext: true,
   timeout: 5,
   filePath: undefined,
   group: undefined,
   importPaths: [],
-  uuid: ""
+  uuid: "",
+  name: ""
 };
 
 test(`form`, () => {

@@ -27,13 +27,13 @@ class MockMemento implements Memento {
 
 const serverSource: ProtoSource = {
   uuid: "",
-  currentHost: "",
-  additionalHosts: [],
+  adress: "",
   plaintext: false,
   timeout: 0,
   filePath: `value`,
   group: `value`,
-  importPaths: []
+  importPaths: [],
+  name: ""
 };
 
 
