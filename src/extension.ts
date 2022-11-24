@@ -9,7 +9,7 @@ import { CallWebViewFactory } from "./webviews/call";
 import { Grpcurl } from "./grpcurl/grpcurl";
 import { AdditionalInfo, HistoryValue } from "./storage/history";
 import { Installer } from "./grpcurl/installer";
-import { SourceWebViewFactory } from "./webviews/source";
+import { SourceWebViewData, SourceWebViewFactory } from "./webviews/source";
 import { v4 as uuidv4 } from "uuid";
 import {
   CollectionItem,
@@ -163,17 +163,19 @@ export function activate(context: vscode.ExtensionContext) {
     const reflectTimeout = vscode.workspace
       .getConfiguration(`grpc-clicker`)
       .get(`reflectTimeout`, 0.5);
-    const serverSource: ProtoSource = {
+    const webviewParams: SourceWebViewData = {
       uuid: uuidv4(),
       timeout: reflectTimeout,
-      currentHost: "localhost:8080",
-      additionalHosts: [],
       plaintext: true,
-      filePath: undefined,
-      group: undefined,
-      importPaths: [],
+      name: "",
+      group: "",
+      useFile: false,
+      adress: "localhost:8080",
+      filePath: "",
+      importPaths: "/",
+      connectStatus: `NOT_EXECUTED`
     };
-    sourceWebviewFactory.createNewTab({ source: serverSource });
+    sourceWebviewFactory.createNewTab(webviewParams);
   });
 
   vscode.commands.registerCommand("protos.remove", (item: ProtoItem) => {
