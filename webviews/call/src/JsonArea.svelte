@@ -245,6 +245,8 @@
     outline-color: transparent;
     background-color: transparent;
     border-color: transparent;
+    font-family: var(--vscode-editor-font-family);
+    font-size: var(--vscode-editor-font-size);
   }
   .brackets {
     color: var(--vscode-debugIcon-breakpointCurrentStackframeForeground);
