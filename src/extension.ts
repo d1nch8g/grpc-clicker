@@ -205,9 +205,8 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   vscode.commands.registerCommand("protos.remove", (item: ProtoItem) => {
-    const source = item.proto.source as ProtoSource;
-    storage.protos.remove(source.uuid);
-    treeviews.protos.refresh(storage.servers.list());
+    storage.protos.remove(item.proto.source.uuid);
+    treeviews.protos.refresh(storage.protos.list());
   });
 
   vscode.commands.registerCommand("protos.refresh", async () => {

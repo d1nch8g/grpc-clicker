@@ -5,7 +5,6 @@ import { Header } from "../storage/headers";
 import { Collection, Test } from "../storage/collections";
 import { HistoryValue } from "../storage/history";
 import { Proto } from "../grpcurl/grpcurl";
-import { ProtoSource } from "../grpcurl/caller";
 
 /**
  * Params that can be used to create new call from pressed button:
@@ -121,15 +120,14 @@ export class ProtoItem extends ClickerItem {
     } else {
       super.description = proto.source.adress;
     }
-
     super.type = ItemType.proto;
+    super.contextValue = `proto`;
     if (proto.source.filePath !== undefined) {
 
       super.tooltip = new vscode.MarkdownString(`#### Proto file:
   - File path: ${proto.source.filePath}
   - Import paths: ${proto.source.importPath}`);
       super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
-      super.contextValue = `file`;
       const icon = `file.svg`;
       super.iconPath = {
         light: path.join(__filename, "..", "..", "images", icon),
@@ -137,7 +135,6 @@ export class ProtoItem extends ClickerItem {
       };
     } else {
       super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
-      super.contextValue = `server`;
       let icon = `host-on.svg`;
       if (proto.schema.services.length === 0) {
         super.collapsibleState = vscode.TreeItemCollapsibleState.None;
