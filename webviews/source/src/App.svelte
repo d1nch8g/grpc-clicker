@@ -2,9 +2,8 @@
   const NOT_EXECUTED =
     "https://cncf-branding.netlify.app/img/projects/grpc/icon/color/grpc-icon-color.png";
   const ERROR =
-    "https://cncf-branding.netlify.app/img/projects/grpc/icon/color/grpc-icon-color.png";
-  const SUCCESS =
-    "https://www.veryicon.com/download/png/miscellaneous/monochromatic-surface-icon-library/success-56?s=512";
+    "https://www.freeiconspng.com/thumbs/error-icon/error-icon-4.png";
+  const SUCCESS = "https://ru.botlibre.com/media/a11675764-0.png";
 
   $: connection = {
     uuid: `someuuid`,
@@ -53,7 +52,7 @@
     vscode.postMessage({
       command: "create",
     });
-    connection.connectStatus = `WAITING`;
+    connection.connectStatus = `ERROR`;
   }
 </script>
 
