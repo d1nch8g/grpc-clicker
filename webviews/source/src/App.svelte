@@ -31,6 +31,15 @@
   function disablePlaintext() {
     connection.plaintext = false;
   }
+
+  function onChange(connection) {
+    console.log(`webview connection chaged:`, connection);
+    vscode.postMessage({
+      command: "change",
+      text: JSON.stringify(connection),
+    });
+  }
+  $: onChange(connection);
 </script>
 
 <center>
