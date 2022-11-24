@@ -57,7 +57,9 @@ const serverSource: ProtoSource = {
   filePath: undefined,
   group: undefined,
   importPaths: [],
-  name: ""
+  name: "",
+  unix: false,
+  customFlags: undefined
 };
 
 const request: Request = {

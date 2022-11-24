@@ -1,7 +1,7 @@
 import * as util from "util";
 
 /**
- * Combined structure containing all required information for proto file.
+ * Combined structure containing all required information for proto file
  */
 export interface ProtoSource {
   /**
@@ -33,9 +33,17 @@ export interface ProtoSource {
    */
   filePath: string | undefined;
   /**
-   * Paths that needs to be imported for proper proto compilation.
+   * Paths that needs to be imported for proper proto compilation
    */
   importPaths: string[];
+  /**
+   * Indicates that server address is path to Unix domain socket
+   */
+  unix: boolean;
+  /**
+   * Additional flags for grpcurl CLI command
+   */
+  customFlags: string | undefined;
 }
 
 /**
@@ -75,6 +83,12 @@ export class Caller {
    */
   buildCliCommand(input: FormCliTemplateParams): string {
     let base: string = ``;
+    if (input.source.unix) {
+      base += ` -unix `;
+    }
+    if (input.source.customFlags !== undefined) {
+      base += ` ${input.source.customFlags} `;
+    }
     if (input.source.filePath !== undefined) {
       for (const importPath of input.source.importPaths) {
         base += ` -import-path ${importPath}`;

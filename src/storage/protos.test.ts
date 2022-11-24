@@ -28,7 +28,9 @@ const src: ProtoSource = {
   filePath: `value`,
   group: `value`,
   importPaths: [],
-  name: ""
+  name: "",
+  unix: false,
+  customFlags: undefined
 };
 
 const scm: ProtoSchema = {

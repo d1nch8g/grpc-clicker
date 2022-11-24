@@ -146,9 +146,14 @@ export function activate(context: vscode.ExtensionContext) {
         name: source.name,
         group: group,
         timeout: source.timeout,
+        unix: source.unix,
+        customFlags: undefined,
         filePath: undefined,
-        importPaths: []
+        importPaths: [],
       };
+      if (source.customFlags !== undefined) {
+        src.customFlags = source.customFlags;
+      }
       if (source.useFile) {
         src.filePath = source.filePath;
         src.importPaths = source.importPaths.split(`,`);
