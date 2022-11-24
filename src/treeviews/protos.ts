@@ -1,22 +1,23 @@
 import * as vscode from "vscode";
-import { FileSource, ServerSource } from "../grpcurl/caller";
+import { ProtoSource } from "../grpcurl/caller";
+import { Proto } from "../grpcurl/grpcurl";
 import { Message } from "../grpcurl/parser";
-import { ProtoFile } from "../storage/protoFiles";
 import {
   CallItem,
   ClickerItem,
   FieldItem,
+  GroupItem,
   ItemType,
   MessageItem,
   ProtoItem,
   ServiceItem,
 } from "./items";
 
-export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
+export class ProtosTreeView implements vscode.TreeDataProvider<ClickerItem> {
   constructor(
-    private files: ProtoFile[],
+    private protos: Proto[],
     private describeMsg: (
-      source: ServerSource | FileSource,
+      source: ProtoSource,
       tag: string
     ) => Promise<Message>
   ) {
@@ -29,27 +30,49 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
     void | ClickerItem | ClickerItem[]
   >;
 
-  async refresh(protoFiles: ProtoFile[]) {
-    this.files = protoFiles;
+  refresh(servers: Proto[]): void {
+    this.protos = servers;
     this.onChange.fire();
   }
 
-  getTreeItem(element: ClickerItem): ClickerItem {
+  getTreeItem(element: ClickerItem): vscode.TreeItem {
     return element;
   }
 
   async getChildren(element?: ClickerItem): Promise<ClickerItem[]> {
     let items: ClickerItem[] = [];
     if (element === undefined) {
-      for (const file of this.files) {
-        items.push(new ProtoItem(file));
+      for (const proto of this.protos) {
+        if (proto.source.group !== undefined) {
+          let duplicate = false;
+          for (const item of items) {
+            const group = item as GroupItem;
+            if (proto.source.group === group.name) {
+              duplicate = true;
+            }
+          }
+          if (duplicate) {
+            continue;
+          }
+          items.push(new GroupItem(proto.source.group));
+        } else {
+          items.push(new ProtoItem(proto));
+        }
       }
       return items;
     }
-    if (element.type === ItemType.file) {
+    if (element.type === ItemType.group) {
+      const elem = element as GroupItem;
+      for (const proto of this.protos) {
+        if (proto.source.group === elem.name) {
+          items.push(new ProtoItem(proto));
+        }
+      }
+    }
+    if (element.type === ItemType.proto) {
       const elem = element as ProtoItem;
-      for (const svc of elem.proto.services) {
-        items.push(new ServiceItem(svc, elem));
+      for (const service of elem.proto.schema.services) {
+        items.push(new ServiceItem(service, elem));
       }
       return items;
     }
@@ -61,13 +84,13 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
     }
     if (element.type === ItemType.call) {
       const elem = element as CallItem;
-      const file = elem.parent.parent as ProtoItem;
+      const server = elem.parent.parent as ProtoItem;
       const input = await this.describeMsg(
-        file.proto.source,
+        server.proto.source,
         elem.base.inputMessageTag
       );
       const output = await this.describeMsg(
-        file.proto.source,
+        server.proto.source,
         elem.base.outputMessageTag
       );
       items.push(new MessageItem(input, elem));
@@ -81,7 +104,7 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
     }
     if (element.type === ItemType.field) {
       const elem = element as FieldItem;
-      const file = elem.parent.parent.parent.parent as ProtoItem;
+      const server = elem.parent.parent.parent.parent as ProtoItem;
       if (elem.base.datatype === `oneof`) {
         for (const field of elem.base.fields!) {
           items.push(new FieldItem(field, elem.parent));
@@ -89,7 +112,7 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
       }
       if (elem.base.innerMessageTag !== undefined) {
         const inner = await this.describeMsg(
-          file.proto.source,
+          server.proto.source,
           elem.base.innerMessageTag
         );
         for (const field of inner.fields) {
@@ -105,10 +128,10 @@ export class ProtoFilesView implements vscode.TreeDataProvider<ClickerItem> {
   }
 
   resolveTreeItem?(
-    item: ClickerItem,
+    item: vscode.TreeItem,
     element: ClickerItem,
     token: vscode.CancellationToken
-  ): vscode.ProviderResult<ClickerItem> {
+  ): vscode.ProviderResult<vscode.TreeItem> {
     return element;
   }
 }

@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [0.1.9]
+
+- Proto files and reflect servers are united into protos
+- New webview for connection tests
+- Groups for reflect servers and files
+- Names for proto schemas
+- Additional adjustments for connections
+- Fixes for fonts and sizes in json-s and webviews
+
 ## [0.1.8]
 
 > August 30, 2022
@@ -43,7 +52,6 @@ All notable changes to this project will be documented in this file. Dates are d
 - Json syntax highlight!!! Made natively in svelte :/ (don't check how it's done
   if you care about your mental health)
 - Headers moved to webview window
-- Hosts are now easily managed from webview when opened from file
 - History relevant bug fixes
 - Changed default option of import path to path to file dir
 

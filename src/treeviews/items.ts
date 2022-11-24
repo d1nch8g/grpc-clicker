@@ -1,13 +1,10 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Service, Call, Message, Field, Proto } from "../grpcurl/parser";
+import { Service, Call, Message, Field } from "../grpcurl/parser";
 import { Header } from "../storage/headers";
 import { Collection, Test } from "../storage/collections";
-import { FileSource, ServerSource } from "../grpcurl/caller";
 import { HistoryValue } from "../storage/history";
-import { Request, Response } from "../grpcurl/grpcurl";
-import { ProtoFile } from "../storage/protoFiles";
-import { ProtoServer } from "../storage/protoServer";
+import { Proto } from "../grpcurl/grpcurl";
 
 /**
  * Params that can be used to create new call from pressed button:
@@ -20,13 +17,12 @@ export interface GrpcTabFromScratch {
   call: Call;
   service: Service;
   proto: Proto;
-  source: FileSource | ServerSource;
 }
 
 export enum ItemType {
   unknown,
-  file,
-  server,
+  group,
+  proto,
   host,
   service,
   call,
@@ -39,6 +35,16 @@ export enum ItemType {
 
 export class ClickerItem extends vscode.TreeItem {
   public type: ItemType = ItemType.unknown;
+}
+
+export class GroupItem extends ClickerItem {
+  constructor(public readonly name: string) {
+    super(name);
+    super.type = ItemType.group;
+    super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+    super.contextValue = `collection`;
+    super.iconPath = new vscode.ThemeIcon(`folder`);
+  }
 }
 
 export class CollectionItem extends ClickerItem {
@@ -106,37 +112,30 @@ ${mistake.expected.split(`\n`).slice(0, 14).join(`\n`)}
 }
 
 export class ProtoItem extends ClickerItem {
-  constructor(public readonly proto: ProtoFile | ProtoServer) {
-    let name = ``;
-    if (proto.source.type === `FILE`) {
-      name = proto.source.filePath.replace(/^.*[\\\/]/, "");
+  constructor(public readonly proto: Proto) {
+    super(proto.source.name);
+    if (proto.source.filePath !== undefined) {
+      super.description = proto.source.filePath.replace(/^.*[\\\/]/, "");
     } else {
-      name = proto.source.host;
+      super.description = proto.source.adress;
     }
-    super(name);
+    super.type = ItemType.proto;
+    super.contextValue = `proto`;
+    if (proto.source.filePath !== undefined) {
 
-    if (proto.source.type === `FILE`) {
-      super.type = ItemType.file;
       super.tooltip = new vscode.MarkdownString(`#### Proto file:
   - File path: ${proto.source.filePath}
-  - Import path: ${proto.source.importPath}`);
-      super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
-      super.contextValue = `file`;
+  - Import paths: ${proto.source.importPath}`);
+      super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
       const icon = `file.svg`;
       super.iconPath = {
         light: path.join(__filename, "..", "..", "images", icon),
         dark: path.join(__filename, "..", "..", "images", icon),
       };
     } else {
-      super.type = ItemType.server;
-      super.description = `TLS: on`;
-      if (proto.source.plaintext) {
-        super.description = `TLS: off`;
-      }
-      super.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
-      super.contextValue = `server`;
+      super.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
       let icon = `host-on.svg`;
-      if (proto.services.length === 0) {
+      if (proto.schema.services.length === 0) {
         super.collapsibleState = vscode.TreeItemCollapsibleState.None;
         icon = `host-down.svg`;
       }
@@ -185,8 +184,7 @@ export class CallItem extends ClickerItem {
     const callParams: GrpcTabFromScratch = {
       call: this.base,
       service: parent.base,
-      proto: parent.parent.proto,
-      source: parent.parent.proto.source,
+      proto: parent.parent.proto
     };
 
     super.command = {
@@ -263,7 +261,7 @@ export class HistoryItem extends ClickerItem {
     super.description = value.response.date;
     super.contextValue = "call";
     super.tooltip = new vscode.MarkdownString(`### Request information:
-- host for execution: \`${value.request.server.host}\`
+- host for execution: \`${value.request.source.adress}\`
 - method used in request: \`${value.request.callTag}\`
 - response code: \`${value.response.code}\`
 - time of execution: \`${value.response.time}\`

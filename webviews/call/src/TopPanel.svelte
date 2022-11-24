@@ -1,12 +1,6 @@
 <script>
   export let data;
   export let onSend;
-  export let onHosts;
-
-  function hostPick(host, plaintext) {
-    data.request.server.host = host;
-    data.request.server.plaintext = plaintext;
-  }
 </script>
 
 <div class="top-container">
@@ -16,27 +10,8 @@
       <td><vscode-badge>{data.info.service}</vscode-badge></td>
       <td><vscode-badge>{data.info.call}</vscode-badge></td>
       <td class="expanded">
-        <vscode-dropdown>
-          {#if data.request.file !== undefined}
-            {#each data.hosts as host}
-              <vscode-option on:click="{hostPick(host.adress, host.plaintext)}">
-                <div>{host.adress}</div>
-              </vscode-option>
-            {/each}
-          {:else}
-            <vscode-option>
-              <div>{data.request.server.host}</div>
-            </vscode-option>
-          {/if}
-        </vscode-dropdown>
+        <vscode-tag class="expanded">{data.request.source.adress}</vscode-tag>
       </td>
-      {#if data.request.file !== undefined}
-        <td>
-          <vscode-button on:click="{onHosts}" appearance="secondary">
-            <div>Hosts</div>
-          </vscode-button>
-        </td>
-      {/if}
       <td>
         <vscode-button on:click="{onSend}">Send</vscode-button>
       </td>
@@ -63,9 +38,6 @@
     border: 1px solid;
     border-color: var(--vscode-input-border);
     border-collapse: collapse;
-  }
-  vscode-dropdown {
-    width: 100%;
   }
   .expanded {
     width: 100%;

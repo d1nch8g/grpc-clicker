@@ -1,22 +1,19 @@
 import * as vscode from "vscode";
-import { ProtoFilesView } from "./files";
 import { HistoryTreeView } from "./history";
 import { Message } from "../grpcurl/parser";
-import { ServerTreeView } from "./servers";
+import { ProtosTreeView } from "./protos";
 import { CollectionsTreeView } from "./collections";
 import { Collection } from "../storage/collections";
-import { ProtoFile } from "../storage/protoFiles";
-import { ProtoServer } from "../storage/protoServer";
 import { HistoryValue } from "../storage/history";
-import { FileSource, ServerSource } from "../grpcurl/caller";
+import { ProtoSource } from "../grpcurl/caller";
+import { Proto } from "../grpcurl/grpcurl";
 
 /**
  * Entity representing proto schema and server source
  */
 export interface ProtosTreeViewParams {
   historyValues: HistoryValue[];
-  files: ProtoFile[];
-  servers: ProtoServer[];
+  protos: Proto[];
   collections: Collection[];
   /**
    * Callback that can be used for message description.
@@ -25,7 +22,7 @@ export interface ProtosTreeViewParams {
     /**
      * Path to proto file
      */
-    source: ServerSource | FileSource,
+    source: ProtoSource,
     /**
      * Message tag in `grpcurl` compatible format.
      */
@@ -34,18 +31,16 @@ export interface ProtosTreeViewParams {
 }
 
 export class TreeViews {
-  public readonly files: ProtoFilesView;
-  public readonly servers: ServerTreeView;
+  public readonly protos: ProtosTreeView;
   public readonly history: HistoryTreeView;
   public readonly collections: CollectionsTreeView;
+  files: any;
   constructor(params: ProtosTreeViewParams) {
-    this.files = new ProtoFilesView(params.files, params.describeMsg);
-    this.servers = new ServerTreeView(params.servers, params.describeMsg);
+    this.protos = new ProtosTreeView(params.protos, params.describeMsg);
     this.history = new HistoryTreeView(params.historyValues);
     this.collections = new CollectionsTreeView(params.collections);
 
-    vscode.window.registerTreeDataProvider("files", this.files);
-    vscode.window.registerTreeDataProvider("servers", this.servers);
+    vscode.window.registerTreeDataProvider("protos", this.protos);
     vscode.window.registerTreeDataProvider("history", this.history);
     vscode.window.registerTreeDataProvider("collections", this.collections);
   }

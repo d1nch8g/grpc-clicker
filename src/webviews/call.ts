@@ -1,13 +1,12 @@
 import * as vscode from "vscode";
-import { Response, Expectations, Request } from "./grpcurl/grpcurl";
-import { Header } from "./storage/headers";
-import { AdditionalInfo } from "./storage/history";
-import { Host } from "./storage/hosts";
+import { Response, Expectations, Request } from "../grpcurl/grpcurl";
+import { Header } from "../storage/headers";
+import { AdditionalInfo } from "../storage/history";
 
 /**
  * Parameters for building all webview tabs.
  */
-export interface WebViewParameters {
+export interface CallWebViewParameters {
   /**
    * Base uri to eject source files for webview, should be base of extension
    */
@@ -26,10 +25,6 @@ export interface WebViewParameters {
    */
   createTest: (request: Request, expect: Expectations | undefined) => void;
   /**
-   * Callback that is sent to manage hosts for webview.
-   */
-  manageHosts: () => Promise<Host[]>;
-  /**
    * Callback for adding new header.
    */
   addHeader: () => Promise<Header[]>;
@@ -42,7 +37,7 @@ export interface WebViewParameters {
 /**
  * Data that is required for building single tab with gRPC call.
  */
-export interface WebViewData {
+export interface CallWebViewData {
   /**
    * Request to be operated from within webview tab.
    */
@@ -55,10 +50,6 @@ export interface WebViewData {
    * Request headers.
    */
   headers: Header[];
-  /**
-   * Host options available for request.
-   */
-  hosts: Host[];
   /**
    * Response to be visible in webview.
    */
@@ -76,19 +67,19 @@ export interface WebViewData {
 /**
  * Factory managing all grpc clicker request tabs.
  */
-export class WebViewFactory {
-  private tabs: GrpcClickerTab[] = [];
+export class CallWebViewFactory {
+  private tabs: CallWebviewTab[] = [];
 
-  constructor(private params: WebViewParameters) {}
+  constructor(private params: CallWebViewParameters) { }
 
   /**
    * Operation that will try to reveal existing panel with same params and
    * create new tab for grpc call if such is not found.
    */
-  createNewTab(data: WebViewData) {
+  createNewTab(data: CallWebViewData) {
     this.removeClosedPanels();
     if (!this.tryToReveal(data.info)) {
-      this.tabs.push(new GrpcClickerTab(this.params, data));
+      this.tabs.push(new CallWebviewTab(this.params, data));
     }
   }
 
@@ -129,11 +120,14 @@ export class WebViewFactory {
 /**
  * Single tab instance of tag for grpc calls.
  */
-class GrpcClickerTab {
+class CallWebviewTab {
   public readonly panel: vscode.WebviewPanel;
   public closed: boolean = false;
 
-  constructor(private params: WebViewParameters, public data: WebViewData) {
+  constructor(
+    private params: CallWebViewParameters,
+    public data: CallWebViewData
+  ) {
     this.panel = vscode.window.createWebviewPanel(
       "callgrpc",
       data.info.call,
@@ -159,10 +153,6 @@ class GrpcClickerTab {
           this.data.snippet = await this.params.createSnippet(
             this.data.request
           );
-          this.panel.webview.postMessage(JSON.stringify(this.data));
-          return;
-        case "hosts":
-          this.data.hosts = await this.params.manageHosts();
           this.panel.webview.postMessage(JSON.stringify(this.data));
           return;
         case "test":
@@ -204,10 +194,10 @@ class GrpcClickerTab {
     };
 
     const scriptUri = this.panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.params.uri, "dist", "main.js")
+      vscode.Uri.joinPath(this.params.uri, "dist", "call.js")
     );
     const stylesMainUri = this.panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.params.uri, "dist", "styles.css")
+      vscode.Uri.joinPath(this.params.uri, "dist", "call.css")
     );
     const toolkitUri = this.panel.webview.asWebviewUri(
       vscode.Uri.joinPath(this.params.uri, "dist", "tk", "toolkit.js")

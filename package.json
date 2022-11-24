@@ -29,15 +29,11 @@
     "client"
   ],
   "activationEvents": [
-    "onView:files",
-    "onCommand:files.add",
-    "onCommand:files.refresh",
-    "onView:servers",
-    "onCommand:servers.add",
-    "onCommand:servers.refresh",
+    "onView:protos",
+    "onCommand:protos.add",
+    "onCommand:protos.refresh",
     "onView:history",
     "onCommand:history.clean",
-    "onCommand:cache.clean",
     "onView:collections",
     "onCommand:collections.create",
     "onWebviewPanel:callgrpc"
@@ -56,12 +52,8 @@
     "views": {
       "grpc-clicker": [
         {
-          "id": "servers",
-          "name": "reflect servers"
-        },
-        {
-          "id": "files",
-          "name": "proto files"
+          "id": "protos",
+          "name": "proto groups"
         },
         {
           "id": "collections",
@@ -69,16 +61,11 @@
         },
         {
           "id": "history",
-          "name": "Request history"
+          "name": "request history"
         }
       ]
     },
     "commands": [
-      {
-        "category": "gRPC Clicker",
-        "command": "call.execute",
-        "title": "Execute call from saved schemas"
-      },
       {
         "category": "gRPC Clicker",
         "command": "collections.create",
@@ -99,68 +86,21 @@
       },
       {
         "category": "gRPC Clicker",
-        "command": "headers.switch",
-        "title": "Turn on/off value of context metadata"
-      },
-      {
-        "category": "gRPC Clicker",
-        "command": "files.add",
-        "title": "Add new proto file",
+        "command": "protos.add",
+        "title": "Add new proto source",
         "icon": "$(settings-add)"
       },
       {
         "category": "gRPC Clicker",
-        "command": "servers.add",
-        "title": "Add new proto reflect server",
-        "icon": "$(settings-add)"
-      },
-      {
-        "command": "files.import",
-        "title": "Update import path for proto file",
-        "icon": "$(extensions-info-message)"
-      },
-      {
-        "command": "files.remove",
-        "title": "Remove existing proto file",
-        "icon": "$(terminal-kill)"
-      },
-      {
-        "category": "gRPC Clicker",
-        "command": "headers.add",
-        "title": "Add new metadata to request",
-        "icon": "$(settings-add)"
-      },
-      {
-        "command": "headers.remove",
-        "title": "Remove header",
-        "icon": "$(terminal-kill)"
-      },
-      {
-        "command": "hosts.add",
-        "title": "Add new host",
-        "icon": "$(settings-add)"
-      },
-      {
-        "command": "hosts.remove",
-        "title": "Remove host",
-        "icon": "$(terminal-kill)"
-      },
-      {
-        "command": "servers.remove",
-        "title": "Remove server",
-        "icon": "$(terminal-kill)"
-      },
-      {
-        "category": "gRPC Clicker",
-        "command": "files.refresh",
-        "title": "Resresh existing proro schemas",
+        "command": "protos.refresh",
+        "title": "Refresh schemas",
         "icon": "$(extensions-refresh)"
       },
       {
         "category": "gRPC Clicker",
-        "command": "servers.refresh",
-        "title": "Resresh existing proro reflect servers",
-        "icon": "$(extensions-refresh)"
+        "command": "protos.remove",
+        "title": "Remove proto source",
+        "icon": "$(terminal-kill)"
       },
       {
         "category": "gRPC Clicker",
@@ -184,28 +124,13 @@
     "menus": {
       "view/title": [
         {
-          "command": "files.add",
-          "when": "view == files",
+          "command": "protos.add",
+          "when": "view == protos",
           "group": "navigation"
         },
         {
-          "command": "files.refresh",
-          "when": "view == files",
-          "group": "navigation"
-        },
-        {
-          "command": "servers.add",
-          "when": "view == servers",
-          "group": "navigation"
-        },
-        {
-          "command": "servers.refresh",
-          "when": "view == servers",
-          "group": "navigation"
-        },
-        {
-          "command": "headers.add",
-          "when": "view == headers",
+          "command": "protos.refresh",
+          "when": "view == protos",
           "group": "navigation"
         },
         {
@@ -221,40 +146,6 @@
       ],
       "view/item/context": [
         {
-          "command": "headers.switch",
-          "when": "viewItem == header"
-        },
-        {
-          "command": "hosts.add",
-          "when": "view == files && viewItem == hosts",
-          "group": "inline"
-        },
-        {
-          "command": "hosts.remove",
-          "when": "view == files && viewItem == host",
-          "group": "inline"
-        },
-        {
-          "command": "headers.remove",
-          "when": "view == headers && viewItem == header",
-          "group": "inline"
-        },
-        {
-          "command": "files.import",
-          "when": "view == files && viewItem == file",
-          "group": "inline"
-        },
-        {
-          "command": "files.remove",
-          "when": "view == files && viewItem == file",
-          "group": "inline"
-        },
-        {
-          "command": "servers.remove",
-          "when": "view == servers && viewItem == server",
-          "group": "inline"
-        },
-        {
           "command": "colections.run",
           "when": "view == collections && viewItem == collection",
           "group": "inline"
@@ -267,6 +158,11 @@
         {
           "command": "tests.remove",
           "when": "view == collections && viewItem == test",
+          "group": "inline"
+        },
+        {
+          "command": "protos.remove",
+          "when": "view == protos && viewItem == proto",
           "group": "inline"
         }
       ]
@@ -295,92 +191,11 @@
         "key": "ctrl+shift+r",
         "command": "workbench.view.extension.grpc-clicker"
       }
-    ],
-    "walkthroughs": [
-      {
-        "id": "grpc-clicker-walkthrow",
-        "title": "Get started with gRPC inside vscode",
-        "description": "Lets make some gRPC calls!",
-        "steps": [
-          {
-            "id": "1",
-            "title": "Install grpcurl",
-            "description": "First - you need to have [grpcurl](https://github.com/fullstorydev/grpcurl) installed on your pc.",
-            "media": {
-              "image": "docs/logo.png",
-              "altText": "gRPC-Clicker"
-            }
-          },
-          {
-            "id": "2",
-            "title": "Open extension side panel",
-            "description": "This command will reveal extension in __vscode__ activity bar",
-            "media": {
-              "image": "docs/1.png",
-              "altText": "gRPC-Clicker"
-            }
-          },
-          {
-            "id": "3",
-            "title": "Add protobuf definition",
-            "description": "Chose __proto__ file in from your local files",
-            "media": {
-              "image": "docs/2.png",
-              "altText": "gRPC-Clicker"
-            }
-          },
-          {
-            "id": "4",
-            "title": "Add host for calls",
-            "description": "You can add multiple and easily switch between them by clicking",
-            "media": {
-              "image": "docs/3.png",
-              "altText": "gRPC-Clicker"
-            }
-          },
-          {
-            "id": "5",
-            "title": "Add request metadata",
-            "description": "This step is optional, you can add metadata to request if required. Enabled metadata is marked with blue.",
-            "media": {
-              "image": "docs/4.png",
-              "altText": "gRPC-Clicker"
-            }
-          },
-          {
-            "id": "6",
-            "title": "Click on call from in gRPC-Explorer",
-            "description": "Click on the call you want to execute in proto schema explorer",
-            "media": {
-              "image": "docs/5.png",
-              "altText": "gRPC-Clicker"
-            }
-          },
-          {
-            "id": "7",
-            "title": "Edit message to send",
-            "description": "Input supports only json format",
-            "media": {
-              "image": "docs/6.png",
-              "altText": "gRPC-Clicker"
-            }
-          },
-          {
-            "id": "8",
-            "title": "Execute call",
-            "description": "Click on send button in view, and wait for result!",
-            "media": {
-              "image": "docs/7.png",
-              "altText": "gRPC-Clicker"
-            }
-          }
-        ]
-      }
     ]
   },
   "scripts": {
     "serve-grpc": "go run server/main.go",
-    "watch-webview": "node watcher.js",
+    "watch-webview": "node daemon.js",
     "package-ext": "vsce package",
     "generate-proto": "protoc --go_out=server/ --go-grpc_out=server/ server/api.proto",
     "vscode:prepublish": "npm run package",
@@ -402,6 +217,7 @@
     "@types/mocha": "^9.1.1",
     "@types/node": "^14.18.21",
     "@types/unzip-stream": "^0.3.1",
+    "@types/uuid": "^8.3.4",
     "@types/vscode": "^1.68.0",
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "@typescript-eslint/parser": "^5.21.0",
@@ -422,6 +238,7 @@
     "fs-extra": "^10.1.0",
     "open": "^8.4.0",
     "unzip-stream": "^0.3.1",
+    "uuid": "^9.0.0",
     "vsce": "^2.14.0"
   }
 }

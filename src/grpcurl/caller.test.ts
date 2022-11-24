@@ -1,18 +1,27 @@
-import { Caller, FormCliTemplateParams } from "./caller";
+import { Caller, FormCliTemplateParams, ProtoSource } from "./caller";
+
+const src: ProtoSource = {
+  adress: "localhost:8080",
+  plaintext: true,
+  timeout: 5,
+  filePath: undefined,
+  group: undefined,
+  importPath: ``,
+  uuid: "",
+  name: "",
+  unix: false,
+  customFlags: undefined
+};
 
 test(`form`, () => {
   const caller = new Caller();
   const form: FormCliTemplateParams = {
     cliCommand: `grpcurl -msg-template |SRC| describe %s`,
-    source: {
-      type: `SERVER`,
-      host: `localhost:12201`,
-      plaintext: true,
-      timeout: 0.5,
-    },
+    source: src,
     args: [`.google.protobuf.Empty`],
+    forceOnlyFile: false
   };
-  const res = `grpcurl -msg-template -plaintext localhost:12201 describe .google.protobuf.Empty`;
+  const res = `grpcurl -msg-template  -plaintext -max-time 5 localhost:8080  describe .google.protobuf.Empty`;
   expect(caller.buildCliCommand(form)).toBe(res);
 });
 

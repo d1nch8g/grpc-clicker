@@ -1,5 +1,5 @@
 import { Memento } from "vscode";
-import { ServerSource } from "../grpcurl/caller";
+import { ProtoSource } from "../grpcurl/caller";
 import { Expectations, Request, TestResult } from "../grpcurl/grpcurl";
 import { Collection, Collections, Test } from "./collections";
 
@@ -49,17 +49,22 @@ test(`list`, () => {
   expect(collections.list()).toStrictEqual(expectValues);
 });
 
-const serverSource: ServerSource = {
-  type: "SERVER",
-  host: "",
+const serverSource: ProtoSource = {
+  uuid: "",
+  adress: "",
   plaintext: false,
-  timeout: 0.5,
+  timeout: 0,
+  filePath: undefined,
+  group: undefined,
+  importPath:`/`,
+  name: "",
+  unix: false,
+  customFlags: undefined
 };
 
 const request: Request = {
-  file: undefined,
   content: "",
-  server: serverSource,
+  source: serverSource,
   callTag: "",
   maxMsgSize: 0,
   headers: [],

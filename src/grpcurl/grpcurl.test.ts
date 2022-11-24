@@ -1,10 +1,9 @@
 import { Expectations, Grpcurl, Request, TestMistake } from "./grpcurl";
-import { Call, Field, Message, Parser, Proto, ParsedResponse } from "./parser";
+import { Call, Field, Message, Parser, ProtoSchema, ParsedResponse } from "./parser";
 import {
   Caller,
-  FileSource,
   FormCliTemplateParams,
-  ServerSource,
+  ProtoSource,
 } from "./caller";
 import { Installer } from "./installer";
 
@@ -20,7 +19,7 @@ class MockParser implements Parser {
       content: input,
     };
   }
-  proto(input: string): Proto {
+  proto(input: string): ProtoSchema {
     return {
       services: [
         {
@@ -72,7 +71,7 @@ test(`protoFile`, async () => {
     ``
   );
 
-  const expectedResult: Proto = {
+  const expectedResult: ProtoSchema = {
     type: `PROTO`,
     services: [
       {
@@ -80,19 +79,26 @@ test(`protoFile`, async () => {
         package: `stuff`,
         name: ``,
         tag: ``,
-        description: `${executablePath}  -import-path / -proto docs/api.proto describe`,
+        description: `${executablePath}  -import-path / -proto server/api.proto describe`,
         calls: [],
       },
     ],
   };
 
-  const fileSouce: FileSource = {
-    type: `FILE`,
-    filePath: `docs/api.proto`,
+  const src: ProtoSource = {
+    adress: "localhost:8080",
+    plaintext: true,
+    timeout: 5,
+    filePath: `server/api.proto`,
+    group: undefined,
     importPath: `/`,
+    uuid: "",
+    name: "",
+    unix: false,
+    customFlags: undefined
   };
 
-  expect(await grpcurl.proto(fileSouce)).toStrictEqual(expectedResult);
+  expect(await grpcurl.proto(src)).toStrictEqual(expectedResult);
 });
 
 test(`protoServer`, async () => {
@@ -103,7 +109,7 @@ test(`protoServer`, async () => {
     ``
   );
 
-  const expectedResult: Proto = {
+  const expectedResult: ProtoSchema = {
     type: `PROTO`,
     services: [
       {
@@ -111,20 +117,26 @@ test(`protoServer`, async () => {
         package: `stuff`,
         name: ``,
         tag: ``,
-        description: `${executablePath} -max-time 0.5 -plaintext localhost:12201 describe`,
+        description: `${executablePath}  -plaintext -max-time 0.5 localhost:8080  describe`,
         calls: [],
       },
     ],
   };
 
-  const serverSource: ServerSource = {
-    type: `SERVER`,
-    host: `localhost:12201`,
+  const src: ProtoSource = {
+    adress: "localhost:8080",
     plaintext: true,
     timeout: 0.5,
+    filePath: undefined,
+    group: undefined,
+    importPath: ``,
+    uuid: "",
+    name: "",
+    unix: false,
+    customFlags: undefined
   };
 
-  expect(await grpcurl.proto(serverSource)).toStrictEqual(expectedResult);
+  expect(await grpcurl.proto(src)).toStrictEqual(expectedResult);
 });
 
 test(`message`, async () => {
@@ -135,20 +147,27 @@ test(`message`, async () => {
     ``
   );
 
-  const fileSouce: FileSource = {
-    type: `FILE`,
-    filePath: `docs/api.proto`,
-    importPath: `/`,
+  const src: ProtoSource = {
+    adress: "localhost:8080",
+    plaintext: true,
+    timeout: 5,
+    filePath: `server/api.proto`,
+    group: undefined,
+    importPath: ``,
+    uuid: "",
+    name: "",
+    unix: false,
+    customFlags: undefined
   };
 
   expect(
     await grpcurl.message({
-      source: fileSouce,
+      source: src,
       messageTag: ".pb.v1.StringMes",
     })
   ).toStrictEqual({
     type: `MESSAGE`,
-    name: `${executablePath} -msg-template -import-path / -proto docs/api.proto describe .pb.v1.StringMes`,
+    name: `${executablePath} -msg-template  -proto server/api.proto describe .pb.v1.StringMes`,
     tag: `tag`,
     description: `dscr`,
     template: `tmplt`,
@@ -164,23 +183,23 @@ test(`send`, async () => {
     ``
   );
 
-  const fileSouce: FileSource = {
-    type: `FILE`,
-    filePath: `docs/api.proto`,
-    importPath: `/`,
-  };
-
-  const serverSource: ServerSource = {
-    type: `SERVER`,
-    host: `localhost:12201`,
+  const src: ProtoSource = {
+    adress: "localhost:8080",
     plaintext: true,
     timeout: 0.5,
+    filePath: `server/api.proto`,
+    group: undefined,
+    importPath: `/`,
+    uuid: "",
+    name: "",
+    unix: false,
+    customFlags: undefined
   };
 
+
   const request: Request = {
-    file: fileSouce,
     content: `{}`,
-    server: serverSource,
+    source: src,
     callTag: `.pb.v1.Constructions/EmptyCall`,
     maxMsgSize: 1,
     headers: [`username: user`, `password: password`],
@@ -190,8 +209,8 @@ test(`send`, async () => {
 
   expect(resp.code).toBe(`OK`);
 
-  const winExpect = `${executablePath} -emit-defaults -H \"username: user\" -H \"password: password\"  -max-msg-sz 1048576 -d \"{}\" -import-path / -proto docs/api.proto -plaintext localhost:12201 .pb.v1.Constructions/EmptyCall`;
-  const linuxExpect = `${executablePath} -emit-defaults -H 'username: user' -H 'password: password'  -max-msg-sz 1048576 -d '{}' -import-path / -proto docs/api.proto -plaintext localhost:12201 .pb.v1.Constructions/EmptyCall`;
+  const winExpect = `${executablePath} -emit-defaults -H \"username: user\" -H \"password: password\"  -max-msg-sz 1048576 -d \"{}\" -import-path / -proto server/api.proto -plaintext localhost:8080 .pb.v1.Constructions/EmptyCall`;
+  const linuxExpect = `${executablePath} -emit-defaults -H 'username: user' -H 'password: password'  -max-msg-sz 1048576 -d '{}'  -import-path / -proto server/api.proto -plaintext -max-time 0.5 localhost:8080  .pb.v1.Constructions/EmptyCall`;
 
   if (process.platform === "win32") {
     expect(resp.content).toBe(winExpect);
@@ -208,23 +227,22 @@ test(`test`, async () => {
     ``
   );
 
-  const fileSouce: FileSource = {
-    type: `FILE`,
-    filePath: `docs/api.proto`,
-    importPath: `/`,
-  };
-
-  const serverSource: ServerSource = {
-    type: `SERVER`,
-    host: `localhost:12201`,
+  const src: ProtoSource = {
+    adress: "localhost:8080",
     plaintext: true,
-    timeout: 0.5,
+    timeout: 5,
+    filePath: undefined,
+    group: undefined,
+    importPath: `/`,
+    uuid: "",
+    name: "",
+    unix: false,
+    customFlags: undefined
   };
 
   const request: Request = {
-    file: fileSouce,
     content: `{}`,
-    server: serverSource,
+    source: src,
     callTag: `.pb.v1.Constructions/EmptyCall`,
     maxMsgSize: 1,
     headers: [`username: user`, `password: password`],

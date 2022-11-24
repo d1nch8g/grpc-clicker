@@ -10,19 +10,21 @@
 
   $: data = {
     request: {
-      file: {
-        type: "FILE",
-        filePath: "server/api.proto",
-        importPath: "/",
-      },
-      content: "{}",
-      server: {
-        type: "SERVER",
-        host: "localhost:8080",
+      source: {
+        uuid: `string`,
+        name: `string`,
+        group: undefined,
+        adress: `string`,
         plaintext: true,
+        timeout: `string`,
+        filePath: `string`,
+        importPath: `string`,
+        unix: false,
+        customFlags: undefined,
       },
-      callTag: "pb.v1.Constructions/AnyCall",
-      maxMsgSize: 4,
+      content: `string`,
+      callTag: `string`,
+      maxMsgSize: 0,
       headers: [],
     },
     info: {

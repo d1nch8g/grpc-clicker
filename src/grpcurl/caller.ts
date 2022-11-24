@@ -1,33 +1,49 @@
 import * as util from "util";
 
 /**
- * Description of server source for CLI command
+ * Combined structure containing all required information for proto file
  */
-export interface ServerSource {
-  type: `SERVER`;
-  host: string;
+export interface ProtoSource {
+  /**
+   * Unique identifier for specific source.
+   */
+  uuid: string;
+  /**
+   * Human readable name for proto source.
+   */
+  name: string;
+  /**
+   * Group that will be used to store proto information.
+   */
+  group: string | undefined;
+  /**
+   * Current host:port, which will be used for calls processing (real adress)
+   */
+  adress: string;
+  /**
+   * Wether to use TLS.
+   */
   plaintext: boolean;
+  /**
+   * Default timeout for call execution.
+   */
   timeout: number;
-}
-
-/**
- * Description of file source for CLI command
- */
-export interface FileSource {
-  type: `FILE`;
-  filePath: string;
+  /**
+   * Files that would be used as base in `-proto` arguement
+   */
+  filePath: string | undefined;
+  /**
+   * Paths that needs to be imported for proper proto compilation
+   */
   importPath: string;
-}
-
-/**
- * Wether command should be formed for multiple sources simultaneously
- */
-export interface MultiSource {
-  type: `MULTI`;
-  host: string;
-  plaintext: boolean;
-  filePath: string;
-  importPath: string;
+  /**
+   * Indicates that server address is path to Unix domain socket
+   */
+  unix: boolean;
+  /**
+   * Additional flags for grpcurl CLI command
+   */
+  customFlags: string | undefined;
 }
 
 /**
@@ -44,11 +60,18 @@ export interface FormCliTemplateParams {
   /**
    * Specify source of execution, that might be server of file
    */
-  source: ServerSource | FileSource | MultiSource;
+  source: ProtoSource;
   /**
    * Arguements that will be included in final version CLI command
    */
   args: string[];
+  /**
+   * Arguements that will be included in final version CLI command
+   */
+  forceOnlyFile: boolean;
+  /**
+   * Arg, that explictly forces caller to use all provided info about sources.
+   */
 }
 
 /**
@@ -59,29 +82,27 @@ export class Caller {
    * This function is used to build cli command from parameters
    */
   buildCliCommand(input: FormCliTemplateParams): string {
-    let source: string;
-    if (input.source.type === `MULTI`) {
-      if (input.source.plaintext) {
-        source = `-import-path ${input.source.importPath} -proto ${input.source.filePath} -plaintext ${input.source.host}`;
-      } else {
-        source = `-import-path ${input.source.importPath} -proto ${input.source.filePath} ${input.source.host}`;
+    let base: string = ``;
+    if (input.source.unix) {
+      base += ` -unix `;
+    }
+    if (input.source.customFlags !== undefined) {
+      base += ` ${input.source.customFlags} `;
+    }
+    if (input.source.filePath !== undefined) {
+      for (const importPath of input.source.importPath) {
+        base += ` -import-path ${importPath}`;
       }
+      base += ` -proto ${input.source.filePath}`;
     }
-    if (input.source.type === `SERVER`) {
+    if (!input.forceOnlyFile || input.source.filePath === undefined) {
       if (input.source.plaintext) {
-        source = `-plaintext ${input.source.host}`;
-      } else {
-        source = `${input.source.host}`;
+        base += ` -plaintext`;
       }
+      base += ` -max-time ${input.source.timeout} ${input.source.adress} `;
     }
-    if (input.source.type === `FILE`) {
-      source = `-import-path ${input.source.importPath} -proto ${input.source.filePath}`;
-    }
-
-    input.cliCommand = input.cliCommand.replace(`|SRC|`, source!);
-
+    input.cliCommand = input.cliCommand.replace(`|SRC|`, base);
     let command = util.format(input.cliCommand, ...input.args);
-
     return command;
   }
 

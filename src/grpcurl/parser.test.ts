@@ -320,7 +320,7 @@ const codeErr = `EmptyCall
 ERROR:
   Code: AlreadyExists
   Message: some err msg`;
-const connErr = `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`;
+const connErr = `Failed to dial target host "localhost:8080": dial tcp [::1]:8080: connectex: No connection could be made because the target machine actively refused it.`;
 const goodResp = `{
   "message": "msg"
 }`;
@@ -335,7 +335,7 @@ test(`response`, () => {
 
   const secondExpectedResponse: ParsedResponse = {
     code: `Unavailable`,
-    content: `Failed to dial target host "localhost:12201": dial tcp [::1]:12201: connectex: No connection could be made because the target machine actively refused it.`,
+    content: `Failed to dial target host "localhost:8080": dial tcp [::1]:8080: connectex: No connection could be made because the target machine actively refused it.`,
   };
   expect(parser.resp(connErr)).toStrictEqual(secondExpectedResponse);
 
