@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. Dates are d
 
 ## [0.1.9]
 
+> November 24, 2022
+
 - Proto files and reflect servers are united into protos
 - New webview for connection tests
 - Groups for reflect servers and files
@@ -13,7 +15,7 @@ All notable changes to this project will be documented in this file. Dates are d
 
 ## [0.1.8]
 
-> August 30, 2022
+> November 12, 2022
 
 - Added option for timeout of recieving schema from reflect proto servers.
 
