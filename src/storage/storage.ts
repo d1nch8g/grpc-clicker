@@ -12,9 +12,6 @@ export class Storage {
   public readonly headers: Headers;
   public readonly history: History;
   public readonly protos: Protos;
-  files: any;
-  servers: any;
-  hosts: any;
 
   constructor(private memento: Memento) {
     this.headers = new Headers(memento);
