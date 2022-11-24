@@ -68,7 +68,7 @@ export interface FormCliTemplateParams {
   /**
    * Arguements that will be included in final version CLI command
    */
-  forceMultisource: boolean;
+  forceOnlyFile: boolean;
   /**
    * Arg, that explictly forces caller to use all provided info about sources.
    */
@@ -94,13 +94,8 @@ export class Caller {
         base += ` -import-path ${importPath}`;
       }
       base += ` -proto ${input.source.filePath}`;
-    } else {
-      if (input.source.plaintext) {
-        base += ` -plaintext`;
-      }
-      base += ` -max-time ${input.source.timeout} ${input.source.adress} `;
     }
-    if (input.forceMultisource) {
+    if (!input.forceOnlyFile || input.source.filePath === undefined) {
       if (input.source.plaintext) {
         base += ` -plaintext`;
       }
