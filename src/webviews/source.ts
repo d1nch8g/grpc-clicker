@@ -35,6 +35,8 @@ export interface SourceWebViewData {
   adress: string,
   plaintext: boolean,
   filePath: string,
+  unix: boolean,
+  customFlags: string,
   importPaths: string,
   connectStatus: ConnectionStatus,
 }

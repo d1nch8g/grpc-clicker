@@ -192,7 +192,9 @@ export function activate(context: vscode.ExtensionContext) {
       adress: "localhost:8080",
       filePath: "",
       importPaths: "/",
-      connectStatus: `NOT_EXECUTED`
+      connectStatus: `NOT_EXECUTED`,
+      unix: false,
+      customFlags: ""
     };
     sourceWebviewFactory.createNewTab(webviewParams);
   });
