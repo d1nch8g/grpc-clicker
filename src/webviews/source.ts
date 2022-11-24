@@ -16,6 +16,15 @@ export interface SourceWebViewParameters {
 }
 
 /**
+ * Represents wether the current state of connection to show it to user.
+ */
+export type ConnectionStatus =
+  | `NOT_EXECUTED`
+  | `WAITING`
+  | `ERROR`
+  | `SUCCESS`;
+
+/**
  * Data that is required for building single tab with gRPC call.
  */
 export interface SourceWebViewData {
@@ -28,7 +37,7 @@ export interface SourceWebViewData {
   plaintext: boolean,
   filePath: string,
   importPaths: string,
-  connectStatus: boolean | undefined,
+  connectStatus: ConnectionStatus,
 }
 
 /**

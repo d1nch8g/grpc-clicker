@@ -1,4 +1,9 @@
 <script>
+  const NOT_EXECUTED =
+    "https://cncf-branding.netlify.app/img/projects/grpc/icon/color/grpc-icon-color.png";
+  const WAITING =
+    "https://cncf-branding.netlify.app/img/projects/grpc/icon/color/grpc-icon-color.png";
+
   $: connection = {
     uuid: `someuuid`,
     name: `keks`,
@@ -9,7 +14,7 @@
     plaintext: true,
     filePath: `filepath`,
     importPaths: `/`,
-    connectStatus: `not_connected`,
+    connectStatus: `NOT_EXECUTED`,
   };
 
   window.addEventListener("message", (event) => {
@@ -46,16 +51,20 @@
     vscode.postMessage({
       command: "create",
     });
+    connection.connectStatus = `WAITING`;
   }
 </script>
 
 <center>
-  <img
-    align="center"
-    height="92px"
-    alt="gRPC"
-    src="https://cncf-branding.netlify.app/img/projects/grpc/icon/color/grpc-icon-color.png"
-  />
+  {#if connection.connectStatus === `NOT_EXECUTED`}
+    <img align="center" height="92px" alt="gRPC" src={NOT_EXECUTED} />
+  {:else if connection.connectStatus === `WAITING`}
+    <div align="center" height="92px" class="loader" />
+  {:else if connection.connectStatus === `ERROR`}
+    <img align="center" height="92px" alt="gRPC" src={NOT_EXECUTED} />
+  {:else if connection.connectStatus === `SUCCESS`}
+    <img align="center" height="92px" alt="gRPC" src={NOT_EXECUTED} />
+  {/if}
 </center>
 
 <center>
@@ -255,5 +264,21 @@
   }
   button:focus {
     outline-color: var(--vscode-focusBorder);
+  }
+  .loader {
+    border: 16px solid var(--vscode-editor-background);
+    border-top: 16px solid var(--vscode-focusBorder);
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+  }
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 </style>
