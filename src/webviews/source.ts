@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import { ProtoSource } from "../grpcurl/caller";
 
 /**
  * Parameters for building all webview tabs.

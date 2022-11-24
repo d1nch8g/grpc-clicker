@@ -139,29 +139,19 @@ export function activate(context: vscode.ExtensionContext) {
       if (source.group !== ``) {
         group = source.group;
       }
-      let src: ProtoSource;
+      const src: ProtoSource = {
+        uuid: source.uuid,
+        adress: source.adress,
+        plaintext: source.plaintext,
+        name: source.name,
+        group: group,
+        timeout: source.timeout,
+        filePath: undefined,
+        importPaths: []
+      };
       if (source.useFile) {
-        src = {
-          uuid: source.uuid,
-          adress: source.adress,
-          plaintext: source.plaintext,
-          timeout: source.timeout,
-          filePath: source.filePath,
-          group: group,
-          name: source.name,
-          importPaths: source.importPaths.split(`,`),
-        };
-      } else {
-        src = {
-          uuid: source.uuid,
-          adress: source.adress,
-          plaintext: source.plaintext,
-          timeout: source.timeout,
-          group: group,
-          name: source.name,
-          filePath: undefined,
-          importPaths: [],
-        };
+        src.filePath = source.filePath;
+        src.importPaths = source.importPaths.split(`,`);
       }
       const protoResult = await grpcurl.proto(src);
       if (typeof protoResult === `string`) {
