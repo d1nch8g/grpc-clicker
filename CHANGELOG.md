@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [1.0.0]
+
+- Fix in storage cleanups on version updates
+- Incompatible changes in stored format
+
 ## [0.1.9]
 
 > November 24, 2022

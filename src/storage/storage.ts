@@ -6,7 +6,7 @@ import { Protos } from "./protos";
 
 export class Storage {
   private readonly key: string = `grpc-clicker-version`;
-  private readonly version: string = `0.1.9`;
+  private readonly version: string = `1.0.0`;
 
   public readonly collections: Collections;
   public readonly headers: Headers;
@@ -34,6 +34,8 @@ export class Storage {
         return;
       default:
         this.clean();
+        this.memento.update(this.key, this.version);
+        return;
     }
   }
 }
