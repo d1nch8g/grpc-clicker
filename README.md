@@ -4,6 +4,6 @@
 <img align="center" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="238px" height="238px" src="https://gitea.dancheg97.ru/dancheg97/grpclicker_vscode/raw/branch/main/images/logo.png" /> 
 </p>
 
-Reposistory migrated to gitea, and not supported on github anymore.
+Repository migrated to gitea, and not supported on github anymore.
 
 - [New home for grpc-clicker](https://gitea.dancheg97.ru/dancheg97/grpclicker_vscode)
