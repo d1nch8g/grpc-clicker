@@ -12,7 +12,7 @@ steps:
     settings:
       branch: master
       remote: ssh://git@github.com/dancheg97/grpclicker_vscode.git
-      force: false
+      force: true
       commit: true
       ssh_key:
         from_secret: SSHKEY
