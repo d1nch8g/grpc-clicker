@@ -4,11 +4,11 @@
 <img align="center" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="238px" height="238px" src="https://dancheg97.ru/repo-avatars/12-f79d041c585beeb0f12d2d279086b1b2" /> 
 </p>
 
-[![Generic badge](https://img.shields.io/badge/LICENSE-MIT-red.svg)](https://dancheg97.ru/dancheg97/grpclicker_vscode/src/branch/main/LICENSE)
+[![Generic badge](https://img.shields.io/badge/LICENSE-MIT-orange.svg)](https://dancheg97.ru/dancheg97/grpclicker_vscode/src/branch/main/LICENSE)
 [![Generic badge](https://img.shields.io/badge/GITEA-REPO-red.svg)](https://dancheg97.ru/dancheg97/grpclicker_vscode)
 [![Generic badge](https://img.shields.io/badge/GITHUB-REPO-white.svg)](https://github.com/dancheg97/grpclicker_vscode)
-[![Generic badge](https://img.shields.io/badge/VSCode-marketplace-cyan.svg)](https://marketplace.visualstudio.com/items?itemName=Dancheg97.grpc-clicker)
-[![Generic badge](https://img.shields.io/badge/Changelog-v1.0.5-orange.svg)](https://dancheg97.ru/dancheg97/grpclicker_vscode/src/branch/main/CHANGELOG.md)
+[![Generic badge](https://img.shields.io/badge/VSCode-marketplace-blue.svg)](https://marketplace.visualstudio.com/items?itemName=Dancheg97.grpc-clicker)
+[![Generic badge](https://img.shields.io/badge/Changelog-v1.0.5-cyan.svg)](https://dancheg97.ru/dancheg97/grpclicker_vscode/src/branch/main/CHANGELOG.md)
 [![Build Status](https://drone.dancheg97.ru/api/badges/dancheg97/grpclicker_vscode/status.svg)](https://drone.dancheg97.ru/dancheg97/grpclicker_vscode)
 
 Extension uses [`grpcurl`](https://github.com/fullstorydev/grpcurl) under the hood, it will be installed automatically with extension.
