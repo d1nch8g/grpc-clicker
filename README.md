@@ -1,7 +1,7 @@
 <h2 align="center" style="font-weight: lighter; font-size: 29px">gRPC Clicker</h2>
 
 <p align="center">
-<img align="center" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="238px" height="238px" src="https://dancheg97.ru/repo-avatars/12-f79d041c585beeb0f12d2d279086b1b2" /> 
+<img align="center" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" width="238px" height="238px" src="https://dancheg97.ru/dancheg97/grpclicker_vscode/raw/branch/main/images/logo.png" /> 
 </p>
 
 [![Generic badge](https://img.shields.io/badge/LICENSE-MIT-orange.svg)](https://dancheg97.ru/dancheg97/grpclicker_vscode/src/branch/main/LICENSE)
