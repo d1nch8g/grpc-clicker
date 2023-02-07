@@ -11,7 +11,7 @@ steps:
     image: appleboy/drone-git-push
     settings:
       branch: master
-      remote: ssh://git@github.com:Dancheg97/grpclicker_vscode.git
+      remote: ssh://git@github.com/dancheg97/grpclicker_vscode.git
       force: true
       commit: true
       ssh_key:
