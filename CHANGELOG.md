@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [1.0.7]
+
+> February 7, 2023
+
+- fixed lack of files in dist
+
 ## [1.0.6]
 
 > February 7, 2023

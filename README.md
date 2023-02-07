@@ -8,7 +8,7 @@
 [![Generic badge](https://img.shields.io/badge/GITEA-REPO-red.svg)](https://dancheg97.ru/dancheg97/grpclicker_vscode)
 [![Generic badge](https://img.shields.io/badge/GITHUB-REPO-white.svg)](https://github.com/dancheg97/grpclicker_vscode)
 [![Generic badge](https://img.shields.io/badge/VSCode-marketplace-blue.svg)](https://marketplace.visualstudio.com/items?itemName=Dancheg97.grpc-clicker)
-[![Generic badge](https://img.shields.io/badge/Changelog-v1.0.6-cyan.svg)](https://dancheg97.ru/dancheg97/grpclicker_vscode/src/branch/main/CHANGELOG.md)
+[![Generic badge](https://img.shields.io/badge/Changelog-v1.0.7-cyan.svg)](https://dancheg97.ru/dancheg97/grpclicker_vscode/src/branch/main/CHANGELOG.md)
 [![Build Status](https://drone.dancheg97.ru/api/badges/dancheg97/grpclicker_vscode/status.svg)](https://drone.dancheg97.ru/dancheg97/grpclicker_vscode)
 
 Extension uses [`grpcurl`](https://github.com/fullstorydev/grpcurl) under the hood, it will be installed automatically with extension.
