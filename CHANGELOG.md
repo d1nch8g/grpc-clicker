@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [1.0.6]
+
+> February 7, 2023
+
+- updated readme
+- added 2 git remotes
+
 ## [1.0.5]
 
 > January 20, 2023
