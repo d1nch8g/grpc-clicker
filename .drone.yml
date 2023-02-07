@@ -1,0 +1,18 @@
+kind: pipeline
+name: default
+type: docker
+
+trigger:
+  branch:
+    - main
+
+steps:
+  - name: push github
+    image: appleboy/drone-git-push
+    settings:
+      branch: master
+      remote: ssh://git@github.com/dancheg97/grpclicker_vscode.git
+      force: false
+      commit: true
+      ssh_key:
+        from_secret: SSHKEY
