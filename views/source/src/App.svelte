@@ -1,5 +1,6 @@
 <script>
-  const link = "https://gitea.dancheg97.ru/dancheg97/grpclicker_vscode/raw";
+  const link =
+    "https://dancheg97.ru/dancheg97/grpclicker_vscode/raw/branch/main/images/logo.png";
   $: connection = {
     uuid: `someuuid`,
     name: `keks`,

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [1.0.8]
+
+> March 29, 2023
+
+- - fixed links in add window
+- - fixed links in readme
+
 ## [1.0.7]
 
 > February 7, 2023
