@@ -130,7 +130,7 @@ class CallWebviewTab {
   ) {
     this.panel = vscode.window.createWebviewPanel(
       "callgrpc",
-      data.info.call,
+      `${data.info.service} ${data.info.call}`,
       vscode.ViewColumn.Active,
       { enableScripts: true }
     );
