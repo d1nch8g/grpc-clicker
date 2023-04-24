@@ -14,7 +14,7 @@ import (
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	"gitea.dancheg97.ru/dancheg97/grpclicker_vscode/server/pb"
+	"gitea.fmnx.ru/dancheg97/grpclicker_vscode/server/pb"
 	"google.golang.org/grpc/reflection"
 )
 

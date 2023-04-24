@@ -1,4 +1,4 @@
-module gitea.dancheg97.ru/dancheg97/grpclicker_vscode
+module gitea.fmnx.ru/dancheg97/grpclicker_vscode
 
 go 1.19
 
