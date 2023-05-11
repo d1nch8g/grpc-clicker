@@ -1,6 +1,5 @@
 <script>
-  const link =
-    "https://fmnx.ru/dancheg97/grpclicker_vscode/raw/branch/main/images/logo.png";
+  const link = "https://fmnx.io/dancheg97/grpc-clicker/raw/branch";
   $: connection = {
     uuid: `someuuid`,
     name: `keks`,
@@ -78,9 +77,9 @@
   {:else if connection.connectStatus === `WAITING`}
     <div align="center" class="loader" />
   {:else if connection.connectStatus === `ERROR`}
-    <img src="{link}/branch/main/images/error.svg" alt="background" />
+    <img src="{link}/main/images/error.svg" alt="background" />
   {:else if connection.connectStatus === `SUCCESS`}
-    <img src="{link}/branch/main/images/success.svg" alt="background" />
+    <img src="{link}/main/images/success.svg" alt="background" />
   {/if}
 </center>
 

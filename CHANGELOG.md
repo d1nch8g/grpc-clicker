@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [1.0.10]
+
+> May 11, 2023
+
+- updated references to new repo
+- fixed a bugs related to link to older repos
+- changed name of repo to match extension name in marketplace
+
 ## [1.0.9]
 
 > April 24, 2023
