@@ -1,4 +1,4 @@
-module gitea.fmnx.io/dancheg97/grpc-clicker
+module gitea.fmnx.su/dancheg97/grpc-clicker
 
 go 1.19
 

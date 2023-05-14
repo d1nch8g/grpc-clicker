@@ -1,5 +1,5 @@
 <script>
-  const link = "https://fmnx.io/dancheg97/grpc-clicker/raw/branch";
+  const link = "https://fmnx.su/dancheg97/grpc-clicker/raw/branch";
   $: connection = {
     uuid: `someuuid`,
     name: `keks`,
