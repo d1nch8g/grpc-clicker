@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [1.0.12]
+
+> May 25, 2023
+
+- fixed a bug related to stuggering in textform on call page
+- removed textarea from webview, relpaced with default textarea with html+css due to stability issues
+
 ## [1.0.11]
 
 > May 25, 2023
