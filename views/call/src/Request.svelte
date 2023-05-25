@@ -11,7 +11,7 @@
     </center>
   </tr>
   <tr>
-    <JsonArea bind:text="{data.request.content}" height="{height}" />
+    <JsonArea bind:text={data.request.content} {height} />
   </tr>
 </table>
 

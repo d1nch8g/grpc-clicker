@@ -156,7 +156,7 @@
   }
 </script>
 
-<svelte:window on:keydown="{onTab}" />
+<svelte:window on:keydown={onTab} />
 
 <div class="containter" style="--height: {height}px;">
   <div class="control">
@@ -164,56 +164,64 @@
       <textarea
         readonly
         class="maineditor"
-        on:focus="{onTyping}"
-        on:blur="{onTypingEnd}"
-        on:scroll="{parseScroll}"
-        bind:value="{text}"
-        bind:this="{mainScroll}"></textarea>
+        on:focus={onTyping}
+        on:blur={onTypingEnd}
+        on:scroll={parseScroll}
+        bind:value={text}
+        bind:this={mainScroll}
+      />
     {:else}
       <textarea
         class="maineditor"
-        on:focus="{onTyping}"
-        on:blur="{onTypingEnd}"
-        on:scroll="{parseScroll}"
-        bind:value="{text}"
-        bind:this="{mainScroll}"></textarea>
+        on:focus={onTyping}
+        on:blur={onTypingEnd}
+        on:scroll={parseScroll}
+        bind:value={text}
+        bind:this={mainScroll}
+      />
     {/if}
   </div>
   <div class="wrapper">
     <textarea
       class="brackets transparenter"
-      bind:this="{bracketScroll}"
-      value="{bracketsText}"></textarea>
+      bind:this={bracketScroll}
+      value={bracketsText}
+    />
   </div>
   <div class="wrapper">
     <textarea
       class="strings transparenter"
-      bind:this="{stringsScroll}"
-      bind:value="{stringsText}"></textarea>
+      bind:this={stringsScroll}
+      bind:value={stringsText}
+    />
   </div>
   <div class="wrapper">
     <textarea
       class="keys transparenter"
-      bind:this="{keysScroll}"
-      bind:value="{keysText}"></textarea>
+      bind:this={keysScroll}
+      bind:value={keysText}
+    />
   </div>
   <div class="wrapper">
     <textarea
       class="numbers transparenter"
-      bind:this="{numbersScroll}"
-      bind:value="{numbersText}"></textarea>
+      bind:this={numbersScroll}
+      bind:value={numbersText}
+    />
   </div>
   <div class="wrapper">
     <textarea
       class="booleans transparenter"
-      bind:this="{boolsScroll}"
-      bind:value="{boolText}"></textarea>
+      bind:this={boolsScroll}
+      bind:value={boolText}
+    />
   </div>
   <div class="wrapper">
     <textarea
       class="punctuation transparenter"
-      bind:this="{markupScroll}"
-      bind:value="{markupText}"></textarea>
+      bind:this={markupScroll}
+      bind:value={markupText}
+    />
   </div>
 </div>
 

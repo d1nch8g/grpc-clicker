@@ -13,16 +13,16 @@
   </tr>
   <tr>
     <JsonArea
-      bind:text="{data.snippet}"
-      highlight="{false}"
-      editable="{false}"
-      height="{height}"
+      bind:text={data.snippet}
+      highlight={false}
+      editable={false}
+      {height}
     />
   </tr>
   <tr>
     <div class="button-padding">
       <center class="button-center">
-        <button on:click="{onSnippet}">Generate gRPCurl CLI command</button>
+        <button on:click={onSnippet}>Generate gRPCurl CLI command</button>
       </center>
     </div>
   </tr>

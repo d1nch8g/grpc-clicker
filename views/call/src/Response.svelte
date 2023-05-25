@@ -16,17 +16,13 @@
   </tr>
   <tr>
     {#if data.response.code === `OK`}
-      <JsonArea
-        bind:text="{data.response.content}"
-        height="{height}"
-        editable="{false}"
-      />
+      <JsonArea bind:text={data.response.content} {height} editable={false} />
     {:else}
       <JsonArea
-        bind:text="{data.response.content}"
-        height="{height}"
-        highlight="{false}"
-        editable="{false}"
+        bind:text={data.response.content}
+        {height}
+        highlight={false}
+        editable={false}
       />
     {/if}
   </tr>

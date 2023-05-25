@@ -64,7 +64,7 @@
         <td class="expect-dropdown">
           <vscode-dropdown position="below">
             {#each timeOptions as time}
-              <vscode-option on:click="{onTimeChanged(time)}">
+              <vscode-option on:click={onTimeChanged(time)}>
                 <div>{time}</div>
               </vscode-option>
             {/each}
@@ -78,7 +78,7 @@
         <td class="expect-dropdown">
           <vscode-dropdown position="below">
             {#each codeOptions as code}
-              <vscode-option on:click="{onCodeChanged(code)}">
+              <vscode-option on:click={onCodeChanged(code)}>
                 <div>{code}</div>
               </vscode-option>
             {/each}
@@ -93,12 +93,12 @@
     </center>
   </tr>
   <tr>
-    <JsonArea bind:text="{data.expectations.content}" height="{height}" />
+    <JsonArea bind:text={data.expectations.content} {height} />
   </tr>
   <tr>
     <div class="button-padding">
       <center>
-        <button on:click="{createTest}">Create test</button>
+        <button on:click={createTest}>Create test</button>
       </center>
     </div>
   </tr>
