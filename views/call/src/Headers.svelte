@@ -28,11 +28,11 @@
     {#each data.headers as header}
       <tr>
         {#if header.active}
-          <vscode-checkbox checked on:click="{onHeaderClicked(header.value)}">
+          <vscode-checkbox checked on:click={onHeaderClicked(header.value)}>
             <div>{header.value}</div>
           </vscode-checkbox>
         {:else}
-          <vscode-checkbox on:click="{onHeaderClicked(header.value)}">
+          <vscode-checkbox on:click={onHeaderClicked(header.value)}>
             <div>{header.value}</div>
           </vscode-checkbox>
         {/if}
@@ -40,10 +40,10 @@
     {/each}
     <tr>
       <center>
-        <vscode-button on:click="{removeHeader}" appearance="secondary">
+        <vscode-button on:click={removeHeader} appearance="secondary">
           <div>Remove</div>
         </vscode-button>
-        <vscode-button on:click="{addHeader}">
+        <vscode-button on:click={addHeader}>
           <div>Add</div>
         </vscode-button>
       </center>

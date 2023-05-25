@@ -1,6 +1,13 @@
 <script>
   export let data;
   export let onSend;
+  export let onChange;
+
+  function upd() {
+    var value = document.getElementById("textarea");
+    data.request.source.adress = value.getAttribute("current-value");
+    onChange();
+  }
 </script>
 
 <div class="top-container">
@@ -10,10 +17,14 @@
       <td><vscode-badge>{data.info.service}</vscode-badge></td>
       <td><vscode-badge>{data.info.call}</vscode-badge></td>
       <td class="expanded">
-        <vscode-tag class="expanded">{data.request.source.adress}</vscode-tag>
+        <vscode-text-field
+          value={data.request.source.adress}
+          on:change={upd}
+          id="textarea"
+        />
       </td>
       <td>
-        <vscode-button on:click="{onSend}">Send</vscode-button>
+        <vscode-button on:click={onSend}>Send</vscode-button>
       </td>
     </tr>
   </table>
@@ -43,5 +54,8 @@
     width: 100%;
     padding-left: 8px;
     padding-right: 8px;
+  }
+  vscode-text-field {
+    width: 100%;
   }
 </style>

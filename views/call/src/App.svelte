@@ -119,21 +119,21 @@
 </script>
 
 <svelte:window
-  use:shortcut="{{
+  use:shortcut={{
     control: true,
-    code: 'KeyS',
+    code: "KeyS",
     callback: onSave,
-  }}"
-  use:shortcut="{{
+  }}
+  use:shortcut={{
     control: true,
-    code: 'Enter',
+    code: "Enter",
     callback: onSend,
-  }}"
+  }}
   bind:innerHeight
   bind:innerWidth
 />
 
-<TopPanel bind:data onSend="{onSend}" onHosts="{onHosts}" />
+<TopPanel bind:data {onSend} {onChange} />
 
 <table>
   {#if horizontalOrientation}
@@ -145,25 +145,21 @@
           <vscode-panel-tab id="tab-3">SNIPPET</vscode-panel-tab>
           <vscode-panel-tab id="tab-4">INFORMATION</vscode-panel-tab>
           <vscode-panel-view id="view-1">
-            <Request bind:data height="{innerHeight - 165}" />
+            <Request bind:data height={innerHeight - 165} />
           </vscode-panel-view>
           <vscode-panel-view id="view-2">
             <Headers
               bind:data
-              addHeader="{onAddHeader}"
-              removeHeader="{onRemoveHeader}"
-              height="{innerHeight - 135}"
+              addHeader={onAddHeader}
+              removeHeader={onRemoveHeader}
+              height={innerHeight - 135}
             />
           </vscode-panel-view>
           <vscode-panel-view id="view-3">
-            <Snippet
-              bind:data
-              onSnippet="{onSnippet}"
-              height="{innerHeight - 220}"
-            />
+            <Snippet bind:data {onSnippet} height={innerHeight - 220} />
           </vscode-panel-view>
           <vscode-panel-view id="view-4">
-            <Info bind:data height="{innerHeight - 135}" />
+            <Info bind:data height={innerHeight - 135} />
           </vscode-panel-view>
         </vscode-panels>
       </div>
@@ -174,14 +170,10 @@
           <vscode-panel-tab id="tab-1">RESPONSE</vscode-panel-tab>
           <vscode-panel-tab id="tab-2">TESTING</vscode-panel-tab>
           <vscode-panel-view id="view-1">
-            <Response bind:data height="{innerHeight - 165}" />
+            <Response bind:data height={innerHeight - 165} />
           </vscode-panel-view>
           <vscode-panel-view id="view-2">
-            <Testing
-              bind:data
-              createTest="{onTest}"
-              height="{innerHeight - 285}"
-            />
+            <Testing bind:data createTest={onTest} height={innerHeight - 285} />
           </vscode-panel-view>
         </vscode-panels>
       </div>
@@ -194,25 +186,21 @@
         <vscode-panel-tab id="tab-3">SNIPPET</vscode-panel-tab>
         <vscode-panel-tab id="tab-4">INFORMATION</vscode-panel-tab>
         <vscode-panel-view id="view-1">
-          <Request bind:data height="{innerHeight / 2 - 122}" />
+          <Request bind:data height={innerHeight / 2 - 122} />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
           <Headers
             bind:data
-            addHeader="{onAddHeader}"
-            removeHeader="{onRemoveHeader}"
-            height="{innerHeight / 2 - 92}"
+            addHeader={onAddHeader}
+            removeHeader={onRemoveHeader}
+            height={innerHeight / 2 - 92}
           />
         </vscode-panel-view>
         <vscode-panel-view id="view-3">
-          <Snippet
-            bind:data
-            onSnippet="{onSnippet}"
-            height="{innerHeight / 2 - 176}"
-          />
+          <Snippet bind:data {onSnippet} height={innerHeight / 2 - 176} />
         </vscode-panel-view>
         <vscode-panel-view id="view-4">
-          <Info bind:data height="{innerHeight / 2 - 92}" />
+          <Info bind:data height={innerHeight / 2 - 92} />
         </vscode-panel-view>
       </vscode-panels>
     </tr>
@@ -221,13 +209,13 @@
         <vscode-panel-tab id="tab-1">RESPONSE</vscode-panel-tab>
         <vscode-panel-tab id="tab-2">TESTING</vscode-panel-tab>
         <vscode-panel-view id="view-1">
-          <Response bind:data height="{innerHeight / 2 - 122}" />
+          <Response bind:data height={innerHeight / 2 - 122} />
         </vscode-panel-view>
         <vscode-panel-view id="view-2">
           <Testing
             bind:data
-            createTest="{onTest}"
-            height="{innerHeight / 2 - 252}"
+            createTest={onTest}
+            height={innerHeight / 2 - 252}
           />
         </vscode-panel-view>
       </vscode-panels>
