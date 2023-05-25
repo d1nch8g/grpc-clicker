@@ -133,7 +133,7 @@
   bind:innerWidth
 />
 
-<TopPanel bind:data {onSend} {onChange} />
+<TopPanel bind:data {onSend} />
 
 <table>
   {#if horizontalOrientation}

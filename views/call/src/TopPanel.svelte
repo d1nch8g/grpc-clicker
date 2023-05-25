@@ -1,13 +1,8 @@
 <script>
+  // @ts-nocheck
+
   export let data;
   export let onSend;
-  export let onChange;
-
-  function upd() {
-    var value = document.getElementById("textarea");
-    data.request.source.adress = value.getAttribute("current-value");
-    onChange();
-  }
 </script>
 
 <div class="top-container">
@@ -17,10 +12,12 @@
       <td><vscode-badge>{data.info.service}</vscode-badge></td>
       <td><vscode-badge>{data.info.call}</vscode-badge></td>
       <td class="expanded">
-        <vscode-text-field
-          value={data.request.source.adress}
-          on:change={upd}
-          id="textarea"
+        <textarea
+          name="a"
+          cols="5"
+          rows="1"
+          oninput="this.value = this.value.replace(/\n/g,'')"
+          bind:value={data.request.source.adress}
         />
       </td>
       <td>
@@ -55,7 +52,16 @@
     padding-left: 8px;
     padding-right: 8px;
   }
-  vscode-text-field {
+  textarea {
     width: 100%;
+    height: 23px;
+    padding-top: 8px;
+    resize: none;
+    font-family: var(--vscode-editor-font-family);
+    font-size: var(--vscode-editor-font-size);
+    color: var(--vscode-input-foreground);
+    caret-color: var(--vscode-input-foreground);
+    outline-color: var(--vscode-input-border);
+    background-color: var(--vscode-sideBar-background);
   }
 </style>
