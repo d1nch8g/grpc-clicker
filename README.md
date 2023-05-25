@@ -8,7 +8,7 @@
 [![Generic badge](https://img.shields.io/badge/GITEA-REPO-red.svg)](https://fmnx.su/dancheg97/grpc-clicker)
 [![Generic badge](https://img.shields.io/badge/GITHUB-REPO-white.svg)](https://github.com/dancheg97/grpc-clicker)
 [![Generic badge](https://img.shields.io/badge/VSCode-marketplace-blue.svg)](https://marketplace.visualstudio.com/items?itemName=Dancheg97.grpc-clicker)
-[![Generic badge](https://img.shields.io/badge/Changelog-v1.0.10-cyan.svg)](https://fmnx.su/dancheg97/grpc-clicker/src/branch/main/CHANGELOG.md)
+[![Generic badge](https://img.shields.io/badge/Changelog-v1.0.11-cyan.svg)](https://fmnx.su/dancheg97/grpc-clicker/src/branch/main/CHANGELOG.md)
 
 Extension uses [`grpcurl`](https://github.com/fullstorydev/grpcurl) under the hood, it will be installed automatically with extension.
 
@@ -77,4 +77,5 @@ This extension is built on top of edge technologies, such as:
 
 <!--
 https://marketplace.visualstudio.com/manage/publishers/dancheg97
+https://open-vsx.org/user-settings/extensions
 -->

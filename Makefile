@@ -7,5 +7,5 @@ run:
 	npm run watch &
 	node daemon.js
 
-package:
+update:
 	node update.js

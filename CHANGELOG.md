@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [1.0.11]
+
+> May 25, 2023
+
+- added ability to modify hosts in call view
+- fixed links and references
+
 ## [1.0.10]
 
 > May 11, 2023
