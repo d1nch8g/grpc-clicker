@@ -2,7 +2,7 @@
   "name": "grpc-clicker",
   "displayName": "gRPC Clicker",
   "description": "Call gRPC services directly from VSCode",
-  "icon": "images/logo.png",
+  "icon": "https://fmnx.su/dancheg97/grpc-clicker/raw/branch/main/images/logo.png",
   "version": "1.0.10",
   "engines": {
     "vscode": "^1.68.0"
@@ -29,13 +29,6 @@
     "client"
   ],
   "activationEvents": [
-    "onView:protos",
-    "onCommand:protos.add",
-    "onCommand:protos.refresh",
-    "onView:history",
-    "onCommand:history.clean",
-    "onView:collections",
-    "onCommand:collections.create",
     "onWebviewPanel:callgrpc"
   ],
   "main": "./dist/extension.js",
