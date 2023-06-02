@@ -89,10 +89,10 @@ export class Caller {
     if (input.source.customFlags !== undefined) {
       base += ` ${input.source.customFlags} `;
     }
+    if (input.source.importPath !== "") {
+      base += ` -import-path ${input.source.importPath}`;
+    }
     if (input.source.filePath !== undefined) {
-      for (const importPath of input.source.importPath) {
-        base += ` -import-path ${importPath}`;
-      }
       base += ` -proto ${input.source.filePath}`;
     }
     if (!input.forceOnlyFile || input.source.filePath === undefined) {
