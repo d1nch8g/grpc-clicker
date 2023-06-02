@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [1.0.13]
+
+> June 2, 2023
+
+- fixed import path split when adding new proto
+
 ## [1.0.12]
 
 > May 25, 2023
