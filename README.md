@@ -5,19 +5,17 @@
 </p>
 
 [![Generic badge](https://img.shields.io/badge/LICENSE-MIT-orange.svg)](https://fmnx.su/dancheg97/grpc-clicker/src/branch/main/LICENSE)
-[![Generic badge](https://img.shields.io/badge/GITEA-REPO-red.svg)](https://fmnx.su/dancheg97/grpc-clicker)
-[![Generic badge](https://img.shields.io/badge/GITHUB-REPO-white.svg)](https://github.com/dancheg97/grpc-clicker)
+[![Generic badge](https://img.shields.io/badge/fmnx-repo-006db0.svg)](https://fmnx.su/dancheg97/grpc-clicker)
+[![Generic badge](https://img.shields.io/badge/github-repo-white.svg)](https://github.com/dancheg97/grpc-clicker)
+[![Generic badge](https://img.shields.io/badge/codeberg-repo-45a3fb.svg)](https://codeberg.org/dancheg97/grpc-clicker)
 [![Generic badge](https://img.shields.io/badge/VSCode-marketplace-blue.svg)](https://marketplace.visualstudio.com/items?itemName=Dancheg97.grpc-clicker)
 [![Generic badge](https://img.shields.io/badge/OpenVSX-marketplace-purple.svg)](https://open-vsx.org/extension/Dancheg97/grpc-clicker)
-[![Generic badge](https://img.shields.io/badge/Changelog-v1.0.13-cyan.svg)](https://fmnx.su/dancheg97/grpc-clicker/src/branch/main/CHANGELOG.md)
 
 Extension uses [`grpcurl`](https://github.com/fullstorydev/grpcurl) under the hood, it will be installed automatically with extension.
 
-This extension provides ability to execute gRPC calls from VSCode, using [`grpcurl`](https://github.com/fullstorydev/grpcurl) CLI commands (similarly to docker extension).
+This extension provides ability to execute gRPC calls from VSCode, using [`grpcurl`](https://github.com/fullstorydev/grpcurl) CLI commands.
 
 Github repository is just a mirror, but issues/pull requests are tracked there aswell. Main repo - [fmnx.su](https://fmnx.su/dancheg97/grpc-clicker).
-
-If you like this extension, don't forget to star it on [github](https://github.com/dancheg97/grpc-clicker).
 
 ## Functionality:
 

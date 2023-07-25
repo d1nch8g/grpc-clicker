@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+## [1.0.14]
+
+> July 25, 2023
+
+- readme corrections
+- codeberg mirror
+- ui corrections for adress in call view
+- makefile fixes
+
 ## [1.0.13]
 
 > June 2, 2023

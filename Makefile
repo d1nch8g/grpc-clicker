@@ -8,5 +8,5 @@ push:
 	git push github
 	git push codeberg
 
-devenv:
+install:
 	sudo npm install -g @vscode/vsce && sudo npm install -g yo generator-code
