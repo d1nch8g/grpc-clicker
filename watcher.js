@@ -1,3 +1,4 @@
+// This script is used to watch changes in extension components and build it.
 const fs = require("fs");
 const execSync = require("child_process").execSync;
 const spawn = require("child_process").spawn;
@@ -77,7 +78,7 @@ var rebuild = function (webviewFolder) {
 // Watch operation for single webview instance
 var watch = async function (webviewFolder) {
   rebuild(webviewFolder);
-  console.log(greenColor, `Watcher for ${webviewFolder} launched.`);
+  console.log(greenColor, `Svelte watcher for ${webviewFolder} launched.`);
 
   let count = 1;
   let lastrebuild = performance.now();
@@ -96,9 +97,13 @@ var watch = async function (webviewFolder) {
   });
 };
 
-// Spawn server running in background
-
+// Run go gRPC server in background.
 spawn("go", ["run", "server/main.go"], { detached: true });
+console.log(greenColor, `Go server server/main.go launched.`);
+
+// Run npm watcher in background.
+spawn("npm", ["run", "watch"], { detached: true });
+console.log(greenColor, `NPM watcher launched.`);
 
 // Launch watchers for all webviews
 

@@ -1,11 +1,12 @@
 
+gitadd:
+	git remote add github https://github.com/dancheg97/grpc-clicker
+	git remote add codeberg https://codeberg.org/dancheg97/grpc-clicker
 
-devend:
+push:
+	git push
+	git push github
+	git push codeberg
+
+devenv:
 	sudo npm install -g @vscode/vsce && sudo npm install -g yo generator-code
-
-run:
-	npm run watch &
-	node daemon.js
-
-update:
-	node update.js

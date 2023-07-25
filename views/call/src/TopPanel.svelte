@@ -54,8 +54,8 @@
   }
   textarea {
     width: 100%;
-    height: 23px;
-    padding-top: 8px;
+    height: 19px;
+    padding-top: 6px;
     resize: none;
     font-family: var(--vscode-editor-font-family);
     font-size: var(--vscode-editor-font-size);
